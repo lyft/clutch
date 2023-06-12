@@ -16294,6 +16294,501 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a Probe. */
+            interface IProbe {
+
+                /** Probe handler */
+                handler?: (clutch.k8s.v1.IProbeHandler|null);
+
+                /** Probe initialDelaySeconds */
+                initialDelaySeconds?: (number|null);
+
+                /** Probe timeoutSeconds */
+                timeoutSeconds?: (number|null);
+
+                /** Probe periodSeconds */
+                periodSeconds?: (number|null);
+
+                /** Probe successThreshold */
+                successThreshold?: (number|null);
+
+                /** Probe failureThreshold */
+                failureThreshold?: (number|null);
+
+                /** Probe terminationGracePeriodSeconds */
+                terminationGracePeriodSeconds?: (number|Long|null);
+            }
+
+            /** Represents a Probe. */
+            class Probe implements IProbe {
+
+                /**
+                 * Constructs a new Probe.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IProbe);
+
+                /** Probe handler. */
+                public handler?: (clutch.k8s.v1.IProbeHandler|null);
+
+                /** Probe initialDelaySeconds. */
+                public initialDelaySeconds?: (number|null);
+
+                /** Probe timeoutSeconds. */
+                public timeoutSeconds?: (number|null);
+
+                /** Probe periodSeconds. */
+                public periodSeconds?: (number|null);
+
+                /** Probe successThreshold. */
+                public successThreshold?: (number|null);
+
+                /** Probe failureThreshold. */
+                public failureThreshold?: (number|null);
+
+                /** Probe terminationGracePeriodSeconds. */
+                public terminationGracePeriodSeconds?: (number|Long|null);
+
+                /** Probe _handler. */
+                public _handler?: "handler";
+
+                /** Probe _initialDelaySeconds. */
+                public _initialDelaySeconds?: "initialDelaySeconds";
+
+                /** Probe _timeoutSeconds. */
+                public _timeoutSeconds?: "timeoutSeconds";
+
+                /** Probe _periodSeconds. */
+                public _periodSeconds?: "periodSeconds";
+
+                /** Probe _successThreshold. */
+                public _successThreshold?: "successThreshold";
+
+                /** Probe _failureThreshold. */
+                public _failureThreshold?: "failureThreshold";
+
+                /** Probe _terminationGracePeriodSeconds. */
+                public _terminationGracePeriodSeconds?: "terminationGracePeriodSeconds";
+
+                /**
+                 * Verifies a Probe message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Probe message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Probe
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Probe;
+
+                /**
+                 * Creates a plain object from a Probe message. Also converts values to other types if specified.
+                 * @param message Probe
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Probe, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Probe to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ProbeHandler. */
+            interface IProbeHandler {
+
+                /** ProbeHandler exec */
+                exec?: (clutch.k8s.v1.IExecAction|null);
+
+                /** ProbeHandler httpGet */
+                httpGet?: (clutch.k8s.v1.IHTTPGetAction|null);
+
+                /** ProbeHandler tcpSocket */
+                tcpSocket?: (clutch.k8s.v1.ITCPSocketAction|null);
+
+                /** ProbeHandler grpc */
+                grpc?: (clutch.k8s.v1.IGRPCAction|null);
+            }
+
+            /** Represents a ProbeHandler. */
+            class ProbeHandler implements IProbeHandler {
+
+                /**
+                 * Constructs a new ProbeHandler.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IProbeHandler);
+
+                /** ProbeHandler exec. */
+                public exec?: (clutch.k8s.v1.IExecAction|null);
+
+                /** ProbeHandler httpGet. */
+                public httpGet?: (clutch.k8s.v1.IHTTPGetAction|null);
+
+                /** ProbeHandler tcpSocket. */
+                public tcpSocket?: (clutch.k8s.v1.ITCPSocketAction|null);
+
+                /** ProbeHandler grpc. */
+                public grpc?: (clutch.k8s.v1.IGRPCAction|null);
+
+                /** ProbeHandler _exec. */
+                public _exec?: "exec";
+
+                /** ProbeHandler _httpGet. */
+                public _httpGet?: "httpGet";
+
+                /** ProbeHandler _tcpSocket. */
+                public _tcpSocket?: "tcpSocket";
+
+                /** ProbeHandler _grpc. */
+                public _grpc?: "grpc";
+
+                /**
+                 * Verifies a ProbeHandler message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ProbeHandler
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ProbeHandler;
+
+                /**
+                 * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
+                 * @param message ProbeHandler
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ProbeHandler, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ProbeHandler to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an ExecAction. */
+            interface IExecAction {
+
+                /** ExecAction command */
+                command?: (string[]|null);
+            }
+
+            /** Represents an ExecAction. */
+            class ExecAction implements IExecAction {
+
+                /**
+                 * Constructs a new ExecAction.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IExecAction);
+
+                /** ExecAction command. */
+                public command: string[];
+
+                /**
+                 * Verifies an ExecAction message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an ExecAction message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ExecAction
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ExecAction;
+
+                /**
+                 * Creates a plain object from an ExecAction message. Also converts values to other types if specified.
+                 * @param message ExecAction
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ExecAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ExecAction to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a HTTPGetAction. */
+            interface IHTTPGetAction {
+
+                /** HTTPGetAction path */
+                path?: (string|null);
+
+                /** HTTPGetAction port */
+                port?: (number|null);
+
+                /** HTTPGetAction host */
+                host?: (string|null);
+
+                /** HTTPGetAction scheme */
+                scheme?: (string|null);
+
+                /** HTTPGetAction httpHeaders */
+                httpHeaders?: (clutch.k8s.v1.IHTTPHeader[]|null);
+            }
+
+            /** Represents a HTTPGetAction. */
+            class HTTPGetAction implements IHTTPGetAction {
+
+                /**
+                 * Constructs a new HTTPGetAction.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IHTTPGetAction);
+
+                /** HTTPGetAction path. */
+                public path?: (string|null);
+
+                /** HTTPGetAction port. */
+                public port?: (number|null);
+
+                /** HTTPGetAction host. */
+                public host?: (string|null);
+
+                /** HTTPGetAction scheme. */
+                public scheme?: (string|null);
+
+                /** HTTPGetAction httpHeaders. */
+                public httpHeaders: clutch.k8s.v1.IHTTPHeader[];
+
+                /** HTTPGetAction _path. */
+                public _path?: "path";
+
+                /** HTTPGetAction _port. */
+                public _port?: "port";
+
+                /** HTTPGetAction _host. */
+                public _host?: "host";
+
+                /** HTTPGetAction _scheme. */
+                public _scheme?: "scheme";
+
+                /**
+                 * Verifies a HTTPGetAction message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a HTTPGetAction message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns HTTPGetAction
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.HTTPGetAction;
+
+                /**
+                 * Creates a plain object from a HTTPGetAction message. Also converts values to other types if specified.
+                 * @param message HTTPGetAction
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.HTTPGetAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this HTTPGetAction to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a HTTPHeader. */
+            interface IHTTPHeader {
+
+                /** HTTPHeader name */
+                name?: (string|null);
+
+                /** HTTPHeader value */
+                value?: (string|null);
+            }
+
+            /** Represents a HTTPHeader. */
+            class HTTPHeader implements IHTTPHeader {
+
+                /**
+                 * Constructs a new HTTPHeader.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IHTTPHeader);
+
+                /** HTTPHeader name. */
+                public name?: (string|null);
+
+                /** HTTPHeader value. */
+                public value?: (string|null);
+
+                /** HTTPHeader _name. */
+                public _name?: "name";
+
+                /** HTTPHeader _value. */
+                public _value?: "value";
+
+                /**
+                 * Verifies a HTTPHeader message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a HTTPHeader message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns HTTPHeader
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.HTTPHeader;
+
+                /**
+                 * Creates a plain object from a HTTPHeader message. Also converts values to other types if specified.
+                 * @param message HTTPHeader
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.HTTPHeader, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this HTTPHeader to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a TCPSocketAction. */
+            interface ITCPSocketAction {
+
+                /** TCPSocketAction port */
+                port?: (number|null);
+
+                /** TCPSocketAction host */
+                host?: (string|null);
+            }
+
+            /** Represents a TCPSocketAction. */
+            class TCPSocketAction implements ITCPSocketAction {
+
+                /**
+                 * Constructs a new TCPSocketAction.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ITCPSocketAction);
+
+                /** TCPSocketAction port. */
+                public port?: (number|null);
+
+                /** TCPSocketAction host. */
+                public host?: (string|null);
+
+                /** TCPSocketAction _port. */
+                public _port?: "port";
+
+                /** TCPSocketAction _host. */
+                public _host?: "host";
+
+                /**
+                 * Verifies a TCPSocketAction message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TCPSocketAction message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TCPSocketAction
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.TCPSocketAction;
+
+                /**
+                 * Creates a plain object from a TCPSocketAction message. Also converts values to other types if specified.
+                 * @param message TCPSocketAction
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.TCPSocketAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TCPSocketAction to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GRPCAction. */
+            interface IGRPCAction {
+
+                /** GRPCAction port */
+                port?: (number|null);
+
+                /** GRPCAction service */
+                service?: (string|null);
+            }
+
+            /** Represents a GRPCAction. */
+            class GRPCAction implements IGRPCAction {
+
+                /**
+                 * Constructs a new GRPCAction.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IGRPCAction);
+
+                /** GRPCAction port. */
+                public port?: (number|null);
+
+                /** GRPCAction service. */
+                public service?: (string|null);
+
+                /** GRPCAction _port. */
+                public _port?: "port";
+
+                /** GRPCAction _service. */
+                public _service?: "service";
+
+                /**
+                 * Verifies a GRPCAction message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GRPCAction message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GRPCAction
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.GRPCAction;
+
+                /**
+                 * Creates a plain object from a GRPCAction message. Also converts values to other types if specified.
+                 * @param message GRPCAction
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.GRPCAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GRPCAction to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a Deployment. */
             interface IDeployment {
 
@@ -16713,10 +17208,10 @@ export namespace clutch {
                                 resources?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IResourceRequirements|null);
 
                                 /** Container livenessProbe */
-                                livenessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+                                livenessProbe?: (clutch.k8s.v1.IProbe|null);
 
                                 /** Container readinessProbe */
-                                readinessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+                                readinessProbe?: (clutch.k8s.v1.IProbe|null);
                             }
 
                             /** Represents a Container. */
@@ -16735,10 +17230,10 @@ export namespace clutch {
                                 public resources?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IResourceRequirements|null);
 
                                 /** Container livenessProbe. */
-                                public livenessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+                                public livenessProbe?: (clutch.k8s.v1.IProbe|null);
 
                                 /** Container readinessProbe. */
-                                public readinessProbe?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe|null);
+                                public readinessProbe?: (clutch.k8s.v1.IProbe|null);
 
                                 /** Container _livenessProbe. */
                                 public _livenessProbe?: "livenessProbe";
@@ -16826,501 +17321,6 @@ export namespace clutch {
 
                                     /**
                                      * Converts this ResourceRequirements to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a Probe. */
-                                interface IProbe {
-
-                                    /** Probe handler */
-                                    handler?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler|null);
-
-                                    /** Probe initialDelaySeconds */
-                                    initialDelaySeconds?: (number|null);
-
-                                    /** Probe timeoutSeconds */
-                                    timeoutSeconds?: (number|null);
-
-                                    /** Probe periodSeconds */
-                                    periodSeconds?: (number|null);
-
-                                    /** Probe successThreshold */
-                                    successThreshold?: (number|null);
-
-                                    /** Probe failureThreshold */
-                                    failureThreshold?: (number|null);
-
-                                    /** Probe terminationGracePeriodSeconds */
-                                    terminationGracePeriodSeconds?: (number|Long|null);
-                                }
-
-                                /** Represents a Probe. */
-                                class Probe implements IProbe {
-
-                                    /**
-                                     * Constructs a new Probe.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbe);
-
-                                    /** Probe handler. */
-                                    public handler?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler|null);
-
-                                    /** Probe initialDelaySeconds. */
-                                    public initialDelaySeconds?: (number|null);
-
-                                    /** Probe timeoutSeconds. */
-                                    public timeoutSeconds?: (number|null);
-
-                                    /** Probe periodSeconds. */
-                                    public periodSeconds?: (number|null);
-
-                                    /** Probe successThreshold. */
-                                    public successThreshold?: (number|null);
-
-                                    /** Probe failureThreshold. */
-                                    public failureThreshold?: (number|null);
-
-                                    /** Probe terminationGracePeriodSeconds. */
-                                    public terminationGracePeriodSeconds?: (number|Long|null);
-
-                                    /** Probe _handler. */
-                                    public _handler?: "handler";
-
-                                    /** Probe _initialDelaySeconds. */
-                                    public _initialDelaySeconds?: "initialDelaySeconds";
-
-                                    /** Probe _timeoutSeconds. */
-                                    public _timeoutSeconds?: "timeoutSeconds";
-
-                                    /** Probe _periodSeconds. */
-                                    public _periodSeconds?: "periodSeconds";
-
-                                    /** Probe _successThreshold. */
-                                    public _successThreshold?: "successThreshold";
-
-                                    /** Probe _failureThreshold. */
-                                    public _failureThreshold?: "failureThreshold";
-
-                                    /** Probe _terminationGracePeriodSeconds. */
-                                    public _terminationGracePeriodSeconds?: "terminationGracePeriodSeconds";
-
-                                    /**
-                                     * Verifies a Probe message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a Probe message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns Probe
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe;
-
-                                    /**
-                                     * Creates a plain object from a Probe message. Also converts values to other types if specified.
-                                     * @param message Probe
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.Probe, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this Probe to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a ProbeHandler. */
-                                interface IProbeHandler {
-
-                                    /** ProbeHandler exec */
-                                    exec?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction|null);
-
-                                    /** ProbeHandler httpGet */
-                                    httpGet?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction|null);
-
-                                    /** ProbeHandler tcpSocket */
-                                    tcpSocket?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction|null);
-
-                                    /** ProbeHandler grpc */
-                                    grpc?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction|null);
-                                }
-
-                                /** Represents a ProbeHandler. */
-                                class ProbeHandler implements IProbeHandler {
-
-                                    /**
-                                     * Constructs a new ProbeHandler.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IProbeHandler);
-
-                                    /** ProbeHandler exec. */
-                                    public exec?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction|null);
-
-                                    /** ProbeHandler httpGet. */
-                                    public httpGet?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction|null);
-
-                                    /** ProbeHandler tcpSocket. */
-                                    public tcpSocket?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction|null);
-
-                                    /** ProbeHandler grpc. */
-                                    public grpc?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction|null);
-
-                                    /** ProbeHandler _exec. */
-                                    public _exec?: "exec";
-
-                                    /** ProbeHandler _httpGet. */
-                                    public _httpGet?: "httpGet";
-
-                                    /** ProbeHandler _tcpSocket. */
-                                    public _tcpSocket?: "tcpSocket";
-
-                                    /** ProbeHandler _grpc. */
-                                    public _grpc?: "grpc";
-
-                                    /**
-                                     * Verifies a ProbeHandler message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns ProbeHandler
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler;
-
-                                    /**
-                                     * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
-                                     * @param message ProbeHandler
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ProbeHandler, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this ProbeHandler to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of an ExecAction. */
-                                interface IExecAction {
-
-                                    /** ExecAction command */
-                                    command?: (string[]|null);
-                                }
-
-                                /** Represents an ExecAction. */
-                                class ExecAction implements IExecAction {
-
-                                    /**
-                                     * Constructs a new ExecAction.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IExecAction);
-
-                                    /** ExecAction command. */
-                                    public command: string[];
-
-                                    /**
-                                     * Verifies an ExecAction message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates an ExecAction message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns ExecAction
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction;
-
-                                    /**
-                                     * Creates a plain object from an ExecAction message. Also converts values to other types if specified.
-                                     * @param message ExecAction
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ExecAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this ExecAction to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a HTTPGetAction. */
-                                interface IHTTPGetAction {
-
-                                    /** HTTPGetAction path */
-                                    path?: (string|null);
-
-                                    /** HTTPGetAction port */
-                                    port?: (number|null);
-
-                                    /** HTTPGetAction host */
-                                    host?: (string|null);
-
-                                    /** HTTPGetAction scheme */
-                                    scheme?: (string|null);
-
-                                    /** HTTPGetAction httpHeaders */
-                                    httpHeaders?: (clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader[]|null);
-                                }
-
-                                /** Represents a HTTPGetAction. */
-                                class HTTPGetAction implements IHTTPGetAction {
-
-                                    /**
-                                     * Constructs a new HTTPGetAction.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPGetAction);
-
-                                    /** HTTPGetAction path. */
-                                    public path?: (string|null);
-
-                                    /** HTTPGetAction port. */
-                                    public port?: (number|null);
-
-                                    /** HTTPGetAction host. */
-                                    public host?: (string|null);
-
-                                    /** HTTPGetAction scheme. */
-                                    public scheme?: (string|null);
-
-                                    /** HTTPGetAction httpHeaders. */
-                                    public httpHeaders: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader[];
-
-                                    /** HTTPGetAction _path. */
-                                    public _path?: "path";
-
-                                    /** HTTPGetAction _port. */
-                                    public _port?: "port";
-
-                                    /** HTTPGetAction _host. */
-                                    public _host?: "host";
-
-                                    /** HTTPGetAction _scheme. */
-                                    public _scheme?: "scheme";
-
-                                    /**
-                                     * Verifies a HTTPGetAction message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a HTTPGetAction message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns HTTPGetAction
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction;
-
-                                    /**
-                                     * Creates a plain object from a HTTPGetAction message. Also converts values to other types if specified.
-                                     * @param message HTTPGetAction
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPGetAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this HTTPGetAction to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a HTTPHeader. */
-                                interface IHTTPHeader {
-
-                                    /** HTTPHeader name */
-                                    name?: (string|null);
-
-                                    /** HTTPHeader value */
-                                    value?: (string|null);
-                                }
-
-                                /** Represents a HTTPHeader. */
-                                class HTTPHeader implements IHTTPHeader {
-
-                                    /**
-                                     * Constructs a new HTTPHeader.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IHTTPHeader);
-
-                                    /** HTTPHeader name. */
-                                    public name?: (string|null);
-
-                                    /** HTTPHeader value. */
-                                    public value?: (string|null);
-
-                                    /** HTTPHeader _name. */
-                                    public _name?: "name";
-
-                                    /** HTTPHeader _value. */
-                                    public _value?: "value";
-
-                                    /**
-                                     * Verifies a HTTPHeader message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a HTTPHeader message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns HTTPHeader
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader;
-
-                                    /**
-                                     * Creates a plain object from a HTTPHeader message. Also converts values to other types if specified.
-                                     * @param message HTTPHeader
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.HTTPHeader, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this HTTPHeader to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a TCPSocketAction. */
-                                interface ITCPSocketAction {
-
-                                    /** TCPSocketAction port */
-                                    port?: (number|null);
-
-                                    /** TCPSocketAction host */
-                                    host?: (string|null);
-                                }
-
-                                /** Represents a TCPSocketAction. */
-                                class TCPSocketAction implements ITCPSocketAction {
-
-                                    /**
-                                     * Constructs a new TCPSocketAction.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ITCPSocketAction);
-
-                                    /** TCPSocketAction port. */
-                                    public port?: (number|null);
-
-                                    /** TCPSocketAction host. */
-                                    public host?: (string|null);
-
-                                    /** TCPSocketAction _port. */
-                                    public _port?: "port";
-
-                                    /** TCPSocketAction _host. */
-                                    public _host?: "host";
-
-                                    /**
-                                     * Verifies a TCPSocketAction message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a TCPSocketAction message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns TCPSocketAction
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction;
-
-                                    /**
-                                     * Creates a plain object from a TCPSocketAction message. Also converts values to other types if specified.
-                                     * @param message TCPSocketAction
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.TCPSocketAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this TCPSocketAction to JSON.
-                                     * @returns JSON object
-                                     */
-                                    public toJSON(): { [k: string]: any };
-                                }
-
-                                /** Properties of a GRPCAction. */
-                                interface IGRPCAction {
-
-                                    /** GRPCAction port */
-                                    port?: (number|null);
-
-                                    /** GRPCAction service */
-                                    service?: (string|null);
-                                }
-
-                                /** Represents a GRPCAction. */
-                                class GRPCAction implements IGRPCAction {
-
-                                    /**
-                                     * Constructs a new GRPCAction.
-                                     * @param [properties] Properties to set
-                                     */
-                                    constructor(properties?: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.IGRPCAction);
-
-                                    /** GRPCAction port. */
-                                    public port?: (number|null);
-
-                                    /** GRPCAction service. */
-                                    public service?: (string|null);
-
-                                    /** GRPCAction _port. */
-                                    public _port?: "port";
-
-                                    /** GRPCAction _service. */
-                                    public _service?: "service";
-
-                                    /**
-                                     * Verifies a GRPCAction message.
-                                     * @param message Plain object to verify
-                                     * @returns `null` if valid, otherwise the reason why it is not
-                                     */
-                                    public static verify(message: { [k: string]: any }): (string|null);
-
-                                    /**
-                                     * Creates a GRPCAction message from a plain object. Also converts values to their respective internal types.
-                                     * @param object Plain object
-                                     * @returns GRPCAction
-                                     */
-                                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction;
-
-                                    /**
-                                     * Creates a plain object from a GRPCAction message. Also converts values to other types if specified.
-                                     * @param message GRPCAction
-                                     * @param [options] Conversion options
-                                     * @returns Plain object
-                                     */
-                                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.GRPCAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                                    /**
-                                     * Converts this GRPCAction to JSON.
                                      * @returns JSON object
                                      */
                                     public toJSON(): { [k: string]: any };
@@ -17819,10 +17819,10 @@ export namespace clutch {
                         containerName?: (string|null);
 
                         /** ContainerProbes livenessProbe */
-                        livenessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+                        livenessProbe?: (clutch.k8s.v1.IProbe|null);
 
                         /** ContainerProbes readinessProbe */
-                        readinessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+                        readinessProbe?: (clutch.k8s.v1.IProbe|null);
                     }
 
                     /** Represents a ContainerProbes. */
@@ -17838,10 +17838,10 @@ export namespace clutch {
                         public containerName: string;
 
                         /** ContainerProbes livenessProbe. */
-                        public livenessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+                        public livenessProbe?: (clutch.k8s.v1.IProbe|null);
 
                         /** ContainerProbes readinessProbe. */
-                        public readinessProbe?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe|null);
+                        public readinessProbe?: (clutch.k8s.v1.IProbe|null);
 
                         /** ContainerProbes _livenessProbe. */
                         public _livenessProbe?: "livenessProbe";
@@ -17876,504 +17876,6 @@ export namespace clutch {
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
-                    }
-
-                    namespace ContainerProbes {
-
-                        /** Properties of a Probe. */
-                        interface IProbe {
-
-                            /** Probe handler */
-                            handler?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler|null);
-
-                            /** Probe initialDelaySeconds */
-                            initialDelaySeconds?: (number|null);
-
-                            /** Probe timeoutSeconds */
-                            timeoutSeconds?: (number|null);
-
-                            /** Probe periodSeconds */
-                            periodSeconds?: (number|null);
-
-                            /** Probe successThreshold */
-                            successThreshold?: (number|null);
-
-                            /** Probe failureThreshold */
-                            failureThreshold?: (number|null);
-
-                            /** Probe terminationGracePeriodSeconds */
-                            terminationGracePeriodSeconds?: (number|Long|null);
-                        }
-
-                        /** Represents a Probe. */
-                        class Probe implements IProbe {
-
-                            /**
-                             * Constructs a new Probe.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbe);
-
-                            /** Probe handler. */
-                            public handler?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler|null);
-
-                            /** Probe initialDelaySeconds. */
-                            public initialDelaySeconds?: (number|null);
-
-                            /** Probe timeoutSeconds. */
-                            public timeoutSeconds?: (number|null);
-
-                            /** Probe periodSeconds. */
-                            public periodSeconds?: (number|null);
-
-                            /** Probe successThreshold. */
-                            public successThreshold?: (number|null);
-
-                            /** Probe failureThreshold. */
-                            public failureThreshold?: (number|null);
-
-                            /** Probe terminationGracePeriodSeconds. */
-                            public terminationGracePeriodSeconds?: (number|Long|null);
-
-                            /** Probe _handler. */
-                            public _handler?: "handler";
-
-                            /** Probe _initialDelaySeconds. */
-                            public _initialDelaySeconds?: "initialDelaySeconds";
-
-                            /** Probe _timeoutSeconds. */
-                            public _timeoutSeconds?: "timeoutSeconds";
-
-                            /** Probe _periodSeconds. */
-                            public _periodSeconds?: "periodSeconds";
-
-                            /** Probe _successThreshold. */
-                            public _successThreshold?: "successThreshold";
-
-                            /** Probe _failureThreshold. */
-                            public _failureThreshold?: "failureThreshold";
-
-                            /** Probe _terminationGracePeriodSeconds. */
-                            public _terminationGracePeriodSeconds?: "terminationGracePeriodSeconds";
-
-                            /**
-                             * Verifies a Probe message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a Probe message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns Probe
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe;
-
-                            /**
-                             * Creates a plain object from a Probe message. Also converts values to other types if specified.
-                             * @param message Probe
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.Probe, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this Probe to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of a ProbeHandler. */
-                        interface IProbeHandler {
-
-                            /** ProbeHandler exec */
-                            exec?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction|null);
-
-                            /** ProbeHandler httpGet */
-                            httpGet?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction|null);
-
-                            /** ProbeHandler tcpSocket */
-                            tcpSocket?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction|null);
-
-                            /** ProbeHandler grpc */
-                            grpc?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction|null);
-                        }
-
-                        /** Represents a ProbeHandler. */
-                        class ProbeHandler implements IProbeHandler {
-
-                            /**
-                             * Constructs a new ProbeHandler.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IProbeHandler);
-
-                            /** ProbeHandler exec. */
-                            public exec?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction|null);
-
-                            /** ProbeHandler httpGet. */
-                            public httpGet?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction|null);
-
-                            /** ProbeHandler tcpSocket. */
-                            public tcpSocket?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction|null);
-
-                            /** ProbeHandler grpc. */
-                            public grpc?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction|null);
-
-                            /** ProbeHandler _exec. */
-                            public _exec?: "exec";
-
-                            /** ProbeHandler _httpGet. */
-                            public _httpGet?: "httpGet";
-
-                            /** ProbeHandler _tcpSocket. */
-                            public _tcpSocket?: "tcpSocket";
-
-                            /** ProbeHandler _grpc. */
-                            public _grpc?: "grpc";
-
-                            /**
-                             * Verifies a ProbeHandler message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a ProbeHandler message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns ProbeHandler
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler;
-
-                            /**
-                             * Creates a plain object from a ProbeHandler message. Also converts values to other types if specified.
-                             * @param message ProbeHandler
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ProbeHandler, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this ProbeHandler to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of an ExecAction. */
-                        interface IExecAction {
-
-                            /** ExecAction command */
-                            command?: (string[]|null);
-                        }
-
-                        /** Represents an ExecAction. */
-                        class ExecAction implements IExecAction {
-
-                            /**
-                             * Constructs a new ExecAction.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IExecAction);
-
-                            /** ExecAction command. */
-                            public command: string[];
-
-                            /**
-                             * Verifies an ExecAction message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates an ExecAction message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns ExecAction
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction;
-
-                            /**
-                             * Creates a plain object from an ExecAction message. Also converts values to other types if specified.
-                             * @param message ExecAction
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ExecAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this ExecAction to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of a HTTPGetAction. */
-                        interface IHTTPGetAction {
-
-                            /** HTTPGetAction path */
-                            path?: (string|null);
-
-                            /** HTTPGetAction port */
-                            port?: (number|null);
-
-                            /** HTTPGetAction host */
-                            host?: (string|null);
-
-                            /** HTTPGetAction scheme */
-                            scheme?: (string|null);
-
-                            /** HTTPGetAction httpHeaders */
-                            httpHeaders?: (clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader[]|null);
-                        }
-
-                        /** Represents a HTTPGetAction. */
-                        class HTTPGetAction implements IHTTPGetAction {
-
-                            /**
-                             * Constructs a new HTTPGetAction.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPGetAction);
-
-                            /** HTTPGetAction path. */
-                            public path?: (string|null);
-
-                            /** HTTPGetAction port. */
-                            public port?: (number|null);
-
-                            /** HTTPGetAction host. */
-                            public host?: (string|null);
-
-                            /** HTTPGetAction scheme. */
-                            public scheme?: (string|null);
-
-                            /** HTTPGetAction httpHeaders. */
-                            public httpHeaders: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader[];
-
-                            /** HTTPGetAction _path. */
-                            public _path?: "path";
-
-                            /** HTTPGetAction _port. */
-                            public _port?: "port";
-
-                            /** HTTPGetAction _host. */
-                            public _host?: "host";
-
-                            /** HTTPGetAction _scheme. */
-                            public _scheme?: "scheme";
-
-                            /**
-                             * Verifies a HTTPGetAction message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a HTTPGetAction message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns HTTPGetAction
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction;
-
-                            /**
-                             * Creates a plain object from a HTTPGetAction message. Also converts values to other types if specified.
-                             * @param message HTTPGetAction
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPGetAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this HTTPGetAction to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of a HTTPHeader. */
-                        interface IHTTPHeader {
-
-                            /** HTTPHeader name */
-                            name?: (string|null);
-
-                            /** HTTPHeader value */
-                            value?: (string|null);
-                        }
-
-                        /** Represents a HTTPHeader. */
-                        class HTTPHeader implements IHTTPHeader {
-
-                            /**
-                             * Constructs a new HTTPHeader.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IHTTPHeader);
-
-                            /** HTTPHeader name. */
-                            public name?: (string|null);
-
-                            /** HTTPHeader value. */
-                            public value?: (string|null);
-
-                            /** HTTPHeader _name. */
-                            public _name?: "name";
-
-                            /** HTTPHeader _value. */
-                            public _value?: "value";
-
-                            /**
-                             * Verifies a HTTPHeader message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a HTTPHeader message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns HTTPHeader
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader;
-
-                            /**
-                             * Creates a plain object from a HTTPHeader message. Also converts values to other types if specified.
-                             * @param message HTTPHeader
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.HTTPHeader, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this HTTPHeader to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of a TCPSocketAction. */
-                        interface ITCPSocketAction {
-
-                            /** TCPSocketAction port */
-                            port?: (number|null);
-
-                            /** TCPSocketAction host */
-                            host?: (string|null);
-                        }
-
-                        /** Represents a TCPSocketAction. */
-                        class TCPSocketAction implements ITCPSocketAction {
-
-                            /**
-                             * Constructs a new TCPSocketAction.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.ITCPSocketAction);
-
-                            /** TCPSocketAction port. */
-                            public port?: (number|null);
-
-                            /** TCPSocketAction host. */
-                            public host?: (string|null);
-
-                            /** TCPSocketAction _port. */
-                            public _port?: "port";
-
-                            /** TCPSocketAction _host. */
-                            public _host?: "host";
-
-                            /**
-                             * Verifies a TCPSocketAction message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a TCPSocketAction message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns TCPSocketAction
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction;
-
-                            /**
-                             * Creates a plain object from a TCPSocketAction message. Also converts values to other types if specified.
-                             * @param message TCPSocketAction
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.TCPSocketAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this TCPSocketAction to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
-
-                        /** Properties of a GRPCAction. */
-                        interface IGRPCAction {
-
-                            /** GRPCAction port */
-                            port?: (number|null);
-
-                            /** GRPCAction service */
-                            service?: (string|null);
-                        }
-
-                        /** Represents a GRPCAction. */
-                        class GRPCAction implements IGRPCAction {
-
-                            /**
-                             * Constructs a new GRPCAction.
-                             * @param [properties] Properties to set
-                             */
-                            constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.IGRPCAction);
-
-                            /** GRPCAction port. */
-                            public port?: (number|null);
-
-                            /** GRPCAction service. */
-                            public service?: (string|null);
-
-                            /** GRPCAction _port. */
-                            public _port?: "port";
-
-                            /** GRPCAction _service. */
-                            public _service?: "service";
-
-                            /**
-                             * Verifies a GRPCAction message.
-                             * @param message Plain object to verify
-                             * @returns `null` if valid, otherwise the reason why it is not
-                             */
-                            public static verify(message: { [k: string]: any }): (string|null);
-
-                            /**
-                             * Creates a GRPCAction message from a plain object. Also converts values to their respective internal types.
-                             * @param object Plain object
-                             * @returns GRPCAction
-                             */
-                            public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction;
-
-                            /**
-                             * Creates a plain object from a GRPCAction message. Also converts values to other types if specified.
-                             * @param message GRPCAction
-                             * @param [options] Conversion options
-                             * @returns Plain object
-                             */
-                            public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerProbes.GRPCAction, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                            /**
-                             * Converts this GRPCAction to JSON.
-                             * @returns JSON object
-                             */
-                            public toJSON(): { [k: string]: any };
-                        }
                     }
                 }
             }
