@@ -112,8 +112,6 @@ func TestS3GetBucketPolicyErrorHandling(t *testing.T) {
 }
 
 type mockS3 struct {
-	s3Client
-
 	getObjectErr    error
 	getObjectOutput *s3.GetObjectOutput
 

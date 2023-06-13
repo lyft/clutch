@@ -554,8 +554,6 @@ func TestErrorIntercept(t *testing.T) {
 }
 
 type mockEC2 struct {
-	ec2Client
-
 	instancesErr error
 	instances    []ec2types.Instance
 
@@ -599,8 +597,6 @@ func (m *mockEC2) RebootInstances(ctx context.Context, params *ec2.RebootInstanc
 }
 
 type mockAutoscaling struct {
-	autoscalingClient
-
 	describeASGErr    error
 	describeASGOutput *autoscaling.DescribeAutoScalingGroupsOutput
 

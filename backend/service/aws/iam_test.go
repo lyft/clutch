@@ -12,8 +12,6 @@ import (
 )
 
 type mockIAM struct {
-	iamClient
-
 	getSimulationResultsErr error
 	getSimulationResults    *iam.SimulateCustomPolicyOutput
 }
@@ -22,7 +20,8 @@ func TestIAMSimulateCustomPolicy(t *testing.T) {
 	iamClient := &mockIAM{
 		getSimulationResults: &iam.SimulateCustomPolicyOutput{
 			EvaluationResults: []types.EvaluationResult{
-				{EvalActionName: aws.String("s3:GetBucketPolicy"),
+				{
+					EvalActionName:       aws.String("s3:GetBucketPolicy"),
 					EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
 					EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 					MissingContextValues: []string{},
@@ -55,7 +54,8 @@ func TestIAMSimulateCustomPolicy(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, output, &iam.SimulateCustomPolicyOutput{
 		EvaluationResults: []types.EvaluationResult{
-			{EvalActionName: aws.String("s3:GetBucketPolicy"),
+			{
+				EvalActionName:       aws.String("s3:GetBucketPolicy"),
 				EvalDecision:         types.PolicyEvaluationDecisionTypeImplicitDeny,
 				EvalResourceName:     aws.String("arn:aws:s3:::a/*"),
 				MissingContextValues: []string{},
