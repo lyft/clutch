@@ -165,6 +165,8 @@ func (m *Monitor) monitorNewExperiments(es []*experimentstore.Experiment, tracke
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
+		ee := e
+
 		activeExperiments[e.Run.Id] = struct{}{}
 		if _, ok := trackedExperiments[e.Run.Id]; !ok {
 			ctx, cancel := context.WithCancel(context.Background())
@@ -173,7 +175,7 @@ func (m *Monitor) monitorNewExperiments(es []*experimentstore.Experiment, tracke
 			m.activeMonitoringRoutines.inc()
 			go func() {
 				defer m.activeMonitoringRoutines.dec()
-				m.monitorSingleExperiment(ctx, e, criteria)
+				m.monitorSingleExperiment(ctx, ee, criteria)
 			}()
 		}
 	}
