@@ -150,7 +150,7 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 	// When a value is nil, the Go Template sets the value as "<no value>".
 	sanitized := strings.ReplaceAll(buf.String(), "<no value>", defaultNone)
 
-	return strings.TrimSpace(sanitized), nil
+	return sanitized, nil
 }
 
 func (s *svc) auditEventToMessage(username string, event *auditv1.RequestEvent) string {
