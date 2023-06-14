@@ -1222,7 +1222,7 @@ enum ObjectKind {
 }
 
 enum EventType {
-  UNSPECIFIED = 0;
+  TYPE_UNSPECIFIED = 0;
   NORMAL = 1;
   WARNING = 2;
   ERROR = 3;
