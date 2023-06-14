@@ -3491,6 +3491,868 @@ var _ interface {
 	ErrorName() string
 } = DeleteHPAResponseValidationError{}
 
+// Validate checks the field values on ExecAction with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ExecAction) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExecAction with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ExecActionMultiError, or
+// nil if none found.
+func (m *ExecAction) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExecAction) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ExecActionMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExecActionMultiError is an error wrapping multiple validation errors
+// returned by ExecAction.ValidateAll() if the designated constraints aren't met.
+type ExecActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExecActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExecActionMultiError) AllErrors() []error { return m }
+
+// ExecActionValidationError is the validation error returned by
+// ExecAction.Validate if the designated constraints aren't met.
+type ExecActionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExecActionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExecActionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExecActionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExecActionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExecActionValidationError) ErrorName() string { return "ExecActionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ExecActionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExecAction.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExecActionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExecActionValidationError{}
+
+// Validate checks the field values on HTTPGetAction with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *HTTPGetAction) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on HTTPGetAction with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in HTTPGetActionMultiError, or
+// nil if none found.
+func (m *HTTPGetAction) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *HTTPGetAction) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetHttpHeaders() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, HTTPGetActionValidationError{
+						field:  fmt.Sprintf("HttpHeaders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, HTTPGetActionValidationError{
+						field:  fmt.Sprintf("HttpHeaders[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return HTTPGetActionValidationError{
+					field:  fmt.Sprintf("HttpHeaders[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.Path != nil {
+		// no validation rules for Path
+	}
+
+	if m.Port != nil {
+		// no validation rules for Port
+	}
+
+	if m.Host != nil {
+		// no validation rules for Host
+	}
+
+	if m.Scheme != nil {
+		// no validation rules for Scheme
+	}
+
+	if len(errors) > 0 {
+		return HTTPGetActionMultiError(errors)
+	}
+
+	return nil
+}
+
+// HTTPGetActionMultiError is an error wrapping multiple validation errors
+// returned by HTTPGetAction.ValidateAll() if the designated constraints
+// aren't met.
+type HTTPGetActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m HTTPGetActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m HTTPGetActionMultiError) AllErrors() []error { return m }
+
+// HTTPGetActionValidationError is the validation error returned by
+// HTTPGetAction.Validate if the designated constraints aren't met.
+type HTTPGetActionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e HTTPGetActionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e HTTPGetActionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e HTTPGetActionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e HTTPGetActionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e HTTPGetActionValidationError) ErrorName() string { return "HTTPGetActionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e HTTPGetActionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sHTTPGetAction.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = HTTPGetActionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = HTTPGetActionValidationError{}
+
+// Validate checks the field values on HTTPHeader with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *HTTPHeader) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on HTTPHeader with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in HTTPHeaderMultiError, or
+// nil if none found.
+func (m *HTTPHeader) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *HTTPHeader) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.Value != nil {
+		// no validation rules for Value
+	}
+
+	if len(errors) > 0 {
+		return HTTPHeaderMultiError(errors)
+	}
+
+	return nil
+}
+
+// HTTPHeaderMultiError is an error wrapping multiple validation errors
+// returned by HTTPHeader.ValidateAll() if the designated constraints aren't met.
+type HTTPHeaderMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m HTTPHeaderMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m HTTPHeaderMultiError) AllErrors() []error { return m }
+
+// HTTPHeaderValidationError is the validation error returned by
+// HTTPHeader.Validate if the designated constraints aren't met.
+type HTTPHeaderValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e HTTPHeaderValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e HTTPHeaderValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e HTTPHeaderValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e HTTPHeaderValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e HTTPHeaderValidationError) ErrorName() string { return "HTTPHeaderValidationError" }
+
+// Error satisfies the builtin error interface
+func (e HTTPHeaderValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sHTTPHeader.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = HTTPHeaderValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = HTTPHeaderValidationError{}
+
+// Validate checks the field values on TCPSocketAction with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *TCPSocketAction) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TCPSocketAction with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TCPSocketActionMultiError, or nil if none found.
+func (m *TCPSocketAction) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TCPSocketAction) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Port != nil {
+		// no validation rules for Port
+	}
+
+	if m.Host != nil {
+		// no validation rules for Host
+	}
+
+	if len(errors) > 0 {
+		return TCPSocketActionMultiError(errors)
+	}
+
+	return nil
+}
+
+// TCPSocketActionMultiError is an error wrapping multiple validation errors
+// returned by TCPSocketAction.ValidateAll() if the designated constraints
+// aren't met.
+type TCPSocketActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TCPSocketActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TCPSocketActionMultiError) AllErrors() []error { return m }
+
+// TCPSocketActionValidationError is the validation error returned by
+// TCPSocketAction.Validate if the designated constraints aren't met.
+type TCPSocketActionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TCPSocketActionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TCPSocketActionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TCPSocketActionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TCPSocketActionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TCPSocketActionValidationError) ErrorName() string { return "TCPSocketActionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e TCPSocketActionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTCPSocketAction.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TCPSocketActionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TCPSocketActionValidationError{}
+
+// Validate checks the field values on GRPCAction with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GRPCAction) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GRPCAction with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GRPCActionMultiError, or
+// nil if none found.
+func (m *GRPCAction) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GRPCAction) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Port != nil {
+		// no validation rules for Port
+	}
+
+	if m.Service != nil {
+		// no validation rules for Service
+	}
+
+	if len(errors) > 0 {
+		return GRPCActionMultiError(errors)
+	}
+
+	return nil
+}
+
+// GRPCActionMultiError is an error wrapping multiple validation errors
+// returned by GRPCAction.ValidateAll() if the designated constraints aren't met.
+type GRPCActionMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GRPCActionMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GRPCActionMultiError) AllErrors() []error { return m }
+
+// GRPCActionValidationError is the validation error returned by
+// GRPCAction.Validate if the designated constraints aren't met.
+type GRPCActionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GRPCActionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GRPCActionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GRPCActionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GRPCActionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GRPCActionValidationError) ErrorName() string { return "GRPCActionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GRPCActionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGRPCAction.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GRPCActionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GRPCActionValidationError{}
+
+// Validate checks the field values on Probe with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Probe) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Probe with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ProbeMultiError, or nil if none found.
+func (m *Probe) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Probe) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.Handler.(type) {
+	case *Probe_Exec:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetExec()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Exec",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Exec",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetExec()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "Exec",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_HttpGet:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetHttpGet()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "HttpGet",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "HttpGet",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetHttpGet()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "HttpGet",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_TcpSocket:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetTcpSocket()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "TcpSocket",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "TcpSocket",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetTcpSocket()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "TcpSocket",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Probe_Grpc:
+		if v == nil {
+			err := ProbeValidationError{
+				field:  "Handler",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetGrpc()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Grpc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ProbeValidationError{
+						field:  "Grpc",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetGrpc()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ProbeValidationError{
+					field:  "Grpc",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if m.InitialDelaySeconds != nil {
+		// no validation rules for InitialDelaySeconds
+	}
+
+	if m.TimeoutSeconds != nil {
+		// no validation rules for TimeoutSeconds
+	}
+
+	if m.PeriodSeconds != nil {
+		// no validation rules for PeriodSeconds
+	}
+
+	if m.SuccessThreshold != nil {
+		// no validation rules for SuccessThreshold
+	}
+
+	if m.FailureThreshold != nil {
+		// no validation rules for FailureThreshold
+	}
+
+	if m.TerminationGracePeriodSeconds != nil {
+		// no validation rules for TerminationGracePeriodSeconds
+	}
+
+	if len(errors) > 0 {
+		return ProbeMultiError(errors)
+	}
+
+	return nil
+}
+
+// ProbeMultiError is an error wrapping multiple validation errors returned by
+// Probe.ValidateAll() if the designated constraints aren't met.
+type ProbeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ProbeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ProbeMultiError) AllErrors() []error { return m }
+
+// ProbeValidationError is the validation error returned by Probe.Validate if
+// the designated constraints aren't met.
+type ProbeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ProbeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ProbeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ProbeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ProbeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ProbeValidationError) ErrorName() string { return "ProbeValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ProbeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sProbe.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ProbeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ProbeValidationError{}
+
 // Validate checks the field values on Deployment with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -13256,6 +14118,72 @@ func (m *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) validate(a
 		}
 	}
 
+	if m.LivenessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetLivenessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "LivenessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "LivenessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetLivenessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+					field:  "LivenessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.ReadinessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetReadinessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetReadinessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerValidationError{
+					field:  "ReadinessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_ContainerMultiError(errors)
 	}
@@ -13582,6 +14510,40 @@ func (m *UpdateDeploymentRequest_Fields) validate(all bool) error {
 
 	}
 
+	for idx, item := range m.GetContainerProbes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_FieldsValidationError{
+						field:  fmt.Sprintf("ContainerProbes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_FieldsValidationError{
+						field:  fmt.Sprintf("ContainerProbes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpdateDeploymentRequest_FieldsValidationError{
+					field:  fmt.Sprintf("ContainerProbes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return UpdateDeploymentRequest_FieldsMultiError(errors)
 	}
@@ -13806,6 +14768,183 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateDeploymentRequest_Fields_ContainerResourcesValidationError{}
+
+// Validate checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerProbes with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *UpdateDeploymentRequest_Fields_ContainerProbes) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// UpdateDeploymentRequest_Fields_ContainerProbes with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// UpdateDeploymentRequest_Fields_ContainerProbesMultiError, or nil if none found.
+func (m *UpdateDeploymentRequest_Fields_ContainerProbes) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateDeploymentRequest_Fields_ContainerProbes) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ContainerName
+
+	if m.LivenessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetLivenessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "LivenessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "LivenessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetLivenessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+					field:  "LivenessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.ReadinessProbe != nil {
+
+		if all {
+			switch v := interface{}(m.GetReadinessProbe()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+						field:  "ReadinessProbe",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetReadinessProbe()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpdateDeploymentRequest_Fields_ContainerProbesValidationError{
+					field:  "ReadinessProbe",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return UpdateDeploymentRequest_Fields_ContainerProbesMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateDeploymentRequest_Fields_ContainerProbesMultiError is an error
+// wrapping multiple validation errors returned by
+// UpdateDeploymentRequest_Fields_ContainerProbes.ValidateAll() if the
+// designated constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerProbesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDeploymentRequest_Fields_ContainerProbesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDeploymentRequest_Fields_ContainerProbesMultiError) AllErrors() []error { return m }
+
+// UpdateDeploymentRequest_Fields_ContainerProbesValidationError is the
+// validation error returned by
+// UpdateDeploymentRequest_Fields_ContainerProbes.Validate if the designated
+// constraints aren't met.
+type UpdateDeploymentRequest_Fields_ContainerProbesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) ErrorName() string {
+	return "UpdateDeploymentRequest_Fields_ContainerProbesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentRequest_Fields_ContainerProbesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentRequest_Fields_ContainerProbes.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentRequest_Fields_ContainerProbesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentRequest_Fields_ContainerProbesValidationError{}
 
 // Validate checks the field values on
 // UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements with
