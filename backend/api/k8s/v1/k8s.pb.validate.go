@@ -39,6 +39,278 @@ var (
 	_ = structpb.NullValue(0)
 )
 
+// Validate checks the field values on ListNamespaceEventsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListNamespaceEventsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListNamespaceEventsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListNamespaceEventsRequestMultiError, or nil if none found.
+func (m *ListNamespaceEventsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListNamespaceEventsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetClientset()) < 1 {
+		err := ListNamespaceEventsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetCluster()) < 1 {
+		err := ListNamespaceEventsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		err := ListNamespaceEventsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ListNamespaceEventsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListNamespaceEventsRequestMultiError is an error wrapping multiple
+// validation errors returned by ListNamespaceEventsRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ListNamespaceEventsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListNamespaceEventsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListNamespaceEventsRequestMultiError) AllErrors() []error { return m }
+
+// ListNamespaceEventsRequestValidationError is the validation error returned
+// by ListNamespaceEventsRequest.Validate if the designated constraints aren't met.
+type ListNamespaceEventsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListNamespaceEventsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListNamespaceEventsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListNamespaceEventsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListNamespaceEventsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListNamespaceEventsRequestValidationError) ErrorName() string {
+	return "ListNamespaceEventsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListNamespaceEventsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListNamespaceEventsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListNamespaceEventsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListNamespaceEventsRequestValidationError{}
+
+// Validate checks the field values on ListNamespaceEventsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListNamespaceEventsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListNamespaceEventsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListNamespaceEventsResponseMultiError, or nil if none found.
+func (m *ListNamespaceEventsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListNamespaceEventsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetEvents() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListNamespaceEventsResponseValidationError{
+						field:  fmt.Sprintf("Events[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListNamespaceEventsResponseValidationError{
+						field:  fmt.Sprintf("Events[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListNamespaceEventsResponseValidationError{
+					field:  fmt.Sprintf("Events[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListNamespaceEventsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListNamespaceEventsResponseMultiError is an error wrapping multiple
+// validation errors returned by ListNamespaceEventsResponse.ValidateAll() if
+// the designated constraints aren't met.
+type ListNamespaceEventsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListNamespaceEventsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListNamespaceEventsResponseMultiError) AllErrors() []error { return m }
+
+// ListNamespaceEventsResponseValidationError is the validation error returned
+// by ListNamespaceEventsResponse.Validate if the designated constraints
+// aren't met.
+type ListNamespaceEventsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListNamespaceEventsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListNamespaceEventsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListNamespaceEventsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListNamespaceEventsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListNamespaceEventsResponseValidationError) ErrorName() string {
+	return "ListNamespaceEventsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListNamespaceEventsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListNamespaceEventsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListNamespaceEventsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListNamespaceEventsResponseValidationError{}
+
 // Validate checks the field values on DescribePodRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -10695,6 +10967,8 @@ func (m *Event) validate(all bool) error {
 	// no validation rules for Kind
 
 	// no validation rules for CreationTimeMillis
+
+	// no validation rules for EventType
 
 	if len(errors) > 0 {
 		return EventMultiError(errors)

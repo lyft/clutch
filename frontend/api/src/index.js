@@ -34751,7 +34751,349 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listNamespaceEvents}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListNamespaceEventsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListNamespaceEventsResponse} [response] ListNamespaceEventsResponse
+                 */
+
+                /**
+                 * Calls ListNamespaceEvents.
+                 * @function listNamespaceEvents
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListNamespaceEventsRequest} request ListNamespaceEventsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListNamespaceEventsCallback} callback Node-style callback called with the error, if any, and ListNamespaceEventsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listNamespaceEvents = function listNamespaceEvents(request, callback) {
+                    return this.rpcCall(listNamespaceEvents, $root.clutch.k8s.v1.ListNamespaceEventsRequest, $root.clutch.k8s.v1.ListNamespaceEventsResponse, request, callback);
+                }, "name", { value: "ListNamespaceEvents" });
+
+                /**
+                 * Calls ListNamespaceEvents.
+                 * @function listNamespaceEvents
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListNamespaceEventsRequest} request ListNamespaceEventsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListNamespaceEventsResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
+            })();
+
+            v1.ListNamespaceEventsRequest = (function() {
+
+                /**
+                 * Properties of a ListNamespaceEventsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListNamespaceEventsRequest
+                 * @property {string|null} [clientset] ListNamespaceEventsRequest clientset
+                 * @property {string|null} [cluster] ListNamespaceEventsRequest cluster
+                 * @property {string|null} [namespace] ListNamespaceEventsRequest namespace
+                 * @property {Array.<clutch.k8s.v1.EventType>|null} [eventTypes] ListNamespaceEventsRequest eventTypes
+                 */
+
+                /**
+                 * Constructs a new ListNamespaceEventsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListNamespaceEventsRequest.
+                 * @implements IListNamespaceEventsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListNamespaceEventsRequest=} [properties] Properties to set
+                 */
+                function ListNamespaceEventsRequest(properties) {
+                    this.eventTypes = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListNamespaceEventsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @instance
+                 */
+                ListNamespaceEventsRequest.prototype.clientset = "";
+
+                /**
+                 * ListNamespaceEventsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @instance
+                 */
+                ListNamespaceEventsRequest.prototype.cluster = "";
+
+                /**
+                 * ListNamespaceEventsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @instance
+                 */
+                ListNamespaceEventsRequest.prototype.namespace = "";
+
+                /**
+                 * ListNamespaceEventsRequest eventTypes.
+                 * @member {Array.<clutch.k8s.v1.EventType>} eventTypes
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @instance
+                 */
+                ListNamespaceEventsRequest.prototype.eventTypes = $util.emptyArray;
+
+                /**
+                 * Verifies a ListNamespaceEventsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListNamespaceEventsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.eventTypes != null && message.hasOwnProperty("eventTypes")) {
+                        if (!Array.isArray(message.eventTypes))
+                            return "eventTypes: array expected";
+                        for (let i = 0; i < message.eventTypes.length; ++i)
+                            switch (message.eventTypes[i]) {
+                            default:
+                                return "eventTypes: enum value[] expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListNamespaceEventsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListNamespaceEventsRequest} ListNamespaceEventsRequest
+                 */
+                ListNamespaceEventsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListNamespaceEventsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListNamespaceEventsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.eventTypes) {
+                        if (!Array.isArray(object.eventTypes))
+                            throw TypeError(".clutch.k8s.v1.ListNamespaceEventsRequest.eventTypes: array expected");
+                        message.eventTypes = [];
+                        for (let i = 0; i < object.eventTypes.length; ++i)
+                            switch (object.eventTypes[i]) {
+                            default:
+                            case "TYPE_UNSPECIFIED":
+                            case 0:
+                                message.eventTypes[i] = 0;
+                                break;
+                            case "NORMAL":
+                            case 1:
+                                message.eventTypes[i] = 1;
+                                break;
+                            case "WARNING":
+                            case 2:
+                                message.eventTypes[i] = 2;
+                                break;
+                            case "ERROR":
+                            case 3:
+                                message.eventTypes[i] = 3;
+                                break;
+                            }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListNamespaceEventsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListNamespaceEventsRequest} message ListNamespaceEventsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListNamespaceEventsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.eventTypes = [];
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.eventTypes && message.eventTypes.length) {
+                        object.eventTypes = [];
+                        for (let j = 0; j < message.eventTypes.length; ++j)
+                            object.eventTypes[j] = options.enums === String ? $root.clutch.k8s.v1.EventType[message.eventTypes[j]] : message.eventTypes[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListNamespaceEventsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListNamespaceEventsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListNamespaceEventsRequest;
+            })();
+
+            v1.ListNamespaceEventsResponse = (function() {
+
+                /**
+                 * Properties of a ListNamespaceEventsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListNamespaceEventsResponse
+                 * @property {Array.<clutch.k8s.v1.IEvent>|null} [events] ListNamespaceEventsResponse events
+                 */
+
+                /**
+                 * Constructs a new ListNamespaceEventsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListNamespaceEventsResponse.
+                 * @implements IListNamespaceEventsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListNamespaceEventsResponse=} [properties] Properties to set
+                 */
+                function ListNamespaceEventsResponse(properties) {
+                    this.events = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListNamespaceEventsResponse events.
+                 * @member {Array.<clutch.k8s.v1.IEvent>} events
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsResponse
+                 * @instance
+                 */
+                ListNamespaceEventsResponse.prototype.events = $util.emptyArray;
+
+                /**
+                 * Verifies a ListNamespaceEventsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListNamespaceEventsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.events != null && message.hasOwnProperty("events")) {
+                        if (!Array.isArray(message.events))
+                            return "events: array expected";
+                        for (let i = 0; i < message.events.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Event.verify(message.events[i]);
+                            if (error)
+                                return "events." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListNamespaceEventsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListNamespaceEventsResponse} ListNamespaceEventsResponse
+                 */
+                ListNamespaceEventsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListNamespaceEventsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListNamespaceEventsResponse();
+                    if (object.events) {
+                        if (!Array.isArray(object.events))
+                            throw TypeError(".clutch.k8s.v1.ListNamespaceEventsResponse.events: array expected");
+                        message.events = [];
+                        for (let i = 0; i < object.events.length; ++i) {
+                            if (typeof object.events[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListNamespaceEventsResponse.events: object expected");
+                            message.events[i] = $root.clutch.k8s.v1.Event.fromObject(object.events[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListNamespaceEventsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListNamespaceEventsResponse} message ListNamespaceEventsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListNamespaceEventsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.events = [];
+                    if (message.events && message.events.length) {
+                        object.events = [];
+                        for (let j = 0; j < message.events.length; ++j)
+                            object.events[j] = $root.clutch.k8s.v1.Event.toObject(message.events[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListNamespaceEventsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListNamespaceEventsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListNamespaceEventsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListNamespaceEventsResponse;
             })();
 
             v1.DescribePodRequest = (function() {
@@ -48265,6 +48607,24 @@ export const clutch = $root.clutch = (() => {
                 return values;
             })();
 
+            /**
+             * EventType enum.
+             * @name clutch.k8s.v1.EventType
+             * @enum {number}
+             * @property {number} TYPE_UNSPECIFIED=0 TYPE_UNSPECIFIED value
+             * @property {number} NORMAL=1 NORMAL value
+             * @property {number} WARNING=2 WARNING value
+             * @property {number} ERROR=3 ERROR value
+             */
+            v1.EventType = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "TYPE_UNSPECIFIED"] = 0;
+                values[valuesById[1] = "NORMAL"] = 1;
+                values[valuesById[2] = "WARNING"] = 2;
+                values[valuesById[3] = "ERROR"] = 3;
+                return values;
+            })();
+
             v1.Event = (function() {
 
                 /**
@@ -48279,6 +48639,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
                  * @property {number|Long|null} [creationTimeMillis] Event creationTimeMillis
+                 * @property {clutch.k8s.v1.EventType|null} [eventType] Event eventType
                  */
 
                 /**
@@ -48361,6 +48722,14 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.creationTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
+                 * Event eventType.
+                 * @member {clutch.k8s.v1.EventType} eventType
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.eventType = 0;
+
+                /**
                  * Verifies an Event message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Event
@@ -48401,6 +48770,16 @@ export const clutch = $root.clutch = (() => {
                     if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
                         if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
                             return "creationTimeMillis: integer|Long expected";
+                    if (message.eventType != null && message.hasOwnProperty("eventType"))
+                        switch (message.eventType) {
+                        default:
+                            return "eventType: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
                     return null;
                 };
 
@@ -48451,6 +48830,24 @@ export const clutch = $root.clutch = (() => {
                             message.creationTimeMillis = object.creationTimeMillis;
                         else if (typeof object.creationTimeMillis === "object")
                             message.creationTimeMillis = new $util.LongBits(object.creationTimeMillis.low >>> 0, object.creationTimeMillis.high >>> 0).toNumber();
+                    switch (object.eventType) {
+                    case "TYPE_UNSPECIFIED":
+                    case 0:
+                        message.eventType = 0;
+                        break;
+                    case "NORMAL":
+                    case 1:
+                        message.eventType = 1;
+                        break;
+                    case "WARNING":
+                    case 2:
+                        message.eventType = 2;
+                        break;
+                    case "ERROR":
+                    case 3:
+                        message.eventType = 3;
+                        break;
+                    }
                     return message;
                 };
 
@@ -48480,6 +48877,7 @@ export const clutch = $root.clutch = (() => {
                             object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.creationTimeMillis = options.longs === String ? "0" : 0;
+                        object.eventType = options.enums === String ? "TYPE_UNSPECIFIED" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -48500,6 +48898,8 @@ export const clutch = $root.clutch = (() => {
                             object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;
                         else
                             object.creationTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.creationTimeMillis) : options.longs === Number ? new $util.LongBits(message.creationTimeMillis.low >>> 0, message.creationTimeMillis.high >>> 0).toNumber() : message.creationTimeMillis;
+                    if (message.eventType != null && message.hasOwnProperty("eventType"))
+                        object.eventType = options.enums === String ? $root.clutch.k8s.v1.EventType[message.eventType] : message.eventType;
                     return object;
                 };
 

@@ -79,6 +79,58 @@ func (ObjectKind) EnumDescriptor() ([]byte, []int) {
 	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{0}
 }
 
+type EventType int32
+
+const (
+	EventType_TYPE_UNSPECIFIED EventType = 0
+	EventType_NORMAL           EventType = 1
+	EventType_WARNING          EventType = 2
+	EventType_ERROR            EventType = 3
+)
+
+// Enum value maps for EventType.
+var (
+	EventType_name = map[int32]string{
+		0: "TYPE_UNSPECIFIED",
+		1: "NORMAL",
+		2: "WARNING",
+		3: "ERROR",
+	}
+	EventType_value = map[string]int32{
+		"TYPE_UNSPECIFIED": 0,
+		"NORMAL":           1,
+		"WARNING":          2,
+		"ERROR":            3,
+	}
+)
+
+func (x EventType) Enum() *EventType {
+	p := new(EventType)
+	*p = x
+	return p
+}
+
+func (x EventType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EventType) Descriptor() protoreflect.EnumDescriptor {
+	return file_k8s_v1_k8s_proto_enumTypes[1].Descriptor()
+}
+
+func (EventType) Type() protoreflect.EnumType {
+	return &file_k8s_v1_k8s_proto_enumTypes[1]
+}
+
+func (x EventType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EventType.Descriptor instead.
+func (EventType) EnumDescriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{1}
+}
+
 // https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#containerstate-v1-core
 type Container_State int32
 
@@ -119,11 +171,11 @@ func (x Container_State) String() string {
 }
 
 func (Container_State) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[1].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[2].Descriptor()
 }
 
 func (Container_State) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[1]
+	return &file_k8s_v1_k8s_proto_enumTypes[2]
 }
 
 func (x Container_State) Number() protoreflect.EnumNumber {
@@ -132,7 +184,7 @@ func (x Container_State) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Container_State.Descriptor instead.
 func (Container_State) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{2, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{4, 0}
 }
 
 type PodCondition_Type int32
@@ -174,11 +226,11 @@ func (x PodCondition_Type) String() string {
 }
 
 func (PodCondition_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[2].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[3].Descriptor()
 }
 
 func (PodCondition_Type) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[2]
+	return &file_k8s_v1_k8s_proto_enumTypes[3]
 }
 
 func (x PodCondition_Type) Number() protoreflect.EnumNumber {
@@ -187,7 +239,7 @@ func (x PodCondition_Type) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PodCondition_Type.Descriptor instead.
 func (PodCondition_Type) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{6, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{8, 0}
 }
 
 type PodCondition_Status int32
@@ -226,11 +278,11 @@ func (x PodCondition_Status) String() string {
 }
 
 func (PodCondition_Status) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[3].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[4].Descriptor()
 }
 
 func (PodCondition_Status) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[3]
+	return &file_k8s_v1_k8s_proto_enumTypes[4]
 }
 
 func (x PodCondition_Status) Number() protoreflect.EnumNumber {
@@ -239,7 +291,7 @@ func (x PodCondition_Status) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PodCondition_Status.Descriptor instead.
 func (PodCondition_Status) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{6, 1}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{8, 1}
 }
 
 // https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
@@ -285,11 +337,11 @@ func (x Pod_State) String() string {
 }
 
 func (Pod_State) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[4].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[5].Descriptor()
 }
 
 func (Pod_State) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[4]
+	return &file_k8s_v1_k8s_proto_enumTypes[5]
 }
 
 func (x Pod_State) Number() protoreflect.EnumNumber {
@@ -298,7 +350,7 @@ func (x Pod_State) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Pod_State.Descriptor instead.
 func (Pod_State) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{7, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{9, 0}
 }
 
 // This is mirroring upstream values here:
@@ -342,11 +394,11 @@ func (x Deployment_DeploymentStatus_Condition_Type) String() string {
 }
 
 func (Deployment_DeploymentStatus_Condition_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[5].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[6].Descriptor()
 }
 
 func (Deployment_DeploymentStatus_Condition_Type) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[5]
+	return &file_k8s_v1_k8s_proto_enumTypes[6]
 }
 
 func (x Deployment_DeploymentStatus_Condition_Type) Number() protoreflect.EnumNumber {
@@ -355,7 +407,7 @@ func (x Deployment_DeploymentStatus_Condition_Type) Number() protoreflect.EnumNu
 
 // Deprecated: Use Deployment_DeploymentStatus_Condition_Type.Descriptor instead.
 func (Deployment_DeploymentStatus_Condition_Type) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 2, 0, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 2, 0, 0}
 }
 
 type Deployment_DeploymentStatus_Condition_ConditionStatus int32
@@ -394,11 +446,11 @@ func (x Deployment_DeploymentStatus_Condition_ConditionStatus) String() string {
 }
 
 func (Deployment_DeploymentStatus_Condition_ConditionStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[6].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[7].Descriptor()
 }
 
 func (Deployment_DeploymentStatus_Condition_ConditionStatus) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[6]
+	return &file_k8s_v1_k8s_proto_enumTypes[7]
 }
 
 func (x Deployment_DeploymentStatus_Condition_ConditionStatus) Number() protoreflect.EnumNumber {
@@ -407,7 +459,7 @@ func (x Deployment_DeploymentStatus_Condition_ConditionStatus) Number() protoref
 
 // Deprecated: Use Deployment_DeploymentStatus_Condition_ConditionStatus.Descriptor instead.
 func (Deployment_DeploymentStatus_Condition_ConditionStatus) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 2, 0, 1}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 2, 0, 1}
 }
 
 type Service_Type int32
@@ -452,11 +504,11 @@ func (x Service_Type) String() string {
 }
 
 func (Service_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[7].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[8].Descriptor()
 }
 
 func (Service_Type) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[7]
+	return &file_k8s_v1_k8s_proto_enumTypes[8]
 }
 
 func (x Service_Type) Number() protoreflect.EnumNumber {
@@ -465,7 +517,7 @@ func (x Service_Type) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Service_Type.Descriptor instead.
 func (Service_Type) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{42, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{44, 0}
 }
 
 type CronJob_ConcurrencyPolicy int32
@@ -507,11 +559,11 @@ func (x CronJob_ConcurrencyPolicy) String() string {
 }
 
 func (CronJob_ConcurrencyPolicy) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[8].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[9].Descriptor()
 }
 
 func (CronJob_ConcurrencyPolicy) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[8]
+	return &file_k8s_v1_k8s_proto_enumTypes[9]
 }
 
 func (x CronJob_ConcurrencyPolicy) Number() protoreflect.EnumNumber {
@@ -520,7 +572,126 @@ func (x CronJob_ConcurrencyPolicy) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use CronJob_ConcurrencyPolicy.Descriptor instead.
 func (CronJob_ConcurrencyPolicy) EnumDescriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{49, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{51, 0}
+}
+
+type ListNamespaceEventsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Clientset string `protobuf:"bytes,1,opt,name=clientset,proto3" json:"clientset,omitempty"`
+	Cluster   string `protobuf:"bytes,2,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// If no filters, only get errors. If filters are presesnt, allow for multiple types.
+	EventTypes []EventType `protobuf:"varint,4,rep,packed,name=event_types,json=eventTypes,proto3,enum=clutch.k8s.v1.EventType" json:"event_types,omitempty"` // Note object kind is Pod, in the future may support nodes as well
+}
+
+func (x *ListNamespaceEventsRequest) Reset() {
+	*x = ListNamespaceEventsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListNamespaceEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListNamespaceEventsRequest) ProtoMessage() {}
+
+func (x *ListNamespaceEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListNamespaceEventsRequest.ProtoReflect.Descriptor instead.
+func (*ListNamespaceEventsRequest) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ListNamespaceEventsRequest) GetClientset() string {
+	if x != nil {
+		return x.Clientset
+	}
+	return ""
+}
+
+func (x *ListNamespaceEventsRequest) GetCluster() string {
+	if x != nil {
+		return x.Cluster
+	}
+	return ""
+}
+
+func (x *ListNamespaceEventsRequest) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *ListNamespaceEventsRequest) GetEventTypes() []EventType {
+	if x != nil {
+		return x.EventTypes
+	}
+	return nil
+}
+
+type ListNamespaceEventsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Events []*Event `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
+}
+
+func (x *ListNamespaceEventsResponse) Reset() {
+	*x = ListNamespaceEventsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListNamespaceEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListNamespaceEventsResponse) ProtoMessage() {}
+
+func (x *ListNamespaceEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListNamespaceEventsResponse.ProtoReflect.Descriptor instead.
+func (*ListNamespaceEventsResponse) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ListNamespaceEventsResponse) GetEvents() []*Event {
+	if x != nil {
+		return x.Events
+	}
+	return nil
 }
 
 type DescribePodRequest struct {
@@ -537,7 +708,7 @@ type DescribePodRequest struct {
 func (x *DescribePodRequest) Reset() {
 	*x = DescribePodRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[0]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -550,7 +721,7 @@ func (x *DescribePodRequest) String() string {
 func (*DescribePodRequest) ProtoMessage() {}
 
 func (x *DescribePodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[0]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -563,7 +734,7 @@ func (x *DescribePodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribePodRequest.ProtoReflect.Descriptor instead.
 func (*DescribePodRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DescribePodRequest) GetClientset() string {
@@ -605,7 +776,7 @@ type DescribePodResponse struct {
 func (x *DescribePodResponse) Reset() {
 	*x = DescribePodResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[1]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -618,7 +789,7 @@ func (x *DescribePodResponse) String() string {
 func (*DescribePodResponse) ProtoMessage() {}
 
 func (x *DescribePodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[1]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -631,7 +802,7 @@ func (x *DescribePodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribePodResponse.ProtoReflect.Descriptor instead.
 func (*DescribePodResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{1}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *DescribePodResponse) GetPod() *Pod {
@@ -665,7 +836,7 @@ type Container struct {
 func (x *Container) Reset() {
 	*x = Container{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[2]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -678,7 +849,7 @@ func (x *Container) String() string {
 func (*Container) ProtoMessage() {}
 
 func (x *Container) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[2]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -691,7 +862,7 @@ func (x *Container) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Container.ProtoReflect.Descriptor instead.
 func (*Container) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{2}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Container) GetName() string {
@@ -792,7 +963,7 @@ type StateWaiting struct {
 func (x *StateWaiting) Reset() {
 	*x = StateWaiting{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[3]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -805,7 +976,7 @@ func (x *StateWaiting) String() string {
 func (*StateWaiting) ProtoMessage() {}
 
 func (x *StateWaiting) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[3]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -818,7 +989,7 @@ func (x *StateWaiting) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateWaiting.ProtoReflect.Descriptor instead.
 func (*StateWaiting) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{3}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *StateWaiting) GetReason() string {
@@ -847,7 +1018,7 @@ type StateRunning struct {
 func (x *StateRunning) Reset() {
 	*x = StateRunning{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[4]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -860,7 +1031,7 @@ func (x *StateRunning) String() string {
 func (*StateRunning) ProtoMessage() {}
 
 func (x *StateRunning) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[4]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -873,7 +1044,7 @@ func (x *StateRunning) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateRunning.ProtoReflect.Descriptor instead.
 func (*StateRunning) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{4}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *StateRunning) GetStartTime() *timestamppb.Timestamp {
@@ -898,7 +1069,7 @@ type StateTerminated struct {
 func (x *StateTerminated) Reset() {
 	*x = StateTerminated{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[5]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -911,7 +1082,7 @@ func (x *StateTerminated) String() string {
 func (*StateTerminated) ProtoMessage() {}
 
 func (x *StateTerminated) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[5]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -924,7 +1095,7 @@ func (x *StateTerminated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateTerminated.ProtoReflect.Descriptor instead.
 func (*StateTerminated) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{5}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *StateTerminated) GetReason() string {
@@ -967,7 +1138,7 @@ type PodCondition struct {
 func (x *PodCondition) Reset() {
 	*x = PodCondition{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[6]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -980,7 +1151,7 @@ func (x *PodCondition) String() string {
 func (*PodCondition) ProtoMessage() {}
 
 func (x *PodCondition) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[6]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -993,7 +1164,7 @@ func (x *PodCondition) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PodCondition.ProtoReflect.Descriptor instead.
 func (*PodCondition) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{6}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PodCondition) GetType() PodCondition_Type {
@@ -1048,7 +1219,7 @@ type Pod struct {
 func (x *Pod) Reset() {
 	*x = Pod{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[7]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1061,7 +1232,7 @@ func (x *Pod) String() string {
 func (*Pod) ProtoMessage() {}
 
 func (x *Pod) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[7]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1074,7 +1245,7 @@ func (x *Pod) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pod.ProtoReflect.Descriptor instead.
 func (*Pod) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{7}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Pod) GetCluster() string {
@@ -1198,7 +1369,7 @@ type ListOptions struct {
 func (x *ListOptions) Reset() {
 	*x = ListOptions{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[8]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1211,7 +1382,7 @@ func (x *ListOptions) String() string {
 func (*ListOptions) ProtoMessage() {}
 
 func (x *ListOptions) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[8]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1224,7 +1395,7 @@ func (x *ListOptions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOptions.ProtoReflect.Descriptor instead.
 func (*ListOptions) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{8}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ListOptions) GetLabels() map[string]string {
@@ -1255,7 +1426,7 @@ type ListPodsRequest struct {
 func (x *ListPodsRequest) Reset() {
 	*x = ListPodsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[9]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1268,7 +1439,7 @@ func (x *ListPodsRequest) String() string {
 func (*ListPodsRequest) ProtoMessage() {}
 
 func (x *ListPodsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[9]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1281,7 +1452,7 @@ func (x *ListPodsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPodsRequest.ProtoReflect.Descriptor instead.
 func (*ListPodsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{9}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ListPodsRequest) GetClientset() string {
@@ -1324,7 +1495,7 @@ type ListPodsResponse struct {
 func (x *ListPodsResponse) Reset() {
 	*x = ListPodsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[10]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1337,7 +1508,7 @@ func (x *ListPodsResponse) String() string {
 func (*ListPodsResponse) ProtoMessage() {}
 
 func (x *ListPodsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[10]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1350,7 +1521,7 @@ func (x *ListPodsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPodsResponse.ProtoReflect.Descriptor instead.
 func (*ListPodsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{10}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListPodsResponse) GetPods() []*Pod {
@@ -1381,7 +1552,7 @@ type DeletePodRequest struct {
 func (x *DeletePodRequest) Reset() {
 	*x = DeletePodRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[11]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1394,7 +1565,7 @@ func (x *DeletePodRequest) String() string {
 func (*DeletePodRequest) ProtoMessage() {}
 
 func (x *DeletePodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[11]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1407,7 +1578,7 @@ func (x *DeletePodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePodRequest.ProtoReflect.Descriptor instead.
 func (*DeletePodRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{11}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeletePodRequest) GetClientset() string {
@@ -1447,7 +1618,7 @@ type DeletePodResponse struct {
 func (x *DeletePodResponse) Reset() {
 	*x = DeletePodResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[12]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1460,7 +1631,7 @@ func (x *DeletePodResponse) String() string {
 func (*DeletePodResponse) ProtoMessage() {}
 
 func (x *DeletePodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[12]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1473,7 +1644,7 @@ func (x *DeletePodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePodResponse.ProtoReflect.Descriptor instead.
 func (*DeletePodResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{12}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{14}
 }
 
 type UpdatePodRequest struct {
@@ -1498,7 +1669,7 @@ type UpdatePodRequest struct {
 func (x *UpdatePodRequest) Reset() {
 	*x = UpdatePodRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[13]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1511,7 +1682,7 @@ func (x *UpdatePodRequest) String() string {
 func (*UpdatePodRequest) ProtoMessage() {}
 
 func (x *UpdatePodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[13]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1524,7 +1695,7 @@ func (x *UpdatePodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePodRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePodRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{13}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UpdatePodRequest) GetClientset() string {
@@ -1585,7 +1756,7 @@ type UpdatePodResponse struct {
 func (x *UpdatePodResponse) Reset() {
 	*x = UpdatePodResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[14]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1598,7 +1769,7 @@ func (x *UpdatePodResponse) String() string {
 func (*UpdatePodResponse) ProtoMessage() {}
 
 func (x *UpdatePodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[14]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1611,7 +1782,7 @@ func (x *UpdatePodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePodResponse.ProtoReflect.Descriptor instead.
 func (*UpdatePodResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{14}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{16}
 }
 
 type GetPodLogsRequest struct {
@@ -1629,7 +1800,7 @@ type GetPodLogsRequest struct {
 func (x *GetPodLogsRequest) Reset() {
 	*x = GetPodLogsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[15]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1642,7 +1813,7 @@ func (x *GetPodLogsRequest) String() string {
 func (*GetPodLogsRequest) ProtoMessage() {}
 
 func (x *GetPodLogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[15]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1655,7 +1826,7 @@ func (x *GetPodLogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPodLogsRequest.ProtoReflect.Descriptor instead.
 func (*GetPodLogsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{15}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetPodLogsRequest) GetClientset() string {
@@ -1713,7 +1884,7 @@ type PodLogsOptions struct {
 func (x *PodLogsOptions) Reset() {
 	*x = PodLogsOptions{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[16]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1726,7 +1897,7 @@ func (x *PodLogsOptions) String() string {
 func (*PodLogsOptions) ProtoMessage() {}
 
 func (x *PodLogsOptions) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[16]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1739,7 +1910,7 @@ func (x *PodLogsOptions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PodLogsOptions.ProtoReflect.Descriptor instead.
 func (*PodLogsOptions) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{16}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *PodLogsOptions) GetContainerName() string {
@@ -1782,7 +1953,7 @@ type GetPodLogsResponse struct {
 func (x *GetPodLogsResponse) Reset() {
 	*x = GetPodLogsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[17]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1795,7 +1966,7 @@ func (x *GetPodLogsResponse) String() string {
 func (*GetPodLogsResponse) ProtoMessage() {}
 
 func (x *GetPodLogsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[17]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1808,7 +1979,7 @@ func (x *GetPodLogsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPodLogsResponse.ProtoReflect.Descriptor instead.
 func (*GetPodLogsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{17}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetPodLogsResponse) GetLatestTs() string {
@@ -1837,7 +2008,7 @@ type PodLogLine struct {
 func (x *PodLogLine) Reset() {
 	*x = PodLogLine{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[18]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1850,7 +2021,7 @@ func (x *PodLogLine) String() string {
 func (*PodLogLine) ProtoMessage() {}
 
 func (x *PodLogLine) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[18]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1863,7 +2034,7 @@ func (x *PodLogLine) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PodLogLine.ProtoReflect.Descriptor instead.
 func (*PodLogLine) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{18}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *PodLogLine) GetTs() string {
@@ -1896,7 +2067,7 @@ type HPA struct {
 func (x *HPA) Reset() {
 	*x = HPA{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[19]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1909,7 +2080,7 @@ func (x *HPA) String() string {
 func (*HPA) ProtoMessage() {}
 
 func (x *HPA) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[19]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1922,7 +2093,7 @@ func (x *HPA) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HPA.ProtoReflect.Descriptor instead.
 func (*HPA) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{19}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *HPA) GetCluster() string {
@@ -1983,7 +2154,7 @@ type ResizeHPARequest struct {
 func (x *ResizeHPARequest) Reset() {
 	*x = ResizeHPARequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[20]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1996,7 +2167,7 @@ func (x *ResizeHPARequest) String() string {
 func (*ResizeHPARequest) ProtoMessage() {}
 
 func (x *ResizeHPARequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[20]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2009,7 +2180,7 @@ func (x *ResizeHPARequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResizeHPARequest.ProtoReflect.Descriptor instead.
 func (*ResizeHPARequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{20}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ResizeHPARequest) GetClientset() string {
@@ -2063,7 +2234,7 @@ type ResizeHPAResponse struct {
 func (x *ResizeHPAResponse) Reset() {
 	*x = ResizeHPAResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[21]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2076,7 +2247,7 @@ func (x *ResizeHPAResponse) String() string {
 func (*ResizeHPAResponse) ProtoMessage() {}
 
 func (x *ResizeHPAResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[21]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2089,7 +2260,7 @@ func (x *ResizeHPAResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResizeHPAResponse.ProtoReflect.Descriptor instead.
 func (*ResizeHPAResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{21}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{23}
 }
 
 type DeleteHPARequest struct {
@@ -2106,7 +2277,7 @@ type DeleteHPARequest struct {
 func (x *DeleteHPARequest) Reset() {
 	*x = DeleteHPARequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[22]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2119,7 +2290,7 @@ func (x *DeleteHPARequest) String() string {
 func (*DeleteHPARequest) ProtoMessage() {}
 
 func (x *DeleteHPARequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[22]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2132,7 +2303,7 @@ func (x *DeleteHPARequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteHPARequest.ProtoReflect.Descriptor instead.
 func (*DeleteHPARequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{22}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *DeleteHPARequest) GetClientset() string {
@@ -2172,7 +2343,7 @@ type DeleteHPAResponse struct {
 func (x *DeleteHPAResponse) Reset() {
 	*x = DeleteHPAResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[23]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2185,7 +2356,7 @@ func (x *DeleteHPAResponse) String() string {
 func (*DeleteHPAResponse) ProtoMessage() {}
 
 func (x *DeleteHPAResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[23]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2198,7 +2369,7 @@ func (x *DeleteHPAResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteHPAResponse.ProtoReflect.Descriptor instead.
 func (*DeleteHPAResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{23}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{25}
 }
 
 type Deployment struct {
@@ -2222,7 +2393,7 @@ type Deployment struct {
 func (x *Deployment) Reset() {
 	*x = Deployment{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[24]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2235,7 +2406,7 @@ func (x *Deployment) String() string {
 func (*Deployment) ProtoMessage() {}
 
 func (x *Deployment) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[24]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2248,7 +2419,7 @@ func (x *Deployment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Deployment.ProtoReflect.Descriptor instead.
 func (*Deployment) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *Deployment) GetCluster() string {
@@ -2321,7 +2492,7 @@ type DescribeDeploymentRequest struct {
 func (x *DescribeDeploymentRequest) Reset() {
 	*x = DescribeDeploymentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[25]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2334,7 +2505,7 @@ func (x *DescribeDeploymentRequest) String() string {
 func (*DescribeDeploymentRequest) ProtoMessage() {}
 
 func (x *DescribeDeploymentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[25]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2347,7 +2518,7 @@ func (x *DescribeDeploymentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeDeploymentRequest.ProtoReflect.Descriptor instead.
 func (*DescribeDeploymentRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{25}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *DescribeDeploymentRequest) GetClientset() string {
@@ -2389,7 +2560,7 @@ type DescribeDeploymentResponse struct {
 func (x *DescribeDeploymentResponse) Reset() {
 	*x = DescribeDeploymentResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[26]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2402,7 +2573,7 @@ func (x *DescribeDeploymentResponse) String() string {
 func (*DescribeDeploymentResponse) ProtoMessage() {}
 
 func (x *DescribeDeploymentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[26]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2415,7 +2586,7 @@ func (x *DescribeDeploymentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeDeploymentResponse.ProtoReflect.Descriptor instead.
 func (*DescribeDeploymentResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *DescribeDeploymentResponse) GetDeployment() *Deployment {
@@ -2439,7 +2610,7 @@ type ListDeploymentsRequest struct {
 func (x *ListDeploymentsRequest) Reset() {
 	*x = ListDeploymentsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[27]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2452,7 +2623,7 @@ func (x *ListDeploymentsRequest) String() string {
 func (*ListDeploymentsRequest) ProtoMessage() {}
 
 func (x *ListDeploymentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[27]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2465,7 +2636,7 @@ func (x *ListDeploymentsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDeploymentsRequest.ProtoReflect.Descriptor instead.
 func (*ListDeploymentsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{27}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ListDeploymentsRequest) GetClientset() string {
@@ -2507,7 +2678,7 @@ type ListDeploymentsResponse struct {
 func (x *ListDeploymentsResponse) Reset() {
 	*x = ListDeploymentsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[28]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2520,7 +2691,7 @@ func (x *ListDeploymentsResponse) String() string {
 func (*ListDeploymentsResponse) ProtoMessage() {}
 
 func (x *ListDeploymentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[28]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2533,7 +2704,7 @@ func (x *ListDeploymentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDeploymentsResponse.ProtoReflect.Descriptor instead.
 func (*ListDeploymentsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{28}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ListDeploymentsResponse) GetDeployments() []*Deployment {
@@ -2558,7 +2729,7 @@ type UpdateDeploymentRequest struct {
 func (x *UpdateDeploymentRequest) Reset() {
 	*x = UpdateDeploymentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[29]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2571,7 +2742,7 @@ func (x *UpdateDeploymentRequest) String() string {
 func (*UpdateDeploymentRequest) ProtoMessage() {}
 
 func (x *UpdateDeploymentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[29]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2584,7 +2755,7 @@ func (x *UpdateDeploymentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDeploymentRequest.ProtoReflect.Descriptor instead.
 func (*UpdateDeploymentRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{29}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *UpdateDeploymentRequest) GetClientset() string {
@@ -2631,7 +2802,7 @@ type UpdateDeploymentResponse struct {
 func (x *UpdateDeploymentResponse) Reset() {
 	*x = UpdateDeploymentResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[30]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2644,7 +2815,7 @@ func (x *UpdateDeploymentResponse) String() string {
 func (*UpdateDeploymentResponse) ProtoMessage() {}
 
 func (x *UpdateDeploymentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[30]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2657,7 +2828,7 @@ func (x *UpdateDeploymentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDeploymentResponse.ProtoReflect.Descriptor instead.
 func (*UpdateDeploymentResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{30}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{32}
 }
 
 type DeleteDeploymentRequest struct {
@@ -2674,7 +2845,7 @@ type DeleteDeploymentRequest struct {
 func (x *DeleteDeploymentRequest) Reset() {
 	*x = DeleteDeploymentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[31]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2687,7 +2858,7 @@ func (x *DeleteDeploymentRequest) String() string {
 func (*DeleteDeploymentRequest) ProtoMessage() {}
 
 func (x *DeleteDeploymentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[31]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2700,7 +2871,7 @@ func (x *DeleteDeploymentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDeploymentRequest.ProtoReflect.Descriptor instead.
 func (*DeleteDeploymentRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{31}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *DeleteDeploymentRequest) GetClientset() string {
@@ -2740,7 +2911,7 @@ type DeleteDeploymentResponse struct {
 func (x *DeleteDeploymentResponse) Reset() {
 	*x = DeleteDeploymentResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[32]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[34]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2753,7 +2924,7 @@ func (x *DeleteDeploymentResponse) String() string {
 func (*DeleteDeploymentResponse) ProtoMessage() {}
 
 func (x *DeleteDeploymentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[32]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[34]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2766,7 +2937,7 @@ func (x *DeleteDeploymentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDeploymentResponse.ProtoReflect.Descriptor instead.
 func (*DeleteDeploymentResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{32}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{34}
 }
 
 type StatefulSet struct {
@@ -2789,7 +2960,7 @@ type StatefulSet struct {
 func (x *StatefulSet) Reset() {
 	*x = StatefulSet{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[33]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[35]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2802,7 +2973,7 @@ func (x *StatefulSet) String() string {
 func (*StatefulSet) ProtoMessage() {}
 
 func (x *StatefulSet) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[33]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[35]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2815,7 +2986,7 @@ func (x *StatefulSet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatefulSet.ProtoReflect.Descriptor instead.
 func (*StatefulSet) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{33}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *StatefulSet) GetCluster() string {
@@ -2881,7 +3052,7 @@ type DescribeStatefulSetRequest struct {
 func (x *DescribeStatefulSetRequest) Reset() {
 	*x = DescribeStatefulSetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[34]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[36]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2894,7 +3065,7 @@ func (x *DescribeStatefulSetRequest) String() string {
 func (*DescribeStatefulSetRequest) ProtoMessage() {}
 
 func (x *DescribeStatefulSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[34]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[36]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2907,7 +3078,7 @@ func (x *DescribeStatefulSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeStatefulSetRequest.ProtoReflect.Descriptor instead.
 func (*DescribeStatefulSetRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{34}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *DescribeStatefulSetRequest) GetClientset() string {
@@ -2949,7 +3120,7 @@ type DescribeStatefulSetResponse struct {
 func (x *DescribeStatefulSetResponse) Reset() {
 	*x = DescribeStatefulSetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[35]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[37]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2962,7 +3133,7 @@ func (x *DescribeStatefulSetResponse) String() string {
 func (*DescribeStatefulSetResponse) ProtoMessage() {}
 
 func (x *DescribeStatefulSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[35]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[37]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2975,7 +3146,7 @@ func (x *DescribeStatefulSetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeStatefulSetResponse.ProtoReflect.Descriptor instead.
 func (*DescribeStatefulSetResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{35}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *DescribeStatefulSetResponse) GetStatefulSet() *StatefulSet {
@@ -2999,7 +3170,7 @@ type ListStatefulSetsRequest struct {
 func (x *ListStatefulSetsRequest) Reset() {
 	*x = ListStatefulSetsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[36]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[38]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3012,7 +3183,7 @@ func (x *ListStatefulSetsRequest) String() string {
 func (*ListStatefulSetsRequest) ProtoMessage() {}
 
 func (x *ListStatefulSetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[36]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[38]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3025,7 +3196,7 @@ func (x *ListStatefulSetsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListStatefulSetsRequest.ProtoReflect.Descriptor instead.
 func (*ListStatefulSetsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{36}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *ListStatefulSetsRequest) GetClientset() string {
@@ -3067,7 +3238,7 @@ type ListStatefulSetsResponse struct {
 func (x *ListStatefulSetsResponse) Reset() {
 	*x = ListStatefulSetsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[37]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[39]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3080,7 +3251,7 @@ func (x *ListStatefulSetsResponse) String() string {
 func (*ListStatefulSetsResponse) ProtoMessage() {}
 
 func (x *ListStatefulSetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[37]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[39]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3093,7 +3264,7 @@ func (x *ListStatefulSetsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListStatefulSetsResponse.ProtoReflect.Descriptor instead.
 func (*ListStatefulSetsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{37}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *ListStatefulSetsResponse) GetStatefulSets() []*StatefulSet {
@@ -3117,7 +3288,7 @@ type DeleteStatefulSetRequest struct {
 func (x *DeleteStatefulSetRequest) Reset() {
 	*x = DeleteStatefulSetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[38]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[40]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3130,7 +3301,7 @@ func (x *DeleteStatefulSetRequest) String() string {
 func (*DeleteStatefulSetRequest) ProtoMessage() {}
 
 func (x *DeleteStatefulSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[38]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[40]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3143,7 +3314,7 @@ func (x *DeleteStatefulSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteStatefulSetRequest.ProtoReflect.Descriptor instead.
 func (*DeleteStatefulSetRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{38}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *DeleteStatefulSetRequest) GetClientset() string {
@@ -3183,7 +3354,7 @@ type DeleteStatefulSetResponse struct {
 func (x *DeleteStatefulSetResponse) Reset() {
 	*x = DeleteStatefulSetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[39]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[41]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3196,7 +3367,7 @@ func (x *DeleteStatefulSetResponse) String() string {
 func (*DeleteStatefulSetResponse) ProtoMessage() {}
 
 func (x *DeleteStatefulSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[39]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[41]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3209,7 +3380,7 @@ func (x *DeleteStatefulSetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteStatefulSetResponse.ProtoReflect.Descriptor instead.
 func (*DeleteStatefulSetResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{39}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{41}
 }
 
 type UpdateStatefulSetRequest struct {
@@ -3227,7 +3398,7 @@ type UpdateStatefulSetRequest struct {
 func (x *UpdateStatefulSetRequest) Reset() {
 	*x = UpdateStatefulSetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[40]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[42]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3240,7 +3411,7 @@ func (x *UpdateStatefulSetRequest) String() string {
 func (*UpdateStatefulSetRequest) ProtoMessage() {}
 
 func (x *UpdateStatefulSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[40]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[42]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3253,7 +3424,7 @@ func (x *UpdateStatefulSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatefulSetRequest.ProtoReflect.Descriptor instead.
 func (*UpdateStatefulSetRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{40}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *UpdateStatefulSetRequest) GetClientset() string {
@@ -3300,7 +3471,7 @@ type UpdateStatefulSetResponse struct {
 func (x *UpdateStatefulSetResponse) Reset() {
 	*x = UpdateStatefulSetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[41]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[43]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3313,7 +3484,7 @@ func (x *UpdateStatefulSetResponse) String() string {
 func (*UpdateStatefulSetResponse) ProtoMessage() {}
 
 func (x *UpdateStatefulSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[41]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[43]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3326,7 +3497,7 @@ func (x *UpdateStatefulSetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatefulSetResponse.ProtoReflect.Descriptor instead.
 func (*UpdateStatefulSetResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{41}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{43}
 }
 
 type Service struct {
@@ -3349,7 +3520,7 @@ type Service struct {
 func (x *Service) Reset() {
 	*x = Service{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[42]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[44]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3362,7 +3533,7 @@ func (x *Service) String() string {
 func (*Service) ProtoMessage() {}
 
 func (x *Service) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[42]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[44]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3375,7 +3546,7 @@ func (x *Service) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Service.ProtoReflect.Descriptor instead.
 func (*Service) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{42}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *Service) GetCluster() string {
@@ -3441,7 +3612,7 @@ type DescribeServiceRequest struct {
 func (x *DescribeServiceRequest) Reset() {
 	*x = DescribeServiceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[43]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[45]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3454,7 +3625,7 @@ func (x *DescribeServiceRequest) String() string {
 func (*DescribeServiceRequest) ProtoMessage() {}
 
 func (x *DescribeServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[43]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[45]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3467,7 +3638,7 @@ func (x *DescribeServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeServiceRequest.ProtoReflect.Descriptor instead.
 func (*DescribeServiceRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{43}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *DescribeServiceRequest) GetClientset() string {
@@ -3509,7 +3680,7 @@ type DescribeServiceResponse struct {
 func (x *DescribeServiceResponse) Reset() {
 	*x = DescribeServiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[44]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[46]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3522,7 +3693,7 @@ func (x *DescribeServiceResponse) String() string {
 func (*DescribeServiceResponse) ProtoMessage() {}
 
 func (x *DescribeServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[44]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[46]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3535,7 +3706,7 @@ func (x *DescribeServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeServiceResponse.ProtoReflect.Descriptor instead.
 func (*DescribeServiceResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{44}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *DescribeServiceResponse) GetService() *Service {
@@ -3559,7 +3730,7 @@ type ListServicesRequest struct {
 func (x *ListServicesRequest) Reset() {
 	*x = ListServicesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[45]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[47]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3572,7 +3743,7 @@ func (x *ListServicesRequest) String() string {
 func (*ListServicesRequest) ProtoMessage() {}
 
 func (x *ListServicesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[45]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[47]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3585,7 +3756,7 @@ func (x *ListServicesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListServicesRequest.ProtoReflect.Descriptor instead.
 func (*ListServicesRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{45}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *ListServicesRequest) GetClientset() string {
@@ -3627,7 +3798,7 @@ type ListServicesResponse struct {
 func (x *ListServicesResponse) Reset() {
 	*x = ListServicesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[46]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[48]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3640,7 +3811,7 @@ func (x *ListServicesResponse) String() string {
 func (*ListServicesResponse) ProtoMessage() {}
 
 func (x *ListServicesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[46]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[48]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3653,7 +3824,7 @@ func (x *ListServicesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListServicesResponse.ProtoReflect.Descriptor instead.
 func (*ListServicesResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{46}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *ListServicesResponse) GetServices() []*Service {
@@ -3677,7 +3848,7 @@ type DeleteServiceRequest struct {
 func (x *DeleteServiceRequest) Reset() {
 	*x = DeleteServiceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[47]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[49]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3690,7 +3861,7 @@ func (x *DeleteServiceRequest) String() string {
 func (*DeleteServiceRequest) ProtoMessage() {}
 
 func (x *DeleteServiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[47]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[49]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3703,7 +3874,7 @@ func (x *DeleteServiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteServiceRequest.ProtoReflect.Descriptor instead.
 func (*DeleteServiceRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{47}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *DeleteServiceRequest) GetClientset() string {
@@ -3743,7 +3914,7 @@ type DeleteServiceResponse struct {
 func (x *DeleteServiceResponse) Reset() {
 	*x = DeleteServiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[48]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[50]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3756,7 +3927,7 @@ func (x *DeleteServiceResponse) String() string {
 func (*DeleteServiceResponse) ProtoMessage() {}
 
 func (x *DeleteServiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[48]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[50]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3769,7 +3940,7 @@ func (x *DeleteServiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteServiceResponse.ProtoReflect.Descriptor instead.
 func (*DeleteServiceResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{48}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{50}
 }
 
 type CronJob struct {
@@ -3792,7 +3963,7 @@ type CronJob struct {
 func (x *CronJob) Reset() {
 	*x = CronJob{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[49]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[51]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3805,7 +3976,7 @@ func (x *CronJob) String() string {
 func (*CronJob) ProtoMessage() {}
 
 func (x *CronJob) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[49]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[51]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3818,7 +3989,7 @@ func (x *CronJob) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CronJob.ProtoReflect.Descriptor instead.
 func (*CronJob) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{49}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *CronJob) GetCluster() string {
@@ -3905,7 +4076,7 @@ type DescribeCronJobRequest struct {
 func (x *DescribeCronJobRequest) Reset() {
 	*x = DescribeCronJobRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[50]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[52]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3918,7 +4089,7 @@ func (x *DescribeCronJobRequest) String() string {
 func (*DescribeCronJobRequest) ProtoMessage() {}
 
 func (x *DescribeCronJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[50]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[52]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3931,7 +4102,7 @@ func (x *DescribeCronJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeCronJobRequest.ProtoReflect.Descriptor instead.
 func (*DescribeCronJobRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{50}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *DescribeCronJobRequest) GetClientset() string {
@@ -3973,7 +4144,7 @@ type DescribeCronJobResponse struct {
 func (x *DescribeCronJobResponse) Reset() {
 	*x = DescribeCronJobResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[51]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[53]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3986,7 +4157,7 @@ func (x *DescribeCronJobResponse) String() string {
 func (*DescribeCronJobResponse) ProtoMessage() {}
 
 func (x *DescribeCronJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[51]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[53]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3999,7 +4170,7 @@ func (x *DescribeCronJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeCronJobResponse.ProtoReflect.Descriptor instead.
 func (*DescribeCronJobResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{51}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *DescribeCronJobResponse) GetCronjob() *CronJob {
@@ -4023,7 +4194,7 @@ type ListCronJobsRequest struct {
 func (x *ListCronJobsRequest) Reset() {
 	*x = ListCronJobsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[52]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[54]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4036,7 +4207,7 @@ func (x *ListCronJobsRequest) String() string {
 func (*ListCronJobsRequest) ProtoMessage() {}
 
 func (x *ListCronJobsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[52]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[54]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4049,7 +4220,7 @@ func (x *ListCronJobsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCronJobsRequest.ProtoReflect.Descriptor instead.
 func (*ListCronJobsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{52}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *ListCronJobsRequest) GetClientset() string {
@@ -4091,7 +4262,7 @@ type ListCronJobsResponse struct {
 func (x *ListCronJobsResponse) Reset() {
 	*x = ListCronJobsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[53]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[55]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4104,7 +4275,7 @@ func (x *ListCronJobsResponse) String() string {
 func (*ListCronJobsResponse) ProtoMessage() {}
 
 func (x *ListCronJobsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[53]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[55]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4117,7 +4288,7 @@ func (x *ListCronJobsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCronJobsResponse.ProtoReflect.Descriptor instead.
 func (*ListCronJobsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{53}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *ListCronJobsResponse) GetCronJobs() []*CronJob {
@@ -4141,7 +4312,7 @@ type DeleteCronJobRequest struct {
 func (x *DeleteCronJobRequest) Reset() {
 	*x = DeleteCronJobRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[54]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[56]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4154,7 +4325,7 @@ func (x *DeleteCronJobRequest) String() string {
 func (*DeleteCronJobRequest) ProtoMessage() {}
 
 func (x *DeleteCronJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[54]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[56]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4167,7 +4338,7 @@ func (x *DeleteCronJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCronJobRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCronJobRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{54}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *DeleteCronJobRequest) GetClientset() string {
@@ -4207,7 +4378,7 @@ type DeleteCronJobResponse struct {
 func (x *DeleteCronJobResponse) Reset() {
 	*x = DeleteCronJobResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[55]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[57]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4220,7 +4391,7 @@ func (x *DeleteCronJobResponse) String() string {
 func (*DeleteCronJobResponse) ProtoMessage() {}
 
 func (x *DeleteCronJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[55]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[57]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4233,7 +4404,7 @@ func (x *DeleteCronJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCronJobResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCronJobResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{55}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{57}
 }
 
 type ConfigMap struct {
@@ -4257,7 +4428,7 @@ type ConfigMap struct {
 func (x *ConfigMap) Reset() {
 	*x = ConfigMap{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[56]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[58]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4270,7 +4441,7 @@ func (x *ConfigMap) String() string {
 func (*ConfigMap) ProtoMessage() {}
 
 func (x *ConfigMap) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[56]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[58]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4283,7 +4454,7 @@ func (x *ConfigMap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfigMap.ProtoReflect.Descriptor instead.
 func (*ConfigMap) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{56}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *ConfigMap) GetCluster() string {
@@ -4349,7 +4520,7 @@ type ListConfigMapsRequest struct {
 func (x *ListConfigMapsRequest) Reset() {
 	*x = ListConfigMapsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[57]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[59]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4362,7 +4533,7 @@ func (x *ListConfigMapsRequest) String() string {
 func (*ListConfigMapsRequest) ProtoMessage() {}
 
 func (x *ListConfigMapsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[57]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[59]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4375,7 +4546,7 @@ func (x *ListConfigMapsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListConfigMapsRequest.ProtoReflect.Descriptor instead.
 func (*ListConfigMapsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{57}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *ListConfigMapsRequest) GetClientset() string {
@@ -4417,7 +4588,7 @@ type ListConfigMapsResponse struct {
 func (x *ListConfigMapsResponse) Reset() {
 	*x = ListConfigMapsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[58]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[60]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4430,7 +4601,7 @@ func (x *ListConfigMapsResponse) String() string {
 func (*ListConfigMapsResponse) ProtoMessage() {}
 
 func (x *ListConfigMapsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[58]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[60]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4443,7 +4614,7 @@ func (x *ListConfigMapsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListConfigMapsResponse.ProtoReflect.Descriptor instead.
 func (*ListConfigMapsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{58}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *ListConfigMapsResponse) GetConfigMaps() []*ConfigMap {
@@ -4467,7 +4638,7 @@ type DescribeConfigMapRequest struct {
 func (x *DescribeConfigMapRequest) Reset() {
 	*x = DescribeConfigMapRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[59]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[61]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4480,7 +4651,7 @@ func (x *DescribeConfigMapRequest) String() string {
 func (*DescribeConfigMapRequest) ProtoMessage() {}
 
 func (x *DescribeConfigMapRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[59]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[61]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4493,7 +4664,7 @@ func (x *DescribeConfigMapRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeConfigMapRequest.ProtoReflect.Descriptor instead.
 func (*DescribeConfigMapRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{59}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *DescribeConfigMapRequest) GetClientset() string {
@@ -4535,7 +4706,7 @@ type DescribeConfigMapResponse struct {
 func (x *DescribeConfigMapResponse) Reset() {
 	*x = DescribeConfigMapResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[60]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[62]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4548,7 +4719,7 @@ func (x *DescribeConfigMapResponse) String() string {
 func (*DescribeConfigMapResponse) ProtoMessage() {}
 
 func (x *DescribeConfigMapResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[60]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[62]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4561,7 +4732,7 @@ func (x *DescribeConfigMapResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeConfigMapResponse.ProtoReflect.Descriptor instead.
 func (*DescribeConfigMapResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{60}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *DescribeConfigMapResponse) GetConfigMap() *ConfigMap {
@@ -4585,7 +4756,7 @@ type DeleteConfigMapRequest struct {
 func (x *DeleteConfigMapRequest) Reset() {
 	*x = DeleteConfigMapRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[61]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[63]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4598,7 +4769,7 @@ func (x *DeleteConfigMapRequest) String() string {
 func (*DeleteConfigMapRequest) ProtoMessage() {}
 
 func (x *DeleteConfigMapRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[61]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[63]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4611,7 +4782,7 @@ func (x *DeleteConfigMapRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteConfigMapRequest.ProtoReflect.Descriptor instead.
 func (*DeleteConfigMapRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{61}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *DeleteConfigMapRequest) GetClientset() string {
@@ -4651,7 +4822,7 @@ type DeleteConfigMapResponse struct {
 func (x *DeleteConfigMapResponse) Reset() {
 	*x = DeleteConfigMapResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[62]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[64]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4664,7 +4835,7 @@ func (x *DeleteConfigMapResponse) String() string {
 func (*DeleteConfigMapResponse) ProtoMessage() {}
 
 func (x *DeleteConfigMapResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[62]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[64]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4677,7 +4848,7 @@ func (x *DeleteConfigMapResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteConfigMapResponse.ProtoReflect.Descriptor instead.
 func (*DeleteConfigMapResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{62}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{64}
 }
 
 type Job struct {
@@ -4695,7 +4866,7 @@ type Job struct {
 func (x *Job) Reset() {
 	*x = Job{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[63]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[65]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4708,7 +4879,7 @@ func (x *Job) String() string {
 func (*Job) ProtoMessage() {}
 
 func (x *Job) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[63]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[65]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4721,7 +4892,7 @@ func (x *Job) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Job.ProtoReflect.Descriptor instead.
 func (*Job) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{63}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *Job) GetCluster() string {
@@ -4773,7 +4944,7 @@ type DescribeJobRequest struct {
 func (x *DescribeJobRequest) Reset() {
 	*x = DescribeJobRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[64]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[66]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4786,7 +4957,7 @@ func (x *DescribeJobRequest) String() string {
 func (*DescribeJobRequest) ProtoMessage() {}
 
 func (x *DescribeJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[64]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[66]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4799,7 +4970,7 @@ func (x *DescribeJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeJobRequest.ProtoReflect.Descriptor instead.
 func (*DescribeJobRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{64}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *DescribeJobRequest) GetClientset() string {
@@ -4841,7 +5012,7 @@ type DescribeJobResponse struct {
 func (x *DescribeJobResponse) Reset() {
 	*x = DescribeJobResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[65]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[67]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4854,7 +5025,7 @@ func (x *DescribeJobResponse) String() string {
 func (*DescribeJobResponse) ProtoMessage() {}
 
 func (x *DescribeJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[65]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[67]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4867,7 +5038,7 @@ func (x *DescribeJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeJobResponse.ProtoReflect.Descriptor instead.
 func (*DescribeJobResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{65}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *DescribeJobResponse) GetJob() *Job {
@@ -4891,7 +5062,7 @@ type ListJobsRequest struct {
 func (x *ListJobsRequest) Reset() {
 	*x = ListJobsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[66]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[68]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4904,7 +5075,7 @@ func (x *ListJobsRequest) String() string {
 func (*ListJobsRequest) ProtoMessage() {}
 
 func (x *ListJobsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[66]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[68]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4917,7 +5088,7 @@ func (x *ListJobsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobsRequest.ProtoReflect.Descriptor instead.
 func (*ListJobsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{66}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *ListJobsRequest) GetClientset() string {
@@ -4959,7 +5130,7 @@ type ListJobsResponse struct {
 func (x *ListJobsResponse) Reset() {
 	*x = ListJobsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[67]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[69]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4972,7 +5143,7 @@ func (x *ListJobsResponse) String() string {
 func (*ListJobsResponse) ProtoMessage() {}
 
 func (x *ListJobsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[67]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[69]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4985,7 +5156,7 @@ func (x *ListJobsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobsResponse.ProtoReflect.Descriptor instead.
 func (*ListJobsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{67}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *ListJobsResponse) GetJobs() []*Job {
@@ -5009,7 +5180,7 @@ type DeleteJobRequest struct {
 func (x *DeleteJobRequest) Reset() {
 	*x = DeleteJobRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[68]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[70]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5022,7 +5193,7 @@ func (x *DeleteJobRequest) String() string {
 func (*DeleteJobRequest) ProtoMessage() {}
 
 func (x *DeleteJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[68]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[70]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5035,7 +5206,7 @@ func (x *DeleteJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteJobRequest.ProtoReflect.Descriptor instead.
 func (*DeleteJobRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{68}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *DeleteJobRequest) GetClientset() string {
@@ -5075,7 +5246,7 @@ type DeleteJobResponse struct {
 func (x *DeleteJobResponse) Reset() {
 	*x = DeleteJobResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[69]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[71]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5088,7 +5259,7 @@ func (x *DeleteJobResponse) String() string {
 func (*DeleteJobResponse) ProtoMessage() {}
 
 func (x *DeleteJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[69]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[71]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5101,7 +5272,7 @@ func (x *DeleteJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteJobResponse.ProtoReflect.Descriptor instead.
 func (*DeleteJobResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{69}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{71}
 }
 
 type JobConfig struct {
@@ -5115,7 +5286,7 @@ type JobConfig struct {
 func (x *JobConfig) Reset() {
 	*x = JobConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[70]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[72]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5128,7 +5299,7 @@ func (x *JobConfig) String() string {
 func (*JobConfig) ProtoMessage() {}
 
 func (x *JobConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[70]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[72]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5141,7 +5312,7 @@ func (x *JobConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JobConfig.ProtoReflect.Descriptor instead.
 func (*JobConfig) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{70}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *JobConfig) GetValue() *structpb.Value {
@@ -5165,7 +5336,7 @@ type CreateJobRequest struct {
 func (x *CreateJobRequest) Reset() {
 	*x = CreateJobRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[71]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[73]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5178,7 +5349,7 @@ func (x *CreateJobRequest) String() string {
 func (*CreateJobRequest) ProtoMessage() {}
 
 func (x *CreateJobRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[71]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[73]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5191,7 +5362,7 @@ func (x *CreateJobRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateJobRequest.ProtoReflect.Descriptor instead.
 func (*CreateJobRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{71}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *CreateJobRequest) GetClientset() string {
@@ -5233,7 +5404,7 @@ type CreateJobResponse struct {
 func (x *CreateJobResponse) Reset() {
 	*x = CreateJobResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[72]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[74]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5246,7 +5417,7 @@ func (x *CreateJobResponse) String() string {
 func (*CreateJobResponse) ProtoMessage() {}
 
 func (x *CreateJobResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[72]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[74]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5259,7 +5430,7 @@ func (x *CreateJobResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateJobResponse.ProtoReflect.Descriptor instead.
 func (*CreateJobResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{72}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *CreateJobResponse) GetJob() *Job {
@@ -5283,7 +5454,7 @@ type Namespace struct {
 func (x *Namespace) Reset() {
 	*x = Namespace{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[73]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[75]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5296,7 +5467,7 @@ func (x *Namespace) String() string {
 func (*Namespace) ProtoMessage() {}
 
 func (x *Namespace) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[73]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[75]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5309,7 +5480,7 @@ func (x *Namespace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Namespace.ProtoReflect.Descriptor instead.
 func (*Namespace) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{73}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *Namespace) GetCluster() string {
@@ -5353,7 +5524,7 @@ type DescribeNamespaceRequest struct {
 func (x *DescribeNamespaceRequest) Reset() {
 	*x = DescribeNamespaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[74]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[76]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5366,7 +5537,7 @@ func (x *DescribeNamespaceRequest) String() string {
 func (*DescribeNamespaceRequest) ProtoMessage() {}
 
 func (x *DescribeNamespaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[74]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[76]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5379,7 +5550,7 @@ func (x *DescribeNamespaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeNamespaceRequest.ProtoReflect.Descriptor instead.
 func (*DescribeNamespaceRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{74}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *DescribeNamespaceRequest) GetClientset() string {
@@ -5414,7 +5585,7 @@ type DescribeNamespaceResponse struct {
 func (x *DescribeNamespaceResponse) Reset() {
 	*x = DescribeNamespaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[75]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[77]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5427,7 +5598,7 @@ func (x *DescribeNamespaceResponse) String() string {
 func (*DescribeNamespaceResponse) ProtoMessage() {}
 
 func (x *DescribeNamespaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[75]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[77]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5440,7 +5611,7 @@ func (x *DescribeNamespaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeNamespaceResponse.ProtoReflect.Descriptor instead.
 func (*DescribeNamespaceResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{75}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *DescribeNamespaceResponse) GetNamespace() *Namespace {
@@ -5473,12 +5644,14 @@ type Event struct {
 	// `lastTimestamp` and `eventTime` fields in the Event object.
 	// https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
 	CreationTimeMillis int64 `protobuf:"varint,10,opt,name=creation_time_millis,json=creationTimeMillis,proto3" json:"creation_time_millis,omitempty"`
+	// type is normal, warning, or error
+	EventType EventType `protobuf:"varint,11,opt,name=event_type,json=eventType,proto3,enum=clutch.k8s.v1.EventType" json:"event_type,omitempty"`
 }
 
 func (x *Event) Reset() {
 	*x = Event{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[76]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[78]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5491,7 +5664,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[76]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[78]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5504,7 +5677,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{76}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *Event) GetName() string {
@@ -5563,6 +5736,13 @@ func (x *Event) GetCreationTimeMillis() int64 {
 	return 0
 }
 
+func (x *Event) GetEventType() EventType {
+	if x != nil {
+		return x.EventType
+	}
+	return EventType_TYPE_UNSPECIFIED
+}
+
 type ListEventsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -5581,7 +5761,7 @@ type ListEventsRequest struct {
 func (x *ListEventsRequest) Reset() {
 	*x = ListEventsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[77]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[79]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5594,7 +5774,7 @@ func (x *ListEventsRequest) String() string {
 func (*ListEventsRequest) ProtoMessage() {}
 
 func (x *ListEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[77]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[79]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5607,7 +5787,7 @@ func (x *ListEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsRequest.ProtoReflect.Descriptor instead.
 func (*ListEventsRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{77}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *ListEventsRequest) GetClientset() string {
@@ -5656,7 +5836,7 @@ type ListEventsResponse struct {
 func (x *ListEventsResponse) Reset() {
 	*x = ListEventsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[80]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5669,7 +5849,7 @@ func (x *ListEventsResponse) String() string {
 func (*ListEventsResponse) ProtoMessage() {}
 
 func (x *ListEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[80]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5682,7 +5862,7 @@ func (x *ListEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventsResponse.ProtoReflect.Descriptor instead.
 func (*ListEventsResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{78}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *ListEventsResponse) GetEvents() []*Event {
@@ -5711,7 +5891,7 @@ type NullableString struct {
 func (x *NullableString) Reset() {
 	*x = NullableString{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[79]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[81]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5724,7 +5904,7 @@ func (x *NullableString) String() string {
 func (*NullableString) ProtoMessage() {}
 
 func (x *NullableString) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[79]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[81]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5737,7 +5917,7 @@ func (x *NullableString) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NullableString.ProtoReflect.Descriptor instead.
 func (*NullableString) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{79}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{81}
 }
 
 func (m *NullableString) GetKind() isNullableString_Kind {
@@ -5792,7 +5972,7 @@ type ExpectedObjectMetaFields struct {
 func (x *ExpectedObjectMetaFields) Reset() {
 	*x = ExpectedObjectMetaFields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[80]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[82]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5805,7 +5985,7 @@ func (x *ExpectedObjectMetaFields) String() string {
 func (*ExpectedObjectMetaFields) ProtoMessage() {}
 
 func (x *ExpectedObjectMetaFields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[80]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[82]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5818,7 +5998,7 @@ func (x *ExpectedObjectMetaFields) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExpectedObjectMetaFields.ProtoReflect.Descriptor instead.
 func (*ExpectedObjectMetaFields) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{80}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *ExpectedObjectMetaFields) GetLabels() map[string]*NullableString {
@@ -5848,7 +6028,7 @@ type ObjectMetaFields struct {
 func (x *ObjectMetaFields) Reset() {
 	*x = ObjectMetaFields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[81]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[83]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5861,7 +6041,7 @@ func (x *ObjectMetaFields) String() string {
 func (*ObjectMetaFields) ProtoMessage() {}
 
 func (x *ObjectMetaFields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[81]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[83]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5874,7 +6054,7 @@ func (x *ObjectMetaFields) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ObjectMetaFields.ProtoReflect.Descriptor instead.
 func (*ObjectMetaFields) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{81}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *ObjectMetaFields) GetLabels() map[string]string {
@@ -5904,7 +6084,7 @@ type RemoveObjectMetaFields struct {
 func (x *RemoveObjectMetaFields) Reset() {
 	*x = RemoveObjectMetaFields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[82]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[84]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5917,7 +6097,7 @@ func (x *RemoveObjectMetaFields) String() string {
 func (*RemoveObjectMetaFields) ProtoMessage() {}
 
 func (x *RemoveObjectMetaFields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[82]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[84]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5930,7 +6110,7 @@ func (x *RemoveObjectMetaFields) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveObjectMetaFields.ProtoReflect.Descriptor instead.
 func (*RemoveObjectMetaFields) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{82}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *RemoveObjectMetaFields) GetLabels() []string {
@@ -5960,7 +6140,7 @@ type Node struct {
 func (x *Node) Reset() {
 	*x = Node{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[83]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[85]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5973,7 +6153,7 @@ func (x *Node) String() string {
 func (*Node) ProtoMessage() {}
 
 func (x *Node) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[83]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[85]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5986,7 +6166,7 @@ func (x *Node) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Node.ProtoReflect.Descriptor instead.
 func (*Node) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{83}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *Node) GetName() string {
@@ -6023,7 +6203,7 @@ type DescribeNodeRequest struct {
 func (x *DescribeNodeRequest) Reset() {
 	*x = DescribeNodeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[84]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[86]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6036,7 +6216,7 @@ func (x *DescribeNodeRequest) String() string {
 func (*DescribeNodeRequest) ProtoMessage() {}
 
 func (x *DescribeNodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[84]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[86]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6049,7 +6229,7 @@ func (x *DescribeNodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeNodeRequest.ProtoReflect.Descriptor instead.
 func (*DescribeNodeRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{84}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *DescribeNodeRequest) GetClientset() string {
@@ -6084,7 +6264,7 @@ type DescribeNodeResponse struct {
 func (x *DescribeNodeResponse) Reset() {
 	*x = DescribeNodeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[85]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[87]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6097,7 +6277,7 @@ func (x *DescribeNodeResponse) String() string {
 func (*DescribeNodeResponse) ProtoMessage() {}
 
 func (x *DescribeNodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[85]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[87]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6110,7 +6290,7 @@ func (x *DescribeNodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeNodeResponse.ProtoReflect.Descriptor instead.
 func (*DescribeNodeResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{85}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *DescribeNodeResponse) GetNode() *Node {
@@ -6134,7 +6314,7 @@ type UpdateNodeRequest struct {
 func (x *UpdateNodeRequest) Reset() {
 	*x = UpdateNodeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[86]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[88]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6147,7 +6327,7 @@ func (x *UpdateNodeRequest) String() string {
 func (*UpdateNodeRequest) ProtoMessage() {}
 
 func (x *UpdateNodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[86]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[88]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6160,7 +6340,7 @@ func (x *UpdateNodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateNodeRequest.ProtoReflect.Descriptor instead.
 func (*UpdateNodeRequest) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{86}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *UpdateNodeRequest) GetClientset() string {
@@ -6200,7 +6380,7 @@ type UpdateNodeResponse struct {
 func (x *UpdateNodeResponse) Reset() {
 	*x = UpdateNodeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[87]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[89]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6213,7 +6393,7 @@ func (x *UpdateNodeResponse) String() string {
 func (*UpdateNodeResponse) ProtoMessage() {}
 
 func (x *UpdateNodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[87]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[89]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6226,7 +6406,7 @@ func (x *UpdateNodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateNodeResponse.ProtoReflect.Descriptor instead.
 func (*UpdateNodeResponse) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{87}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{89}
 }
 
 type HPA_Sizing struct {
@@ -6243,7 +6423,7 @@ type HPA_Sizing struct {
 func (x *HPA_Sizing) Reset() {
 	*x = HPA_Sizing{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[91]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[93]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6256,7 +6436,7 @@ func (x *HPA_Sizing) String() string {
 func (*HPA_Sizing) ProtoMessage() {}
 
 func (x *HPA_Sizing) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[91]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[93]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6269,7 +6449,7 @@ func (x *HPA_Sizing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HPA_Sizing.ProtoReflect.Descriptor instead.
 func (*HPA_Sizing) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{19, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{21, 0}
 }
 
 func (x *HPA_Sizing) GetMinReplicas() uint32 {
@@ -6312,7 +6492,7 @@ type ResizeHPARequest_Sizing struct {
 func (x *ResizeHPARequest_Sizing) Reset() {
 	*x = ResizeHPARequest_Sizing{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[94]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[96]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6325,7 +6505,7 @@ func (x *ResizeHPARequest_Sizing) String() string {
 func (*ResizeHPARequest_Sizing) ProtoMessage() {}
 
 func (x *ResizeHPARequest_Sizing) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[94]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[96]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6338,7 +6518,7 @@ func (x *ResizeHPARequest_Sizing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResizeHPARequest_Sizing.ProtoReflect.Descriptor instead.
 func (*ResizeHPARequest_Sizing) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{20, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{22, 0}
 }
 
 func (x *ResizeHPARequest_Sizing) GetMin() uint32 {
@@ -6371,7 +6551,7 @@ type Deployment_DeploymentStatus struct {
 func (x *Deployment_DeploymentStatus) Reset() {
 	*x = Deployment_DeploymentStatus{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[97]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[99]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6384,7 +6564,7 @@ func (x *Deployment_DeploymentStatus) String() string {
 func (*Deployment_DeploymentStatus) ProtoMessage() {}
 
 func (x *Deployment_DeploymentStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[97]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[99]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6397,7 +6577,7 @@ func (x *Deployment_DeploymentStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Deployment_DeploymentStatus.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentStatus) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 2}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 2}
 }
 
 func (x *Deployment_DeploymentStatus) GetReplicas() uint32 {
@@ -6453,7 +6633,7 @@ type Deployment_DeploymentSpec struct {
 func (x *Deployment_DeploymentSpec) Reset() {
 	*x = Deployment_DeploymentSpec{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[98]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[100]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6466,7 +6646,7 @@ func (x *Deployment_DeploymentSpec) String() string {
 func (*Deployment_DeploymentSpec) ProtoMessage() {}
 
 func (x *Deployment_DeploymentSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[98]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[100]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6479,7 +6659,7 @@ func (x *Deployment_DeploymentSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Deployment_DeploymentSpec.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentSpec) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 3}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 3}
 }
 
 func (x *Deployment_DeploymentSpec) GetTemplate() *Deployment_DeploymentSpec_PodTemplateSpec {
@@ -6503,7 +6683,7 @@ type Deployment_DeploymentStatus_Condition struct {
 func (x *Deployment_DeploymentStatus_Condition) Reset() {
 	*x = Deployment_DeploymentStatus_Condition{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[99]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[101]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6516,7 +6696,7 @@ func (x *Deployment_DeploymentStatus_Condition) String() string {
 func (*Deployment_DeploymentStatus_Condition) ProtoMessage() {}
 
 func (x *Deployment_DeploymentStatus_Condition) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[99]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[101]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6529,7 +6709,7 @@ func (x *Deployment_DeploymentStatus_Condition) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use Deployment_DeploymentStatus_Condition.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentStatus_Condition) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 2, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 2, 0}
 }
 
 func (x *Deployment_DeploymentStatus_Condition) GetType() Deployment_DeploymentStatus_Condition_Type {
@@ -6571,7 +6751,7 @@ type Deployment_DeploymentSpec_PodTemplateSpec struct {
 func (x *Deployment_DeploymentSpec_PodTemplateSpec) Reset() {
 	*x = Deployment_DeploymentSpec_PodTemplateSpec{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[100]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[102]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6584,7 +6764,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec) String() string {
 func (*Deployment_DeploymentSpec_PodTemplateSpec) ProtoMessage() {}
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[100]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[102]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6597,7 +6777,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec) ProtoReflect() protoreflect.
 
 // Deprecated: Use Deployment_DeploymentSpec_PodTemplateSpec.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentSpec_PodTemplateSpec) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 3, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 3, 0}
 }
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec) GetSpec() *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec {
@@ -6618,7 +6798,7 @@ type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec struct {
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) Reset() {
 	*x = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[101]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[103]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6631,7 +6811,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) String() string {
 func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) ProtoMessage() {}
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[101]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[103]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6644,7 +6824,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) ProtoReflect() proto
 
 // Deprecated: Use Deployment_DeploymentSpec_PodTemplateSpec_PodSpec.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 3, 0, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 3, 0, 0}
 }
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec) GetContainers() []*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container {
@@ -6666,7 +6846,7 @@ type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container struct {
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) Reset() {
 	*x = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[102]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[104]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6679,7 +6859,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) String() s
 func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) ProtoMessage() {}
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[102]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[104]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6692,7 +6872,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) ProtoRefle
 
 // Deprecated: Use Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 3, 0, 0, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 3, 0, 0, 0}
 }
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container) GetName() string {
@@ -6721,7 +6901,7 @@ type Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequire
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) Reset() {
 	*x = Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[103]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[105]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6735,7 +6915,7 @@ func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequi
 }
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[103]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[105]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6748,7 +6928,7 @@ func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceReq
 
 // Deprecated: Use Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements.ProtoReflect.Descriptor instead.
 func (*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{24, 3, 0, 0, 0, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{26, 3, 0, 0, 0, 0}
 }
 
 func (x *Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements) GetLimits() map[string]string {
@@ -6783,7 +6963,7 @@ type UpdateDeploymentRequest_Fields struct {
 func (x *UpdateDeploymentRequest_Fields) Reset() {
 	*x = UpdateDeploymentRequest_Fields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[106]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[108]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6796,7 +6976,7 @@ func (x *UpdateDeploymentRequest_Fields) String() string {
 func (*UpdateDeploymentRequest_Fields) ProtoMessage() {}
 
 func (x *UpdateDeploymentRequest_Fields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[106]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[108]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6809,7 +6989,7 @@ func (x *UpdateDeploymentRequest_Fields) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDeploymentRequest_Fields.ProtoReflect.Descriptor instead.
 func (*UpdateDeploymentRequest_Fields) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{29, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{31, 0}
 }
 
 func (x *UpdateDeploymentRequest_Fields) GetLabels() map[string]string {
@@ -6845,7 +7025,7 @@ type UpdateDeploymentRequest_Fields_ContainerResources struct {
 func (x *UpdateDeploymentRequest_Fields_ContainerResources) Reset() {
 	*x = UpdateDeploymentRequest_Fields_ContainerResources{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[109]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[111]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6858,7 +7038,7 @@ func (x *UpdateDeploymentRequest_Fields_ContainerResources) String() string {
 func (*UpdateDeploymentRequest_Fields_ContainerResources) ProtoMessage() {}
 
 func (x *UpdateDeploymentRequest_Fields_ContainerResources) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[109]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[111]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6871,7 +7051,7 @@ func (x *UpdateDeploymentRequest_Fields_ContainerResources) ProtoReflect() proto
 
 // Deprecated: Use UpdateDeploymentRequest_Fields_ContainerResources.ProtoReflect.Descriptor instead.
 func (*UpdateDeploymentRequest_Fields_ContainerResources) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{29, 0, 2}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{31, 0, 2}
 }
 
 func (x *UpdateDeploymentRequest_Fields_ContainerResources) GetContainerName() string {
@@ -6900,7 +7080,7 @@ type UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements stru
 func (x *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) Reset() {
 	*x = UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[110]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[112]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6913,7 +7093,7 @@ func (x *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements)
 func (*UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) ProtoMessage() {}
 
 func (x *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[110]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[112]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6926,7 +7106,7 @@ func (x *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements)
 
 // Deprecated: Use UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements.ProtoReflect.Descriptor instead.
 func (*UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{29, 0, 2, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{31, 0, 2, 0}
 }
 
 func (x *UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements) GetLimits() map[string]string {
@@ -6956,7 +7136,7 @@ type StatefulSet_Status struct {
 func (x *StatefulSet_Status) Reset() {
 	*x = StatefulSet_Status{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[115]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[117]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6969,7 +7149,7 @@ func (x *StatefulSet_Status) String() string {
 func (*StatefulSet_Status) ProtoMessage() {}
 
 func (x *StatefulSet_Status) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[115]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[117]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6982,7 +7162,7 @@ func (x *StatefulSet_Status) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatefulSet_Status.ProtoReflect.Descriptor instead.
 func (*StatefulSet_Status) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{33, 2}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{35, 2}
 }
 
 func (x *StatefulSet_Status) GetReplicas() uint32 {
@@ -7023,7 +7203,7 @@ type UpdateStatefulSetRequest_Fields struct {
 func (x *UpdateStatefulSetRequest_Fields) Reset() {
 	*x = UpdateStatefulSetRequest_Fields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[116]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[118]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7036,7 +7216,7 @@ func (x *UpdateStatefulSetRequest_Fields) String() string {
 func (*UpdateStatefulSetRequest_Fields) ProtoMessage() {}
 
 func (x *UpdateStatefulSetRequest_Fields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[116]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[118]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7049,7 +7229,7 @@ func (x *UpdateStatefulSetRequest_Fields) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatefulSetRequest_Fields.ProtoReflect.Descriptor instead.
 func (*UpdateStatefulSetRequest_Fields) Descriptor() ([]byte, []int) {
-	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{40, 0}
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{42, 0}
 }
 
 func (x *UpdateStatefulSetRequest_Fields) GetLabels() map[string]string {
@@ -7083,7 +7263,28 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
 	0x65, 0x2f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x18, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xdb, 0x01, 0x0a, 0x12, 0x44,
+	0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x80, 0x02, 0x0a, 0x1a, 0x4c,
+	0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x45, 0x76, 0x65, 0x6e,
+	0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x09, 0x63, 0x6c, 0x69,
+	0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42,
+	0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74,
+	0x12, 0x21, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73,
+	0x74, 0x65, 0x72, 0x12, 0x25, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52,
+	0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x0b, 0x65, 0x76,
+	0x65, 0x6e, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0e, 0x32,
+	0x18, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x45, 0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74,
+	0x54, 0x79, 0x70, 0x65, 0x73, 0x3a, 0x36, 0xb2, 0xe1, 0x1c, 0x32, 0x0a, 0x30, 0x0a, 0x17, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x61, 0x6d,
+	0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x15, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72,
+	0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x7d, 0x22, 0x4b, 0x0a,
+	0x1b, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x45, 0x76,
+	0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2c, 0x0a, 0x06,
+	0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x76, 0x65,
+	0x6e, 0x74, 0x52, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x22, 0xdb, 0x01, 0x0a, 0x12, 0x44,
 	0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x12, 0x25, 0x0a, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x63,
@@ -8318,7 +8519,7 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61,
 	0x63, 0x65, 0x42, 0x04, 0xa8, 0xe1, 0x1c, 0x00, 0x52, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70,
 	0x61, 0x63, 0x65, 0x3a, 0x0f, 0xaa, 0xe1, 0x1c, 0x0b, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73,
-	0x70, 0x61, 0x63, 0x65, 0x22, 0xa0, 0x02, 0x0a, 0x05, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12,
+	0x70, 0x61, 0x63, 0x65, 0x22, 0xd9, 0x02, 0x0a, 0x05, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x12, 0x12,
 	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65,
@@ -8336,133 +8537,141 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x04, 0x6b, 0x69, 0x6e, 0x64, 0x12, 0x30, 0x0a, 0x14, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x6d, 0x69, 0x6c, 0x6c, 0x69, 0x73, 0x18, 0x0a, 0x20,
 	0x01, 0x28, 0x03, 0x52, 0x12, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d,
-	0x65, 0x4d, 0x69, 0x6c, 0x6c, 0x69, 0x73, 0x22, 0xad, 0x02, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74,
-	0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a,
-	0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e,
-	0x74, 0x73, 0x65, 0x74, 0x12, 0x21, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07,
-	0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x25, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73,
-	0x70, 0x61, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72,
-	0x02, 0x20, 0x01, 0x52, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x28,
-	0x0a, 0x0b, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20,
-	0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x0a, 0x6f, 0x62,
-	0x6a, 0x65, 0x63, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x37, 0x0a, 0x04, 0x6b, 0x69, 0x6e, 0x64,
-	0x18, 0x05, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x19, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
-	0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4b, 0x69, 0x6e,
-	0x64, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x82, 0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x6b, 0x69, 0x6e,
-	0x64, 0x3a, 0x44, 0xb2, 0xe1, 0x1c, 0x40, 0x0a, 0x3e, 0x0a, 0x17, 0x63, 0x6c, 0x75, 0x74, 0x63,
-	0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61,
-	0x63, 0x65, 0x12, 0x23, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e,
-	0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x7d, 0x2f, 0x7b, 0x6f, 0x62, 0x6a, 0x65, 0x63,
-	0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x22, 0x56, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x45,
-	0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x32, 0x0a,
-	0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e,
-	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x76,
-	0x65, 0x6e, 0x74, 0x42, 0x04, 0xa8, 0xe1, 0x1c, 0x00, 0x52, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74,
-	0x73, 0x3a, 0x0c, 0xaa, 0xe1, 0x1c, 0x08, 0x0a, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x22,
-	0x62, 0x0a, 0x0e, 0x4e, 0x75, 0x6c, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x74, 0x72, 0x69, 0x6e,
-	0x67, 0x12, 0x30, 0x0a, 0x04, 0x6e, 0x75, 0x6c, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32,
-	0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x4e, 0x75, 0x6c, 0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x48, 0x00, 0x52, 0x04, 0x6e,
-	0x75, 0x6c, 0x6c, 0x12, 0x16, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x6b,
-	0x69, 0x6e, 0x64, 0x22, 0x98, 0x03, 0x0a, 0x18, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74, 0x65, 0x64,
-	0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73,
-	0x12, 0x59, 0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x33, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74, 0x65, 0x64, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d,
-	0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73,
-	0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72,
-	0x02, 0x20, 0x01, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12, 0x68, 0x0a, 0x0b, 0x61,
-	0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74, 0x65, 0x64, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d,
-	0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a,
-	0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x1a, 0x58, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45,
-	0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x33, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b,
-	0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x75, 0x6c, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x74,
-	0x72, 0x69, 0x6e, 0x67, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a,
-	0x5d, 0x0a, 0x10, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e,
-	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x33, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38,
-	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x75, 0x6c, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x74, 0x72,
-	0x69, 0x6e, 0x67, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xc2,
-	0x02, 0x0a, 0x10, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65,
-	0x6c, 0x64, 0x73, 0x12, 0x51, 0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73,
-	0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69,
-	0x65, 0x6c, 0x64, 0x73, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
-	0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x06,
-	0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12, 0x60, 0x0a, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x30, 0x2e, 0x63, 0x6c,
-	0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65,
-	0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x2e, 0x41, 0x6e, 0x6e,
-	0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa,
-	0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x0b, 0x61, 0x6e, 0x6e,
-	0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65,
-	0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a,
-	0x02, 0x38, 0x01, 0x1a, 0x3e, 0x0a, 0x10, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a,
-	0x02, 0x38, 0x01, 0x22, 0x66, 0x0a, 0x16, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4f, 0x62, 0x6a,
-	0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x12, 0x20, 0x0a,
-	0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x42, 0x08, 0xfa,
-	0x42, 0x05, 0x92, 0x01, 0x02, 0x18, 0x01, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12,
-	0x2a, 0x0a, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02,
-	0x20, 0x03, 0x28, 0x09, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x92, 0x01, 0x02, 0x18, 0x01, 0x52, 0x0b,
-	0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x88, 0x01, 0x0a, 0x04,
-	0x4e, 0x6f, 0x64, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73,
-	0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74,
-	0x65, 0x72, 0x12, 0x24, 0x0a, 0x0d, 0x75, 0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c, 0x61,
-	0x62, 0x6c, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0d, 0x75, 0x6e, 0x73, 0x63, 0x68,
-	0x65, 0x64, 0x75, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x3a, 0x2c, 0xb2, 0xe1, 0x1c, 0x28, 0x0a, 0x26,
-	0x0a, 0x12, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e,
-	0x4e, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f,
-	0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x22, 0xaa, 0x01, 0x0a, 0x13, 0x44, 0x65, 0x73, 0x63, 0x72,
-	0x69, 0x62, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25,
-	0x0a, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65,
-	0x6e, 0x74, 0x73, 0x65, 0x74, 0x12, 0x21, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52,
-	0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52,
-	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x3a, 0x2c, 0xb2, 0xe1, 0x1c, 0x28, 0x0a, 0x26, 0x0a, 0x12, 0x63,
-	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64,
-	0x65, 0x12, 0x10, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61,
-	0x6d, 0x65, 0x7d, 0x22, 0x51, 0x0a, 0x14, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4e,
-	0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x04, 0x6e,
-	0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x63, 0x6c, 0x75, 0x74,
-	0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x42, 0x04,
-	0xa8, 0xe1, 0x1c, 0x00, 0x52, 0x04, 0x6e, 0x6f, 0x64, 0x65, 0x3a, 0x0a, 0xaa, 0xe1, 0x1c, 0x06,
-	0x0a, 0x04, 0x6e, 0x6f, 0x64, 0x65, 0x22, 0xce, 0x01, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x09,
-	0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74,
-	0x73, 0x65, 0x74, 0x12, 0x21, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07, 0x63,
-	0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e,
-	0x61, 0x6d, 0x65, 0x12, 0x24, 0x0a, 0x0d, 0x75, 0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c,
-	0x61, 0x62, 0x6c, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0d, 0x75, 0x6e, 0x73, 0x63,
-	0x68, 0x65, 0x64, 0x75, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x3a, 0x2c, 0xb2, 0xe1, 0x1c, 0x28, 0x0a,
-	0x26, 0x0a, 0x12, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d,
-	0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x22, 0x14, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2a, 0x33, 0x0a,
-	0x0a, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4b, 0x69, 0x6e, 0x64, 0x12, 0x0f, 0x0a, 0x0b, 0x55,
-	0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07,
-	0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x50, 0x4f, 0x44,
-	0x10, 0x02, 0x32, 0x84, 0x21, 0x0a, 0x06, 0x4b, 0x38, 0x73, 0x41, 0x50, 0x49, 0x12, 0x7a, 0x0a,
+	0x65, 0x4d, 0x69, 0x6c, 0x6c, 0x69, 0x73, 0x12, 0x37, 0x0a, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74,
+	0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x76, 0x65, 0x6e,
+	0x74, 0x54, 0x79, 0x70, 0x65, 0x52, 0x09, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x22, 0xad, 0x02, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74,
+	0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02,
+	0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x12, 0x21, 0x0a,
+	0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07,
+	0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72,
+	0x12, 0x25, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x09, 0x6e, 0x61,
+	0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x28, 0x0a, 0x0b, 0x6f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42,
+	0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x0a, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4e, 0x61, 0x6d,
+	0x65, 0x12, 0x37, 0x0a, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x19, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4b, 0x69, 0x6e, 0x64, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x82,
+	0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x3a, 0x44, 0xb2, 0xe1, 0x1c, 0x40,
+	0x0a, 0x3e, 0x0a, 0x17, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76,
+	0x31, 0x2e, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x23, 0x7b, 0x63, 0x6c,
+	0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63,
+	0x65, 0x7d, 0x2f, 0x7b, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x7d,
+	0x22, 0x56, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x32, 0x0a, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
+	0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x42, 0x04, 0xa8, 0xe1,
+	0x1c, 0x00, 0x52, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x3a, 0x0c, 0xaa, 0xe1, 0x1c, 0x08,
+	0x0a, 0x06, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x22, 0x62, 0x0a, 0x0e, 0x4e, 0x75, 0x6c, 0x6c,
+	0x61, 0x62, 0x6c, 0x65, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x12, 0x30, 0x0a, 0x04, 0x6e, 0x75,
+	0x6c, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x4e, 0x75, 0x6c, 0x6c, 0x56,
+	0x61, 0x6c, 0x75, 0x65, 0x48, 0x00, 0x52, 0x04, 0x6e, 0x75, 0x6c, 0x6c, 0x12, 0x16, 0x0a, 0x05,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x42, 0x06, 0x0a, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x22, 0x98, 0x03, 0x0a,
+	0x18, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74, 0x65, 0x64, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d,
+	0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x12, 0x59, 0x0a, 0x06, 0x6c, 0x61, 0x62,
+	0x65, 0x6c, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74,
+	0x65, 0x64, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c,
+	0x64, 0x73, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c,
+	0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x06, 0x6c, 0x61,
+	0x62, 0x65, 0x6c, 0x73, 0x12, 0x68, 0x0a, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x78, 0x70, 0x65, 0x63, 0x74,
+	0x65, 0x64, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c,
+	0x64, 0x73, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e,
+	0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20,
+	0x01, 0x52, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x1a, 0x58,
+	0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a,
+	0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
+	0x33, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d,
+	0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e,
+	0x75, 0x6c, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x5d, 0x0a, 0x10, 0x41, 0x6e, 0x6e, 0x6f,
+	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03,
+	0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x33,
+	0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e,
+	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x75,
+	0x6c, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xc2, 0x02, 0x0a, 0x10, 0x4f, 0x62, 0x6a, 0x65,
+	0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x12, 0x51, 0x0a, 0x06,
+	0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a,
+	0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x2e, 0x4c, 0x61,
+	0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01,
+	0x06, 0x22, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12,
+	0x60, 0x0a, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x30, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x46,
+	0x69, 0x65, 0x6c, 0x64, 0x73, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04,
+	0x72, 0x02, 0x20, 0x01, 0x52, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x3e, 0x0a, 0x10,
+	0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x66, 0x0a, 0x16,
+	0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x4d, 0x65, 0x74, 0x61,
+	0x46, 0x69, 0x65, 0x6c, 0x64, 0x73, 0x12, 0x20, 0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x92, 0x01, 0x02, 0x18, 0x01,
+	0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x12, 0x2a, 0x0a, 0x0b, 0x61, 0x6e, 0x6e, 0x6f,
+	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x42, 0x08, 0xfa,
+	0x42, 0x05, 0x92, 0x01, 0x02, 0x18, 0x01, 0x52, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x22, 0x88, 0x01, 0x0a, 0x04, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x24, 0x0a, 0x0d, 0x75,
+	0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x08, 0x52, 0x0d, 0x75, 0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c, 0x61, 0x62, 0x6c,
+	0x65, 0x3a, 0x2c, 0xb2, 0xe1, 0x1c, 0x28, 0x0a, 0x26, 0x0a, 0x12, 0x63, 0x6c, 0x75, 0x74, 0x63,
+	0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x7b,
+	0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x22,
+	0xaa, 0x01, 0x0a, 0x13, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4e, 0x6f, 0x64, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e,
+	0x74, 0x73, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72,
+	0x02, 0x20, 0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x12, 0x21,
+	0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65,
+	0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x3a, 0x2c,
+	0xb2, 0xe1, 0x1c, 0x28, 0x0a, 0x26, 0x0a, 0x12, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b,
+	0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x7b, 0x63, 0x6c, 0x75,
+	0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x22, 0x51, 0x0a, 0x14,
+	0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x04, 0x6e, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x13, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x42, 0x04, 0xa8, 0xe1, 0x1c, 0x00, 0x52, 0x04, 0x6e,
+	0x6f, 0x64, 0x65, 0x3a, 0x0a, 0xaa, 0xe1, 0x1c, 0x06, 0x0a, 0x04, 0x6e, 0x6f, 0x64, 0x65, 0x22,
+	0xce, 0x01, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73,
+	0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20,
+	0x01, 0x52, 0x09, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x65, 0x74, 0x12, 0x21, 0x0a, 0x07,
+	0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa,
+	0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12,
+	0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa,
+	0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x24, 0x0a, 0x0d,
+	0x75, 0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x0d, 0x75, 0x6e, 0x73, 0x63, 0x68, 0x65, 0x64, 0x75, 0x6c, 0x61, 0x62,
+	0x6c, 0x65, 0x3a, 0x2c, 0xb2, 0xe1, 0x1c, 0x28, 0x0a, 0x26, 0x0a, 0x12, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x10,
+	0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x7d,
+	0x22, 0x14, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2a, 0x33, 0x0a, 0x0a, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74,
+	0x4b, 0x69, 0x6e, 0x64, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46,
+	0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e,
+	0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x50, 0x4f, 0x44, 0x10, 0x02, 0x2a, 0x45, 0x0a, 0x09, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x14, 0x0a, 0x10, 0x54, 0x59, 0x50, 0x45,
+	0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0a,
+	0x0a, 0x06, 0x4e, 0x4f, 0x52, 0x4d, 0x41, 0x4c, 0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x57, 0x41,
+	0x52, 0x4e, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x09, 0x0a, 0x05, 0x45, 0x52, 0x52, 0x4f, 0x52,
+	0x10, 0x03, 0x32, 0xa1, 0x22, 0x0a, 0x06, 0x4b, 0x38, 0x73, 0x41, 0x50, 0x49, 0x12, 0x7a, 0x0a,
 	0x0b, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x50, 0x6f, 0x64, 0x12, 0x21, 0x2e, 0x63,
 	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x73,
 	0x63, 0x72, 0x69, 0x62, 0x65, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
@@ -8726,11 +8935,21 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x23, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x03, 0x82, 0xd3, 0xe4, 0x93,
 	0x02, 0x17, 0x3a, 0x01, 0x2a, 0x22, 0x12, 0x2f, 0x76, 0x31, 0x2f, 0x6b, 0x38, 0x73, 0x2f, 0x75,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x42, 0x31, 0x5a, 0x2f, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75,
-	0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x6b, 0x38, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x6b, 0x38, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x9a, 0x01, 0x0a, 0x13, 0x4c, 0x69,
+	0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74,
+	0x73, 0x12, 0x29, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76,
+	0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x45,
+	0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73,
+	0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2c, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x20, 0x3a, 0x01, 0x2a, 0x22, 0x1b, 0x2f, 0x76, 0x31, 0x2f, 0x6b,
+	0x38, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65,
+	0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x42, 0x31, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68,
+	0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6b, 0x38, 0x73,
+	0x2f, 0x76, 0x31, 0x3b, 0x6b, 0x38, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -8745,334 +8964,342 @@ func file_k8s_v1_k8s_proto_rawDescGZIP() []byte {
 	return file_k8s_v1_k8s_proto_rawDescData
 }
 
-var file_k8s_v1_k8s_proto_enumTypes = make([]protoimpl.EnumInfo, 9)
-var file_k8s_v1_k8s_proto_msgTypes = make([]protoimpl.MessageInfo, 136)
+var file_k8s_v1_k8s_proto_enumTypes = make([]protoimpl.EnumInfo, 10)
+var file_k8s_v1_k8s_proto_msgTypes = make([]protoimpl.MessageInfo, 138)
 var file_k8s_v1_k8s_proto_goTypes = []interface{}{
 	(ObjectKind)(0),          // 0: clutch.k8s.v1.ObjectKind
-	(Container_State)(0),     // 1: clutch.k8s.v1.Container.State
-	(PodCondition_Type)(0),   // 2: clutch.k8s.v1.PodCondition.Type
-	(PodCondition_Status)(0), // 3: clutch.k8s.v1.PodCondition.Status
-	(Pod_State)(0),           // 4: clutch.k8s.v1.Pod.State
-	(Deployment_DeploymentStatus_Condition_Type)(0),            // 5: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type
-	(Deployment_DeploymentStatus_Condition_ConditionStatus)(0), // 6: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus
-	(Service_Type)(0),                                 // 7: clutch.k8s.v1.Service.Type
-	(CronJob_ConcurrencyPolicy)(0),                    // 8: clutch.k8s.v1.CronJob.ConcurrencyPolicy
-	(*DescribePodRequest)(nil),                        // 9: clutch.k8s.v1.DescribePodRequest
-	(*DescribePodResponse)(nil),                       // 10: clutch.k8s.v1.DescribePodResponse
-	(*Container)(nil),                                 // 11: clutch.k8s.v1.Container
-	(*StateWaiting)(nil),                              // 12: clutch.k8s.v1.StateWaiting
-	(*StateRunning)(nil),                              // 13: clutch.k8s.v1.StateRunning
-	(*StateTerminated)(nil),                           // 14: clutch.k8s.v1.StateTerminated
-	(*PodCondition)(nil),                              // 15: clutch.k8s.v1.PodCondition
-	(*Pod)(nil),                                       // 16: clutch.k8s.v1.Pod
-	(*ListOptions)(nil),                               // 17: clutch.k8s.v1.ListOptions
-	(*ListPodsRequest)(nil),                           // 18: clutch.k8s.v1.ListPodsRequest
-	(*ListPodsResponse)(nil),                          // 19: clutch.k8s.v1.ListPodsResponse
-	(*DeletePodRequest)(nil),                          // 20: clutch.k8s.v1.DeletePodRequest
-	(*DeletePodResponse)(nil),                         // 21: clutch.k8s.v1.DeletePodResponse
-	(*UpdatePodRequest)(nil),                          // 22: clutch.k8s.v1.UpdatePodRequest
-	(*UpdatePodResponse)(nil),                         // 23: clutch.k8s.v1.UpdatePodResponse
-	(*GetPodLogsRequest)(nil),                         // 24: clutch.k8s.v1.GetPodLogsRequest
-	(*PodLogsOptions)(nil),                            // 25: clutch.k8s.v1.PodLogsOptions
-	(*GetPodLogsResponse)(nil),                        // 26: clutch.k8s.v1.GetPodLogsResponse
-	(*PodLogLine)(nil),                                // 27: clutch.k8s.v1.PodLogLine
-	(*HPA)(nil),                                       // 28: clutch.k8s.v1.HPA
-	(*ResizeHPARequest)(nil),                          // 29: clutch.k8s.v1.ResizeHPARequest
-	(*ResizeHPAResponse)(nil),                         // 30: clutch.k8s.v1.ResizeHPAResponse
-	(*DeleteHPARequest)(nil),                          // 31: clutch.k8s.v1.DeleteHPARequest
-	(*DeleteHPAResponse)(nil),                         // 32: clutch.k8s.v1.DeleteHPAResponse
-	(*Deployment)(nil),                                // 33: clutch.k8s.v1.Deployment
-	(*DescribeDeploymentRequest)(nil),                 // 34: clutch.k8s.v1.DescribeDeploymentRequest
-	(*DescribeDeploymentResponse)(nil),                // 35: clutch.k8s.v1.DescribeDeploymentResponse
-	(*ListDeploymentsRequest)(nil),                    // 36: clutch.k8s.v1.ListDeploymentsRequest
-	(*ListDeploymentsResponse)(nil),                   // 37: clutch.k8s.v1.ListDeploymentsResponse
-	(*UpdateDeploymentRequest)(nil),                   // 38: clutch.k8s.v1.UpdateDeploymentRequest
-	(*UpdateDeploymentResponse)(nil),                  // 39: clutch.k8s.v1.UpdateDeploymentResponse
-	(*DeleteDeploymentRequest)(nil),                   // 40: clutch.k8s.v1.DeleteDeploymentRequest
-	(*DeleteDeploymentResponse)(nil),                  // 41: clutch.k8s.v1.DeleteDeploymentResponse
-	(*StatefulSet)(nil),                               // 42: clutch.k8s.v1.StatefulSet
-	(*DescribeStatefulSetRequest)(nil),                // 43: clutch.k8s.v1.DescribeStatefulSetRequest
-	(*DescribeStatefulSetResponse)(nil),               // 44: clutch.k8s.v1.DescribeStatefulSetResponse
-	(*ListStatefulSetsRequest)(nil),                   // 45: clutch.k8s.v1.ListStatefulSetsRequest
-	(*ListStatefulSetsResponse)(nil),                  // 46: clutch.k8s.v1.ListStatefulSetsResponse
-	(*DeleteStatefulSetRequest)(nil),                  // 47: clutch.k8s.v1.DeleteStatefulSetRequest
-	(*DeleteStatefulSetResponse)(nil),                 // 48: clutch.k8s.v1.DeleteStatefulSetResponse
-	(*UpdateStatefulSetRequest)(nil),                  // 49: clutch.k8s.v1.UpdateStatefulSetRequest
-	(*UpdateStatefulSetResponse)(nil),                 // 50: clutch.k8s.v1.UpdateStatefulSetResponse
-	(*Service)(nil),                                   // 51: clutch.k8s.v1.Service
-	(*DescribeServiceRequest)(nil),                    // 52: clutch.k8s.v1.DescribeServiceRequest
-	(*DescribeServiceResponse)(nil),                   // 53: clutch.k8s.v1.DescribeServiceResponse
-	(*ListServicesRequest)(nil),                       // 54: clutch.k8s.v1.ListServicesRequest
-	(*ListServicesResponse)(nil),                      // 55: clutch.k8s.v1.ListServicesResponse
-	(*DeleteServiceRequest)(nil),                      // 56: clutch.k8s.v1.DeleteServiceRequest
-	(*DeleteServiceResponse)(nil),                     // 57: clutch.k8s.v1.DeleteServiceResponse
-	(*CronJob)(nil),                                   // 58: clutch.k8s.v1.CronJob
-	(*DescribeCronJobRequest)(nil),                    // 59: clutch.k8s.v1.DescribeCronJobRequest
-	(*DescribeCronJobResponse)(nil),                   // 60: clutch.k8s.v1.DescribeCronJobResponse
-	(*ListCronJobsRequest)(nil),                       // 61: clutch.k8s.v1.ListCronJobsRequest
-	(*ListCronJobsResponse)(nil),                      // 62: clutch.k8s.v1.ListCronJobsResponse
-	(*DeleteCronJobRequest)(nil),                      // 63: clutch.k8s.v1.DeleteCronJobRequest
-	(*DeleteCronJobResponse)(nil),                     // 64: clutch.k8s.v1.DeleteCronJobResponse
-	(*ConfigMap)(nil),                                 // 65: clutch.k8s.v1.ConfigMap
-	(*ListConfigMapsRequest)(nil),                     // 66: clutch.k8s.v1.ListConfigMapsRequest
-	(*ListConfigMapsResponse)(nil),                    // 67: clutch.k8s.v1.ListConfigMapsResponse
-	(*DescribeConfigMapRequest)(nil),                  // 68: clutch.k8s.v1.DescribeConfigMapRequest
-	(*DescribeConfigMapResponse)(nil),                 // 69: clutch.k8s.v1.DescribeConfigMapResponse
-	(*DeleteConfigMapRequest)(nil),                    // 70: clutch.k8s.v1.DeleteConfigMapRequest
-	(*DeleteConfigMapResponse)(nil),                   // 71: clutch.k8s.v1.DeleteConfigMapResponse
-	(*Job)(nil),                                       // 72: clutch.k8s.v1.Job
-	(*DescribeJobRequest)(nil),                        // 73: clutch.k8s.v1.DescribeJobRequest
-	(*DescribeJobResponse)(nil),                       // 74: clutch.k8s.v1.DescribeJobResponse
-	(*ListJobsRequest)(nil),                           // 75: clutch.k8s.v1.ListJobsRequest
-	(*ListJobsResponse)(nil),                          // 76: clutch.k8s.v1.ListJobsResponse
-	(*DeleteJobRequest)(nil),                          // 77: clutch.k8s.v1.DeleteJobRequest
-	(*DeleteJobResponse)(nil),                         // 78: clutch.k8s.v1.DeleteJobResponse
-	(*JobConfig)(nil),                                 // 79: clutch.k8s.v1.JobConfig
-	(*CreateJobRequest)(nil),                          // 80: clutch.k8s.v1.CreateJobRequest
-	(*CreateJobResponse)(nil),                         // 81: clutch.k8s.v1.CreateJobResponse
-	(*Namespace)(nil),                                 // 82: clutch.k8s.v1.Namespace
-	(*DescribeNamespaceRequest)(nil),                  // 83: clutch.k8s.v1.DescribeNamespaceRequest
-	(*DescribeNamespaceResponse)(nil),                 // 84: clutch.k8s.v1.DescribeNamespaceResponse
-	(*Event)(nil),                                     // 85: clutch.k8s.v1.Event
-	(*ListEventsRequest)(nil),                         // 86: clutch.k8s.v1.ListEventsRequest
-	(*ListEventsResponse)(nil),                        // 87: clutch.k8s.v1.ListEventsResponse
-	(*NullableString)(nil),                            // 88: clutch.k8s.v1.NullableString
-	(*ExpectedObjectMetaFields)(nil),                  // 89: clutch.k8s.v1.ExpectedObjectMetaFields
-	(*ObjectMetaFields)(nil),                          // 90: clutch.k8s.v1.ObjectMetaFields
-	(*RemoveObjectMetaFields)(nil),                    // 91: clutch.k8s.v1.RemoveObjectMetaFields
-	(*Node)(nil),                                      // 92: clutch.k8s.v1.Node
-	(*DescribeNodeRequest)(nil),                       // 93: clutch.k8s.v1.DescribeNodeRequest
-	(*DescribeNodeResponse)(nil),                      // 94: clutch.k8s.v1.DescribeNodeResponse
-	(*UpdateNodeRequest)(nil),                         // 95: clutch.k8s.v1.UpdateNodeRequest
-	(*UpdateNodeResponse)(nil),                        // 96: clutch.k8s.v1.UpdateNodeResponse
-	nil,                                               // 97: clutch.k8s.v1.Pod.LabelsEntry
-	nil,                                               // 98: clutch.k8s.v1.Pod.AnnotationsEntry
-	nil,                                               // 99: clutch.k8s.v1.ListOptions.LabelsEntry
-	(*HPA_Sizing)(nil),                                // 100: clutch.k8s.v1.HPA.Sizing
-	nil,                                               // 101: clutch.k8s.v1.HPA.LabelsEntry
-	nil,                                               // 102: clutch.k8s.v1.HPA.AnnotationsEntry
-	(*ResizeHPARequest_Sizing)(nil),                   // 103: clutch.k8s.v1.ResizeHPARequest.Sizing
-	nil,                                               // 104: clutch.k8s.v1.Deployment.LabelsEntry
-	nil,                                               // 105: clutch.k8s.v1.Deployment.AnnotationsEntry
-	(*Deployment_DeploymentStatus)(nil),               // 106: clutch.k8s.v1.Deployment.DeploymentStatus
-	(*Deployment_DeploymentSpec)(nil),                 // 107: clutch.k8s.v1.Deployment.DeploymentSpec
-	(*Deployment_DeploymentStatus_Condition)(nil),     // 108: clutch.k8s.v1.Deployment.DeploymentStatus.Condition
-	(*Deployment_DeploymentSpec_PodTemplateSpec)(nil), // 109: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec
-	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec)(nil),                                // 110: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec
-	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container)(nil),                      // 111: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
-	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements)(nil), // 112: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements
-	nil,                                    // 113: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.LimitsEntry
-	nil,                                    // 114: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.RequestsEntry
-	(*UpdateDeploymentRequest_Fields)(nil), // 115: clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	nil,                                    // 116: clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	nil,                                    // 117: clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	(*UpdateDeploymentRequest_Fields_ContainerResources)(nil),                      // 118: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources
-	(*UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements)(nil), // 119: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements
-	nil,                                     // 120: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.LimitsEntry
-	nil,                                     // 121: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.RequestsEntry
-	nil,                                     // 122: clutch.k8s.v1.StatefulSet.LabelsEntry
-	nil,                                     // 123: clutch.k8s.v1.StatefulSet.AnnotationsEntry
-	(*StatefulSet_Status)(nil),              // 124: clutch.k8s.v1.StatefulSet.Status
-	(*UpdateStatefulSetRequest_Fields)(nil), // 125: clutch.k8s.v1.UpdateStatefulSetRequest.Fields
-	nil,                                     // 126: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
-	nil,                                     // 127: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
-	nil,                                     // 128: clutch.k8s.v1.Service.LabelsEntry
-	nil,                                     // 129: clutch.k8s.v1.Service.AnnotationsEntry
-	nil,                                     // 130: clutch.k8s.v1.Service.SelectorEntry
-	nil,                                     // 131: clutch.k8s.v1.CronJob.LabelsEntry
-	nil,                                     // 132: clutch.k8s.v1.CronJob.AnnotationsEntry
-	nil,                                     // 133: clutch.k8s.v1.ConfigMap.AnnotationsEntry
-	nil,                                     // 134: clutch.k8s.v1.ConfigMap.LabelsEntry
-	nil,                                     // 135: clutch.k8s.v1.ConfigMap.DataEntry
-	nil,                                     // 136: clutch.k8s.v1.ConfigMap.BinaryDataEntry
-	nil,                                     // 137: clutch.k8s.v1.Job.AnnotationsEntry
-	nil,                                     // 138: clutch.k8s.v1.Job.LabelsEntry
-	nil,                                     // 139: clutch.k8s.v1.Namespace.AnnotationsEntry
-	nil,                                     // 140: clutch.k8s.v1.Namespace.LabelsEntry
-	nil,                                     // 141: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
-	nil,                                     // 142: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
-	nil,                                     // 143: clutch.k8s.v1.ObjectMetaFields.LabelsEntry
-	nil,                                     // 144: clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
-	(*timestamppb.Timestamp)(nil),           // 145: google.protobuf.Timestamp
-	(*status.Status)(nil),                   // 146: google.rpc.Status
-	(*wrapperspb.Int64Value)(nil),           // 147: google.protobuf.Int64Value
-	(*structpb.Value)(nil),                  // 148: google.protobuf.Value
-	(structpb.NullValue)(0),                 // 149: google.protobuf.NullValue
+	(EventType)(0),           // 1: clutch.k8s.v1.EventType
+	(Container_State)(0),     // 2: clutch.k8s.v1.Container.State
+	(PodCondition_Type)(0),   // 3: clutch.k8s.v1.PodCondition.Type
+	(PodCondition_Status)(0), // 4: clutch.k8s.v1.PodCondition.Status
+	(Pod_State)(0),           // 5: clutch.k8s.v1.Pod.State
+	(Deployment_DeploymentStatus_Condition_Type)(0),            // 6: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type
+	(Deployment_DeploymentStatus_Condition_ConditionStatus)(0), // 7: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus
+	(Service_Type)(0),                                 // 8: clutch.k8s.v1.Service.Type
+	(CronJob_ConcurrencyPolicy)(0),                    // 9: clutch.k8s.v1.CronJob.ConcurrencyPolicy
+	(*ListNamespaceEventsRequest)(nil),                // 10: clutch.k8s.v1.ListNamespaceEventsRequest
+	(*ListNamespaceEventsResponse)(nil),               // 11: clutch.k8s.v1.ListNamespaceEventsResponse
+	(*DescribePodRequest)(nil),                        // 12: clutch.k8s.v1.DescribePodRequest
+	(*DescribePodResponse)(nil),                       // 13: clutch.k8s.v1.DescribePodResponse
+	(*Container)(nil),                                 // 14: clutch.k8s.v1.Container
+	(*StateWaiting)(nil),                              // 15: clutch.k8s.v1.StateWaiting
+	(*StateRunning)(nil),                              // 16: clutch.k8s.v1.StateRunning
+	(*StateTerminated)(nil),                           // 17: clutch.k8s.v1.StateTerminated
+	(*PodCondition)(nil),                              // 18: clutch.k8s.v1.PodCondition
+	(*Pod)(nil),                                       // 19: clutch.k8s.v1.Pod
+	(*ListOptions)(nil),                               // 20: clutch.k8s.v1.ListOptions
+	(*ListPodsRequest)(nil),                           // 21: clutch.k8s.v1.ListPodsRequest
+	(*ListPodsResponse)(nil),                          // 22: clutch.k8s.v1.ListPodsResponse
+	(*DeletePodRequest)(nil),                          // 23: clutch.k8s.v1.DeletePodRequest
+	(*DeletePodResponse)(nil),                         // 24: clutch.k8s.v1.DeletePodResponse
+	(*UpdatePodRequest)(nil),                          // 25: clutch.k8s.v1.UpdatePodRequest
+	(*UpdatePodResponse)(nil),                         // 26: clutch.k8s.v1.UpdatePodResponse
+	(*GetPodLogsRequest)(nil),                         // 27: clutch.k8s.v1.GetPodLogsRequest
+	(*PodLogsOptions)(nil),                            // 28: clutch.k8s.v1.PodLogsOptions
+	(*GetPodLogsResponse)(nil),                        // 29: clutch.k8s.v1.GetPodLogsResponse
+	(*PodLogLine)(nil),                                // 30: clutch.k8s.v1.PodLogLine
+	(*HPA)(nil),                                       // 31: clutch.k8s.v1.HPA
+	(*ResizeHPARequest)(nil),                          // 32: clutch.k8s.v1.ResizeHPARequest
+	(*ResizeHPAResponse)(nil),                         // 33: clutch.k8s.v1.ResizeHPAResponse
+	(*DeleteHPARequest)(nil),                          // 34: clutch.k8s.v1.DeleteHPARequest
+	(*DeleteHPAResponse)(nil),                         // 35: clutch.k8s.v1.DeleteHPAResponse
+	(*Deployment)(nil),                                // 36: clutch.k8s.v1.Deployment
+	(*DescribeDeploymentRequest)(nil),                 // 37: clutch.k8s.v1.DescribeDeploymentRequest
+	(*DescribeDeploymentResponse)(nil),                // 38: clutch.k8s.v1.DescribeDeploymentResponse
+	(*ListDeploymentsRequest)(nil),                    // 39: clutch.k8s.v1.ListDeploymentsRequest
+	(*ListDeploymentsResponse)(nil),                   // 40: clutch.k8s.v1.ListDeploymentsResponse
+	(*UpdateDeploymentRequest)(nil),                   // 41: clutch.k8s.v1.UpdateDeploymentRequest
+	(*UpdateDeploymentResponse)(nil),                  // 42: clutch.k8s.v1.UpdateDeploymentResponse
+	(*DeleteDeploymentRequest)(nil),                   // 43: clutch.k8s.v1.DeleteDeploymentRequest
+	(*DeleteDeploymentResponse)(nil),                  // 44: clutch.k8s.v1.DeleteDeploymentResponse
+	(*StatefulSet)(nil),                               // 45: clutch.k8s.v1.StatefulSet
+	(*DescribeStatefulSetRequest)(nil),                // 46: clutch.k8s.v1.DescribeStatefulSetRequest
+	(*DescribeStatefulSetResponse)(nil),               // 47: clutch.k8s.v1.DescribeStatefulSetResponse
+	(*ListStatefulSetsRequest)(nil),                   // 48: clutch.k8s.v1.ListStatefulSetsRequest
+	(*ListStatefulSetsResponse)(nil),                  // 49: clutch.k8s.v1.ListStatefulSetsResponse
+	(*DeleteStatefulSetRequest)(nil),                  // 50: clutch.k8s.v1.DeleteStatefulSetRequest
+	(*DeleteStatefulSetResponse)(nil),                 // 51: clutch.k8s.v1.DeleteStatefulSetResponse
+	(*UpdateStatefulSetRequest)(nil),                  // 52: clutch.k8s.v1.UpdateStatefulSetRequest
+	(*UpdateStatefulSetResponse)(nil),                 // 53: clutch.k8s.v1.UpdateStatefulSetResponse
+	(*Service)(nil),                                   // 54: clutch.k8s.v1.Service
+	(*DescribeServiceRequest)(nil),                    // 55: clutch.k8s.v1.DescribeServiceRequest
+	(*DescribeServiceResponse)(nil),                   // 56: clutch.k8s.v1.DescribeServiceResponse
+	(*ListServicesRequest)(nil),                       // 57: clutch.k8s.v1.ListServicesRequest
+	(*ListServicesResponse)(nil),                      // 58: clutch.k8s.v1.ListServicesResponse
+	(*DeleteServiceRequest)(nil),                      // 59: clutch.k8s.v1.DeleteServiceRequest
+	(*DeleteServiceResponse)(nil),                     // 60: clutch.k8s.v1.DeleteServiceResponse
+	(*CronJob)(nil),                                   // 61: clutch.k8s.v1.CronJob
+	(*DescribeCronJobRequest)(nil),                    // 62: clutch.k8s.v1.DescribeCronJobRequest
+	(*DescribeCronJobResponse)(nil),                   // 63: clutch.k8s.v1.DescribeCronJobResponse
+	(*ListCronJobsRequest)(nil),                       // 64: clutch.k8s.v1.ListCronJobsRequest
+	(*ListCronJobsResponse)(nil),                      // 65: clutch.k8s.v1.ListCronJobsResponse
+	(*DeleteCronJobRequest)(nil),                      // 66: clutch.k8s.v1.DeleteCronJobRequest
+	(*DeleteCronJobResponse)(nil),                     // 67: clutch.k8s.v1.DeleteCronJobResponse
+	(*ConfigMap)(nil),                                 // 68: clutch.k8s.v1.ConfigMap
+	(*ListConfigMapsRequest)(nil),                     // 69: clutch.k8s.v1.ListConfigMapsRequest
+	(*ListConfigMapsResponse)(nil),                    // 70: clutch.k8s.v1.ListConfigMapsResponse
+	(*DescribeConfigMapRequest)(nil),                  // 71: clutch.k8s.v1.DescribeConfigMapRequest
+	(*DescribeConfigMapResponse)(nil),                 // 72: clutch.k8s.v1.DescribeConfigMapResponse
+	(*DeleteConfigMapRequest)(nil),                    // 73: clutch.k8s.v1.DeleteConfigMapRequest
+	(*DeleteConfigMapResponse)(nil),                   // 74: clutch.k8s.v1.DeleteConfigMapResponse
+	(*Job)(nil),                                       // 75: clutch.k8s.v1.Job
+	(*DescribeJobRequest)(nil),                        // 76: clutch.k8s.v1.DescribeJobRequest
+	(*DescribeJobResponse)(nil),                       // 77: clutch.k8s.v1.DescribeJobResponse
+	(*ListJobsRequest)(nil),                           // 78: clutch.k8s.v1.ListJobsRequest
+	(*ListJobsResponse)(nil),                          // 79: clutch.k8s.v1.ListJobsResponse
+	(*DeleteJobRequest)(nil),                          // 80: clutch.k8s.v1.DeleteJobRequest
+	(*DeleteJobResponse)(nil),                         // 81: clutch.k8s.v1.DeleteJobResponse
+	(*JobConfig)(nil),                                 // 82: clutch.k8s.v1.JobConfig
+	(*CreateJobRequest)(nil),                          // 83: clutch.k8s.v1.CreateJobRequest
+	(*CreateJobResponse)(nil),                         // 84: clutch.k8s.v1.CreateJobResponse
+	(*Namespace)(nil),                                 // 85: clutch.k8s.v1.Namespace
+	(*DescribeNamespaceRequest)(nil),                  // 86: clutch.k8s.v1.DescribeNamespaceRequest
+	(*DescribeNamespaceResponse)(nil),                 // 87: clutch.k8s.v1.DescribeNamespaceResponse
+	(*Event)(nil),                                     // 88: clutch.k8s.v1.Event
+	(*ListEventsRequest)(nil),                         // 89: clutch.k8s.v1.ListEventsRequest
+	(*ListEventsResponse)(nil),                        // 90: clutch.k8s.v1.ListEventsResponse
+	(*NullableString)(nil),                            // 91: clutch.k8s.v1.NullableString
+	(*ExpectedObjectMetaFields)(nil),                  // 92: clutch.k8s.v1.ExpectedObjectMetaFields
+	(*ObjectMetaFields)(nil),                          // 93: clutch.k8s.v1.ObjectMetaFields
+	(*RemoveObjectMetaFields)(nil),                    // 94: clutch.k8s.v1.RemoveObjectMetaFields
+	(*Node)(nil),                                      // 95: clutch.k8s.v1.Node
+	(*DescribeNodeRequest)(nil),                       // 96: clutch.k8s.v1.DescribeNodeRequest
+	(*DescribeNodeResponse)(nil),                      // 97: clutch.k8s.v1.DescribeNodeResponse
+	(*UpdateNodeRequest)(nil),                         // 98: clutch.k8s.v1.UpdateNodeRequest
+	(*UpdateNodeResponse)(nil),                        // 99: clutch.k8s.v1.UpdateNodeResponse
+	nil,                                               // 100: clutch.k8s.v1.Pod.LabelsEntry
+	nil,                                               // 101: clutch.k8s.v1.Pod.AnnotationsEntry
+	nil,                                               // 102: clutch.k8s.v1.ListOptions.LabelsEntry
+	(*HPA_Sizing)(nil),                                // 103: clutch.k8s.v1.HPA.Sizing
+	nil,                                               // 104: clutch.k8s.v1.HPA.LabelsEntry
+	nil,                                               // 105: clutch.k8s.v1.HPA.AnnotationsEntry
+	(*ResizeHPARequest_Sizing)(nil),                   // 106: clutch.k8s.v1.ResizeHPARequest.Sizing
+	nil,                                               // 107: clutch.k8s.v1.Deployment.LabelsEntry
+	nil,                                               // 108: clutch.k8s.v1.Deployment.AnnotationsEntry
+	(*Deployment_DeploymentStatus)(nil),               // 109: clutch.k8s.v1.Deployment.DeploymentStatus
+	(*Deployment_DeploymentSpec)(nil),                 // 110: clutch.k8s.v1.Deployment.DeploymentSpec
+	(*Deployment_DeploymentStatus_Condition)(nil),     // 111: clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+	(*Deployment_DeploymentSpec_PodTemplateSpec)(nil), // 112: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec
+	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec)(nil),                                // 113: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec
+	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container)(nil),                      // 114: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+	(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements)(nil), // 115: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements
+	nil,                                    // 116: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.LimitsEntry
+	nil,                                    // 117: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.RequestsEntry
+	(*UpdateDeploymentRequest_Fields)(nil), // 118: clutch.k8s.v1.UpdateDeploymentRequest.Fields
+	nil,                                    // 119: clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
+	nil,                                    // 120: clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
+	(*UpdateDeploymentRequest_Fields_ContainerResources)(nil),                      // 121: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources
+	(*UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements)(nil), // 122: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements
+	nil,                                     // 123: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.LimitsEntry
+	nil,                                     // 124: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.RequestsEntry
+	nil,                                     // 125: clutch.k8s.v1.StatefulSet.LabelsEntry
+	nil,                                     // 126: clutch.k8s.v1.StatefulSet.AnnotationsEntry
+	(*StatefulSet_Status)(nil),              // 127: clutch.k8s.v1.StatefulSet.Status
+	(*UpdateStatefulSetRequest_Fields)(nil), // 128: clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+	nil,                                     // 129: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
+	nil,                                     // 130: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
+	nil,                                     // 131: clutch.k8s.v1.Service.LabelsEntry
+	nil,                                     // 132: clutch.k8s.v1.Service.AnnotationsEntry
+	nil,                                     // 133: clutch.k8s.v1.Service.SelectorEntry
+	nil,                                     // 134: clutch.k8s.v1.CronJob.LabelsEntry
+	nil,                                     // 135: clutch.k8s.v1.CronJob.AnnotationsEntry
+	nil,                                     // 136: clutch.k8s.v1.ConfigMap.AnnotationsEntry
+	nil,                                     // 137: clutch.k8s.v1.ConfigMap.LabelsEntry
+	nil,                                     // 138: clutch.k8s.v1.ConfigMap.DataEntry
+	nil,                                     // 139: clutch.k8s.v1.ConfigMap.BinaryDataEntry
+	nil,                                     // 140: clutch.k8s.v1.Job.AnnotationsEntry
+	nil,                                     // 141: clutch.k8s.v1.Job.LabelsEntry
+	nil,                                     // 142: clutch.k8s.v1.Namespace.AnnotationsEntry
+	nil,                                     // 143: clutch.k8s.v1.Namespace.LabelsEntry
+	nil,                                     // 144: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
+	nil,                                     // 145: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
+	nil,                                     // 146: clutch.k8s.v1.ObjectMetaFields.LabelsEntry
+	nil,                                     // 147: clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
+	(*timestamppb.Timestamp)(nil),           // 148: google.protobuf.Timestamp
+	(*status.Status)(nil),                   // 149: google.rpc.Status
+	(*wrapperspb.Int64Value)(nil),           // 150: google.protobuf.Int64Value
+	(*structpb.Value)(nil),                  // 151: google.protobuf.Value
+	(structpb.NullValue)(0),                 // 152: google.protobuf.NullValue
 }
 var file_k8s_v1_k8s_proto_depIdxs = []int32{
-	16,  // 0: clutch.k8s.v1.DescribePodResponse.pod:type_name -> clutch.k8s.v1.Pod
-	1,   // 1: clutch.k8s.v1.Container.state:type_name -> clutch.k8s.v1.Container.State
-	12,  // 2: clutch.k8s.v1.Container.state_waiting:type_name -> clutch.k8s.v1.StateWaiting
-	13,  // 3: clutch.k8s.v1.Container.state_running:type_name -> clutch.k8s.v1.StateRunning
-	14,  // 4: clutch.k8s.v1.Container.state_terminated:type_name -> clutch.k8s.v1.StateTerminated
-	145, // 5: clutch.k8s.v1.StateRunning.start_time:type_name -> google.protobuf.Timestamp
-	2,   // 6: clutch.k8s.v1.PodCondition.type:type_name -> clutch.k8s.v1.PodCondition.Type
-	3,   // 7: clutch.k8s.v1.PodCondition.status:type_name -> clutch.k8s.v1.PodCondition.Status
-	11,  // 8: clutch.k8s.v1.Pod.containers:type_name -> clutch.k8s.v1.Container
-	4,   // 9: clutch.k8s.v1.Pod.state:type_name -> clutch.k8s.v1.Pod.State
-	145, // 10: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
-	97,  // 11: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
-	98,  // 12: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
-	15,  // 13: clutch.k8s.v1.Pod.pod_conditions:type_name -> clutch.k8s.v1.PodCondition
-	11,  // 14: clutch.k8s.v1.Pod.init_containers:type_name -> clutch.k8s.v1.Container
-	99,  // 15: clutch.k8s.v1.ListOptions.labels:type_name -> clutch.k8s.v1.ListOptions.LabelsEntry
-	17,  // 16: clutch.k8s.v1.ListPodsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	16,  // 17: clutch.k8s.v1.ListPodsResponse.pods:type_name -> clutch.k8s.v1.Pod
-	146, // 18: clutch.k8s.v1.ListPodsResponse.partial_failures:type_name -> google.rpc.Status
-	89,  // 19: clutch.k8s.v1.UpdatePodRequest.expected_object_meta_fields:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields
-	90,  // 20: clutch.k8s.v1.UpdatePodRequest.object_meta_fields:type_name -> clutch.k8s.v1.ObjectMetaFields
-	91,  // 21: clutch.k8s.v1.UpdatePodRequest.remove_object_meta_fields:type_name -> clutch.k8s.v1.RemoveObjectMetaFields
-	25,  // 22: clutch.k8s.v1.GetPodLogsRequest.options:type_name -> clutch.k8s.v1.PodLogsOptions
-	27,  // 23: clutch.k8s.v1.GetPodLogsResponse.logs:type_name -> clutch.k8s.v1.PodLogLine
-	100, // 24: clutch.k8s.v1.HPA.sizing:type_name -> clutch.k8s.v1.HPA.Sizing
-	101, // 25: clutch.k8s.v1.HPA.labels:type_name -> clutch.k8s.v1.HPA.LabelsEntry
-	102, // 26: clutch.k8s.v1.HPA.annotations:type_name -> clutch.k8s.v1.HPA.AnnotationsEntry
-	103, // 27: clutch.k8s.v1.ResizeHPARequest.sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
-	103, // 28: clutch.k8s.v1.ResizeHPARequest.current_sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
-	104, // 29: clutch.k8s.v1.Deployment.labels:type_name -> clutch.k8s.v1.Deployment.LabelsEntry
-	105, // 30: clutch.k8s.v1.Deployment.annotations:type_name -> clutch.k8s.v1.Deployment.AnnotationsEntry
-	106, // 31: clutch.k8s.v1.Deployment.deployment_status:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus
-	107, // 32: clutch.k8s.v1.Deployment.deployment_spec:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec
-	33,  // 33: clutch.k8s.v1.DescribeDeploymentResponse.deployment:type_name -> clutch.k8s.v1.Deployment
-	17,  // 34: clutch.k8s.v1.ListDeploymentsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	33,  // 35: clutch.k8s.v1.ListDeploymentsResponse.deployments:type_name -> clutch.k8s.v1.Deployment
-	115, // 36: clutch.k8s.v1.UpdateDeploymentRequest.fields:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	122, // 37: clutch.k8s.v1.StatefulSet.labels:type_name -> clutch.k8s.v1.StatefulSet.LabelsEntry
-	123, // 38: clutch.k8s.v1.StatefulSet.annotations:type_name -> clutch.k8s.v1.StatefulSet.AnnotationsEntry
-	124, // 39: clutch.k8s.v1.StatefulSet.status:type_name -> clutch.k8s.v1.StatefulSet.Status
-	42,  // 40: clutch.k8s.v1.DescribeStatefulSetResponse.stateful_set:type_name -> clutch.k8s.v1.StatefulSet
-	17,  // 41: clutch.k8s.v1.ListStatefulSetsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	42,  // 42: clutch.k8s.v1.ListStatefulSetsResponse.stateful_sets:type_name -> clutch.k8s.v1.StatefulSet
-	125, // 43: clutch.k8s.v1.UpdateStatefulSetRequest.fields:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields
-	7,   // 44: clutch.k8s.v1.Service.type:type_name -> clutch.k8s.v1.Service.Type
-	128, // 45: clutch.k8s.v1.Service.labels:type_name -> clutch.k8s.v1.Service.LabelsEntry
-	129, // 46: clutch.k8s.v1.Service.annotations:type_name -> clutch.k8s.v1.Service.AnnotationsEntry
-	130, // 47: clutch.k8s.v1.Service.selector:type_name -> clutch.k8s.v1.Service.SelectorEntry
-	51,  // 48: clutch.k8s.v1.DescribeServiceResponse.service:type_name -> clutch.k8s.v1.Service
-	17,  // 49: clutch.k8s.v1.ListServicesRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	51,  // 50: clutch.k8s.v1.ListServicesResponse.services:type_name -> clutch.k8s.v1.Service
-	131, // 51: clutch.k8s.v1.CronJob.labels:type_name -> clutch.k8s.v1.CronJob.LabelsEntry
-	132, // 52: clutch.k8s.v1.CronJob.annotations:type_name -> clutch.k8s.v1.CronJob.AnnotationsEntry
-	8,   // 53: clutch.k8s.v1.CronJob.concurrency_policy:type_name -> clutch.k8s.v1.CronJob.ConcurrencyPolicy
-	147, // 54: clutch.k8s.v1.CronJob.starting_deadline_seconds:type_name -> google.protobuf.Int64Value
-	58,  // 55: clutch.k8s.v1.DescribeCronJobResponse.cronjob:type_name -> clutch.k8s.v1.CronJob
-	17,  // 56: clutch.k8s.v1.ListCronJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	58,  // 57: clutch.k8s.v1.ListCronJobsResponse.cron_jobs:type_name -> clutch.k8s.v1.CronJob
-	133, // 58: clutch.k8s.v1.ConfigMap.annotations:type_name -> clutch.k8s.v1.ConfigMap.AnnotationsEntry
-	134, // 59: clutch.k8s.v1.ConfigMap.labels:type_name -> clutch.k8s.v1.ConfigMap.LabelsEntry
-	135, // 60: clutch.k8s.v1.ConfigMap.data:type_name -> clutch.k8s.v1.ConfigMap.DataEntry
-	136, // 61: clutch.k8s.v1.ConfigMap.binary_data:type_name -> clutch.k8s.v1.ConfigMap.BinaryDataEntry
-	17,  // 62: clutch.k8s.v1.ListConfigMapsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	65,  // 63: clutch.k8s.v1.ListConfigMapsResponse.config_maps:type_name -> clutch.k8s.v1.ConfigMap
-	65,  // 64: clutch.k8s.v1.DescribeConfigMapResponse.config_map:type_name -> clutch.k8s.v1.ConfigMap
-	137, // 65: clutch.k8s.v1.Job.annotations:type_name -> clutch.k8s.v1.Job.AnnotationsEntry
-	138, // 66: clutch.k8s.v1.Job.labels:type_name -> clutch.k8s.v1.Job.LabelsEntry
-	72,  // 67: clutch.k8s.v1.DescribeJobResponse.job:type_name -> clutch.k8s.v1.Job
-	17,  // 68: clutch.k8s.v1.ListJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	72,  // 69: clutch.k8s.v1.ListJobsResponse.jobs:type_name -> clutch.k8s.v1.Job
-	148, // 70: clutch.k8s.v1.JobConfig.value:type_name -> google.protobuf.Value
-	79,  // 71: clutch.k8s.v1.CreateJobRequest.job_config:type_name -> clutch.k8s.v1.JobConfig
-	72,  // 72: clutch.k8s.v1.CreateJobResponse.job:type_name -> clutch.k8s.v1.Job
-	139, // 73: clutch.k8s.v1.Namespace.annotations:type_name -> clutch.k8s.v1.Namespace.AnnotationsEntry
-	140, // 74: clutch.k8s.v1.Namespace.labels:type_name -> clutch.k8s.v1.Namespace.LabelsEntry
-	82,  // 75: clutch.k8s.v1.DescribeNamespaceResponse.namespace:type_name -> clutch.k8s.v1.Namespace
-	0,   // 76: clutch.k8s.v1.Event.kind:type_name -> clutch.k8s.v1.ObjectKind
-	0,   // 77: clutch.k8s.v1.ListEventsRequest.kind:type_name -> clutch.k8s.v1.ObjectKind
-	85,  // 78: clutch.k8s.v1.ListEventsResponse.events:type_name -> clutch.k8s.v1.Event
-	149, // 79: clutch.k8s.v1.NullableString.null:type_name -> google.protobuf.NullValue
-	141, // 80: clutch.k8s.v1.ExpectedObjectMetaFields.labels:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
-	142, // 81: clutch.k8s.v1.ExpectedObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
-	143, // 82: clutch.k8s.v1.ObjectMetaFields.labels:type_name -> clutch.k8s.v1.ObjectMetaFields.LabelsEntry
-	144, // 83: clutch.k8s.v1.ObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
-	92,  // 84: clutch.k8s.v1.DescribeNodeResponse.node:type_name -> clutch.k8s.v1.Node
-	108, // 85: clutch.k8s.v1.Deployment.DeploymentStatus.deployment_conditions:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition
-	109, // 86: clutch.k8s.v1.Deployment.DeploymentSpec.template:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec
-	5,   // 87: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.type:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type
-	6,   // 88: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.condition_status:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus
-	110, // 89: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.spec:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec
-	111, // 90: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.containers:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
-	112, // 91: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.resources:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements
-	113, // 92: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.limits:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.LimitsEntry
-	114, // 93: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.requests:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.RequestsEntry
-	116, // 94: clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	117, // 95: clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	118, // 96: clutch.k8s.v1.UpdateDeploymentRequest.Fields.container_resources:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources
-	119, // 97: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.resources:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements
-	120, // 98: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.limits:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.LimitsEntry
-	121, // 99: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.requests:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.RequestsEntry
-	126, // 100: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
-	127, // 101: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
-	88,  // 102: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry.value:type_name -> clutch.k8s.v1.NullableString
-	88,  // 103: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry.value:type_name -> clutch.k8s.v1.NullableString
-	9,   // 104: clutch.k8s.v1.K8sAPI.DescribePod:input_type -> clutch.k8s.v1.DescribePodRequest
-	18,  // 105: clutch.k8s.v1.K8sAPI.ListPods:input_type -> clutch.k8s.v1.ListPodsRequest
-	20,  // 106: clutch.k8s.v1.K8sAPI.DeletePod:input_type -> clutch.k8s.v1.DeletePodRequest
-	22,  // 107: clutch.k8s.v1.K8sAPI.UpdatePod:input_type -> clutch.k8s.v1.UpdatePodRequest
-	24,  // 108: clutch.k8s.v1.K8sAPI.GetPodLogs:input_type -> clutch.k8s.v1.GetPodLogsRequest
-	29,  // 109: clutch.k8s.v1.K8sAPI.ResizeHPA:input_type -> clutch.k8s.v1.ResizeHPARequest
-	31,  // 110: clutch.k8s.v1.K8sAPI.DeleteHPA:input_type -> clutch.k8s.v1.DeleteHPARequest
-	34,  // 111: clutch.k8s.v1.K8sAPI.DescribeDeployment:input_type -> clutch.k8s.v1.DescribeDeploymentRequest
-	36,  // 112: clutch.k8s.v1.K8sAPI.ListDeployments:input_type -> clutch.k8s.v1.ListDeploymentsRequest
-	38,  // 113: clutch.k8s.v1.K8sAPI.UpdateDeployment:input_type -> clutch.k8s.v1.UpdateDeploymentRequest
-	40,  // 114: clutch.k8s.v1.K8sAPI.DeleteDeployment:input_type -> clutch.k8s.v1.DeleteDeploymentRequest
-	52,  // 115: clutch.k8s.v1.K8sAPI.DescribeService:input_type -> clutch.k8s.v1.DescribeServiceRequest
-	54,  // 116: clutch.k8s.v1.K8sAPI.ListServices:input_type -> clutch.k8s.v1.ListServicesRequest
-	56,  // 117: clutch.k8s.v1.K8sAPI.DeleteService:input_type -> clutch.k8s.v1.DeleteServiceRequest
-	43,  // 118: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:input_type -> clutch.k8s.v1.DescribeStatefulSetRequest
-	45,  // 119: clutch.k8s.v1.K8sAPI.ListStatefulSets:input_type -> clutch.k8s.v1.ListStatefulSetsRequest
-	49,  // 120: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:input_type -> clutch.k8s.v1.UpdateStatefulSetRequest
-	47,  // 121: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:input_type -> clutch.k8s.v1.DeleteStatefulSetRequest
-	59,  // 122: clutch.k8s.v1.K8sAPI.DescribeCronJob:input_type -> clutch.k8s.v1.DescribeCronJobRequest
-	61,  // 123: clutch.k8s.v1.K8sAPI.ListCronJobs:input_type -> clutch.k8s.v1.ListCronJobsRequest
-	63,  // 124: clutch.k8s.v1.K8sAPI.DeleteCronJob:input_type -> clutch.k8s.v1.DeleteCronJobRequest
-	66,  // 125: clutch.k8s.v1.K8sAPI.ListConfigMaps:input_type -> clutch.k8s.v1.ListConfigMapsRequest
-	68,  // 126: clutch.k8s.v1.K8sAPI.DescribeConfigMap:input_type -> clutch.k8s.v1.DescribeConfigMapRequest
-	70,  // 127: clutch.k8s.v1.K8sAPI.DeleteConfigMap:input_type -> clutch.k8s.v1.DeleteConfigMapRequest
-	73,  // 128: clutch.k8s.v1.K8sAPI.DescribeJob:input_type -> clutch.k8s.v1.DescribeJobRequest
-	75,  // 129: clutch.k8s.v1.K8sAPI.ListJobs:input_type -> clutch.k8s.v1.ListJobsRequest
-	77,  // 130: clutch.k8s.v1.K8sAPI.DeleteJob:input_type -> clutch.k8s.v1.DeleteJobRequest
-	80,  // 131: clutch.k8s.v1.K8sAPI.CreateJob:input_type -> clutch.k8s.v1.CreateJobRequest
-	83,  // 132: clutch.k8s.v1.K8sAPI.DescribeNamespace:input_type -> clutch.k8s.v1.DescribeNamespaceRequest
-	86,  // 133: clutch.k8s.v1.K8sAPI.ListEvents:input_type -> clutch.k8s.v1.ListEventsRequest
-	93,  // 134: clutch.k8s.v1.K8sAPI.DescribeNode:input_type -> clutch.k8s.v1.DescribeNodeRequest
-	95,  // 135: clutch.k8s.v1.K8sAPI.UpdateNode:input_type -> clutch.k8s.v1.UpdateNodeRequest
-	10,  // 136: clutch.k8s.v1.K8sAPI.DescribePod:output_type -> clutch.k8s.v1.DescribePodResponse
-	19,  // 137: clutch.k8s.v1.K8sAPI.ListPods:output_type -> clutch.k8s.v1.ListPodsResponse
-	21,  // 138: clutch.k8s.v1.K8sAPI.DeletePod:output_type -> clutch.k8s.v1.DeletePodResponse
-	23,  // 139: clutch.k8s.v1.K8sAPI.UpdatePod:output_type -> clutch.k8s.v1.UpdatePodResponse
-	26,  // 140: clutch.k8s.v1.K8sAPI.GetPodLogs:output_type -> clutch.k8s.v1.GetPodLogsResponse
-	30,  // 141: clutch.k8s.v1.K8sAPI.ResizeHPA:output_type -> clutch.k8s.v1.ResizeHPAResponse
-	32,  // 142: clutch.k8s.v1.K8sAPI.DeleteHPA:output_type -> clutch.k8s.v1.DeleteHPAResponse
-	35,  // 143: clutch.k8s.v1.K8sAPI.DescribeDeployment:output_type -> clutch.k8s.v1.DescribeDeploymentResponse
-	37,  // 144: clutch.k8s.v1.K8sAPI.ListDeployments:output_type -> clutch.k8s.v1.ListDeploymentsResponse
-	39,  // 145: clutch.k8s.v1.K8sAPI.UpdateDeployment:output_type -> clutch.k8s.v1.UpdateDeploymentResponse
-	41,  // 146: clutch.k8s.v1.K8sAPI.DeleteDeployment:output_type -> clutch.k8s.v1.DeleteDeploymentResponse
-	53,  // 147: clutch.k8s.v1.K8sAPI.DescribeService:output_type -> clutch.k8s.v1.DescribeServiceResponse
-	55,  // 148: clutch.k8s.v1.K8sAPI.ListServices:output_type -> clutch.k8s.v1.ListServicesResponse
-	57,  // 149: clutch.k8s.v1.K8sAPI.DeleteService:output_type -> clutch.k8s.v1.DeleteServiceResponse
-	44,  // 150: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:output_type -> clutch.k8s.v1.DescribeStatefulSetResponse
-	46,  // 151: clutch.k8s.v1.K8sAPI.ListStatefulSets:output_type -> clutch.k8s.v1.ListStatefulSetsResponse
-	50,  // 152: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:output_type -> clutch.k8s.v1.UpdateStatefulSetResponse
-	48,  // 153: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:output_type -> clutch.k8s.v1.DeleteStatefulSetResponse
-	60,  // 154: clutch.k8s.v1.K8sAPI.DescribeCronJob:output_type -> clutch.k8s.v1.DescribeCronJobResponse
-	62,  // 155: clutch.k8s.v1.K8sAPI.ListCronJobs:output_type -> clutch.k8s.v1.ListCronJobsResponse
-	64,  // 156: clutch.k8s.v1.K8sAPI.DeleteCronJob:output_type -> clutch.k8s.v1.DeleteCronJobResponse
-	67,  // 157: clutch.k8s.v1.K8sAPI.ListConfigMaps:output_type -> clutch.k8s.v1.ListConfigMapsResponse
-	69,  // 158: clutch.k8s.v1.K8sAPI.DescribeConfigMap:output_type -> clutch.k8s.v1.DescribeConfigMapResponse
-	71,  // 159: clutch.k8s.v1.K8sAPI.DeleteConfigMap:output_type -> clutch.k8s.v1.DeleteConfigMapResponse
-	74,  // 160: clutch.k8s.v1.K8sAPI.DescribeJob:output_type -> clutch.k8s.v1.DescribeJobResponse
-	76,  // 161: clutch.k8s.v1.K8sAPI.ListJobs:output_type -> clutch.k8s.v1.ListJobsResponse
-	78,  // 162: clutch.k8s.v1.K8sAPI.DeleteJob:output_type -> clutch.k8s.v1.DeleteJobResponse
-	81,  // 163: clutch.k8s.v1.K8sAPI.CreateJob:output_type -> clutch.k8s.v1.CreateJobResponse
-	84,  // 164: clutch.k8s.v1.K8sAPI.DescribeNamespace:output_type -> clutch.k8s.v1.DescribeNamespaceResponse
-	87,  // 165: clutch.k8s.v1.K8sAPI.ListEvents:output_type -> clutch.k8s.v1.ListEventsResponse
-	94,  // 166: clutch.k8s.v1.K8sAPI.DescribeNode:output_type -> clutch.k8s.v1.DescribeNodeResponse
-	96,  // 167: clutch.k8s.v1.K8sAPI.UpdateNode:output_type -> clutch.k8s.v1.UpdateNodeResponse
-	136, // [136:168] is the sub-list for method output_type
-	104, // [104:136] is the sub-list for method input_type
-	104, // [104:104] is the sub-list for extension type_name
-	104, // [104:104] is the sub-list for extension extendee
-	0,   // [0:104] is the sub-list for field type_name
+	1,   // 0: clutch.k8s.v1.ListNamespaceEventsRequest.event_types:type_name -> clutch.k8s.v1.EventType
+	88,  // 1: clutch.k8s.v1.ListNamespaceEventsResponse.events:type_name -> clutch.k8s.v1.Event
+	19,  // 2: clutch.k8s.v1.DescribePodResponse.pod:type_name -> clutch.k8s.v1.Pod
+	2,   // 3: clutch.k8s.v1.Container.state:type_name -> clutch.k8s.v1.Container.State
+	15,  // 4: clutch.k8s.v1.Container.state_waiting:type_name -> clutch.k8s.v1.StateWaiting
+	16,  // 5: clutch.k8s.v1.Container.state_running:type_name -> clutch.k8s.v1.StateRunning
+	17,  // 6: clutch.k8s.v1.Container.state_terminated:type_name -> clutch.k8s.v1.StateTerminated
+	148, // 7: clutch.k8s.v1.StateRunning.start_time:type_name -> google.protobuf.Timestamp
+	3,   // 8: clutch.k8s.v1.PodCondition.type:type_name -> clutch.k8s.v1.PodCondition.Type
+	4,   // 9: clutch.k8s.v1.PodCondition.status:type_name -> clutch.k8s.v1.PodCondition.Status
+	14,  // 10: clutch.k8s.v1.Pod.containers:type_name -> clutch.k8s.v1.Container
+	5,   // 11: clutch.k8s.v1.Pod.state:type_name -> clutch.k8s.v1.Pod.State
+	148, // 12: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
+	100, // 13: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
+	101, // 14: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
+	18,  // 15: clutch.k8s.v1.Pod.pod_conditions:type_name -> clutch.k8s.v1.PodCondition
+	14,  // 16: clutch.k8s.v1.Pod.init_containers:type_name -> clutch.k8s.v1.Container
+	102, // 17: clutch.k8s.v1.ListOptions.labels:type_name -> clutch.k8s.v1.ListOptions.LabelsEntry
+	20,  // 18: clutch.k8s.v1.ListPodsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	19,  // 19: clutch.k8s.v1.ListPodsResponse.pods:type_name -> clutch.k8s.v1.Pod
+	149, // 20: clutch.k8s.v1.ListPodsResponse.partial_failures:type_name -> google.rpc.Status
+	92,  // 21: clutch.k8s.v1.UpdatePodRequest.expected_object_meta_fields:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields
+	93,  // 22: clutch.k8s.v1.UpdatePodRequest.object_meta_fields:type_name -> clutch.k8s.v1.ObjectMetaFields
+	94,  // 23: clutch.k8s.v1.UpdatePodRequest.remove_object_meta_fields:type_name -> clutch.k8s.v1.RemoveObjectMetaFields
+	28,  // 24: clutch.k8s.v1.GetPodLogsRequest.options:type_name -> clutch.k8s.v1.PodLogsOptions
+	30,  // 25: clutch.k8s.v1.GetPodLogsResponse.logs:type_name -> clutch.k8s.v1.PodLogLine
+	103, // 26: clutch.k8s.v1.HPA.sizing:type_name -> clutch.k8s.v1.HPA.Sizing
+	104, // 27: clutch.k8s.v1.HPA.labels:type_name -> clutch.k8s.v1.HPA.LabelsEntry
+	105, // 28: clutch.k8s.v1.HPA.annotations:type_name -> clutch.k8s.v1.HPA.AnnotationsEntry
+	106, // 29: clutch.k8s.v1.ResizeHPARequest.sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
+	106, // 30: clutch.k8s.v1.ResizeHPARequest.current_sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
+	107, // 31: clutch.k8s.v1.Deployment.labels:type_name -> clutch.k8s.v1.Deployment.LabelsEntry
+	108, // 32: clutch.k8s.v1.Deployment.annotations:type_name -> clutch.k8s.v1.Deployment.AnnotationsEntry
+	109, // 33: clutch.k8s.v1.Deployment.deployment_status:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus
+	110, // 34: clutch.k8s.v1.Deployment.deployment_spec:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec
+	36,  // 35: clutch.k8s.v1.DescribeDeploymentResponse.deployment:type_name -> clutch.k8s.v1.Deployment
+	20,  // 36: clutch.k8s.v1.ListDeploymentsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	36,  // 37: clutch.k8s.v1.ListDeploymentsResponse.deployments:type_name -> clutch.k8s.v1.Deployment
+	118, // 38: clutch.k8s.v1.UpdateDeploymentRequest.fields:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields
+	125, // 39: clutch.k8s.v1.StatefulSet.labels:type_name -> clutch.k8s.v1.StatefulSet.LabelsEntry
+	126, // 40: clutch.k8s.v1.StatefulSet.annotations:type_name -> clutch.k8s.v1.StatefulSet.AnnotationsEntry
+	127, // 41: clutch.k8s.v1.StatefulSet.status:type_name -> clutch.k8s.v1.StatefulSet.Status
+	45,  // 42: clutch.k8s.v1.DescribeStatefulSetResponse.stateful_set:type_name -> clutch.k8s.v1.StatefulSet
+	20,  // 43: clutch.k8s.v1.ListStatefulSetsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	45,  // 44: clutch.k8s.v1.ListStatefulSetsResponse.stateful_sets:type_name -> clutch.k8s.v1.StatefulSet
+	128, // 45: clutch.k8s.v1.UpdateStatefulSetRequest.fields:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+	8,   // 46: clutch.k8s.v1.Service.type:type_name -> clutch.k8s.v1.Service.Type
+	131, // 47: clutch.k8s.v1.Service.labels:type_name -> clutch.k8s.v1.Service.LabelsEntry
+	132, // 48: clutch.k8s.v1.Service.annotations:type_name -> clutch.k8s.v1.Service.AnnotationsEntry
+	133, // 49: clutch.k8s.v1.Service.selector:type_name -> clutch.k8s.v1.Service.SelectorEntry
+	54,  // 50: clutch.k8s.v1.DescribeServiceResponse.service:type_name -> clutch.k8s.v1.Service
+	20,  // 51: clutch.k8s.v1.ListServicesRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	54,  // 52: clutch.k8s.v1.ListServicesResponse.services:type_name -> clutch.k8s.v1.Service
+	134, // 53: clutch.k8s.v1.CronJob.labels:type_name -> clutch.k8s.v1.CronJob.LabelsEntry
+	135, // 54: clutch.k8s.v1.CronJob.annotations:type_name -> clutch.k8s.v1.CronJob.AnnotationsEntry
+	9,   // 55: clutch.k8s.v1.CronJob.concurrency_policy:type_name -> clutch.k8s.v1.CronJob.ConcurrencyPolicy
+	150, // 56: clutch.k8s.v1.CronJob.starting_deadline_seconds:type_name -> google.protobuf.Int64Value
+	61,  // 57: clutch.k8s.v1.DescribeCronJobResponse.cronjob:type_name -> clutch.k8s.v1.CronJob
+	20,  // 58: clutch.k8s.v1.ListCronJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	61,  // 59: clutch.k8s.v1.ListCronJobsResponse.cron_jobs:type_name -> clutch.k8s.v1.CronJob
+	136, // 60: clutch.k8s.v1.ConfigMap.annotations:type_name -> clutch.k8s.v1.ConfigMap.AnnotationsEntry
+	137, // 61: clutch.k8s.v1.ConfigMap.labels:type_name -> clutch.k8s.v1.ConfigMap.LabelsEntry
+	138, // 62: clutch.k8s.v1.ConfigMap.data:type_name -> clutch.k8s.v1.ConfigMap.DataEntry
+	139, // 63: clutch.k8s.v1.ConfigMap.binary_data:type_name -> clutch.k8s.v1.ConfigMap.BinaryDataEntry
+	20,  // 64: clutch.k8s.v1.ListConfigMapsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	68,  // 65: clutch.k8s.v1.ListConfigMapsResponse.config_maps:type_name -> clutch.k8s.v1.ConfigMap
+	68,  // 66: clutch.k8s.v1.DescribeConfigMapResponse.config_map:type_name -> clutch.k8s.v1.ConfigMap
+	140, // 67: clutch.k8s.v1.Job.annotations:type_name -> clutch.k8s.v1.Job.AnnotationsEntry
+	141, // 68: clutch.k8s.v1.Job.labels:type_name -> clutch.k8s.v1.Job.LabelsEntry
+	75,  // 69: clutch.k8s.v1.DescribeJobResponse.job:type_name -> clutch.k8s.v1.Job
+	20,  // 70: clutch.k8s.v1.ListJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	75,  // 71: clutch.k8s.v1.ListJobsResponse.jobs:type_name -> clutch.k8s.v1.Job
+	151, // 72: clutch.k8s.v1.JobConfig.value:type_name -> google.protobuf.Value
+	82,  // 73: clutch.k8s.v1.CreateJobRequest.job_config:type_name -> clutch.k8s.v1.JobConfig
+	75,  // 74: clutch.k8s.v1.CreateJobResponse.job:type_name -> clutch.k8s.v1.Job
+	142, // 75: clutch.k8s.v1.Namespace.annotations:type_name -> clutch.k8s.v1.Namespace.AnnotationsEntry
+	143, // 76: clutch.k8s.v1.Namespace.labels:type_name -> clutch.k8s.v1.Namespace.LabelsEntry
+	85,  // 77: clutch.k8s.v1.DescribeNamespaceResponse.namespace:type_name -> clutch.k8s.v1.Namespace
+	0,   // 78: clutch.k8s.v1.Event.kind:type_name -> clutch.k8s.v1.ObjectKind
+	1,   // 79: clutch.k8s.v1.Event.event_type:type_name -> clutch.k8s.v1.EventType
+	0,   // 80: clutch.k8s.v1.ListEventsRequest.kind:type_name -> clutch.k8s.v1.ObjectKind
+	88,  // 81: clutch.k8s.v1.ListEventsResponse.events:type_name -> clutch.k8s.v1.Event
+	152, // 82: clutch.k8s.v1.NullableString.null:type_name -> google.protobuf.NullValue
+	144, // 83: clutch.k8s.v1.ExpectedObjectMetaFields.labels:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
+	145, // 84: clutch.k8s.v1.ExpectedObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
+	146, // 85: clutch.k8s.v1.ObjectMetaFields.labels:type_name -> clutch.k8s.v1.ObjectMetaFields.LabelsEntry
+	147, // 86: clutch.k8s.v1.ObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
+	95,  // 87: clutch.k8s.v1.DescribeNodeResponse.node:type_name -> clutch.k8s.v1.Node
+	111, // 88: clutch.k8s.v1.Deployment.DeploymentStatus.deployment_conditions:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+	112, // 89: clutch.k8s.v1.Deployment.DeploymentSpec.template:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec
+	6,   // 90: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.type:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type
+	7,   // 91: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.condition_status:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus
+	113, // 92: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.spec:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec
+	114, // 93: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.containers:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container
+	115, // 94: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.resources:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements
+	116, // 95: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.limits:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.LimitsEntry
+	117, // 96: clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.requests:type_name -> clutch.k8s.v1.Deployment.DeploymentSpec.PodTemplateSpec.PodSpec.Container.ResourceRequirements.RequestsEntry
+	119, // 97: clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
+	120, // 98: clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
+	121, // 99: clutch.k8s.v1.UpdateDeploymentRequest.Fields.container_resources:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources
+	122, // 100: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.resources:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements
+	123, // 101: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.limits:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.LimitsEntry
+	124, // 102: clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.requests:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.ContainerResources.ResourceRequirements.RequestsEntry
+	129, // 103: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
+	130, // 104: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
+	91,  // 105: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry.value:type_name -> clutch.k8s.v1.NullableString
+	91,  // 106: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry.value:type_name -> clutch.k8s.v1.NullableString
+	12,  // 107: clutch.k8s.v1.K8sAPI.DescribePod:input_type -> clutch.k8s.v1.DescribePodRequest
+	21,  // 108: clutch.k8s.v1.K8sAPI.ListPods:input_type -> clutch.k8s.v1.ListPodsRequest
+	23,  // 109: clutch.k8s.v1.K8sAPI.DeletePod:input_type -> clutch.k8s.v1.DeletePodRequest
+	25,  // 110: clutch.k8s.v1.K8sAPI.UpdatePod:input_type -> clutch.k8s.v1.UpdatePodRequest
+	27,  // 111: clutch.k8s.v1.K8sAPI.GetPodLogs:input_type -> clutch.k8s.v1.GetPodLogsRequest
+	32,  // 112: clutch.k8s.v1.K8sAPI.ResizeHPA:input_type -> clutch.k8s.v1.ResizeHPARequest
+	34,  // 113: clutch.k8s.v1.K8sAPI.DeleteHPA:input_type -> clutch.k8s.v1.DeleteHPARequest
+	37,  // 114: clutch.k8s.v1.K8sAPI.DescribeDeployment:input_type -> clutch.k8s.v1.DescribeDeploymentRequest
+	39,  // 115: clutch.k8s.v1.K8sAPI.ListDeployments:input_type -> clutch.k8s.v1.ListDeploymentsRequest
+	41,  // 116: clutch.k8s.v1.K8sAPI.UpdateDeployment:input_type -> clutch.k8s.v1.UpdateDeploymentRequest
+	43,  // 117: clutch.k8s.v1.K8sAPI.DeleteDeployment:input_type -> clutch.k8s.v1.DeleteDeploymentRequest
+	55,  // 118: clutch.k8s.v1.K8sAPI.DescribeService:input_type -> clutch.k8s.v1.DescribeServiceRequest
+	57,  // 119: clutch.k8s.v1.K8sAPI.ListServices:input_type -> clutch.k8s.v1.ListServicesRequest
+	59,  // 120: clutch.k8s.v1.K8sAPI.DeleteService:input_type -> clutch.k8s.v1.DeleteServiceRequest
+	46,  // 121: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:input_type -> clutch.k8s.v1.DescribeStatefulSetRequest
+	48,  // 122: clutch.k8s.v1.K8sAPI.ListStatefulSets:input_type -> clutch.k8s.v1.ListStatefulSetsRequest
+	52,  // 123: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:input_type -> clutch.k8s.v1.UpdateStatefulSetRequest
+	50,  // 124: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:input_type -> clutch.k8s.v1.DeleteStatefulSetRequest
+	62,  // 125: clutch.k8s.v1.K8sAPI.DescribeCronJob:input_type -> clutch.k8s.v1.DescribeCronJobRequest
+	64,  // 126: clutch.k8s.v1.K8sAPI.ListCronJobs:input_type -> clutch.k8s.v1.ListCronJobsRequest
+	66,  // 127: clutch.k8s.v1.K8sAPI.DeleteCronJob:input_type -> clutch.k8s.v1.DeleteCronJobRequest
+	69,  // 128: clutch.k8s.v1.K8sAPI.ListConfigMaps:input_type -> clutch.k8s.v1.ListConfigMapsRequest
+	71,  // 129: clutch.k8s.v1.K8sAPI.DescribeConfigMap:input_type -> clutch.k8s.v1.DescribeConfigMapRequest
+	73,  // 130: clutch.k8s.v1.K8sAPI.DeleteConfigMap:input_type -> clutch.k8s.v1.DeleteConfigMapRequest
+	76,  // 131: clutch.k8s.v1.K8sAPI.DescribeJob:input_type -> clutch.k8s.v1.DescribeJobRequest
+	78,  // 132: clutch.k8s.v1.K8sAPI.ListJobs:input_type -> clutch.k8s.v1.ListJobsRequest
+	80,  // 133: clutch.k8s.v1.K8sAPI.DeleteJob:input_type -> clutch.k8s.v1.DeleteJobRequest
+	83,  // 134: clutch.k8s.v1.K8sAPI.CreateJob:input_type -> clutch.k8s.v1.CreateJobRequest
+	86,  // 135: clutch.k8s.v1.K8sAPI.DescribeNamespace:input_type -> clutch.k8s.v1.DescribeNamespaceRequest
+	89,  // 136: clutch.k8s.v1.K8sAPI.ListEvents:input_type -> clutch.k8s.v1.ListEventsRequest
+	96,  // 137: clutch.k8s.v1.K8sAPI.DescribeNode:input_type -> clutch.k8s.v1.DescribeNodeRequest
+	98,  // 138: clutch.k8s.v1.K8sAPI.UpdateNode:input_type -> clutch.k8s.v1.UpdateNodeRequest
+	10,  // 139: clutch.k8s.v1.K8sAPI.ListNamespaceEvents:input_type -> clutch.k8s.v1.ListNamespaceEventsRequest
+	13,  // 140: clutch.k8s.v1.K8sAPI.DescribePod:output_type -> clutch.k8s.v1.DescribePodResponse
+	22,  // 141: clutch.k8s.v1.K8sAPI.ListPods:output_type -> clutch.k8s.v1.ListPodsResponse
+	24,  // 142: clutch.k8s.v1.K8sAPI.DeletePod:output_type -> clutch.k8s.v1.DeletePodResponse
+	26,  // 143: clutch.k8s.v1.K8sAPI.UpdatePod:output_type -> clutch.k8s.v1.UpdatePodResponse
+	29,  // 144: clutch.k8s.v1.K8sAPI.GetPodLogs:output_type -> clutch.k8s.v1.GetPodLogsResponse
+	33,  // 145: clutch.k8s.v1.K8sAPI.ResizeHPA:output_type -> clutch.k8s.v1.ResizeHPAResponse
+	35,  // 146: clutch.k8s.v1.K8sAPI.DeleteHPA:output_type -> clutch.k8s.v1.DeleteHPAResponse
+	38,  // 147: clutch.k8s.v1.K8sAPI.DescribeDeployment:output_type -> clutch.k8s.v1.DescribeDeploymentResponse
+	40,  // 148: clutch.k8s.v1.K8sAPI.ListDeployments:output_type -> clutch.k8s.v1.ListDeploymentsResponse
+	42,  // 149: clutch.k8s.v1.K8sAPI.UpdateDeployment:output_type -> clutch.k8s.v1.UpdateDeploymentResponse
+	44,  // 150: clutch.k8s.v1.K8sAPI.DeleteDeployment:output_type -> clutch.k8s.v1.DeleteDeploymentResponse
+	56,  // 151: clutch.k8s.v1.K8sAPI.DescribeService:output_type -> clutch.k8s.v1.DescribeServiceResponse
+	58,  // 152: clutch.k8s.v1.K8sAPI.ListServices:output_type -> clutch.k8s.v1.ListServicesResponse
+	60,  // 153: clutch.k8s.v1.K8sAPI.DeleteService:output_type -> clutch.k8s.v1.DeleteServiceResponse
+	47,  // 154: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:output_type -> clutch.k8s.v1.DescribeStatefulSetResponse
+	49,  // 155: clutch.k8s.v1.K8sAPI.ListStatefulSets:output_type -> clutch.k8s.v1.ListStatefulSetsResponse
+	53,  // 156: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:output_type -> clutch.k8s.v1.UpdateStatefulSetResponse
+	51,  // 157: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:output_type -> clutch.k8s.v1.DeleteStatefulSetResponse
+	63,  // 158: clutch.k8s.v1.K8sAPI.DescribeCronJob:output_type -> clutch.k8s.v1.DescribeCronJobResponse
+	65,  // 159: clutch.k8s.v1.K8sAPI.ListCronJobs:output_type -> clutch.k8s.v1.ListCronJobsResponse
+	67,  // 160: clutch.k8s.v1.K8sAPI.DeleteCronJob:output_type -> clutch.k8s.v1.DeleteCronJobResponse
+	70,  // 161: clutch.k8s.v1.K8sAPI.ListConfigMaps:output_type -> clutch.k8s.v1.ListConfigMapsResponse
+	72,  // 162: clutch.k8s.v1.K8sAPI.DescribeConfigMap:output_type -> clutch.k8s.v1.DescribeConfigMapResponse
+	74,  // 163: clutch.k8s.v1.K8sAPI.DeleteConfigMap:output_type -> clutch.k8s.v1.DeleteConfigMapResponse
+	77,  // 164: clutch.k8s.v1.K8sAPI.DescribeJob:output_type -> clutch.k8s.v1.DescribeJobResponse
+	79,  // 165: clutch.k8s.v1.K8sAPI.ListJobs:output_type -> clutch.k8s.v1.ListJobsResponse
+	81,  // 166: clutch.k8s.v1.K8sAPI.DeleteJob:output_type -> clutch.k8s.v1.DeleteJobResponse
+	84,  // 167: clutch.k8s.v1.K8sAPI.CreateJob:output_type -> clutch.k8s.v1.CreateJobResponse
+	87,  // 168: clutch.k8s.v1.K8sAPI.DescribeNamespace:output_type -> clutch.k8s.v1.DescribeNamespaceResponse
+	90,  // 169: clutch.k8s.v1.K8sAPI.ListEvents:output_type -> clutch.k8s.v1.ListEventsResponse
+	97,  // 170: clutch.k8s.v1.K8sAPI.DescribeNode:output_type -> clutch.k8s.v1.DescribeNodeResponse
+	99,  // 171: clutch.k8s.v1.K8sAPI.UpdateNode:output_type -> clutch.k8s.v1.UpdateNodeResponse
+	11,  // 172: clutch.k8s.v1.K8sAPI.ListNamespaceEvents:output_type -> clutch.k8s.v1.ListNamespaceEventsResponse
+	140, // [140:173] is the sub-list for method output_type
+	107, // [107:140] is the sub-list for method input_type
+	107, // [107:107] is the sub-list for extension type_name
+	107, // [107:107] is the sub-list for extension extendee
+	0,   // [0:107] is the sub-list for field type_name
 }
 
 func init() { file_k8s_v1_k8s_proto_init() }
@@ -9082,7 +9309,7 @@ func file_k8s_v1_k8s_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_k8s_v1_k8s_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribePodRequest); i {
+			switch v := v.(*ListNamespaceEventsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9094,7 +9321,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribePodResponse); i {
+			switch v := v.(*ListNamespaceEventsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9106,7 +9333,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Container); i {
+			switch v := v.(*DescribePodRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9118,7 +9345,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StateWaiting); i {
+			switch v := v.(*DescribePodResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9130,7 +9357,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StateRunning); i {
+			switch v := v.(*Container); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9142,7 +9369,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StateTerminated); i {
+			switch v := v.(*StateWaiting); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9154,7 +9381,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PodCondition); i {
+			switch v := v.(*StateRunning); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9166,7 +9393,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Pod); i {
+			switch v := v.(*StateTerminated); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9178,7 +9405,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListOptions); i {
+			switch v := v.(*PodCondition); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9190,7 +9417,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListPodsRequest); i {
+			switch v := v.(*Pod); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9202,7 +9429,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListPodsResponse); i {
+			switch v := v.(*ListOptions); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9214,7 +9441,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeletePodRequest); i {
+			switch v := v.(*ListPodsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9226,7 +9453,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeletePodResponse); i {
+			switch v := v.(*ListPodsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9238,7 +9465,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdatePodRequest); i {
+			switch v := v.(*DeletePodRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9250,7 +9477,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdatePodResponse); i {
+			switch v := v.(*DeletePodResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9262,7 +9489,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPodLogsRequest); i {
+			switch v := v.(*UpdatePodRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9274,7 +9501,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PodLogsOptions); i {
+			switch v := v.(*UpdatePodResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9286,7 +9513,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPodLogsResponse); i {
+			switch v := v.(*GetPodLogsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9298,7 +9525,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PodLogLine); i {
+			switch v := v.(*PodLogsOptions); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9310,7 +9537,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HPA); i {
+			switch v := v.(*GetPodLogsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9322,7 +9549,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ResizeHPARequest); i {
+			switch v := v.(*PodLogLine); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9334,7 +9561,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ResizeHPAResponse); i {
+			switch v := v.(*HPA); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9346,7 +9573,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteHPARequest); i {
+			switch v := v.(*ResizeHPARequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9358,7 +9585,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteHPAResponse); i {
+			switch v := v.(*ResizeHPAResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9370,7 +9597,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Deployment); i {
+			switch v := v.(*DeleteHPARequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9382,7 +9609,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeDeploymentRequest); i {
+			switch v := v.(*DeleteHPAResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9394,7 +9621,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeDeploymentResponse); i {
+			switch v := v.(*Deployment); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9406,7 +9633,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListDeploymentsRequest); i {
+			switch v := v.(*DescribeDeploymentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9418,7 +9645,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListDeploymentsResponse); i {
+			switch v := v.(*DescribeDeploymentResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9430,7 +9657,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDeploymentRequest); i {
+			switch v := v.(*ListDeploymentsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9442,7 +9669,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDeploymentResponse); i {
+			switch v := v.(*ListDeploymentsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9454,7 +9681,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteDeploymentRequest); i {
+			switch v := v.(*UpdateDeploymentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9466,7 +9693,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteDeploymentResponse); i {
+			switch v := v.(*UpdateDeploymentResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9478,7 +9705,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StatefulSet); i {
+			switch v := v.(*DeleteDeploymentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9490,7 +9717,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeStatefulSetRequest); i {
+			switch v := v.(*DeleteDeploymentResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9502,7 +9729,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeStatefulSetResponse); i {
+			switch v := v.(*StatefulSet); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9514,7 +9741,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListStatefulSetsRequest); i {
+			switch v := v.(*DescribeStatefulSetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9526,7 +9753,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListStatefulSetsResponse); i {
+			switch v := v.(*DescribeStatefulSetResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9538,7 +9765,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteStatefulSetRequest); i {
+			switch v := v.(*ListStatefulSetsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9550,7 +9777,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteStatefulSetResponse); i {
+			switch v := v.(*ListStatefulSetsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9562,7 +9789,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatefulSetRequest); i {
+			switch v := v.(*DeleteStatefulSetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9574,7 +9801,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateStatefulSetResponse); i {
+			switch v := v.(*DeleteStatefulSetResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9586,7 +9813,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Service); i {
+			switch v := v.(*UpdateStatefulSetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9598,7 +9825,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeServiceRequest); i {
+			switch v := v.(*UpdateStatefulSetResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9610,7 +9837,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeServiceResponse); i {
+			switch v := v.(*Service); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9622,7 +9849,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListServicesRequest); i {
+			switch v := v.(*DescribeServiceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9634,7 +9861,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListServicesResponse); i {
+			switch v := v.(*DescribeServiceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9646,7 +9873,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteServiceRequest); i {
+			switch v := v.(*ListServicesRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9658,7 +9885,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteServiceResponse); i {
+			switch v := v.(*ListServicesResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9670,7 +9897,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CronJob); i {
+			switch v := v.(*DeleteServiceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9682,7 +9909,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeCronJobRequest); i {
+			switch v := v.(*DeleteServiceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9694,7 +9921,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeCronJobResponse); i {
+			switch v := v.(*CronJob); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9706,7 +9933,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCronJobsRequest); i {
+			switch v := v.(*DescribeCronJobRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9718,7 +9945,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListCronJobsResponse); i {
+			switch v := v.(*DescribeCronJobResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9730,7 +9957,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCronJobRequest); i {
+			switch v := v.(*ListCronJobsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9742,7 +9969,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCronJobResponse); i {
+			switch v := v.(*ListCronJobsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9754,7 +9981,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ConfigMap); i {
+			switch v := v.(*DeleteCronJobRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9766,7 +9993,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListConfigMapsRequest); i {
+			switch v := v.(*DeleteCronJobResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9778,7 +10005,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListConfigMapsResponse); i {
+			switch v := v.(*ConfigMap); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9790,7 +10017,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeConfigMapRequest); i {
+			switch v := v.(*ListConfigMapsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9802,7 +10029,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeConfigMapResponse); i {
+			switch v := v.(*ListConfigMapsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9814,7 +10041,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteConfigMapRequest); i {
+			switch v := v.(*DescribeConfigMapRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9826,7 +10053,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteConfigMapResponse); i {
+			switch v := v.(*DescribeConfigMapResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9838,7 +10065,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Job); i {
+			switch v := v.(*DeleteConfigMapRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9850,7 +10077,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeJobRequest); i {
+			switch v := v.(*DeleteConfigMapResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9862,7 +10089,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeJobResponse); i {
+			switch v := v.(*Job); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9874,7 +10101,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListJobsRequest); i {
+			switch v := v.(*DescribeJobRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9886,7 +10113,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[67].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListJobsResponse); i {
+			switch v := v.(*DescribeJobResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9898,7 +10125,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteJobRequest); i {
+			switch v := v.(*ListJobsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9910,7 +10137,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteJobResponse); i {
+			switch v := v.(*ListJobsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9922,7 +10149,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[70].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*JobConfig); i {
+			switch v := v.(*DeleteJobRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9934,7 +10161,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[71].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateJobRequest); i {
+			switch v := v.(*DeleteJobResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9946,7 +10173,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[72].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateJobResponse); i {
+			switch v := v.(*JobConfig); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9958,7 +10185,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[73].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Namespace); i {
+			switch v := v.(*CreateJobRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9970,7 +10197,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeNamespaceRequest); i {
+			switch v := v.(*CreateJobResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9982,7 +10209,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeNamespaceResponse); i {
+			switch v := v.(*Namespace); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9994,7 +10221,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Event); i {
+			switch v := v.(*DescribeNamespaceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10006,7 +10233,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListEventsRequest); i {
+			switch v := v.(*DescribeNamespaceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10018,7 +10245,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListEventsResponse); i {
+			switch v := v.(*Event); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10030,7 +10257,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NullableString); i {
+			switch v := v.(*ListEventsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10042,7 +10269,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[80].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExpectedObjectMetaFields); i {
+			switch v := v.(*ListEventsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10054,7 +10281,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[81].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ObjectMetaFields); i {
+			switch v := v.(*NullableString); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10066,7 +10293,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[82].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RemoveObjectMetaFields); i {
+			switch v := v.(*ExpectedObjectMetaFields); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10078,7 +10305,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[83].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Node); i {
+			switch v := v.(*ObjectMetaFields); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10090,7 +10317,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[84].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeNodeRequest); i {
+			switch v := v.(*RemoveObjectMetaFields); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10102,7 +10329,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[85].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DescribeNodeResponse); i {
+			switch v := v.(*Node); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10114,7 +10341,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[86].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateNodeRequest); i {
+			switch v := v.(*DescribeNodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10126,6 +10353,30 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[87].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DescribeNodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_k8s_v1_k8s_proto_msgTypes[88].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateNodeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_k8s_v1_k8s_proto_msgTypes[89].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateNodeResponse); i {
 			case 0:
 				return &v.state
@@ -10137,7 +10388,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[91].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[93].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*HPA_Sizing); i {
 			case 0:
 				return &v.state
@@ -10149,7 +10400,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[94].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[96].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ResizeHPARequest_Sizing); i {
 			case 0:
 				return &v.state
@@ -10161,7 +10412,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[97].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[99].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentStatus); i {
 			case 0:
 				return &v.state
@@ -10173,7 +10424,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[98].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentSpec); i {
 			case 0:
 				return &v.state
@@ -10185,7 +10436,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[99].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[101].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentStatus_Condition); i {
 			case 0:
 				return &v.state
@@ -10197,7 +10448,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[102].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentSpec_PodTemplateSpec); i {
 			case 0:
 				return &v.state
@@ -10209,7 +10460,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[101].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[103].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec); i {
 			case 0:
 				return &v.state
@@ -10221,7 +10472,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[102].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[104].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container); i {
 			case 0:
 				return &v.state
@@ -10233,7 +10484,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[103].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[105].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements); i {
 			case 0:
 				return &v.state
@@ -10245,7 +10496,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[106].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[108].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateDeploymentRequest_Fields); i {
 			case 0:
 				return &v.state
@@ -10257,7 +10508,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[109].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[111].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateDeploymentRequest_Fields_ContainerResources); i {
 			case 0:
 				return &v.state
@@ -10269,7 +10520,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[110].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[112].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateDeploymentRequest_Fields_ContainerResources_ResourceRequirements); i {
 			case 0:
 				return &v.state
@@ -10281,7 +10532,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[115].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[117].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*StatefulSet_Status); i {
 			case 0:
 				return &v.state
@@ -10293,7 +10544,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[116].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[118].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateStatefulSetRequest_Fields); i {
 			case 0:
 				return &v.state
@@ -10306,12 +10557,12 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 	}
-	file_k8s_v1_k8s_proto_msgTypes[2].OneofWrappers = []interface{}{
+	file_k8s_v1_k8s_proto_msgTypes[4].OneofWrappers = []interface{}{
 		(*Container_StateWaiting)(nil),
 		(*Container_StateRunning)(nil),
 		(*Container_StateTerminated)(nil),
 	}
-	file_k8s_v1_k8s_proto_msgTypes[79].OneofWrappers = []interface{}{
+	file_k8s_v1_k8s_proto_msgTypes[81].OneofWrappers = []interface{}{
 		(*NullableString_Null)(nil),
 		(*NullableString_Value)(nil),
 	}
@@ -10320,8 +10571,8 @@ func file_k8s_v1_k8s_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_k8s_v1_k8s_proto_rawDesc,
-			NumEnums:      9,
-			NumMessages:   136,
+			NumEnums:      10,
+			NumMessages:   138,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
