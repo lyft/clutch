@@ -56,6 +56,12 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	}
 }
 
+func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string) ([]*k8sapiv1.Event, error) {
+	// TODO: actually implement the function correctly
+	var events []*k8sapiv1.Event
+	return events, nil
+}
+
 func protoForObjectKind(kind string) k8sapiv1.ObjectKind {
 	// Look up value in generated enum map after ensuring consistent case with generated code.
 	val, ok := k8sapiv1.ObjectKind_value[strcase.ToScreamingSnake(kind)]

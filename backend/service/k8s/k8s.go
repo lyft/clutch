@@ -108,6 +108,8 @@ type Service interface {
 	// Node management functions.
 	DescribeNode(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Node, error)
 	UpdateNode(ctx context.Context, clientset, cluster, name string, unschedulable bool) error
+
+	ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string) ([]*k8sapiv1.Event, error)
 }
 
 type svc struct {
