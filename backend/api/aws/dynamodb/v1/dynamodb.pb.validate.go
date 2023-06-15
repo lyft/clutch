@@ -854,6 +854,170 @@ var _ interface {
 	ErrorName() string
 } = AttributeDefinitionValidationError{}
 
+// Validate checks the field values on ContinuousBackups with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ContinuousBackups) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ContinuousBackups with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ContinuousBackupsMultiError, or nil if none found.
+func (m *ContinuousBackups) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ContinuousBackups) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ContinuousBackupsStatus
+
+	// no validation rules for PointInTimeRecoveryStatus
+
+	if all {
+		switch v := interface{}(m.GetEarliestRestorableDateTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ContinuousBackupsValidationError{
+					field:  "EarliestRestorableDateTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ContinuousBackupsValidationError{
+					field:  "EarliestRestorableDateTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetEarliestRestorableDateTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ContinuousBackupsValidationError{
+				field:  "EarliestRestorableDateTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetLatestRestorableDateTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ContinuousBackupsValidationError{
+					field:  "LatestRestorableDateTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ContinuousBackupsValidationError{
+					field:  "LatestRestorableDateTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLatestRestorableDateTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ContinuousBackupsValidationError{
+				field:  "LatestRestorableDateTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ContinuousBackupsMultiError(errors)
+	}
+
+	return nil
+}
+
+// ContinuousBackupsMultiError is an error wrapping multiple validation errors
+// returned by ContinuousBackups.ValidateAll() if the designated constraints
+// aren't met.
+type ContinuousBackupsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ContinuousBackupsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ContinuousBackupsMultiError) AllErrors() []error { return m }
+
+// ContinuousBackupsValidationError is the validation error returned by
+// ContinuousBackups.Validate if the designated constraints aren't met.
+type ContinuousBackupsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ContinuousBackupsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ContinuousBackupsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ContinuousBackupsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ContinuousBackupsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ContinuousBackupsValidationError) ErrorName() string {
+	return "ContinuousBackupsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ContinuousBackupsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sContinuousBackups.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ContinuousBackupsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ContinuousBackupsValidationError{}
+
 // Validate checks the field values on DescribeTableRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1119,6 +1283,278 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DescribeTableResponseValidationError{}
+
+// Validate checks the field values on DescribeContinuousBackupsRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *DescribeContinuousBackupsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeContinuousBackupsRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// DescribeContinuousBackupsRequestMultiError, or nil if none found.
+func (m *DescribeContinuousBackupsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeContinuousBackupsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetTableName()) < 1 {
+		err := DescribeContinuousBackupsRequestValidationError{
+			field:  "TableName",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetRegion()) < 1 {
+		err := DescribeContinuousBackupsRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetAccount()) < 1 {
+		err := DescribeContinuousBackupsRequestValidationError{
+			field:  "Account",
+			reason: "value length must be at least 1 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return DescribeContinuousBackupsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DescribeContinuousBackupsRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// DescribeContinuousBackupsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeContinuousBackupsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeContinuousBackupsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeContinuousBackupsRequestMultiError) AllErrors() []error { return m }
+
+// DescribeContinuousBackupsRequestValidationError is the validation error
+// returned by DescribeContinuousBackupsRequest.Validate if the designated
+// constraints aren't met.
+type DescribeContinuousBackupsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeContinuousBackupsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeContinuousBackupsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeContinuousBackupsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeContinuousBackupsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeContinuousBackupsRequestValidationError) ErrorName() string {
+	return "DescribeContinuousBackupsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeContinuousBackupsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeContinuousBackupsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeContinuousBackupsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeContinuousBackupsRequestValidationError{}
+
+// Validate checks the field values on DescribeContinuousBackupsResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *DescribeContinuousBackupsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeContinuousBackupsResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// DescribeContinuousBackupsResponseMultiError, or nil if none found.
+func (m *DescribeContinuousBackupsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeContinuousBackupsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetContinuousBackups()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DescribeContinuousBackupsResponseValidationError{
+					field:  "ContinuousBackups",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DescribeContinuousBackupsResponseValidationError{
+					field:  "ContinuousBackups",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContinuousBackups()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeContinuousBackupsResponseValidationError{
+				field:  "ContinuousBackups",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return DescribeContinuousBackupsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// DescribeContinuousBackupsResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// DescribeContinuousBackupsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeContinuousBackupsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeContinuousBackupsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeContinuousBackupsResponseMultiError) AllErrors() []error { return m }
+
+// DescribeContinuousBackupsResponseValidationError is the validation error
+// returned by DescribeContinuousBackupsResponse.Validate if the designated
+// constraints aren't met.
+type DescribeContinuousBackupsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeContinuousBackupsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeContinuousBackupsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeContinuousBackupsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeContinuousBackupsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeContinuousBackupsResponseValidationError) ErrorName() string {
+	return "DescribeContinuousBackupsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeContinuousBackupsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeContinuousBackupsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeContinuousBackupsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeContinuousBackupsResponseValidationError{}
 
 // Validate checks the field values on UpdateCapacityRequest with the rules
 // defined in the proto definition for this message. If any rules are

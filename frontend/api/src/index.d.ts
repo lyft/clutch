@@ -1823,6 +1823,20 @@ export namespace clutch {
                     public describeTable(request: clutch.aws.dynamodb.v1.IDescribeTableRequest): Promise<clutch.aws.dynamodb.v1.DescribeTableResponse>;
 
                     /**
+                     * Calls DescribeContinuousBackups.
+                     * @param request DescribeContinuousBackupsRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and DescribeContinuousBackupsResponse
+                     */
+                    public describeContinuousBackups(request: clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest, callback: clutch.aws.dynamodb.v1.DDBAPI.DescribeContinuousBackupsCallback): void;
+
+                    /**
+                     * Calls DescribeContinuousBackups.
+                     * @param request DescribeContinuousBackupsRequest message or plain object
+                     * @returns Promise
+                     */
+                    public describeContinuousBackups(request: clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest): Promise<clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse>;
+
+                    /**
                      * Calls UpdateCapacity.
                      * @param request UpdateCapacityRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and UpdateCapacityResponse
@@ -1845,6 +1859,13 @@ export namespace clutch {
                      * @param [response] DescribeTableResponse
                      */
                     type DescribeTableCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeTableResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeContinuousBackups}.
+                     * @param error Error, if any
+                     * @param [response] DescribeContinuousBackupsResponse
+                     */
+                    type DescribeContinuousBackupsCallback = (error: (Error|null), response?: clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateCapacity}.
@@ -2274,6 +2295,83 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** Properties of a ContinuousBackups. */
+                interface IContinuousBackups {
+
+                    /** ContinuousBackups continuousBackupsStatus */
+                    continuousBackupsStatus?: (clutch.aws.dynamodb.v1.ContinuousBackups.Status|null);
+
+                    /** ContinuousBackups pointInTimeRecoveryStatus */
+                    pointInTimeRecoveryStatus?: (clutch.aws.dynamodb.v1.ContinuousBackups.Status|null);
+
+                    /** ContinuousBackups earliestRestorableDateTime */
+                    earliestRestorableDateTime?: (google.protobuf.ITimestamp|null);
+
+                    /** ContinuousBackups latestRestorableDateTime */
+                    latestRestorableDateTime?: (google.protobuf.ITimestamp|null);
+                }
+
+                /** Represents a ContinuousBackups. */
+                class ContinuousBackups implements IContinuousBackups {
+
+                    /**
+                     * Constructs a new ContinuousBackups.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IContinuousBackups);
+
+                    /** ContinuousBackups continuousBackupsStatus. */
+                    public continuousBackupsStatus: clutch.aws.dynamodb.v1.ContinuousBackups.Status;
+
+                    /** ContinuousBackups pointInTimeRecoveryStatus. */
+                    public pointInTimeRecoveryStatus: clutch.aws.dynamodb.v1.ContinuousBackups.Status;
+
+                    /** ContinuousBackups earliestRestorableDateTime. */
+                    public earliestRestorableDateTime?: (google.protobuf.ITimestamp|null);
+
+                    /** ContinuousBackups latestRestorableDateTime. */
+                    public latestRestorableDateTime?: (google.protobuf.ITimestamp|null);
+
+                    /**
+                     * Verifies a ContinuousBackups message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ContinuousBackups message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ContinuousBackups
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.ContinuousBackups;
+
+                    /**
+                     * Creates a plain object from a ContinuousBackups message. Also converts values to other types if specified.
+                     * @param message ContinuousBackups
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.ContinuousBackups, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ContinuousBackups to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace ContinuousBackups {
+
+                    /** Status enum. */
+                    enum Status {
+                        UNSPECIFIED = 0,
+                        UNKNOWN = 1,
+                        ENABLED = 2,
+                        DISABLED = 3
+                    }
+                }
+
                 /** Properties of a DescribeTableRequest. */
                 interface IDescribeTableRequest {
 
@@ -2377,6 +2475,114 @@ export namespace clutch {
 
                     /**
                      * Converts this DescribeTableResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DescribeContinuousBackupsRequest. */
+                interface IDescribeContinuousBackupsRequest {
+
+                    /** DescribeContinuousBackupsRequest tableName */
+                    tableName?: (string|null);
+
+                    /** DescribeContinuousBackupsRequest region */
+                    region?: (string|null);
+
+                    /** DescribeContinuousBackupsRequest account */
+                    account?: (string|null);
+                }
+
+                /** Represents a DescribeContinuousBackupsRequest. */
+                class DescribeContinuousBackupsRequest implements IDescribeContinuousBackupsRequest {
+
+                    /**
+                     * Constructs a new DescribeContinuousBackupsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest);
+
+                    /** DescribeContinuousBackupsRequest tableName. */
+                    public tableName: string;
+
+                    /** DescribeContinuousBackupsRequest region. */
+                    public region: string;
+
+                    /** DescribeContinuousBackupsRequest account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a DescribeContinuousBackupsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DescribeContinuousBackupsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DescribeContinuousBackupsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest;
+
+                    /**
+                     * Creates a plain object from a DescribeContinuousBackupsRequest message. Also converts values to other types if specified.
+                     * @param message DescribeContinuousBackupsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DescribeContinuousBackupsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a DescribeContinuousBackupsResponse. */
+                interface IDescribeContinuousBackupsResponse {
+
+                    /** DescribeContinuousBackupsResponse continuousBackups */
+                    continuousBackups?: (clutch.aws.dynamodb.v1.IContinuousBackups|null);
+                }
+
+                /** Represents a DescribeContinuousBackupsResponse. */
+                class DescribeContinuousBackupsResponse implements IDescribeContinuousBackupsResponse {
+
+                    /**
+                     * Constructs a new DescribeContinuousBackupsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.dynamodb.v1.IDescribeContinuousBackupsResponse);
+
+                    /** DescribeContinuousBackupsResponse continuousBackups. */
+                    public continuousBackups?: (clutch.aws.dynamodb.v1.IContinuousBackups|null);
+
+                    /**
+                     * Verifies a DescribeContinuousBackupsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DescribeContinuousBackupsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DescribeContinuousBackupsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse;
+
+                    /**
+                     * Creates a plain object from a DescribeContinuousBackupsResponse message. Also converts values to other types if specified.
+                     * @param message DescribeContinuousBackupsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DescribeContinuousBackupsResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
