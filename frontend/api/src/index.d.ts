@@ -14635,8 +14635,8 @@ export namespace clutch {
                 /** ListNamespaceEventsRequest namespace */
                 namespace?: (string|null);
 
-                /** ListNamespaceEventsRequest eventTypes */
-                eventTypes?: (clutch.k8s.v1.EventType[]|null);
+                /** ListNamespaceEventsRequest types */
+                types?: (clutch.k8s.v1.EventType[]|null);
             }
 
             /** Represents a ListNamespaceEventsRequest. */
@@ -14657,8 +14657,8 @@ export namespace clutch {
                 /** ListNamespaceEventsRequest namespace. */
                 public namespace: string;
 
-                /** ListNamespaceEventsRequest eventTypes. */
-                public eventTypes: clutch.k8s.v1.EventType[];
+                /** ListNamespaceEventsRequest types. */
+                public types: clutch.k8s.v1.EventType[];
 
                 /**
                  * Verifies a ListNamespaceEventsRequest message.
@@ -20848,8 +20848,8 @@ export namespace clutch {
                 /** Event creationTimeMillis */
                 creationTimeMillis?: (number|Long|null);
 
-                /** Event eventType */
-                eventType?: (clutch.k8s.v1.EventType|null);
+                /** Event type */
+                type?: (clutch.k8s.v1.EventType|null);
             }
 
             /** Represents an Event. */
@@ -20885,8 +20885,8 @@ export namespace clutch {
                 /** Event creationTimeMillis. */
                 public creationTimeMillis: (number|Long);
 
-                /** Event eventType. */
-                public eventType: clutch.k8s.v1.EventType;
+                /** Event type. */
+                public type: clutch.k8s.v1.EventType;
 
                 /**
                  * Verifies an Event message.

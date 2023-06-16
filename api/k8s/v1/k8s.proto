@@ -287,8 +287,7 @@ message ListNamespaceEventsRequest {
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
-  // If no filters, only get errors. If filters are presesnt, allow for multiple types.
-  repeated EventType event_types = 4;
+  repeated EventType types = 4;
   // Note object kind is Pod, in the future may support nodes as well
 }
 
@@ -1301,7 +1300,7 @@ message Event {
   int64 creation_time_millis = 10;
 
   // type is normal, warning, or error
-  EventType event_type = 11;
+  EventType type = 11;
 }
 
 message ListEventsRequest {

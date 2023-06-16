@@ -34796,7 +34796,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [clientset] ListNamespaceEventsRequest clientset
                  * @property {string|null} [cluster] ListNamespaceEventsRequest cluster
                  * @property {string|null} [namespace] ListNamespaceEventsRequest namespace
-                 * @property {Array.<clutch.k8s.v1.EventType>|null} [eventTypes] ListNamespaceEventsRequest eventTypes
+                 * @property {Array.<clutch.k8s.v1.EventType>|null} [types] ListNamespaceEventsRequest types
                  */
 
                 /**
@@ -34808,7 +34808,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IListNamespaceEventsRequest=} [properties] Properties to set
                  */
                 function ListNamespaceEventsRequest(properties) {
-                    this.eventTypes = [];
+                    this.types = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -34840,12 +34840,12 @@ export const clutch = $root.clutch = (() => {
                 ListNamespaceEventsRequest.prototype.namespace = "";
 
                 /**
-                 * ListNamespaceEventsRequest eventTypes.
-                 * @member {Array.<clutch.k8s.v1.EventType>} eventTypes
+                 * ListNamespaceEventsRequest types.
+                 * @member {Array.<clutch.k8s.v1.EventType>} types
                  * @memberof clutch.k8s.v1.ListNamespaceEventsRequest
                  * @instance
                  */
-                ListNamespaceEventsRequest.prototype.eventTypes = $util.emptyArray;
+                ListNamespaceEventsRequest.prototype.types = $util.emptyArray;
 
                 /**
                  * Verifies a ListNamespaceEventsRequest message.
@@ -34867,13 +34867,13 @@ export const clutch = $root.clutch = (() => {
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         if (!$util.isString(message.namespace))
                             return "namespace: string expected";
-                    if (message.eventTypes != null && message.hasOwnProperty("eventTypes")) {
-                        if (!Array.isArray(message.eventTypes))
-                            return "eventTypes: array expected";
-                        for (let i = 0; i < message.eventTypes.length; ++i)
-                            switch (message.eventTypes[i]) {
+                    if (message.types != null && message.hasOwnProperty("types")) {
+                        if (!Array.isArray(message.types))
+                            return "types: array expected";
+                        for (let i = 0; i < message.types.length; ++i)
+                            switch (message.types[i]) {
                             default:
-                                return "eventTypes: enum value[] expected";
+                                return "types: enum value[] expected";
                             case 0:
                             case 1:
                             case 2:
@@ -34902,28 +34902,28 @@ export const clutch = $root.clutch = (() => {
                         message.cluster = String(object.cluster);
                     if (object.namespace != null)
                         message.namespace = String(object.namespace);
-                    if (object.eventTypes) {
-                        if (!Array.isArray(object.eventTypes))
-                            throw TypeError(".clutch.k8s.v1.ListNamespaceEventsRequest.eventTypes: array expected");
-                        message.eventTypes = [];
-                        for (let i = 0; i < object.eventTypes.length; ++i)
-                            switch (object.eventTypes[i]) {
+                    if (object.types) {
+                        if (!Array.isArray(object.types))
+                            throw TypeError(".clutch.k8s.v1.ListNamespaceEventsRequest.types: array expected");
+                        message.types = [];
+                        for (let i = 0; i < object.types.length; ++i)
+                            switch (object.types[i]) {
                             default:
                             case "TYPE_UNSPECIFIED":
                             case 0:
-                                message.eventTypes[i] = 0;
+                                message.types[i] = 0;
                                 break;
                             case "NORMAL":
                             case 1:
-                                message.eventTypes[i] = 1;
+                                message.types[i] = 1;
                                 break;
                             case "WARNING":
                             case 2:
-                                message.eventTypes[i] = 2;
+                                message.types[i] = 2;
                                 break;
                             case "ERROR":
                             case 3:
-                                message.eventTypes[i] = 3;
+                                message.types[i] = 3;
                                 break;
                             }
                     }
@@ -34944,7 +34944,7 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.arrays || options.defaults)
-                        object.eventTypes = [];
+                        object.types = [];
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -34956,10 +34956,10 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = message.cluster;
                     if (message.namespace != null && message.hasOwnProperty("namespace"))
                         object.namespace = message.namespace;
-                    if (message.eventTypes && message.eventTypes.length) {
-                        object.eventTypes = [];
-                        for (let j = 0; j < message.eventTypes.length; ++j)
-                            object.eventTypes[j] = options.enums === String ? $root.clutch.k8s.v1.EventType[message.eventTypes[j]] : message.eventTypes[j];
+                    if (message.types && message.types.length) {
+                        object.types = [];
+                        for (let j = 0; j < message.types.length; ++j)
+                            object.types[j] = options.enums === String ? $root.clutch.k8s.v1.EventType[message.types[j]] : message.types[j];
                     }
                     return object;
                 };
@@ -50161,7 +50161,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [involvedObjectName] Event involvedObjectName
                  * @property {clutch.k8s.v1.ObjectKind|null} [kind] Event kind
                  * @property {number|Long|null} [creationTimeMillis] Event creationTimeMillis
-                 * @property {clutch.k8s.v1.EventType|null} [eventType] Event eventType
+                 * @property {clutch.k8s.v1.EventType|null} [type] Event type
                  */
 
                 /**
@@ -50244,12 +50244,12 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.creationTimeMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
-                 * Event eventType.
-                 * @member {clutch.k8s.v1.EventType} eventType
+                 * Event type.
+                 * @member {clutch.k8s.v1.EventType} type
                  * @memberof clutch.k8s.v1.Event
                  * @instance
                  */
-                Event.prototype.eventType = 0;
+                Event.prototype.type = 0;
 
                 /**
                  * Verifies an Event message.
@@ -50292,10 +50292,10 @@ export const clutch = $root.clutch = (() => {
                     if (message.creationTimeMillis != null && message.hasOwnProperty("creationTimeMillis"))
                         if (!$util.isInteger(message.creationTimeMillis) && !(message.creationTimeMillis && $util.isInteger(message.creationTimeMillis.low) && $util.isInteger(message.creationTimeMillis.high)))
                             return "creationTimeMillis: integer|Long expected";
-                    if (message.eventType != null && message.hasOwnProperty("eventType"))
-                        switch (message.eventType) {
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
                         default:
-                            return "eventType: enum value expected";
+                            return "type: enum value expected";
                         case 0:
                         case 1:
                         case 2:
@@ -50352,22 +50352,22 @@ export const clutch = $root.clutch = (() => {
                             message.creationTimeMillis = object.creationTimeMillis;
                         else if (typeof object.creationTimeMillis === "object")
                             message.creationTimeMillis = new $util.LongBits(object.creationTimeMillis.low >>> 0, object.creationTimeMillis.high >>> 0).toNumber();
-                    switch (object.eventType) {
+                    switch (object.type) {
                     case "TYPE_UNSPECIFIED":
                     case 0:
-                        message.eventType = 0;
+                        message.type = 0;
                         break;
                     case "NORMAL":
                     case 1:
-                        message.eventType = 1;
+                        message.type = 1;
                         break;
                     case "WARNING":
                     case 2:
-                        message.eventType = 2;
+                        message.type = 2;
                         break;
                     case "ERROR":
                     case 3:
-                        message.eventType = 3;
+                        message.type = 3;
                         break;
                     }
                     return message;
@@ -50399,7 +50399,7 @@ export const clutch = $root.clutch = (() => {
                             object.creationTimeMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.creationTimeMillis = options.longs === String ? "0" : 0;
-                        object.eventType = options.enums === String ? "TYPE_UNSPECIFIED" : 0;
+                        object.type = options.enums === String ? "TYPE_UNSPECIFIED" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -50420,8 +50420,8 @@ export const clutch = $root.clutch = (() => {
                             object.creationTimeMillis = options.longs === String ? String(message.creationTimeMillis) : message.creationTimeMillis;
                         else
                             object.creationTimeMillis = options.longs === String ? $util.Long.prototype.toString.call(message.creationTimeMillis) : options.longs === Number ? new $util.LongBits(message.creationTimeMillis.low >>> 0, message.creationTimeMillis.high >>> 0).toNumber() : message.creationTimeMillis;
-                    if (message.eventType != null && message.hasOwnProperty("eventType"))
-                        object.eventType = options.enums === String ? $root.clutch.k8s.v1.EventType[message.eventType] : message.eventType;
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.clutch.k8s.v1.EventType[message.type] : message.type;
                     return object;
                 };
 

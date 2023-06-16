@@ -11830,7 +11830,7 @@ func (m *Event) validate(all bool) error {
 
 	// no validation rules for CreationTimeMillis
 
-	// no validation rules for EventType
+	// no validation rules for Type
 
 	if len(errors) > 0 {
 		return EventMultiError(errors)

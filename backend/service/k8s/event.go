@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -58,8 +59,7 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 
 func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string) ([]*k8sapiv1.Event, error) {
 	// TODO: actually implement the function correctly
-	var events []*k8sapiv1.Event
-	return events, nil
+	return nil, errors.New("not implemented")
 }
 
 func protoForObjectKind(kind string) k8sapiv1.ObjectKind {
