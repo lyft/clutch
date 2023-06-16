@@ -267,6 +267,32 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = UPDATE;
   }
+
+  rpc ListNamespaceEvents(ListNamespaceEventsRequest) returns (ListNamespaceEventsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listNamespaceEvents"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message ListNamespaceEventsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    // requests for all events associated with a given namespace
+    pattern : "{cluster}/{namespace}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated EventType types = 4;
+  // Note object kind is Pod, in the future may support nodes as well
+}
+
+message ListNamespaceEventsResponse {
+  repeated Event events = 1;
 }
 
 message DescribePodRequest {
@@ -1244,6 +1270,13 @@ enum ObjectKind {
   POD = 2;
 }
 
+enum EventType {
+  TYPE_UNSPECIFIED = 0;
+  NORMAL = 1;
+  WARNING = 2;
+  ERROR = 3;
+}
+
 // this represents a Kubernetes event: https://pkg.go.dev/k8s.io/api/core/v1#Event
 // for a given object
 message Event {
@@ -1265,6 +1298,9 @@ message Event {
   // `lastTimestamp` and `eventTime` fields in the Event object.
   // https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
   int64 creation_time_millis = 10;
+
+  // type is normal, warning, or error
+  EventType type = 11;
 }
 
 message ListEventsRequest {

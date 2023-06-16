@@ -14,3 +14,12 @@ func (a *k8sAPI) ListEvents(ctx context.Context, req *k8sapiv1.ListEventsRequest
 	}
 	return &k8sapiv1.ListEventsResponse{Events: events}, nil
 }
+
+func (a *k8sAPI) ListNamespaceEvents(ctx context.Context, req *k8sapiv1.ListNamespaceEventsRequest) (*k8sapiv1.ListNamespaceEventsResponse, error) {
+	events, err := a.k8s.ListNamespaceEvents(ctx, req.Clientset, req.Cluster, req.Namespace)
+
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.ListNamespaceEventsResponse{Events: events}, nil
+}

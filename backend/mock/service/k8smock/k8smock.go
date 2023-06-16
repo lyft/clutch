@@ -385,3 +385,16 @@ func New() k8sservice.Service {
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
+
+func (s *svc) ListNamespaceEvents(_ context.Context, clientset, cluster, namespace string) ([]*k8sv1.Event, error) {
+	return []*k8sv1.Event{
+		{
+			Name:               "event1",
+			Reason:             "reason-1",
+			Description:        "description-1",
+			Cluster:            "fake-cluster-name",
+			Namespace:          namespace,
+			InvolvedObjectName: "pod1",
+		},
+	}, nil
+}
