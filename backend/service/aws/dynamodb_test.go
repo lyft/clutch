@@ -5,12 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -282,6 +284,22 @@ var testTableNoBillingModeResponse = &types.TableDescription{
 	TableStatus:            "UPDATING",
 }
 
+var testContinuousBackupsDescription = &types.ContinuousBackupsDescription{
+	ContinuousBackupsStatus: "ENABLED",
+	PointInTimeRecoveryDescription: &types.PointInTimeRecoveryDescription{
+		PointInTimeRecoveryStatus:  "DISABLED",
+		LatestRestorableDateTime:   aws.Time(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)),
+		EarliestRestorableDateTime: aws.Time(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)),
+	},
+}
+
+var testContinuousBackupsOutput = &dynamodbv1.ContinuousBackups{
+	ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(2),
+	PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(3),
+	LatestRestorableDateTime:   timestamppb.New(*aws.Time(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC))),
+	EarliestRestorableDateTime: timestamppb.New(*aws.Time(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC))),
+}
+
 func TestDescribeTableValid(t *testing.T) {
 	m := &mockDynamodb{
 		table: testDynamodbTable,
@@ -347,6 +365,49 @@ func TestDescribeTableWithGsiValid(t *testing.T) {
 	result, err := c.DescribeTable(context.Background(), "default", "us-east-1", "test-gsi-table")
 	assert.NoError(t, err)
 	assert.Equal(t, testTableWithGSIOutput, result)
+}
+
+func TestDescribeContinuousBackups(t *testing.T) {
+	m := &mockDynamodb{
+		backups: testContinuousBackupsDescription,
+	}
+	c := &client{
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
+	}
+
+	result, err := c.DescribeContinuousBackups(context.Background(), "default", "us-east-1", "test-table")
+	assert.NoError(t, err)
+	assert.Equal(t, testContinuousBackupsOutput, result)
+}
+
+func TestDescribeContinuousBackupsError(t *testing.T) {
+	m := &mockDynamodb{
+		backups:    testContinuousBackupsDescription,
+		backupsErr: fmt.Errorf("describe continuous backups error"),
+	}
+
+	c := &client{
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
+	}
+
+	_, err := c.DescribeContinuousBackups(context.Background(), "default", "us-east-1", "test-table")
+	assert.Error(t, err)
 }
 
 func TestGetScalingLimitsDefault(t *testing.T) {
@@ -1150,6 +1211,9 @@ type mockDynamodb struct {
 
 	batchGetErr    error
 	batchGetOutput dynamodb.BatchGetItemOutput
+
+	backupsErr error
+	backups    *types.ContinuousBackupsDescription
 }
 
 func (m *mockDynamodb) DescribeTable(ctx context.Context, params *dynamodb.DescribeTableInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeTableOutput, error) {
@@ -1182,4 +1246,16 @@ func (m *mockDynamodb) BatchGetItem(ctx context.Context, params *dynamodb.BatchG
 	}
 
 	return &m.batchGetOutput, nil
+}
+
+func (m *mockDynamodb) DescribeContinuousBackups(ctx context.Context, params *dynamodb.DescribeContinuousBackupsInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DescribeContinuousBackupsOutput, error) {
+	if m.backupsErr != nil {
+		return nil, m.backupsErr
+	}
+
+	ret := &dynamodb.DescribeContinuousBackupsOutput{
+		ContinuousBackupsDescription: m.backups,
+	}
+
+	return ret, nil
 }
