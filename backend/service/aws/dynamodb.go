@@ -142,12 +142,35 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 }
 
 func newProtoForContinuousBackups(t *types.ContinuousBackupsDescription, account string, region string) *dynamodbv1.ContinuousBackups {
-	return &dynamodbv1.ContinuousBackups{
-		ContinuousBackupsStatus:    newProtoForBackupStatus(string(t.ContinuousBackupsStatus)),
-		PointInTimeRecoveryStatus:  newProtoForBackupStatus(string(t.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus)),
-		EarliestRestorableDateTime: timestamppb.New(*t.PointInTimeRecoveryDescription.EarliestRestorableDateTime),
-		LatestRestorableDateTime:   timestamppb.New(*t.PointInTimeRecoveryDescription.LatestRestorableDateTime),
+	backups := &dynamodbv1.ContinuousBackups{
+		ContinuousBackupsStatus: newProtoForBackupStatus(string(t.ContinuousBackupsStatus)),
 	}
+
+	// if *t.PointInTimeRecoveryDescription is nil
+	// then we set PointInTimeRecoveryStatus to UNSPECIFIED
+	if t.PointInTimeRecoveryDescription == nil || t.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus == "" {
+		backups.PointInTimeRecoveryStatus = dynamodbv1.ContinuousBackups_UNSPECIFIED
+	} else {
+		backups.PointInTimeRecoveryStatus = newProtoForBackupStatus(string(t.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus))
+	}
+
+	// if *t.PointInTimeRecoveryDescription is nil or if EarliestRestorableDateTime is nil
+	// then we set EarliestRestorableDateTime to nil
+	if t.PointInTimeRecoveryDescription != nil && t.PointInTimeRecoveryDescription.EarliestRestorableDateTime != nil {
+		backups.EarliestRestorableDateTime = timestamppb.New(*t.PointInTimeRecoveryDescription.EarliestRestorableDateTime)
+	} else {
+		backups.EarliestRestorableDateTime = nil
+	}
+
+	// if *t.PointInTimeRecoveryDescription is nil or if LatestRestorableDateTime is nil
+	// then we set LatestRestorableDateTime to nil
+	if t.PointInTimeRecoveryDescription != nil && t.PointInTimeRecoveryDescription.LatestRestorableDateTime != nil {
+		backups.LatestRestorableDateTime = timestamppb.New(*t.PointInTimeRecoveryDescription.LatestRestorableDateTime)
+	} else {
+		backups.LatestRestorableDateTime = nil
+	}
+
+	return backups
 }
 
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Table_Status {

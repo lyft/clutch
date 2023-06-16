@@ -300,6 +300,17 @@ var testContinuousBackupsOutput = &dynamodbv1.ContinuousBackups{
 	EarliestRestorableDateTime: timestamppb.New(*aws.Time(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC))),
 }
 
+var testContinuousBackupsDescriptionNoPitr = &types.ContinuousBackupsDescription{
+	ContinuousBackupsStatus: "DISABLED",
+}
+
+var testContinuousBackupsNoPitrOutput = &dynamodbv1.ContinuousBackups{
+	ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(3),
+	PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(0),
+	LatestRestorableDateTime:   nil,
+	EarliestRestorableDateTime: nil,
+}
+
 func TestDescribeTableValid(t *testing.T) {
 	m := &mockDynamodb{
 		table: testDynamodbTable,
@@ -408,6 +419,27 @@ func TestDescribeContinuousBackupsError(t *testing.T) {
 
 	_, err := c.DescribeContinuousBackups(context.Background(), "default", "us-east-1", "test-table")
 	assert.Error(t, err)
+}
+
+func TestDescribeContinuousBackupsNoPitr(t *testing.T) {
+	m := &mockDynamodb{
+		backups: testContinuousBackupsDescriptionNoPitr,
+	}
+	c := &client{
+		log:                 zaptest.NewLogger(t),
+		currentAccountAlias: "default",
+		accounts: map[string]*accountClients{
+			"default": {
+				clients: map[string]*regionalClient{
+					"us-east-1": {region: "us-east-1", dynamodb: m},
+				},
+			},
+		},
+	}
+
+	result, err := c.DescribeContinuousBackups(context.Background(), "default", "us-east-1", "test-table")
+	assert.NoError(t, err)
+	assert.Equal(t, testContinuousBackupsNoPitrOutput, result)
 }
 
 func TestGetScalingLimitsDefault(t *testing.T) {
