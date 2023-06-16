@@ -752,7 +752,7 @@ func (x *AttributeDefinition) GetAttributeType() string {
 	return ""
 }
 
-// Represents the description for a table's continuous backups
+// Represents the description for a table's continuous backups and point in time recovery
 type ContinuousBackups struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
