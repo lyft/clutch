@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -17,6 +18,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
@@ -216,6 +218,16 @@ func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *d
 		},
 		UnprocessedKeys: map[string]ddbtypes.KeysAndAttributes{},
 		ResultMetadata:  middleware.Metadata{},
+	}, nil
+}
+
+func (s *svc) DescribeContinuousBackups(ctx context.Context, account string, region string, tableName string) (*dynamodbv1.ContinuousBackups, error) {
+
+	return &dynamodbv1.ContinuousBackups{
+		ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(1),
+		PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(1),
+		EarliestRestorableDateTime: timestamppb.New(time.Now()),
+		LatestRestorableDateTime:   timestamppb.New(time.Now()),
 	}, nil
 }
 
