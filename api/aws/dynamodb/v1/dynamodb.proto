@@ -191,7 +191,7 @@ message AttributeDefinition {
   string attribute_type = 2;
 }
 
-// Represents the description for a table's continuous backups
+// Represents the description for a table's continuous backups and point in time recovery
 message ContinuousBackups {
   enum Status {
     // Undetermined value
