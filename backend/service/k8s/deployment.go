@@ -108,7 +108,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 			LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
 			if container.LivenessProbe.ProbeHandler.HTTPGet != nil {
 				if container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
-					LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+					LivenessProbeHTTPHeaders = make([]*k8sapiv1.HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
 					for _, value := range container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
 						UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
 							Name:  &value.Name,
@@ -187,7 +187,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 			ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
 			if container.ReadinessProbe.ProbeHandler.HTTPGet != nil {
 				if container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
-					ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+					ReadinessProbeHTTPHeaders = make([]*k8sapiv1.HTTPHeader, 0, len(container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
 					for _, value := range container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
 						UniqueReadnessHeader := &k8sapiv1.HTTPHeader{
 							Name:  &value.Name,
