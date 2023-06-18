@@ -101,12 +101,174 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 			resourceRequests[string(res)] = quantity.String()
 		}
 
+		LivenessProbeObject := &k8sapiv1.Probe{}
+		ReadinessProbeObject := &k8sapiv1.Probe{}
+		if container.LivenessProbe != nil {
+			LivenessProbeHTTPObject := &k8sapiv1.HTTPGetAction{}
+			LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
+			if container.LivenessProbe.ProbeHandler.HTTPGet != nil {
+				if container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
+					LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+					for _, value := range container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
+						UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
+							Name:  &value.Name,
+							Value: &value.Value,
+						}
+						LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
+					}
+				}
+				LivenessProbeHTTPObject = &k8sapiv1.HTTPGetAction{
+					Path:        &container.LivenessProbe.ProbeHandler.HTTPGet.Path,
+					Port:        &container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal,
+					Host:        &container.LivenessProbe.ProbeHandler.HTTPGet.Host,
+					Scheme:      (*string)(&container.LivenessProbe.ProbeHandler.HTTPGet.Scheme),
+					HttpHeaders: LivenessProbeHTTPHeaders,
+				}
+			}
+			LivenessProbeExec := &k8sapiv1.ExecAction{}
+			if container.LivenessProbe.ProbeHandler.Exec != nil {
+				LivenessProbeExec = &k8sapiv1.ExecAction{
+					Command: container.LivenessProbe.ProbeHandler.Exec.Command,
+				}
+			}
+
+			LivenessProbeTCPSocket := &k8sapiv1.TCPSocketAction{}
+			if container.LivenessProbe.ProbeHandler.TCPSocket != nil {
+				LivenessProbeTCPSocket = &k8sapiv1.TCPSocketAction{
+					Port: &container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal,
+					Host: &container.LivenessProbe.ProbeHandler.TCPSocket.Host,
+				}
+			}
+
+			LivenessProbeGRPC := &k8sapiv1.GRPCAction{}
+			if container.LivenessProbe.ProbeHandler.GRPC != nil {
+				LivenessProbeGRPC = &k8sapiv1.GRPCAction{
+					Port:    &container.LivenessProbe.ProbeHandler.GRPC.Port,
+					Service: container.LivenessProbe.ProbeHandler.GRPC.Service,
+				}
+			}
+
+			HandlerObj := &k8sapiv1.Probe{}
+
+			if (LivenessProbeHTTPObject != &k8sapiv1.HTTPGetAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
+					HttpGet: LivenessProbeHTTPObject,
+				}
+			}
+			if (LivenessProbeExec != &k8sapiv1.ExecAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
+					Exec: LivenessProbeExec,
+				}
+			}
+			if (LivenessProbeTCPSocket != &k8sapiv1.TCPSocketAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
+					TcpSocket: LivenessProbeTCPSocket,
+				}
+			}
+			if (LivenessProbeGRPC != &k8sapiv1.GRPCAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
+					Grpc: LivenessProbeGRPC,
+				}
+			}
+
+			LivenessProbeObject = &k8sapiv1.Probe{
+				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
+				TimeoutSeconds:                &container.LivenessProbe.TimeoutSeconds,
+				PeriodSeconds:                 &container.LivenessProbe.PeriodSeconds,
+				SuccessThreshold:              &container.LivenessProbe.SuccessThreshold,
+				FailureThreshold:              &container.LivenessProbe.FailureThreshold,
+				TerminationGracePeriodSeconds: container.LivenessProbe.TerminationGracePeriodSeconds,
+				Handler:                       HandlerObj.Handler,
+			}
+		}
+
+		if container.ReadinessProbe != nil {
+			ReadinessProbeHTTPObject := &k8sapiv1.HTTPGetAction{}
+			ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
+			if container.ReadinessProbe.ProbeHandler.HTTPGet != nil {
+				if container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
+					ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+					for _, value := range container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
+						UniqueReadnessHeader := &k8sapiv1.HTTPHeader{
+							Name:  &value.Name,
+							Value: &value.Value,
+						}
+						ReadinessProbeHTTPHeaders = append(ReadinessProbeHTTPHeaders, UniqueReadnessHeader)
+					}
+				}
+				ReadinessProbeHTTPObject = &k8sapiv1.HTTPGetAction{
+					Path:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Path,
+					Port:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Port.IntVal,
+					Host:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Host,
+					Scheme:      (*string)(&container.ReadinessProbe.ProbeHandler.HTTPGet.Scheme),
+					HttpHeaders: ReadinessProbeHTTPHeaders,
+				}
+			}
+			ReadinessProbeExec := &k8sapiv1.ExecAction{}
+			if container.ReadinessProbe.ProbeHandler.Exec != nil {
+				ReadinessProbeExec = &k8sapiv1.ExecAction{
+					Command: container.ReadinessProbe.ProbeHandler.Exec.Command,
+				}
+			}
+
+			ReadinessProbeTCPSocket := &k8sapiv1.TCPSocketAction{}
+			if container.ReadinessProbe.ProbeHandler.TCPSocket != nil {
+				ReadinessProbeTCPSocket = &k8sapiv1.TCPSocketAction{
+					Port: &container.ReadinessProbe.ProbeHandler.TCPSocket.Port.IntVal,
+					Host: &container.ReadinessProbe.ProbeHandler.TCPSocket.Host,
+				}
+			}
+
+			ReadinessProbeGRPC := &k8sapiv1.GRPCAction{}
+			if container.ReadinessProbe.ProbeHandler.GRPC != nil {
+				ReadinessProbeGRPC = &k8sapiv1.GRPCAction{
+					Port:    &container.ReadinessProbe.ProbeHandler.GRPC.Port,
+					Service: container.ReadinessProbe.ProbeHandler.GRPC.Service,
+				}
+			}
+
+			HandlerObj := &k8sapiv1.Probe{}
+
+			if (ReadinessProbeHTTPObject != &k8sapiv1.HTTPGetAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
+					HttpGet: ReadinessProbeHTTPObject,
+				}
+			}
+			if (ReadinessProbeExec != &k8sapiv1.ExecAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
+					Exec: ReadinessProbeExec,
+				}
+			}
+			if (ReadinessProbeTCPSocket != &k8sapiv1.TCPSocketAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
+					TcpSocket: ReadinessProbeTCPSocket,
+				}
+			}
+			if (ReadinessProbeGRPC != &k8sapiv1.GRPCAction{}) {
+				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
+					Grpc: ReadinessProbeGRPC,
+				}
+			}
+
+			ReadinessProbeObject = &k8sapiv1.Probe{
+				InitialDelaySeconds:           &container.ReadinessProbe.InitialDelaySeconds,
+				TimeoutSeconds:                &container.ReadinessProbe.TimeoutSeconds,
+				PeriodSeconds:                 &container.ReadinessProbe.PeriodSeconds,
+				SuccessThreshold:              &container.ReadinessProbe.SuccessThreshold,
+				FailureThreshold:              &container.ReadinessProbe.FailureThreshold,
+				TerminationGracePeriodSeconds: container.ReadinessProbe.TerminationGracePeriodSeconds,
+				Handler:                       HandlerObj.Handler,
+			}
+		}
+
 		newContainer := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{
 			Name: container.Name,
 			Resources: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{
 				Limits:   resourceLimits,
 				Requests: resourceRequests,
 			},
+			LivenessProbe:  LivenessProbeObject,
+			ReadinessProbe: ReadinessProbeObject,
 		}
 		deploymentContainers = append(deploymentContainers, newContainer)
 	}
@@ -179,6 +341,10 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 		return err
 	}
 
+	if err := updateContainerProbes(newDeployment, fields); err != nil {
+		return err
+	}
+
 	patchBytes, err := GenerateStrategicPatch(oldDeployment, newDeployment, appsv1.Deployment{})
 	if err != nil {
 		return err
@@ -230,6 +396,111 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 						return err
 					}
 					container.Resources.Requests[v1.ResourceName(resourceName)] = quantity
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
+	for _, containerProbes := range fields.ContainerProbes {
+		for _, container := range deployment.Spec.Template.Spec.Containers {
+			if container.Name == containerProbes.ContainerName {
+				if containerProbes.LivenessProbe != nil {
+					resourceProbe := containerProbes.LivenessProbe
+					if resourceProbe.InitialDelaySeconds != nil {
+						container.LivenessProbe.InitialDelaySeconds = *resourceProbe.InitialDelaySeconds
+					}
+					if resourceProbe.PeriodSeconds != nil {
+						container.LivenessProbe.PeriodSeconds = *resourceProbe.PeriodSeconds
+					}
+					if resourceProbe.TimeoutSeconds != nil {
+						container.LivenessProbe.TimeoutSeconds = *resourceProbe.TimeoutSeconds
+					}
+					if resourceProbe.SuccessThreshold != nil {
+						container.LivenessProbe.SuccessThreshold = *resourceProbe.SuccessThreshold
+					}
+					if resourceProbe.FailureThreshold != nil {
+						container.LivenessProbe.FailureThreshold = *resourceProbe.FailureThreshold
+					}
+					if resourceProbe.TerminationGracePeriodSeconds != nil {
+						container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
+					}
+					if handler := resourceProbe.Handler; handler != nil {
+						switch resourceProbe.Handler.(type) {
+						case *k8sapiv1.Probe_Exec:
+							container.LivenessProbe.ProbeHandler.Exec.Command = resourceProbe.GetExec().Command
+						case *k8sapiv1.Probe_Grpc:
+							container.LivenessProbe.ProbeHandler.GRPC.Port = *resourceProbe.GetGrpc().Port
+							container.LivenessProbe.ProbeHandler.GRPC.Service = resourceProbe.GetGrpc().Service
+						case *k8sapiv1.Probe_TcpSocket:
+							container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = *resourceProbe.GetTcpSocket().Port
+							container.LivenessProbe.ProbeHandler.TCPSocket.Host = *resourceProbe.GetTcpSocket().Host
+						case *k8sapiv1.Probe_HttpGet:
+							container.LivenessProbe.ProbeHandler.HTTPGet.Host = *resourceProbe.GetHttpGet().Host
+							container.LivenessProbe.ProbeHandler.HTTPGet.Path = *resourceProbe.GetHttpGet().Path
+							container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = *resourceProbe.GetHttpGet().Port
+							container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(*resourceProbe.GetHttpGet().Scheme)
+							LivenessProbeHTTPHeaders := make([]v1.HTTPHeader, 0, len(resourceProbe.GetHttpGet().HttpHeaders))
+							for _, value := range resourceProbe.GetHttpGet().HttpHeaders {
+								UniqueLivenessHeader := v1.HTTPHeader{
+									Name:  *value.Name,
+									Value: *value.Value,
+								}
+								LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
+							}
+							container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders = LivenessProbeHTTPHeaders
+						}
+					}
+				}
+				if containerProbes.ReadinessProbe == nil {
+					return nil
+				}
+				resourceReadinessProbe := containerProbes.ReadinessProbe
+				if resourceReadinessProbe.InitialDelaySeconds != nil {
+					container.ReadinessProbe.InitialDelaySeconds = *resourceReadinessProbe.InitialDelaySeconds
+				}
+				if resourceReadinessProbe.PeriodSeconds != nil {
+					container.ReadinessProbe.PeriodSeconds = *resourceReadinessProbe.PeriodSeconds
+				}
+				if resourceReadinessProbe.TimeoutSeconds != nil {
+					container.ReadinessProbe.TimeoutSeconds = *resourceReadinessProbe.TimeoutSeconds
+				}
+				if resourceReadinessProbe.SuccessThreshold != nil {
+					container.ReadinessProbe.SuccessThreshold = *resourceReadinessProbe.SuccessThreshold
+				}
+				if resourceReadinessProbe.FailureThreshold != nil {
+					container.ReadinessProbe.FailureThreshold = *resourceReadinessProbe.FailureThreshold
+				}
+				if resourceReadinessProbe.TerminationGracePeriodSeconds != nil {
+					container.ReadinessProbe.TerminationGracePeriodSeconds = resourceReadinessProbe.TerminationGracePeriodSeconds
+				}
+				if handler := resourceReadinessProbe.Handler; handler != nil {
+					switch resourceReadinessProbe.Handler.(type) {
+					case *k8sapiv1.Probe_Exec:
+						container.LivenessProbe.ProbeHandler.Exec.Command = resourceReadinessProbe.GetExec().Command
+					case *k8sapiv1.Probe_Grpc:
+						container.LivenessProbe.ProbeHandler.GRPC.Port = *resourceReadinessProbe.GetGrpc().Port
+						container.LivenessProbe.ProbeHandler.GRPC.Service = resourceReadinessProbe.GetGrpc().Service
+					case *k8sapiv1.Probe_TcpSocket:
+						container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = *resourceReadinessProbe.GetTcpSocket().Port
+						container.LivenessProbe.ProbeHandler.TCPSocket.Host = *resourceReadinessProbe.GetTcpSocket().Host
+					case *k8sapiv1.Probe_HttpGet:
+						container.LivenessProbe.ProbeHandler.HTTPGet.Host = *resourceReadinessProbe.GetHttpGet().Host
+						container.LivenessProbe.ProbeHandler.HTTPGet.Path = *resourceReadinessProbe.GetHttpGet().Path
+						container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = *resourceReadinessProbe.GetHttpGet().Port
+						container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(*resourceReadinessProbe.GetHttpGet().Scheme)
+						ReadinessProbeHTTPHeaders := make([]v1.HTTPHeader, 0, len(resourceReadinessProbe.GetHttpGet().HttpHeaders))
+						for _, value := range resourceReadinessProbe.GetHttpGet().HttpHeaders {
+							UniqueLivenessHeader := v1.HTTPHeader{
+								Name:  *value.Name,
+								Value: *value.Value,
+							}
+							ReadinessProbeHTTPHeaders = append(ReadinessProbeHTTPHeaders, UniqueLivenessHeader)
+						}
+						container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders = ReadinessProbeHTTPHeaders
+					}
 				}
 			}
 		}
