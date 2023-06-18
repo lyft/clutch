@@ -101,6 +101,8 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 			resourceRequests[string(res)] = quantity.String()
 		}
 
+		LivenessProbeObject := &k8sapiv1.Probe{}
+
 		newContainer := &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container{
 			Name: container.Name,
 			Resources: &k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container_ResourceRequirements{
