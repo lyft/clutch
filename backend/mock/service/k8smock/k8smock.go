@@ -386,7 +386,7 @@ func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
 
-func (s *svc) ListNamespaceEvents(_ context.Context, clientset, cluster, namespace string) ([]*k8sv1.Event, error) {
+func (s *svc) ListNamespaceEvents(_ context.Context, clientset, cluster, namespace string, types []k8sv1.EventType) ([]*k8sv1.Event, error) {
 	return []*k8sv1.Event{
 		{
 			Name:               "event1",
