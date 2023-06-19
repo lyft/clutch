@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -57,9 +56,51 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	}
 }
 
-func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string) ([]*k8sapiv1.Event, error) {
-	// TODO: actually implement the function correctly
-	return nil, errors.New("not implemented")
+func convertTypesToFieldSelector(types []k8sapiv1.EventType) string {
+	fs := ""
+	setOfTypes := make(map[k8sapiv1.EventType]bool)
+	for _, t := range types {
+		setOfTypes[t] = true
+	}
+
+	if setOfTypes[k8sapiv1.EventType_NORMAL] {
+		fs += "type=Normal"
+	}
+	if setOfTypes[k8sapiv1.EventType_WARNING] {
+		if fs != "" {
+			fs += ","
+		}
+		fs += "type=Warning"
+	}
+	if setOfTypes[k8sapiv1.EventType_ERROR] {
+		if fs != "" {
+			fs += ","
+		}
+		fs += "type=Error"
+	}
+
+	return fs
+}
+
+// TODO: improve method to iterate over all clusters so users don't have to pass one in
+func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string, types []k8sapiv1.EventType) ([]*k8sapiv1.Event, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: convertTypesToFieldSelector(types)})
+	if err != nil {
+		return nil, err
+	}
+
+	// in the future, could also potentially return full event object rather than the subset in ProtoForEvent
+	var events []*k8sapiv1.Event
+	for i := range eventList.Items {
+		events = append(events, ProtoForEvent(cs.Cluster(), &eventList.Items[i]))
+	}
+
+	return events, nil
 }
 
 func protoForObjectKind(kind string) k8sapiv1.ObjectKind {

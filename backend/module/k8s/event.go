@@ -16,7 +16,7 @@ func (a *k8sAPI) ListEvents(ctx context.Context, req *k8sapiv1.ListEventsRequest
 }
 
 func (a *k8sAPI) ListNamespaceEvents(ctx context.Context, req *k8sapiv1.ListNamespaceEventsRequest) (*k8sapiv1.ListNamespaceEventsResponse, error) {
-	events, err := a.k8s.ListNamespaceEvents(ctx, req.Clientset, req.Cluster, req.Namespace)
+	events, err := a.k8s.ListNamespaceEvents(ctx, req.Clientset, req.Cluster, req.Namespace, req.Types)
 
 	if err != nil {
 		return nil, err
