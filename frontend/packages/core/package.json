@@ -34,7 +34,7 @@
     "@hookform/resolvers": "2.8.8",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.87",
-    "@mui/material": "^5.8.5",
+    "@mui/material": "5.8.5",
     "@mui/styles": "^5.8.4",
     "@mui/system": "^5.8.5",
     "@mui/x-date-pickers": "^5.0.5",
@@ -64,6 +64,9 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^2.0.0-beta"
+  },
+  "resolutions": {
+    "@mui/base": "5.0.0-alpha.86"
   },
   "engines": {
     "node": ">=16.0.0 <17"
