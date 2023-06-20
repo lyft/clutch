@@ -24,6 +24,9 @@
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
+  "resolutions": {
+    "@mui/base": "5.0.0-alpha.86"
+  },
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
     "@date-io/core": "^1.3.6",
