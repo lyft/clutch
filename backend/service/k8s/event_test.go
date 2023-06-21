@@ -81,3 +81,44 @@ func TestListEvents(t *testing.T) {
 		assert.Equal(t, time.Unix(timeVal, 0).UnixMilli(), v.CreationTimeMillis)
 	}
 }
+
+func TestConvertTypesToFieldSelector(t *testing.T) {
+	testCases := []struct {
+		name     string
+		types    []k8sapiv1.EventType
+		expected string
+	}{
+		{
+			name:     "empty",
+			types:    []k8sapiv1.EventType{},
+			expected: "",
+		},
+		{
+			name:     "single",
+			types:    []k8sapiv1.EventType{k8sapiv1.EventType_WARNING},
+			expected: "type=Warning",
+		},
+		{
+			name:     "multiple",
+			types:    []k8sapiv1.EventType{k8sapiv1.EventType_WARNING, k8sapiv1.EventType_NORMAL},
+			expected: "type=Normal,type=Warning",
+		},
+		{
+			name:     "duplicate",
+			types:    []k8sapiv1.EventType{k8sapiv1.EventType_WARNING, k8sapiv1.EventType_WARNING},
+			expected: "type=Warning",
+		},
+		{
+			name:     "all",
+			types:    []k8sapiv1.EventType{k8sapiv1.EventType_WARNING, k8sapiv1.EventType_NORMAL, k8sapiv1.EventType_ERROR},
+			expected: "type=Normal,type=Warning,type=Error",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := convertTypesToFieldSelector(tc.types)
+			assert.Equal(t, tc.expected, actual)
+		})
+	}
+}
