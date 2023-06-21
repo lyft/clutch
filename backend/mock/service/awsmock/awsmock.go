@@ -223,8 +223,8 @@ func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *d
 
 func (s *svc) DescribeContinuousBackups(ctx context.Context, account string, region string, tableName string) (*dynamodbv1.ContinuousBackups, error) {
 	return &dynamodbv1.ContinuousBackups{
-		ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(2),
-		PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(2),
+		ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(0),
+		PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(0),
 		EarliestRestorableDateTime: timestamppb.New(time.Now()),
 		LatestRestorableDateTime:   timestamppb.New(time.Now()),
 	}, nil
