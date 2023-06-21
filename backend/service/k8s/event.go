@@ -82,7 +82,6 @@ func convertTypesToFieldSelector(types []k8sapiv1.EventType) string {
 	return fs
 }
 
-// TODO: improve method to iterate over all clusters so users don't have to pass one in
 func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, namespace string, types []k8sapiv1.EventType) ([]*k8sapiv1.Event, error) {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
