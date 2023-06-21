@@ -222,7 +222,7 @@ func (s *svc) BatchGetItem(ctx context.Context, account, region string, input *d
 }
 
 func (s *svc) DescribeContinuousBackups(ctx context.Context, account string, region string, tableName string) (*dynamodbv1.ContinuousBackups, error) {
-	time, _ := time.Parse(time.RFC3339, "2008-12-18T21:46:43Z")
+	time := time.Now()
 	return &dynamodbv1.ContinuousBackups{
 		ContinuousBackupsStatus:    dynamodbv1.ContinuousBackups_Status(1),
 		PointInTimeRecoveryStatus:  dynamodbv1.ContinuousBackups_Status(1),
