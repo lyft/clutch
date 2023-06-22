@@ -605,10 +605,10 @@ message ExecAction {
 }
 
 message HTTPGetAction {
-  string path = 1 [(validate.rules).string.pattern = "^/.*$"];
-  int32 port = 2 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
-  string host = 3 [(validate.rules).string.hostname = true];
-  string scheme = 4 [(validate.rules).string.pattern = "^(http|https)$"];
+  string path = 1 [ (validate.rules).string.pattern = "^/.*$" ];
+  int32 port = 2 [ (validate.rules).int32 = {gte : 0, lte : 65535} ];
+  string host = 3 [ (validate.rules).string.hostname = true ];
+  string scheme = 4 [ (validate.rules).string.pattern = "^(http|https)$" ];
   repeated HTTPHeader http_headers = 5;
 }
 
@@ -618,13 +618,13 @@ message HTTPHeader {
 }
 
 message TCPSocketAction {
-  int32 port = 1 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
-  string host = 2 [(validate.rules).string.hostname = true];
+  int32 port = 1 [ (validate.rules).int32 = {gte : 0, lte : 65535} ];
+  string host = 2 [ (validate.rules).string.hostname = true ];
 }
 
 message GRPCAction {
-  int32 port = 1 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
-  string service = 2 [(validate.rules).string.pattern = "^$|^[a-zA-Z0-9.-]+$"];
+  int32 port = 1 [ (validate.rules).int32 = {gte : 0, lte : 65535} ];
+  string service = 2 [ (validate.rules).string.pattern = "^$|^[a-zA-Z0-9.-]+$" ];
 }
 
 message Probe {
@@ -634,12 +634,12 @@ message Probe {
     TCPSocketAction tcp_socket = 3;
     GRPCAction grpc = 4;
   }
-  int32 initial_delay_seconds = 5 [(validate.rules).int32.gte = 0];
-  int32 timeout_seconds = 6 [(validate.rules).int32.gte = 0];
-  int32 period_seconds = 7 [(validate.rules).int32.gte = 0];
-  int32 success_threshold = 8 [(validate.rules).int32.gte = 0];
-  int32 failure_threshold = 9 [(validate.rules).int32.gte = 0];
-  int64 termination_grace_period_seconds = 10 [(validate.rules).int64.gte = 0];
+  int32 initial_delay_seconds = 5 [ (validate.rules).int32.gte = 0 ];
+  int32 timeout_seconds = 6 [ (validate.rules).int32.gte = 0 ];
+  int32 period_seconds = 7 [ (validate.rules).int32.gte = 0 ];
+  int32 success_threshold = 8 [ (validate.rules).int32.gte = 0 ];
+  int32 failure_threshold = 9 [ (validate.rules).int32.gte = 0 ];
+  int64 termination_grace_period_seconds = 10 [ (validate.rules).int64.gte = 0 ];
 }
 
 message Deployment {
