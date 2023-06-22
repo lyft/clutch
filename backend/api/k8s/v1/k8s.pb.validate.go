@@ -4479,72 +4479,6 @@ func (m *Probe) validate(all bool) error {
 
 	var errors []error
 
-	if m.GetInitialDelaySeconds() < 0 {
-		err := ProbeValidationError{
-			field:  "InitialDelaySeconds",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetTimeoutSeconds() < 0 {
-		err := ProbeValidationError{
-			field:  "TimeoutSeconds",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetPeriodSeconds() < 0 {
-		err := ProbeValidationError{
-			field:  "PeriodSeconds",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetSuccessThreshold() < 0 {
-		err := ProbeValidationError{
-			field:  "SuccessThreshold",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetFailureThreshold() < 0 {
-		err := ProbeValidationError{
-			field:  "FailureThreshold",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if m.GetTerminationGracePeriodSeconds() < 0 {
-		err := ProbeValidationError{
-			field:  "TerminationGracePeriodSeconds",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	switch v := m.Handler.(type) {
 	case *Probe_Exec:
 		if v == nil {
@@ -4712,6 +4646,30 @@ func (m *Probe) validate(all bool) error {
 
 	default:
 		_ = v // ensures v is used
+	}
+
+	if m.InitialDelaySeconds != nil {
+		// no validation rules for InitialDelaySeconds
+	}
+
+	if m.TimeoutSeconds != nil {
+		// no validation rules for TimeoutSeconds
+	}
+
+	if m.PeriodSeconds != nil {
+		// no validation rules for PeriodSeconds
+	}
+
+	if m.SuccessThreshold != nil {
+		// no validation rules for SuccessThreshold
+	}
+
+	if m.FailureThreshold != nil {
+		// no validation rules for FailureThreshold
+	}
+
+	if m.TerminationGracePeriodSeconds != nil {
+		// no validation rules for TerminationGracePeriodSeconds
 	}
 
 	if len(errors) > 0 {

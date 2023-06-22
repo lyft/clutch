@@ -40066,51 +40066,51 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Probe initialDelaySeconds.
-                 * @member {number} initialDelaySeconds
+                 * @member {number|null|undefined} initialDelaySeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.initialDelaySeconds = 0;
+                Probe.prototype.initialDelaySeconds = null;
 
                 /**
                  * Probe timeoutSeconds.
-                 * @member {number} timeoutSeconds
+                 * @member {number|null|undefined} timeoutSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.timeoutSeconds = 0;
+                Probe.prototype.timeoutSeconds = null;
 
                 /**
                  * Probe periodSeconds.
-                 * @member {number} periodSeconds
+                 * @member {number|null|undefined} periodSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.periodSeconds = 0;
+                Probe.prototype.periodSeconds = null;
 
                 /**
                  * Probe successThreshold.
-                 * @member {number} successThreshold
+                 * @member {number|null|undefined} successThreshold
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.successThreshold = 0;
+                Probe.prototype.successThreshold = null;
 
                 /**
                  * Probe failureThreshold.
-                 * @member {number} failureThreshold
+                 * @member {number|null|undefined} failureThreshold
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.failureThreshold = 0;
+                Probe.prototype.failureThreshold = null;
 
                 /**
                  * Probe terminationGracePeriodSeconds.
-                 * @member {number|Long} terminationGracePeriodSeconds
+                 * @member {number|Long|null|undefined} terminationGracePeriodSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.terminationGracePeriodSeconds = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                Probe.prototype.terminationGracePeriodSeconds = null;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -40123,6 +40123,72 @@ export const clutch = $root.clutch = (() => {
                  */
                 Object.defineProperty(Probe.prototype, "handler", {
                     get: $util.oneOfGetter($oneOfFields = ["exec", "httpGet", "tcpSocket", "grpc"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _initialDelaySeconds.
+                 * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _timeoutSeconds.
+                 * @member {"timeoutSeconds"|undefined} _timeoutSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _periodSeconds.
+                 * @member {"periodSeconds"|undefined} _periodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_periodSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _successThreshold.
+                 * @member {"successThreshold"|undefined} _successThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_successThreshold", {
+                    get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _failureThreshold.
+                 * @member {"failureThreshold"|undefined} _failureThreshold
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_failureThreshold", {
+                    get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Probe _terminationGracePeriodSeconds.
+                 * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
+                 * @memberof clutch.k8s.v1.Probe
+                 * @instance
+                 */
+                Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
+                    get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
                     set: $util.oneOfSetter($oneOfFields)
                 });
 
@@ -40176,24 +40242,36 @@ export const clutch = $root.clutch = (() => {
                                 return "grpc." + error;
                         }
                     }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds"))
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                        properties._initialDelaySeconds = 1;
                         if (!$util.isInteger(message.initialDelaySeconds))
                             return "initialDelaySeconds: integer expected";
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds"))
+                    }
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                        properties._timeoutSeconds = 1;
                         if (!$util.isInteger(message.timeoutSeconds))
                             return "timeoutSeconds: integer expected";
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds"))
+                    }
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                        properties._periodSeconds = 1;
                         if (!$util.isInteger(message.periodSeconds))
                             return "periodSeconds: integer expected";
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold"))
+                    }
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                        properties._successThreshold = 1;
                         if (!$util.isInteger(message.successThreshold))
                             return "successThreshold: integer expected";
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold"))
+                    }
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                        properties._failureThreshold = 1;
                         if (!$util.isInteger(message.failureThreshold))
                             return "failureThreshold: integer expected";
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds"))
+                    }
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                        properties._terminationGracePeriodSeconds = 1;
                         if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
                             return "terminationGracePeriodSeconds: integer|Long expected";
+                    }
                     return null;
                 };
 
@@ -40264,18 +40342,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.defaults) {
-                        object.initialDelaySeconds = 0;
-                        object.timeoutSeconds = 0;
-                        object.periodSeconds = 0;
-                        object.successThreshold = 0;
-                        object.failureThreshold = 0;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.terminationGracePeriodSeconds = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.terminationGracePeriodSeconds = options.longs === String ? "0" : 0;
-                    }
                     if (message.exec != null && message.hasOwnProperty("exec")) {
                         object.exec = $root.clutch.k8s.v1.ExecAction.toObject(message.exec, options);
                         if (options.oneofs)
@@ -40296,21 +40362,39 @@ export const clutch = $root.clutch = (() => {
                         if (options.oneofs)
                             object.handler = "grpc";
                     }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds"))
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
                         object.initialDelaySeconds = message.initialDelaySeconds;
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds"))
+                        if (options.oneofs)
+                            object._initialDelaySeconds = "initialDelaySeconds";
+                    }
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
                         object.timeoutSeconds = message.timeoutSeconds;
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds"))
+                        if (options.oneofs)
+                            object._timeoutSeconds = "timeoutSeconds";
+                    }
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
                         object.periodSeconds = message.periodSeconds;
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold"))
+                        if (options.oneofs)
+                            object._periodSeconds = "periodSeconds";
+                    }
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
                         object.successThreshold = message.successThreshold;
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold"))
+                        if (options.oneofs)
+                            object._successThreshold = "successThreshold";
+                    }
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
                         object.failureThreshold = message.failureThreshold;
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds"))
+                        if (options.oneofs)
+                            object._failureThreshold = "failureThreshold";
+                    }
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
                         if (typeof message.terminationGracePeriodSeconds === "number")
                             object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
                         else
                             object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
+                        if (options.oneofs)
+                            object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
+                    }
                     return object;
                 };
 

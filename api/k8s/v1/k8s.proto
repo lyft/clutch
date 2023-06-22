@@ -634,12 +634,12 @@ message Probe {
     TCPSocketAction tcp_socket = 3;
     GRPCAction grpc = 4;
   }
-  int32 initial_delay_seconds = 5 [ (validate.rules).int32.gte = 0 ];
-  int32 timeout_seconds = 6 [ (validate.rules).int32.gte = 0 ];
-  int32 period_seconds = 7 [ (validate.rules).int32.gte = 0 ];
-  int32 success_threshold = 8 [ (validate.rules).int32.gte = 0 ];
-  int32 failure_threshold = 9 [ (validate.rules).int32.gte = 0 ];
-  int64 termination_grace_period_seconds = 10 [ (validate.rules).int64.gte = 0 ];
+  optional int32 initial_delay_seconds = 5;
+  optional int32 timeout_seconds = 6;
+  optional int32 period_seconds = 7;
+  optional int32 success_threshold = 8;
+  optional int32 failure_threshold = 9;
+  optional int64 termination_grace_period_seconds = 10;
 }
 
 message Deployment {

@@ -16773,25 +16773,43 @@ export namespace clutch {
                 public grpc?: (clutch.k8s.v1.IGRPCAction|null);
 
                 /** Probe initialDelaySeconds. */
-                public initialDelaySeconds: number;
+                public initialDelaySeconds?: (number|null);
 
                 /** Probe timeoutSeconds. */
-                public timeoutSeconds: number;
+                public timeoutSeconds?: (number|null);
 
                 /** Probe periodSeconds. */
-                public periodSeconds: number;
+                public periodSeconds?: (number|null);
 
                 /** Probe successThreshold. */
-                public successThreshold: number;
+                public successThreshold?: (number|null);
 
                 /** Probe failureThreshold. */
-                public failureThreshold: number;
+                public failureThreshold?: (number|null);
 
                 /** Probe terminationGracePeriodSeconds. */
-                public terminationGracePeriodSeconds: (number|Long);
+                public terminationGracePeriodSeconds?: (number|Long|null);
 
                 /** Probe handler. */
                 public handler?: ("exec"|"httpGet"|"tcpSocket"|"grpc");
+
+                /** Probe _initialDelaySeconds. */
+                public _initialDelaySeconds?: "initialDelaySeconds";
+
+                /** Probe _timeoutSeconds. */
+                public _timeoutSeconds?: "timeoutSeconds";
+
+                /** Probe _periodSeconds. */
+                public _periodSeconds?: "periodSeconds";
+
+                /** Probe _successThreshold. */
+                public _successThreshold?: "successThreshold";
+
+                /** Probe _failureThreshold. */
+                public _failureThreshold?: "failureThreshold";
+
+                /** Probe _terminationGracePeriodSeconds. */
+                public _terminationGracePeriodSeconds?: "terminationGracePeriodSeconds";
 
                 /**
                  * Verifies a Probe message.
