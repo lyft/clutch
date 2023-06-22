@@ -101,6 +101,7 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 	// in the future, could also potentially return full event object rather than the subset in ProtoForEvent
 	var events []*k8sapiv1.Event
 	for _, ev := range totalEventList {
+		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
 
