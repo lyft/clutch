@@ -58,27 +58,24 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 
 // Note in the case of a blank string being returned, that means there is no field selector,
 // and all events will be returned.
-func convertTypesToFieldSelector(types []k8sapiv1.EventType) string {
-	fs := ""
+// Note that chaining field selectors only results in AND not OR, thus to have multiples
+// we must have multiple field selectors.
+// See https://github.com/kubernetes/kubernetes/issues/32946 for more info
+func convertTypesToFieldSelectors(types []k8sapiv1.EventType) []string {
+	fs := []string{}
 	setOfTypes := make(map[k8sapiv1.EventType]bool)
 	for _, t := range types {
 		setOfTypes[t] = true
 	}
 
 	if setOfTypes[k8sapiv1.EventType_NORMAL] {
-		fs += "type=Normal"
+		fs = append(fs, "type=Normal")
 	}
 	if setOfTypes[k8sapiv1.EventType_WARNING] {
-		if fs != "" {
-			fs += ","
-		}
-		fs += "type=Warning"
+		fs = append(fs, "type=Warning")
 	}
 	if setOfTypes[k8sapiv1.EventType_ERROR] {
-		if fs != "" {
-			fs += ","
-		}
-		fs += "type=Error"
+		fs = append(fs, "type=Error")
 	}
 
 	return fs
@@ -91,15 +88,20 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 	}
 
 	// Note if field selector is blank it will return everything
-	eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: convertTypesToFieldSelector(types)})
-	if err != nil {
-		return nil, err
+	totalEventList := []corev1.Event{}
+	fs := convertTypesToFieldSelectors(types)
+	for _, f := range fs {
+		eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: f})
+		if err != nil {
+			return nil, err
+		}
+		totalEventList = append(totalEventList, eventList.Items...)
 	}
 
 	// in the future, could also potentially return full event object rather than the subset in ProtoForEvent
 	var events []*k8sapiv1.Event
-	for i := range eventList.Items {
-		events = append(events, ProtoForEvent(cs.Cluster(), &eventList.Items[i]))
+	for _, ev := range totalEventList {
+		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
 
 	return events, nil
