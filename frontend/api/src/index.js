@@ -39456,35 +39456,35 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * HTTPGetAction path.
-                 * @member {string|null|undefined} path
+                 * @member {string} path
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.path = null;
+                HTTPGetAction.prototype.path = "";
 
                 /**
                  * HTTPGetAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.port = null;
+                HTTPGetAction.prototype.port = 0;
 
                 /**
                  * HTTPGetAction host.
-                 * @member {string|null|undefined} host
+                 * @member {string} host
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.host = null;
+                HTTPGetAction.prototype.host = "";
 
                 /**
                  * HTTPGetAction scheme.
-                 * @member {string|null|undefined} scheme
+                 * @member {string} scheme
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.scheme = null;
+                HTTPGetAction.prototype.scheme = "";
 
                 /**
                  * HTTPGetAction httpHeaders.
@@ -39493,53 +39493,6 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 HTTPGetAction.prototype.httpHeaders = $util.emptyArray;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * HTTPGetAction _path.
-                 * @member {"path"|undefined} _path
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_path", {
-                    get: $util.oneOfGetter($oneOfFields = ["path"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _host.
-                 * @member {"host"|undefined} _host
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_host", {
-                    get: $util.oneOfGetter($oneOfFields = ["host"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _scheme.
-                 * @member {"scheme"|undefined} _scheme
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_scheme", {
-                    get: $util.oneOfGetter($oneOfFields = ["scheme"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
 
                 /**
                  * Verifies a HTTPGetAction message.
@@ -39552,27 +39505,18 @@ export const clutch = $root.clutch = (() => {
                 HTTPGetAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.path != null && message.hasOwnProperty("path")) {
-                        properties._path = 1;
+                    if (message.path != null && message.hasOwnProperty("path"))
                         if (!$util.isString(message.path))
                             return "path: string expected";
-                    }
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
-                        properties._host = 1;
+                    if (message.host != null && message.hasOwnProperty("host"))
                         if (!$util.isString(message.host))
                             return "host: string expected";
-                    }
-                    if (message.scheme != null && message.hasOwnProperty("scheme")) {
-                        properties._scheme = 1;
+                    if (message.scheme != null && message.hasOwnProperty("scheme"))
                         if (!$util.isString(message.scheme))
                             return "scheme: string expected";
-                    }
                     if (message.httpHeaders != null && message.hasOwnProperty("httpHeaders")) {
                         if (!Array.isArray(message.httpHeaders))
                             return "httpHeaders: array expected";
@@ -39633,26 +39577,20 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.httpHeaders = [];
-                    if (message.path != null && message.hasOwnProperty("path")) {
+                    if (options.defaults) {
+                        object.path = "";
+                        object.port = 0;
+                        object.host = "";
+                        object.scheme = "";
+                    }
+                    if (message.path != null && message.hasOwnProperty("path"))
                         object.path = message.path;
-                        if (options.oneofs)
-                            object._path = "path";
-                    }
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
+                    if (message.host != null && message.hasOwnProperty("host"))
                         object.host = message.host;
-                        if (options.oneofs)
-                            object._host = "host";
-                    }
-                    if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                    if (message.scheme != null && message.hasOwnProperty("scheme"))
                         object.scheme = message.scheme;
-                        if (options.oneofs)
-                            object._scheme = "scheme";
-                    }
                     if (message.httpHeaders && message.httpHeaders.length) {
                         object.httpHeaders = [];
                         for (let j = 0; j < message.httpHeaders.length; ++j)
@@ -39852,44 +39790,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * TCPSocketAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.TCPSocketAction
                  * @instance
                  */
-                TCPSocketAction.prototype.port = null;
+                TCPSocketAction.prototype.port = 0;
 
                 /**
                  * TCPSocketAction host.
-                 * @member {string|null|undefined} host
+                 * @member {string} host
                  * @memberof clutch.k8s.v1.TCPSocketAction
                  * @instance
                  */
-                TCPSocketAction.prototype.host = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * TCPSocketAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.TCPSocketAction
-                 * @instance
-                 */
-                Object.defineProperty(TCPSocketAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * TCPSocketAction _host.
-                 * @member {"host"|undefined} _host
-                 * @memberof clutch.k8s.v1.TCPSocketAction
-                 * @instance
-                 */
-                Object.defineProperty(TCPSocketAction.prototype, "_host", {
-                    get: $util.oneOfGetter($oneOfFields = ["host"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
+                TCPSocketAction.prototype.host = "";
 
                 /**
                  * Verifies a TCPSocketAction message.
@@ -39902,17 +39815,12 @@ export const clutch = $root.clutch = (() => {
                 TCPSocketAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
-                        properties._host = 1;
+                    if (message.host != null && message.hasOwnProperty("host"))
                         if (!$util.isString(message.host))
                             return "host: string expected";
-                    }
                     return null;
                 };
 
@@ -39948,16 +39856,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (options.defaults) {
+                        object.port = 0;
+                        object.host = "";
+                    }
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
+                    if (message.host != null && message.hasOwnProperty("host"))
                         object.host = message.host;
-                        if (options.oneofs)
-                            object._host = "host";
-                    }
                     return object;
                 };
 
@@ -40002,44 +39908,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * GRPCAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.GRPCAction
                  * @instance
                  */
-                GRPCAction.prototype.port = null;
+                GRPCAction.prototype.port = 0;
 
                 /**
                  * GRPCAction service.
-                 * @member {string|null|undefined} service
+                 * @member {string} service
                  * @memberof clutch.k8s.v1.GRPCAction
                  * @instance
                  */
-                GRPCAction.prototype.service = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * GRPCAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.GRPCAction
-                 * @instance
-                 */
-                Object.defineProperty(GRPCAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * GRPCAction _service.
-                 * @member {"service"|undefined} _service
-                 * @memberof clutch.k8s.v1.GRPCAction
-                 * @instance
-                 */
-                Object.defineProperty(GRPCAction.prototype, "_service", {
-                    get: $util.oneOfGetter($oneOfFields = ["service"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
+                GRPCAction.prototype.service = "";
 
                 /**
                  * Verifies a GRPCAction message.
@@ -40052,17 +39933,12 @@ export const clutch = $root.clutch = (() => {
                 GRPCAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.service != null && message.hasOwnProperty("service")) {
-                        properties._service = 1;
+                    if (message.service != null && message.hasOwnProperty("service"))
                         if (!$util.isString(message.service))
                             return "service: string expected";
-                    }
                     return null;
                 };
 
@@ -40098,16 +39974,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (options.defaults) {
+                        object.port = 0;
+                        object.service = "";
+                    }
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.service != null && message.hasOwnProperty("service")) {
+                    if (message.service != null && message.hasOwnProperty("service"))
                         object.service = message.service;
-                        if (options.oneofs)
-                            object._service = "service";
-                    }
                     return object;
                 };
 
@@ -40192,51 +40066,51 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Probe initialDelaySeconds.
-                 * @member {number|null|undefined} initialDelaySeconds
+                 * @member {number} initialDelaySeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.initialDelaySeconds = null;
+                Probe.prototype.initialDelaySeconds = 0;
 
                 /**
                  * Probe timeoutSeconds.
-                 * @member {number|null|undefined} timeoutSeconds
+                 * @member {number} timeoutSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.timeoutSeconds = null;
+                Probe.prototype.timeoutSeconds = 0;
 
                 /**
                  * Probe periodSeconds.
-                 * @member {number|null|undefined} periodSeconds
+                 * @member {number} periodSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.periodSeconds = null;
+                Probe.prototype.periodSeconds = 0;
 
                 /**
                  * Probe successThreshold.
-                 * @member {number|null|undefined} successThreshold
+                 * @member {number} successThreshold
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.successThreshold = null;
+                Probe.prototype.successThreshold = 0;
 
                 /**
                  * Probe failureThreshold.
-                 * @member {number|null|undefined} failureThreshold
+                 * @member {number} failureThreshold
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.failureThreshold = null;
+                Probe.prototype.failureThreshold = 0;
 
                 /**
                  * Probe terminationGracePeriodSeconds.
-                 * @member {number|Long|null|undefined} terminationGracePeriodSeconds
+                 * @member {number|Long} terminationGracePeriodSeconds
                  * @memberof clutch.k8s.v1.Probe
                  * @instance
                  */
-                Probe.prototype.terminationGracePeriodSeconds = null;
+                Probe.prototype.terminationGracePeriodSeconds = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 // OneOf field names bound to virtual getters and setters
                 let $oneOfFields;
@@ -40249,72 +40123,6 @@ export const clutch = $root.clutch = (() => {
                  */
                 Object.defineProperty(Probe.prototype, "handler", {
                     get: $util.oneOfGetter($oneOfFields = ["exec", "httpGet", "tcpSocket", "grpc"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _initialDelaySeconds.
-                 * @member {"initialDelaySeconds"|undefined} _initialDelaySeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_initialDelaySeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["initialDelaySeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _timeoutSeconds.
-                 * @member {"timeoutSeconds"|undefined} _timeoutSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_timeoutSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["timeoutSeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _periodSeconds.
-                 * @member {"periodSeconds"|undefined} _periodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_periodSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["periodSeconds"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _successThreshold.
-                 * @member {"successThreshold"|undefined} _successThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_successThreshold", {
-                    get: $util.oneOfGetter($oneOfFields = ["successThreshold"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _failureThreshold.
-                 * @member {"failureThreshold"|undefined} _failureThreshold
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_failureThreshold", {
-                    get: $util.oneOfGetter($oneOfFields = ["failureThreshold"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Probe _terminationGracePeriodSeconds.
-                 * @member {"terminationGracePeriodSeconds"|undefined} _terminationGracePeriodSeconds
-                 * @memberof clutch.k8s.v1.Probe
-                 * @instance
-                 */
-                Object.defineProperty(Probe.prototype, "_terminationGracePeriodSeconds", {
-                    get: $util.oneOfGetter($oneOfFields = ["terminationGracePeriodSeconds"]),
                     set: $util.oneOfSetter($oneOfFields)
                 });
 
@@ -40368,36 +40176,24 @@ export const clutch = $root.clutch = (() => {
                                 return "grpc." + error;
                         }
                     }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
-                        properties._initialDelaySeconds = 1;
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds"))
                         if (!$util.isInteger(message.initialDelaySeconds))
                             return "initialDelaySeconds: integer expected";
-                    }
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
-                        properties._timeoutSeconds = 1;
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds"))
                         if (!$util.isInteger(message.timeoutSeconds))
                             return "timeoutSeconds: integer expected";
-                    }
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
-                        properties._periodSeconds = 1;
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds"))
                         if (!$util.isInteger(message.periodSeconds))
                             return "periodSeconds: integer expected";
-                    }
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
-                        properties._successThreshold = 1;
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold"))
                         if (!$util.isInteger(message.successThreshold))
                             return "successThreshold: integer expected";
-                    }
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
-                        properties._failureThreshold = 1;
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold"))
                         if (!$util.isInteger(message.failureThreshold))
                             return "failureThreshold: integer expected";
-                    }
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
-                        properties._terminationGracePeriodSeconds = 1;
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds"))
                         if (!$util.isInteger(message.terminationGracePeriodSeconds) && !(message.terminationGracePeriodSeconds && $util.isInteger(message.terminationGracePeriodSeconds.low) && $util.isInteger(message.terminationGracePeriodSeconds.high)))
                             return "terminationGracePeriodSeconds: integer|Long expected";
-                    }
                     return null;
                 };
 
@@ -40468,6 +40264,18 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
+                    if (options.defaults) {
+                        object.initialDelaySeconds = 0;
+                        object.timeoutSeconds = 0;
+                        object.periodSeconds = 0;
+                        object.successThreshold = 0;
+                        object.failureThreshold = 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.terminationGracePeriodSeconds = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.terminationGracePeriodSeconds = options.longs === String ? "0" : 0;
+                    }
                     if (message.exec != null && message.hasOwnProperty("exec")) {
                         object.exec = $root.clutch.k8s.v1.ExecAction.toObject(message.exec, options);
                         if (options.oneofs)
@@ -40488,39 +40296,21 @@ export const clutch = $root.clutch = (() => {
                         if (options.oneofs)
                             object.handler = "grpc";
                     }
-                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds")) {
+                    if (message.initialDelaySeconds != null && message.hasOwnProperty("initialDelaySeconds"))
                         object.initialDelaySeconds = message.initialDelaySeconds;
-                        if (options.oneofs)
-                            object._initialDelaySeconds = "initialDelaySeconds";
-                    }
-                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds")) {
+                    if (message.timeoutSeconds != null && message.hasOwnProperty("timeoutSeconds"))
                         object.timeoutSeconds = message.timeoutSeconds;
-                        if (options.oneofs)
-                            object._timeoutSeconds = "timeoutSeconds";
-                    }
-                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds")) {
+                    if (message.periodSeconds != null && message.hasOwnProperty("periodSeconds"))
                         object.periodSeconds = message.periodSeconds;
-                        if (options.oneofs)
-                            object._periodSeconds = "periodSeconds";
-                    }
-                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold")) {
+                    if (message.successThreshold != null && message.hasOwnProperty("successThreshold"))
                         object.successThreshold = message.successThreshold;
-                        if (options.oneofs)
-                            object._successThreshold = "successThreshold";
-                    }
-                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold")) {
+                    if (message.failureThreshold != null && message.hasOwnProperty("failureThreshold"))
                         object.failureThreshold = message.failureThreshold;
-                        if (options.oneofs)
-                            object._failureThreshold = "failureThreshold";
-                    }
-                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds")) {
+                    if (message.terminationGracePeriodSeconds != null && message.hasOwnProperty("terminationGracePeriodSeconds"))
                         if (typeof message.terminationGracePeriodSeconds === "number")
                             object.terminationGracePeriodSeconds = options.longs === String ? String(message.terminationGracePeriodSeconds) : message.terminationGracePeriodSeconds;
                         else
                             object.terminationGracePeriodSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.terminationGracePeriodSeconds) : options.longs === Number ? new $util.LongBits(message.terminationGracePeriodSeconds.low >>> 0, message.terminationGracePeriodSeconds.high >>> 0).toNumber() : message.terminationGracePeriodSeconds;
-                        if (options.oneofs)
-                            object._terminationGracePeriodSeconds = "terminationGracePeriodSeconds";
-                    }
                     return object;
                 };
 

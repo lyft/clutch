@@ -16506,31 +16506,19 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IHTTPGetAction);
 
                 /** HTTPGetAction path. */
-                public path?: (string|null);
+                public path: string;
 
                 /** HTTPGetAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** HTTPGetAction host. */
-                public host?: (string|null);
+                public host: string;
 
                 /** HTTPGetAction scheme. */
-                public scheme?: (string|null);
+                public scheme: string;
 
                 /** HTTPGetAction httpHeaders. */
                 public httpHeaders: clutch.k8s.v1.IHTTPHeader[];
-
-                /** HTTPGetAction _path. */
-                public _path?: "path";
-
-                /** HTTPGetAction _port. */
-                public _port?: "port";
-
-                /** HTTPGetAction _host. */
-                public _host?: "host";
-
-                /** HTTPGetAction _scheme. */
-                public _scheme?: "scheme";
 
                 /**
                  * Verifies a HTTPGetAction message.
@@ -16641,16 +16629,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.ITCPSocketAction);
 
                 /** TCPSocketAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** TCPSocketAction host. */
-                public host?: (string|null);
-
-                /** TCPSocketAction _port. */
-                public _port?: "port";
-
-                /** TCPSocketAction _host. */
-                public _host?: "host";
+                public host: string;
 
                 /**
                  * Verifies a TCPSocketAction message.
@@ -16701,16 +16683,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IGRPCAction);
 
                 /** GRPCAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** GRPCAction service. */
-                public service?: (string|null);
-
-                /** GRPCAction _port. */
-                public _port?: "port";
-
-                /** GRPCAction _service. */
-                public _service?: "service";
+                public service: string;
 
                 /**
                  * Verifies a GRPCAction message.
@@ -16797,43 +16773,25 @@ export namespace clutch {
                 public grpc?: (clutch.k8s.v1.IGRPCAction|null);
 
                 /** Probe initialDelaySeconds. */
-                public initialDelaySeconds?: (number|null);
+                public initialDelaySeconds: number;
 
                 /** Probe timeoutSeconds. */
-                public timeoutSeconds?: (number|null);
+                public timeoutSeconds: number;
 
                 /** Probe periodSeconds. */
-                public periodSeconds?: (number|null);
+                public periodSeconds: number;
 
                 /** Probe successThreshold. */
-                public successThreshold?: (number|null);
+                public successThreshold: number;
 
                 /** Probe failureThreshold. */
-                public failureThreshold?: (number|null);
+                public failureThreshold: number;
 
                 /** Probe terminationGracePeriodSeconds. */
-                public terminationGracePeriodSeconds?: (number|Long|null);
+                public terminationGracePeriodSeconds: (number|Long);
 
                 /** Probe handler. */
                 public handler?: ("exec"|"httpGet"|"tcpSocket"|"grpc");
-
-                /** Probe _initialDelaySeconds. */
-                public _initialDelaySeconds?: "initialDelaySeconds";
-
-                /** Probe _timeoutSeconds. */
-                public _timeoutSeconds?: "timeoutSeconds";
-
-                /** Probe _periodSeconds. */
-                public _periodSeconds?: "periodSeconds";
-
-                /** Probe _successThreshold. */
-                public _successThreshold?: "successThreshold";
-
-                /** Probe _failureThreshold. */
-                public _failureThreshold?: "failureThreshold";
-
-                /** Probe _terminationGracePeriodSeconds. */
-                public _terminationGracePeriodSeconds?: "terminationGracePeriodSeconds";
 
                 /**
                  * Verifies a Probe message.

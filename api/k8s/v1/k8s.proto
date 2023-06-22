@@ -605,10 +605,10 @@ message ExecAction {
 }
 
 message HTTPGetAction {
-  optional string path = 1;
-  optional int32 port = 2;
-  optional string host = 3;
-  optional string scheme = 4;
+  string path = 1 [(validate.rules).string.pattern = "^/.*$"];
+  int32 port = 2 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
+  string host = 3 [(validate.rules).string.hostname = true];
+  string scheme = 4 [(validate.rules).string.pattern = "^(http|https)$"];
   repeated HTTPHeader http_headers = 5;
 }
 
@@ -618,13 +618,13 @@ message HTTPHeader {
 }
 
 message TCPSocketAction {
-  optional int32 port = 1;
-  optional string host = 2;
+  int32 port = 1 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
+  string host = 2 [(validate.rules).string.hostname = true];
 }
 
 message GRPCAction {
-  optional int32 port = 1;
-  optional string service = 2;
+  int32 port = 1 [(validate.rules).int32 = {gte: 0,  lte: 65535}];
+  string service = 2 [(validate.rules).string.pattern = "^$|^[a-zA-Z0-9.-]+$"];
 }
 
 message Probe {
@@ -634,12 +634,12 @@ message Probe {
     TCPSocketAction tcp_socket = 3;
     GRPCAction grpc = 4;
   }
-  optional int32 initial_delay_seconds = 5;
-  optional int32 timeout_seconds = 6;
-  optional int32 period_seconds = 7;
-  optional int32 success_threshold = 8;
-  optional int32 failure_threshold = 9;
-  optional int64 termination_grace_period_seconds = 10;
+  int32 initial_delay_seconds = 5 [(validate.rules).int32.gte = 0];
+  int32 timeout_seconds = 6 [(validate.rules).int32.gte = 0];
+  int32 period_seconds = 7 [(validate.rules).int32.gte = 0];
+  int32 success_threshold = 8 [(validate.rules).int32.gte = 0];
+  int32 failure_threshold = 9 [(validate.rules).int32.gte = 0];
+  int64 termination_grace_period_seconds = 10 [(validate.rules).int64.gte = 0];
 }
 
 message Deployment {
