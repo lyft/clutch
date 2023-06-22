@@ -56,6 +56,8 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	}
 }
 
+// Note in the case of a blank string being returned, that means there is no field selector,
+// and all events will be returned.
 func convertTypesToFieldSelector(types []k8sapiv1.EventType) string {
 	fs := ""
 	setOfTypes := make(map[k8sapiv1.EventType]bool)
@@ -88,6 +90,7 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		return nil, err
 	}
 
+	// Note if field selector is blank it will return everything
 	eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: convertTypesToFieldSelector(types)})
 	if err != nil {
 		return nil, err
