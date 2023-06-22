@@ -14,6 +14,8 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
 
+	"reflect"
+
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
@@ -87,6 +89,15 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 	return k8sDeployment
 }
 
+func setOptionalActionValue(action interface{}, target interface{}) {
+	if action != nil {
+		if reflect.ValueOf(action).IsNil() {
+			return
+		}
+		reflect.ValueOf(target).Elem().Set(reflect.ValueOf(action).Elem())
+	}
+}
+
 func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Deployment_DeploymentSpec {
 	deploymentContainers := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container, 0, len(deploymentSpec.Template.Spec.Containers))
 	for _, container := range deploymentSpec.Template.Spec.Containers {
@@ -105,71 +116,23 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 		ReadinessProbeObject := &k8sapiv1.Probe{}
 		if container.LivenessProbe != nil {
 			LivenessProbeHTTPObject := &k8sapiv1.HTTPGetAction{}
-			LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
-			if container.LivenessProbe.ProbeHandler.HTTPGet != nil {
-				if container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
-					LivenessProbeHTTPHeaders = make([]*k8sapiv1.HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
-					for _, value := range container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
-						UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
-							Name:  &value.Name,
-							Value: &value.Value,
-						}
-						LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
-					}
-				}
-				LivenessProbeHTTPObject = &k8sapiv1.HTTPGetAction{
-					Path:        &container.LivenessProbe.ProbeHandler.HTTPGet.Path,
-					Port:        &container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal,
-					Host:        &container.LivenessProbe.ProbeHandler.HTTPGet.Host,
-					Scheme:      (*string)(&container.LivenessProbe.ProbeHandler.HTTPGet.Scheme),
-					HttpHeaders: LivenessProbeHTTPHeaders,
-				}
-			}
+			setOptionalActionValue(container.LivenessProbe.ProbeHandler.HTTPGet, &LivenessProbeHTTPObject)
+
 			LivenessProbeExec := &k8sapiv1.ExecAction{}
-			if container.LivenessProbe.ProbeHandler.Exec != nil {
-				LivenessProbeExec = &k8sapiv1.ExecAction{
-					Command: container.LivenessProbe.ProbeHandler.Exec.Command,
-				}
-			}
+			setOptionalActionValue(container.LivenessProbe.ProbeHandler.Exec, &LivenessProbeExec)
 
 			LivenessProbeTCPSocket := &k8sapiv1.TCPSocketAction{}
-			if container.LivenessProbe.ProbeHandler.TCPSocket != nil {
-				LivenessProbeTCPSocket = &k8sapiv1.TCPSocketAction{
-					Port: &container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal,
-					Host: &container.LivenessProbe.ProbeHandler.TCPSocket.Host,
-				}
-			}
+			setOptionalActionValue(container.LivenessProbe.ProbeHandler.TCPSocket, &LivenessProbeTCPSocket)
 
 			LivenessProbeGRPC := &k8sapiv1.GRPCAction{}
-			if container.LivenessProbe.ProbeHandler.GRPC != nil {
-				LivenessProbeGRPC = &k8sapiv1.GRPCAction{
-					Port:    &container.LivenessProbe.ProbeHandler.GRPC.Port,
-					Service: container.LivenessProbe.ProbeHandler.GRPC.Service,
-				}
-			}
+			setOptionalActionValue(container.LivenessProbe.ProbeHandler.GRPC, &LivenessProbeGRPC)
 
 			HandlerObj := &k8sapiv1.Probe{}
 
-			if (LivenessProbeHTTPObject != &k8sapiv1.HTTPGetAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
-					HttpGet: LivenessProbeHTTPObject,
-				}
-			}
-			if (LivenessProbeExec != &k8sapiv1.ExecAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
-					Exec: LivenessProbeExec,
-				}
-			}
-			if (LivenessProbeTCPSocket != &k8sapiv1.TCPSocketAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
-					TcpSocket: LivenessProbeTCPSocket,
-				}
-			}
-			if (LivenessProbeGRPC != &k8sapiv1.GRPCAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
-					Grpc: LivenessProbeGRPC,
-				}
-			}
+			setOptionalActionValue(LivenessProbeHTTPObject, &HandlerObj.Handler)
+			setOptionalActionValue(LivenessProbeExec, &HandlerObj.Handler)
+			setOptionalActionValue(LivenessProbeTCPSocket, &HandlerObj.Handler)
+			setOptionalActionValue(LivenessProbeGRPC, &HandlerObj.Handler)
 
 			LivenessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
@@ -184,71 +147,23 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 
 		if container.ReadinessProbe != nil {
 			ReadinessProbeHTTPObject := &k8sapiv1.HTTPGetAction{}
-			ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0)
-			if container.ReadinessProbe.ProbeHandler.HTTPGet != nil {
-				if container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders != nil {
-					ReadinessProbeHTTPHeaders = make([]*k8sapiv1.HTTPHeader, 0, len(container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
-					for _, value := range container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
-						UniqueReadnessHeader := &k8sapiv1.HTTPHeader{
-							Name:  &value.Name,
-							Value: &value.Value,
-						}
-						ReadinessProbeHTTPHeaders = append(ReadinessProbeHTTPHeaders, UniqueReadnessHeader)
-					}
-				}
-				ReadinessProbeHTTPObject = &k8sapiv1.HTTPGetAction{
-					Path:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Path,
-					Port:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Port.IntVal,
-					Host:        &container.ReadinessProbe.ProbeHandler.HTTPGet.Host,
-					Scheme:      (*string)(&container.ReadinessProbe.ProbeHandler.HTTPGet.Scheme),
-					HttpHeaders: ReadinessProbeHTTPHeaders,
-				}
-			}
+			setOptionalActionValue(container.ReadinessProbe.ProbeHandler.HTTPGet, &ReadinessProbeHTTPObject)
+
 			ReadinessProbeExec := &k8sapiv1.ExecAction{}
-			if container.ReadinessProbe.ProbeHandler.Exec != nil {
-				ReadinessProbeExec = &k8sapiv1.ExecAction{
-					Command: container.ReadinessProbe.ProbeHandler.Exec.Command,
-				}
-			}
+			setOptionalActionValue(container.ReadinessProbe.ProbeHandler.Exec, &ReadinessProbeExec)
 
 			ReadinessProbeTCPSocket := &k8sapiv1.TCPSocketAction{}
-			if container.ReadinessProbe.ProbeHandler.TCPSocket != nil {
-				ReadinessProbeTCPSocket = &k8sapiv1.TCPSocketAction{
-					Port: &container.ReadinessProbe.ProbeHandler.TCPSocket.Port.IntVal,
-					Host: &container.ReadinessProbe.ProbeHandler.TCPSocket.Host,
-				}
-			}
+			setOptionalActionValue(container.ReadinessProbe.ProbeHandler.TCPSocket, &ReadinessProbeTCPSocket)
 
 			ReadinessProbeGRPC := &k8sapiv1.GRPCAction{}
-			if container.ReadinessProbe.ProbeHandler.GRPC != nil {
-				ReadinessProbeGRPC = &k8sapiv1.GRPCAction{
-					Port:    &container.ReadinessProbe.ProbeHandler.GRPC.Port,
-					Service: container.ReadinessProbe.ProbeHandler.GRPC.Service,
-				}
-			}
+			setOptionalActionValue(container.ReadinessProbe.ProbeHandler.GRPC, &ReadinessProbeGRPC)
 
 			HandlerObj := &k8sapiv1.Probe{}
 
-			if (ReadinessProbeHTTPObject != &k8sapiv1.HTTPGetAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
-					HttpGet: ReadinessProbeHTTPObject,
-				}
-			}
-			if (ReadinessProbeExec != &k8sapiv1.ExecAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
-					Exec: ReadinessProbeExec,
-				}
-			}
-			if (ReadinessProbeTCPSocket != &k8sapiv1.TCPSocketAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
-					TcpSocket: ReadinessProbeTCPSocket,
-				}
-			}
-			if (ReadinessProbeGRPC != &k8sapiv1.GRPCAction{}) {
-				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
-					Grpc: ReadinessProbeGRPC,
-				}
-			}
+			setOptionalActionValue(ReadinessProbeHTTPObject, &HandlerObj.Handler)
+			setOptionalActionValue(ReadinessProbeExec, &HandlerObj.Handler)
+			setOptionalActionValue(ReadinessProbeTCPSocket, &HandlerObj.Handler)
+			setOptionalActionValue(ReadinessProbeGRPC, &HandlerObj.Handler)
 
 			ReadinessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.ReadinessProbe.InitialDelaySeconds,
@@ -403,30 +318,30 @@ func updateContainerResources(deployment *appsv1.Deployment, fields *k8sapiv1.Up
 	return nil
 }
 
+func setOptionalValue(source *int32, target *int32) {
+	if source != nil {
+		*target = *source
+	}
+}
+
+func setOptionalInt64Value(source *int64, target *int64) {
+	if source != nil {
+		*target = *source
+	}
+}
+
 func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
 	for _, containerProbes := range fields.ContainerProbes {
 		for _, container := range deployment.Spec.Template.Spec.Containers {
 			if container.Name == containerProbes.ContainerName {
 				if containerProbes.LivenessProbe != nil {
 					resourceProbe := containerProbes.LivenessProbe
-					if resourceProbe.InitialDelaySeconds != nil {
-						container.LivenessProbe.InitialDelaySeconds = *resourceProbe.InitialDelaySeconds
-					}
-					if resourceProbe.PeriodSeconds != nil {
-						container.LivenessProbe.PeriodSeconds = *resourceProbe.PeriodSeconds
-					}
-					if resourceProbe.TimeoutSeconds != nil {
-						container.LivenessProbe.TimeoutSeconds = *resourceProbe.TimeoutSeconds
-					}
-					if resourceProbe.SuccessThreshold != nil {
-						container.LivenessProbe.SuccessThreshold = *resourceProbe.SuccessThreshold
-					}
-					if resourceProbe.FailureThreshold != nil {
-						container.LivenessProbe.FailureThreshold = *resourceProbe.FailureThreshold
-					}
-					if resourceProbe.TerminationGracePeriodSeconds != nil {
-						container.LivenessProbe.TerminationGracePeriodSeconds = resourceProbe.TerminationGracePeriodSeconds
-					}
+					setOptionalValue(resourceProbe.InitialDelaySeconds, &container.LivenessProbe.InitialDelaySeconds)
+					setOptionalValue(resourceProbe.PeriodSeconds, &container.LivenessProbe.PeriodSeconds)
+					setOptionalValue(resourceProbe.TimeoutSeconds, &container.LivenessProbe.TimeoutSeconds)
+					setOptionalValue(resourceProbe.SuccessThreshold, &container.LivenessProbe.SuccessThreshold)
+					setOptionalValue(resourceProbe.FailureThreshold, &container.LivenessProbe.FailureThreshold)
+					setOptionalInt64Value(resourceProbe.TerminationGracePeriodSeconds, container.LivenessProbe.TerminationGracePeriodSeconds)
 					if handler := resourceProbe.Handler; handler != nil {
 						switch resourceProbe.Handler.(type) {
 						case *k8sapiv1.Probe_Exec:
@@ -458,24 +373,12 @@ func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.Updat
 					return nil
 				}
 				resourceReadinessProbe := containerProbes.ReadinessProbe
-				if resourceReadinessProbe.InitialDelaySeconds != nil {
-					container.ReadinessProbe.InitialDelaySeconds = *resourceReadinessProbe.InitialDelaySeconds
-				}
-				if resourceReadinessProbe.PeriodSeconds != nil {
-					container.ReadinessProbe.PeriodSeconds = *resourceReadinessProbe.PeriodSeconds
-				}
-				if resourceReadinessProbe.TimeoutSeconds != nil {
-					container.ReadinessProbe.TimeoutSeconds = *resourceReadinessProbe.TimeoutSeconds
-				}
-				if resourceReadinessProbe.SuccessThreshold != nil {
-					container.ReadinessProbe.SuccessThreshold = *resourceReadinessProbe.SuccessThreshold
-				}
-				if resourceReadinessProbe.FailureThreshold != nil {
-					container.ReadinessProbe.FailureThreshold = *resourceReadinessProbe.FailureThreshold
-				}
-				if resourceReadinessProbe.TerminationGracePeriodSeconds != nil {
-					container.ReadinessProbe.TerminationGracePeriodSeconds = resourceReadinessProbe.TerminationGracePeriodSeconds
-				}
+				setOptionalValue(resourceReadinessProbe.InitialDelaySeconds, &container.ReadinessProbe.InitialDelaySeconds)
+				setOptionalValue(resourceReadinessProbe.PeriodSeconds, &container.ReadinessProbe.PeriodSeconds)
+				setOptionalValue(resourceReadinessProbe.TimeoutSeconds, &container.ReadinessProbe.TimeoutSeconds)
+				setOptionalValue(resourceReadinessProbe.SuccessThreshold, &container.ReadinessProbe.SuccessThreshold)
+				setOptionalValue(resourceReadinessProbe.FailureThreshold, &container.ReadinessProbe.FailureThreshold)
+				setOptionalInt64Value(resourceReadinessProbe.TerminationGracePeriodSeconds, container.ReadinessProbe.TerminationGracePeriodSeconds)
 				if handler := resourceReadinessProbe.Handler; handler != nil {
 					switch resourceReadinessProbe.Handler.(type) {
 					case *k8sapiv1.Probe_Exec:
