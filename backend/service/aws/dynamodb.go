@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -140,6 +141,38 @@ func newProtoForTable(t *types.TableDescription, account, region string) *dynamo
 	return ret
 }
 
+func newProtoForContinuousBackups(t *types.ContinuousBackupsDescription, account string, region string) *dynamodbv1.ContinuousBackups {
+	backups := &dynamodbv1.ContinuousBackups{
+		ContinuousBackupsStatus: newProtoForBackupStatus(string(t.ContinuousBackupsStatus)),
+	}
+
+	// if *t.PointInTimeRecoveryDescription is nil
+	// then we set PointInTimeRecoveryStatus to UNSPECIFIED
+	if t.PointInTimeRecoveryDescription == nil || t.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus == "" {
+		backups.PointInTimeRecoveryStatus = dynamodbv1.ContinuousBackups_UNSPECIFIED
+	} else {
+		backups.PointInTimeRecoveryStatus = newProtoForBackupStatus(string(t.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus))
+	}
+
+	// if *t.PointInTimeRecoveryDescription is nil or if EarliestRestorableDateTime is nil
+	// then we set EarliestRestorableDateTime to nil
+	if t.PointInTimeRecoveryDescription != nil && t.PointInTimeRecoveryDescription.EarliestRestorableDateTime != nil {
+		backups.EarliestRestorableDateTime = timestamppb.New(*t.PointInTimeRecoveryDescription.EarliestRestorableDateTime)
+	} else {
+		backups.EarliestRestorableDateTime = nil
+	}
+
+	// if *t.PointInTimeRecoveryDescription is nil or if LatestRestorableDateTime is nil
+	// then we set LatestRestorableDateTime to nil
+	if t.PointInTimeRecoveryDescription != nil && t.PointInTimeRecoveryDescription.LatestRestorableDateTime != nil {
+		backups.LatestRestorableDateTime = timestamppb.New(*t.PointInTimeRecoveryDescription.LatestRestorableDateTime)
+	} else {
+		backups.LatestRestorableDateTime = nil
+	}
+
+	return backups
+}
+
 func newProtoForTableStatus(s types.TableStatus) dynamodbv1.Table_Status {
 	value, ok := dynamodbv1.Table_Status_value[string(s)]
 	if !ok {
@@ -154,6 +187,14 @@ func newProtoForIndexStatus(s types.IndexStatus) dynamodbv1.GlobalSecondaryIndex
 		return dynamodbv1.GlobalSecondaryIndex_UNKNOWN
 	}
 	return dynamodbv1.GlobalSecondaryIndex_Status(value)
+}
+
+func newProtoForBackupStatus(s string) dynamodbv1.ContinuousBackups_Status {
+	value, ok := dynamodbv1.ContinuousBackups_Status_value[s]
+	if !ok {
+		return dynamodbv1.ContinuousBackups_UNKNOWN
+	}
+	return dynamodbv1.ContinuousBackups_Status(value)
 }
 
 // manually retrieve the billing mode by inferring it from throughput
@@ -347,4 +388,24 @@ func (c *client) BatchGetItem(ctx context.Context, account string, region string
 		return nil, err
 	}
 	return client.dynamodb.BatchGetItem(ctx, input)
+}
+
+func (c *client) DescribeContinuousBackups(ctx context.Context, account string, region string, tableName string) (*dynamodbv1.ContinuousBackups, error) {
+	cl, err := c.getAccountRegionClient(account, region)
+	if err != nil {
+		return nil, err
+	}
+
+	input := &dynamodb.DescribeContinuousBackupsInput{TableName: aws.String(tableName)}
+
+	res, err := cl.dynamodb.DescribeContinuousBackups(ctx, input)
+
+	if err != nil {
+		c.log.Warn("unable to get backups description for table: "+tableName, zap.Error(err))
+		return nil, err
+	}
+
+	ret := newProtoForContinuousBackups(res.ContinuousBackupsDescription, account, region)
+
+	return ret, nil
 }

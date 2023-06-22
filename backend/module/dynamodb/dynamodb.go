@@ -26,6 +26,15 @@ func (a *dynamodbAPI) DescribeTable(ctx context.Context, req *dynamodbv1.Describ
 	return &dynamodbv1.DescribeTableResponse{Table: table}, nil
 }
 
+func (a *dynamodbAPI) DescribeContinuousBackups(ctx context.Context, req *dynamodbv1.DescribeContinuousBackupsRequest) (*dynamodbv1.DescribeContinuousBackupsResponse, error) {
+	backups, err := a.client.DescribeContinuousBackups(ctx, req.Account, req.Region, req.TableName)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dynamodbv1.DescribeContinuousBackupsResponse{ContinuousBackups: backups}, nil
+}
+
 func (a *dynamodbAPI) UpdateCapacity(ctx context.Context, req *dynamodbv1.UpdateCapacityRequest) (*dynamodbv1.UpdateCapacityResponse, error) {
 	result, err := a.client.UpdateCapacity(ctx, req.Account, req.Region, req.TableName, req.TableThroughput, req.GsiUpdates, req.IgnoreMaximums)
 	if err != nil {

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DDBAPI_DescribeTable_FullMethodName  = "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable"
-	DDBAPI_UpdateCapacity_FullMethodName = "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity"
+	DDBAPI_DescribeTable_FullMethodName             = "/clutch.aws.dynamodb.v1.DDBAPI/DescribeTable"
+	DDBAPI_DescribeContinuousBackups_FullMethodName = "/clutch.aws.dynamodb.v1.DDBAPI/DescribeContinuousBackups"
+	DDBAPI_UpdateCapacity_FullMethodName            = "/clutch.aws.dynamodb.v1.DDBAPI/UpdateCapacity"
 )
 
 // DDBAPIClient is the client API for DDBAPI service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DDBAPIClient interface {
 	DescribeTable(ctx context.Context, in *DescribeTableRequest, opts ...grpc.CallOption) (*DescribeTableResponse, error)
+	DescribeContinuousBackups(ctx context.Context, in *DescribeContinuousBackupsRequest, opts ...grpc.CallOption) (*DescribeContinuousBackupsResponse, error)
 	UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error)
 }
 
@@ -48,6 +50,15 @@ func (c *dDBAPIClient) DescribeTable(ctx context.Context, in *DescribeTableReque
 	return out, nil
 }
 
+func (c *dDBAPIClient) DescribeContinuousBackups(ctx context.Context, in *DescribeContinuousBackupsRequest, opts ...grpc.CallOption) (*DescribeContinuousBackupsResponse, error) {
+	out := new(DescribeContinuousBackupsResponse)
+	err := c.cc.Invoke(ctx, DDBAPI_DescribeContinuousBackups_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dDBAPIClient) UpdateCapacity(ctx context.Context, in *UpdateCapacityRequest, opts ...grpc.CallOption) (*UpdateCapacityResponse, error) {
 	out := new(UpdateCapacityResponse)
 	err := c.cc.Invoke(ctx, DDBAPI_UpdateCapacity_FullMethodName, in, out, opts...)
@@ -62,6 +73,7 @@ func (c *dDBAPIClient) UpdateCapacity(ctx context.Context, in *UpdateCapacityReq
 // for forward compatibility
 type DDBAPIServer interface {
 	DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error)
+	DescribeContinuousBackups(context.Context, *DescribeContinuousBackupsRequest) (*DescribeContinuousBackupsResponse, error)
 	UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error)
 }
 
@@ -71,6 +83,9 @@ type UnimplementedDDBAPIServer struct {
 
 func (UnimplementedDDBAPIServer) DescribeTable(context.Context, *DescribeTableRequest) (*DescribeTableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeTable not implemented")
+}
+func (UnimplementedDDBAPIServer) DescribeContinuousBackups(context.Context, *DescribeContinuousBackupsRequest) (*DescribeContinuousBackupsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeContinuousBackups not implemented")
 }
 func (UnimplementedDDBAPIServer) UpdateCapacity(context.Context, *UpdateCapacityRequest) (*UpdateCapacityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCapacity not implemented")
@@ -105,6 +120,24 @@ func _DDBAPI_DescribeTable_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DDBAPI_DescribeContinuousBackups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeContinuousBackupsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DDBAPIServer).DescribeContinuousBackups(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DDBAPI_DescribeContinuousBackups_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DDBAPIServer).DescribeContinuousBackups(ctx, req.(*DescribeContinuousBackupsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DDBAPI_UpdateCapacity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateCapacityRequest)
 	if err := dec(in); err != nil {
@@ -133,6 +166,10 @@ var DDBAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DescribeTable",
 			Handler:    _DDBAPI_DescribeTable_Handler,
+		},
+		{
+			MethodName: "DescribeContinuousBackups",
+			Handler:    _DDBAPI_DescribeContinuousBackups_Handler,
 		},
 		{
 			MethodName: "UpdateCapacity",

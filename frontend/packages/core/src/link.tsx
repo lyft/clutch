@@ -25,12 +25,19 @@ const StyledLink = styled(MuiLink)<{
 
 export interface LinkProps extends Pick<MuiLinkProps, "href" | "children"> {
   textTransform?: TextTransform;
+  target?: React.AnchorHTMLAttributes<HTMLAnchorElement>["target"];
 }
 
-export const Link = ({ href, textTransform = "none", children, ...props }: LinkProps) => (
+export const Link = ({
+  href,
+  textTransform = "none",
+  target = "_blank",
+  children,
+  ...props
+}: LinkProps) => (
   <StyledLink
     href={href}
-    target="_blank"
+    target={target}
     rel="noopener noreferrer"
     $textTransform={textTransform}
     {...props}

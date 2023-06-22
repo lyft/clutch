@@ -4230,6 +4230,39 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
+                     * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#describeContinuousBackups}.
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @typedef DescribeContinuousBackupsCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse} [response] DescribeContinuousBackupsResponse
+                     */
+
+                    /**
+                     * Calls DescribeContinuousBackups.
+                     * @function describeContinuousBackups
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest} request DescribeContinuousBackupsRequest message or plain object
+                     * @param {clutch.aws.dynamodb.v1.DDBAPI.DescribeContinuousBackupsCallback} callback Node-style callback called with the error, if any, and DescribeContinuousBackupsResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(DDBAPI.prototype.describeContinuousBackups = function describeContinuousBackups(request, callback) {
+                        return this.rpcCall(describeContinuousBackups, $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest, $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse, request, callback);
+                    }, "name", { value: "DescribeContinuousBackups" });
+
+                    /**
+                     * Calls DescribeContinuousBackups.
+                     * @function describeContinuousBackups
+                     * @memberof clutch.aws.dynamodb.v1.DDBAPI
+                     * @instance
+                     * @param {clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest} request DescribeContinuousBackupsRequest message or plain object
+                     * @returns {Promise<clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
                      * Callback as used by {@link clutch.aws.dynamodb.v1.DDBAPI#updateCapacity}.
                      * @memberof clutch.aws.dynamodb.v1.DDBAPI
                      * @typedef UpdateCapacityCallback
@@ -5421,6 +5454,232 @@ export const clutch = $root.clutch = (() => {
                     return AttributeDefinition;
                 })();
 
+                v1.ContinuousBackups = (function() {
+
+                    /**
+                     * Properties of a ContinuousBackups.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IContinuousBackups
+                     * @property {clutch.aws.dynamodb.v1.ContinuousBackups.Status|null} [continuousBackupsStatus] ContinuousBackups continuousBackupsStatus
+                     * @property {clutch.aws.dynamodb.v1.ContinuousBackups.Status|null} [pointInTimeRecoveryStatus] ContinuousBackups pointInTimeRecoveryStatus
+                     * @property {google.protobuf.ITimestamp|null} [earliestRestorableDateTime] ContinuousBackups earliestRestorableDateTime
+                     * @property {google.protobuf.ITimestamp|null} [latestRestorableDateTime] ContinuousBackups latestRestorableDateTime
+                     */
+
+                    /**
+                     * Constructs a new ContinuousBackups.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a ContinuousBackups.
+                     * @implements IContinuousBackups
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IContinuousBackups=} [properties] Properties to set
+                     */
+                    function ContinuousBackups(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ContinuousBackups continuousBackupsStatus.
+                     * @member {clutch.aws.dynamodb.v1.ContinuousBackups.Status} continuousBackupsStatus
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @instance
+                     */
+                    ContinuousBackups.prototype.continuousBackupsStatus = 0;
+
+                    /**
+                     * ContinuousBackups pointInTimeRecoveryStatus.
+                     * @member {clutch.aws.dynamodb.v1.ContinuousBackups.Status} pointInTimeRecoveryStatus
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @instance
+                     */
+                    ContinuousBackups.prototype.pointInTimeRecoveryStatus = 0;
+
+                    /**
+                     * ContinuousBackups earliestRestorableDateTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} earliestRestorableDateTime
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @instance
+                     */
+                    ContinuousBackups.prototype.earliestRestorableDateTime = null;
+
+                    /**
+                     * ContinuousBackups latestRestorableDateTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} latestRestorableDateTime
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @instance
+                     */
+                    ContinuousBackups.prototype.latestRestorableDateTime = null;
+
+                    /**
+                     * Verifies a ContinuousBackups message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ContinuousBackups.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.continuousBackupsStatus != null && message.hasOwnProperty("continuousBackupsStatus"))
+                            switch (message.continuousBackupsStatus) {
+                            default:
+                                return "continuousBackupsStatus: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                        if (message.pointInTimeRecoveryStatus != null && message.hasOwnProperty("pointInTimeRecoveryStatus"))
+                            switch (message.pointInTimeRecoveryStatus) {
+                            default:
+                                return "pointInTimeRecoveryStatus: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                        if (message.earliestRestorableDateTime != null && message.hasOwnProperty("earliestRestorableDateTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.earliestRestorableDateTime);
+                            if (error)
+                                return "earliestRestorableDateTime." + error;
+                        }
+                        if (message.latestRestorableDateTime != null && message.hasOwnProperty("latestRestorableDateTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.latestRestorableDateTime);
+                            if (error)
+                                return "latestRestorableDateTime." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ContinuousBackups message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.ContinuousBackups} ContinuousBackups
+                     */
+                    ContinuousBackups.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.ContinuousBackups)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.ContinuousBackups();
+                        switch (object.continuousBackupsStatus) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.continuousBackupsStatus = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.continuousBackupsStatus = 1;
+                            break;
+                        case "ENABLED":
+                        case 2:
+                            message.continuousBackupsStatus = 2;
+                            break;
+                        case "DISABLED":
+                        case 3:
+                            message.continuousBackupsStatus = 3;
+                            break;
+                        }
+                        switch (object.pointInTimeRecoveryStatus) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.pointInTimeRecoveryStatus = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.pointInTimeRecoveryStatus = 1;
+                            break;
+                        case "ENABLED":
+                        case 2:
+                            message.pointInTimeRecoveryStatus = 2;
+                            break;
+                        case "DISABLED":
+                        case 3:
+                            message.pointInTimeRecoveryStatus = 3;
+                            break;
+                        }
+                        if (object.earliestRestorableDateTime != null) {
+                            if (typeof object.earliestRestorableDateTime !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.ContinuousBackups.earliestRestorableDateTime: object expected");
+                            message.earliestRestorableDateTime = $root.google.protobuf.Timestamp.fromObject(object.earliestRestorableDateTime);
+                        }
+                        if (object.latestRestorableDateTime != null) {
+                            if (typeof object.latestRestorableDateTime !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.ContinuousBackups.latestRestorableDateTime: object expected");
+                            message.latestRestorableDateTime = $root.google.protobuf.Timestamp.fromObject(object.latestRestorableDateTime);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ContinuousBackups message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.ContinuousBackups} message ContinuousBackups
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ContinuousBackups.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.continuousBackupsStatus = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.pointInTimeRecoveryStatus = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.earliestRestorableDateTime = null;
+                            object.latestRestorableDateTime = null;
+                        }
+                        if (message.continuousBackupsStatus != null && message.hasOwnProperty("continuousBackupsStatus"))
+                            object.continuousBackupsStatus = options.enums === String ? $root.clutch.aws.dynamodb.v1.ContinuousBackups.Status[message.continuousBackupsStatus] : message.continuousBackupsStatus;
+                        if (message.pointInTimeRecoveryStatus != null && message.hasOwnProperty("pointInTimeRecoveryStatus"))
+                            object.pointInTimeRecoveryStatus = options.enums === String ? $root.clutch.aws.dynamodb.v1.ContinuousBackups.Status[message.pointInTimeRecoveryStatus] : message.pointInTimeRecoveryStatus;
+                        if (message.earliestRestorableDateTime != null && message.hasOwnProperty("earliestRestorableDateTime"))
+                            object.earliestRestorableDateTime = $root.google.protobuf.Timestamp.toObject(message.earliestRestorableDateTime, options);
+                        if (message.latestRestorableDateTime != null && message.hasOwnProperty("latestRestorableDateTime"))
+                            object.latestRestorableDateTime = $root.google.protobuf.Timestamp.toObject(message.latestRestorableDateTime, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ContinuousBackups to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.ContinuousBackups
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ContinuousBackups.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Status enum.
+                     * @name clutch.aws.dynamodb.v1.ContinuousBackups.Status
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} UNKNOWN=1 UNKNOWN value
+                     * @property {number} ENABLED=2 ENABLED value
+                     * @property {number} DISABLED=3 DISABLED value
+                     */
+                    ContinuousBackups.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "UNKNOWN"] = 1;
+                        values[valuesById[2] = "ENABLED"] = 2;
+                        values[valuesById[3] = "DISABLED"] = 3;
+                        return values;
+                    })();
+
+                    return ContinuousBackups;
+                })();
+
                 v1.DescribeTableRequest = (function() {
 
                     /**
@@ -5659,6 +5918,246 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return DescribeTableResponse;
+                })();
+
+                v1.DescribeContinuousBackupsRequest = (function() {
+
+                    /**
+                     * Properties of a DescribeContinuousBackupsRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IDescribeContinuousBackupsRequest
+                     * @property {string|null} [tableName] DescribeContinuousBackupsRequest tableName
+                     * @property {string|null} [region] DescribeContinuousBackupsRequest region
+                     * @property {string|null} [account] DescribeContinuousBackupsRequest account
+                     */
+
+                    /**
+                     * Constructs a new DescribeContinuousBackupsRequest.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a DescribeContinuousBackupsRequest.
+                     * @implements IDescribeContinuousBackupsRequest
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IDescribeContinuousBackupsRequest=} [properties] Properties to set
+                     */
+                    function DescribeContinuousBackupsRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DescribeContinuousBackupsRequest tableName.
+                     * @member {string} tableName
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @instance
+                     */
+                    DescribeContinuousBackupsRequest.prototype.tableName = "";
+
+                    /**
+                     * DescribeContinuousBackupsRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @instance
+                     */
+                    DescribeContinuousBackupsRequest.prototype.region = "";
+
+                    /**
+                     * DescribeContinuousBackupsRequest account.
+                     * @member {string} account
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @instance
+                     */
+                    DescribeContinuousBackupsRequest.prototype.account = "";
+
+                    /**
+                     * Verifies a DescribeContinuousBackupsRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DescribeContinuousBackupsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            if (!$util.isString(message.tableName))
+                                return "tableName: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DescribeContinuousBackupsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest} DescribeContinuousBackupsRequest
+                     */
+                    DescribeContinuousBackupsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest();
+                        if (object.tableName != null)
+                            message.tableName = String(object.tableName);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DescribeContinuousBackupsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest} message DescribeContinuousBackupsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DescribeContinuousBackupsRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.tableName = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.tableName != null && message.hasOwnProperty("tableName"))
+                            object.tableName = message.tableName;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DescribeContinuousBackupsRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DescribeContinuousBackupsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DescribeContinuousBackupsRequest;
+                })();
+
+                v1.DescribeContinuousBackupsResponse = (function() {
+
+                    /**
+                     * Properties of a DescribeContinuousBackupsResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @interface IDescribeContinuousBackupsResponse
+                     * @property {clutch.aws.dynamodb.v1.IContinuousBackups|null} [continuousBackups] DescribeContinuousBackupsResponse continuousBackups
+                     */
+
+                    /**
+                     * Constructs a new DescribeContinuousBackupsResponse.
+                     * @memberof clutch.aws.dynamodb.v1
+                     * @classdesc Represents a DescribeContinuousBackupsResponse.
+                     * @implements IDescribeContinuousBackupsResponse
+                     * @constructor
+                     * @param {clutch.aws.dynamodb.v1.IDescribeContinuousBackupsResponse=} [properties] Properties to set
+                     */
+                    function DescribeContinuousBackupsResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DescribeContinuousBackupsResponse continuousBackups.
+                     * @member {clutch.aws.dynamodb.v1.IContinuousBackups|null|undefined} continuousBackups
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse
+                     * @instance
+                     */
+                    DescribeContinuousBackupsResponse.prototype.continuousBackups = null;
+
+                    /**
+                     * Verifies a DescribeContinuousBackupsResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DescribeContinuousBackupsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.continuousBackups != null && message.hasOwnProperty("continuousBackups")) {
+                            let error = $root.clutch.aws.dynamodb.v1.ContinuousBackups.verify(message.continuousBackups);
+                            if (error)
+                                return "continuousBackups." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DescribeContinuousBackupsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse} DescribeContinuousBackupsResponse
+                     */
+                    DescribeContinuousBackupsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse)
+                            return object;
+                        let message = new $root.clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse();
+                        if (object.continuousBackups != null) {
+                            if (typeof object.continuousBackups !== "object")
+                                throw TypeError(".clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse.continuousBackups: object expected");
+                            message.continuousBackups = $root.clutch.aws.dynamodb.v1.ContinuousBackups.fromObject(object.continuousBackups);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DescribeContinuousBackupsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse
+                     * @static
+                     * @param {clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse} message DescribeContinuousBackupsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DescribeContinuousBackupsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.continuousBackups = null;
+                        if (message.continuousBackups != null && message.hasOwnProperty("continuousBackups"))
+                            object.continuousBackups = $root.clutch.aws.dynamodb.v1.ContinuousBackups.toObject(message.continuousBackups, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DescribeContinuousBackupsResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.dynamodb.v1.DescribeContinuousBackupsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DescribeContinuousBackupsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return DescribeContinuousBackupsResponse;
                 })();
 
                 v1.UpdateCapacityRequest = (function() {
