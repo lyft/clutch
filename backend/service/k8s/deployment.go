@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"reflect"
 	"strings"
 
 	"google.golang.org/grpc/codes"
@@ -13,8 +14,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
-
-	"reflect"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
