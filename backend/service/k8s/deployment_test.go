@@ -10,6 +10,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
@@ -361,6 +362,67 @@ func TestProtoForDeploymentStatus(t *testing.T) {
 			assert.Equal(t, tt.deployment.Status.ReadyReplicas, int32(deployment.DeploymentStatus.ReadyReplicas))
 			assert.Equal(t, tt.deployment.Status.AvailableReplicas, int32(deployment.DeploymentStatus.AvailableReplicas))
 			assert.Equal(t, len(tt.deployment.Status.Conditions), len(deployment.DeploymentStatus.DeploymentConditions))
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbes(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "foo",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									Resources: v1.ResourceRequirements{
+										Limits: v1.ResourceList{
+											"cpu":    resource.MustParse("500m"),
+											"memory": resource.MustParse("128Mi"),
+										},
+										Requests: v1.ResourceList{
+											"cpu":    resource.MustParse("250m"),
+											"memory": resource.MustParse("64Mi"),
+										},
+									},
+									LivenessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											HTTPGet: &v1.HTTPGetAction{
+												Path: "/",
+												Port: intstr.IntOrString{
+													IntVal: 8080,
+												},
+											},
+										},
+										InitialDelaySeconds:           10,
+										PeriodSeconds:                 30,
+										TimeoutSeconds:                1,
+										SuccessThreshold:              1,
+										FailureThreshold:              3,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds)
 		})
 	}
 }

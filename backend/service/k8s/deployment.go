@@ -87,6 +87,61 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 	return k8sDeployment
 }
 
+func ProcessObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
+	HandlerObj := &k8sapiv1.Probe{}
+	if objProbe.ProbeHandler.HTTPGet != nil {
+		ObjProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(objProbe.ProbeHandler.HTTPGet.HTTPHeaders))
+		for _, value := range objProbe.ProbeHandler.HTTPGet.HTTPHeaders {
+			UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
+				Name:  &value.Name,
+				Value: &value.Value,
+			}
+			ObjProbeHTTPHeaders = append(ObjProbeHTTPHeaders, UniqueLivenessHeader)
+		}
+
+		ObjProbeHTTPObject := &k8sapiv1.HTTPGetAction{
+			Path:        objProbe.ProbeHandler.HTTPGet.Path,
+			Port:        objProbe.ProbeHandler.HTTPGet.Port.IntVal,
+			Host:        objProbe.ProbeHandler.HTTPGet.Host,
+			Scheme:      string(objProbe.ProbeHandler.HTTPGet.Scheme),
+			HttpHeaders: ObjProbeHTTPHeaders,
+		}
+		HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
+			HttpGet: ObjProbeHTTPObject,
+		}
+	}
+
+	if objProbe.ProbeHandler.Exec != nil {
+		ObjProbeExec := &k8sapiv1.ExecAction{
+			Command: objProbe.ProbeHandler.Exec.Command,
+		}
+		HandlerObj.Handler = &k8sapiv1.Probe_Exec{
+			Exec: ObjProbeExec,
+		}
+	}
+
+	if objProbe.ProbeHandler.TCPSocket != nil {
+		ObjProbeTCPSocket := &k8sapiv1.TCPSocketAction{
+			Port: objProbe.ProbeHandler.TCPSocket.Port.IntVal,
+			Host: objProbe.ProbeHandler.TCPSocket.Host,
+		}
+		HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
+			TcpSocket: ObjProbeTCPSocket,
+		}
+	}
+
+	if objProbe.ProbeHandler.GRPC != nil {
+		ObjProbeGRPC := &k8sapiv1.GRPCAction{
+			Port:    objProbe.ProbeHandler.GRPC.Port,
+			Service: *objProbe.ProbeHandler.GRPC.Service,
+		}
+		HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
+			Grpc: ObjProbeGRPC,
+		}
+	}
+	return HandlerObj
+}
+
 func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Deployment_DeploymentSpec {
 	deploymentContainers := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container, 0, len(deploymentSpec.Template.Spec.Containers))
 	for _, container := range deploymentSpec.Template.Spec.Containers {
@@ -104,58 +159,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 		LivenessProbeObject := &k8sapiv1.Probe{}
 		ReadinessProbeObject := &k8sapiv1.Probe{}
 		if container.LivenessProbe != nil {
-			HandlerObj := &k8sapiv1.Probe{}
-
-			if container.LivenessProbe.ProbeHandler.HTTPGet != nil {
-				LivenessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
-				for _, value := range container.LivenessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
-					UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
-						Name:  &value.Name,
-						Value: &value.Value,
-					}
-					LivenessProbeHTTPHeaders = append(LivenessProbeHTTPHeaders, UniqueLivenessHeader)
-				}
-
-				LivenessProbeHTTPObject := &k8sapiv1.HTTPGetAction{
-					Path:        container.LivenessProbe.ProbeHandler.HTTPGet.Path,
-					Port:        container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal,
-					Host:        container.LivenessProbe.ProbeHandler.HTTPGet.Host,
-					Scheme:      string(container.LivenessProbe.ProbeHandler.HTTPGet.Scheme),
-					HttpHeaders: LivenessProbeHTTPHeaders,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
-					HttpGet: LivenessProbeHTTPObject,
-				}
-			}
-
-			if container.LivenessProbe.ProbeHandler.Exec != nil {
-				LivenessProbeExec := &k8sapiv1.ExecAction{
-					Command: container.LivenessProbe.ProbeHandler.Exec.Command,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
-					Exec: LivenessProbeExec,
-				}
-			}
-
-			if container.LivenessProbe.ProbeHandler.TCPSocket != nil {
-				LivenessProbeTCPSocket := &k8sapiv1.TCPSocketAction{
-					Port: container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal,
-					Host: container.LivenessProbe.ProbeHandler.TCPSocket.Host,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
-					TcpSocket: LivenessProbeTCPSocket,
-				}
-			}
-
-			if container.LivenessProbe.ProbeHandler.GRPC != nil {
-				LivenessProbeGRPC := &k8sapiv1.GRPCAction{
-					Port:    container.LivenessProbe.ProbeHandler.GRPC.Port,
-					Service: *container.LivenessProbe.ProbeHandler.GRPC.Service,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
-					Grpc: LivenessProbeGRPC,
-				}
-			}
+			HandlerObj := ProcessObjProbe(container.LivenessProbe)
 
 			LivenessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
@@ -169,56 +173,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 		}
 
 		if container.ReadinessProbe != nil {
-			HandlerObj := &k8sapiv1.Probe{}
-			if container.ReadinessProbe.ProbeHandler.HTTPGet != nil {
-				ReadinessProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders))
-				for _, value := range container.ReadinessProbe.ProbeHandler.HTTPGet.HTTPHeaders {
-					UniqueReadnessHeader := &k8sapiv1.HTTPHeader{
-						Name:  &value.Name,
-						Value: &value.Value,
-					}
-					ReadinessProbeHTTPHeaders = append(ReadinessProbeHTTPHeaders, UniqueReadnessHeader)
-				}
-				ReadinessProbeHTTPObject := &k8sapiv1.HTTPGetAction{
-					Path:        container.ReadinessProbe.ProbeHandler.HTTPGet.Path,
-					Port:        container.ReadinessProbe.ProbeHandler.HTTPGet.Port.IntVal,
-					Host:        container.ReadinessProbe.ProbeHandler.HTTPGet.Host,
-					Scheme:      string(container.ReadinessProbe.ProbeHandler.HTTPGet.Scheme),
-					HttpHeaders: ReadinessProbeHTTPHeaders,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_HttpGet{
-					HttpGet: ReadinessProbeHTTPObject,
-				}
-			}
-
-			if container.ReadinessProbe.ProbeHandler.Exec != nil {
-				ReadinessProbeExec := &k8sapiv1.ExecAction{
-					Command: container.ReadinessProbe.ProbeHandler.Exec.Command,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_Exec{
-					Exec: ReadinessProbeExec,
-				}
-			}
-
-			if container.ReadinessProbe.ProbeHandler.TCPSocket != nil {
-				ReadinessProbeTCPSocket := &k8sapiv1.TCPSocketAction{
-					Port: container.ReadinessProbe.ProbeHandler.TCPSocket.Port.IntVal,
-					Host: container.ReadinessProbe.ProbeHandler.TCPSocket.Host,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_TcpSocket{
-					TcpSocket: ReadinessProbeTCPSocket,
-				}
-			}
-
-			if container.ReadinessProbe.ProbeHandler.GRPC != nil {
-				ReadinessProbeGRPC := &k8sapiv1.GRPCAction{
-					Port:    container.ReadinessProbe.ProbeHandler.GRPC.Port,
-					Service: *container.ReadinessProbe.ProbeHandler.GRPC.Service,
-				}
-				HandlerObj.Handler = &k8sapiv1.Probe_Grpc{
-					Grpc: ReadinessProbeGRPC,
-				}
-			}
+			HandlerObj := ProcessObjProbe(container.LivenessProbe)
 
 			ReadinessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.ReadinessProbe.InitialDelaySeconds,
