@@ -1,6 +1,12 @@
-// helper methods for accessing k8s cluster metadata in object labels
-// add detail as to why this needs to exist.
-
+// Clutch relies on cluster information throughout the application.
+//
+// Previously we relied on the `clusterName` field on objectmeta
+// https://github.com/kubernetes/apimachinery/blob/2456ebdaba229616fab2161a615148884b46644b/pkg/apis/meta/v1/types.go#L266-L270
+// This has since be depreacted as of https://github.com/kubernetes/kubernetes/commit/331525670b772eb8956b7f5204078c51c00aaef3
+// and there was no replacement to this objectmeta field.
+//
+// To replace this we utilize our own label to denote which cluster the object belongs to,
+// these helper functions are used to standardize the getting and setting of this field.
 package k8s
 
 import (
@@ -11,14 +17,14 @@ import (
 
 const clusterClutchNameLabel = "cluster.clutch.sh/name"
 
-// (mikecutalo) - debate this return sig
 func GetKubeCluster(obj any) string {
-	ObjectMeta, err := meta.Accessor(obj)
+	objectMeta, err := meta.Accessor(obj)
 	if err != nil {
+		// Callers are expected to handle nil cases
 		return ""
 	}
 
-	labels := ObjectMeta.GetLabels()
+	labels := objectMeta.GetLabels()
 	if cluster, ok := labels[clusterClutchNameLabel]; ok {
 		return cluster
 	}
@@ -26,10 +32,7 @@ func GetKubeCluster(obj any) string {
 	return ""
 }
 
-// Applies the name of the cluster to a kube object
-// ClusterName is still not set in kube v1.20 so we are setting this manually.
-// https://github.com/kubernetes/apimachinery/blob/2456ebdaba229616fab2161a615148884b46644b/pkg/apis/meta/v1/types.go#L266-L270
-func ApplyClusterMetadata(cluster string, obj runtime.Object) error {
+func ApplyClusterLabels(cluster string, obj runtime.Object) error {
 	objMeta, err := meta.Accessor(obj)
 	if err != nil {
 		return err

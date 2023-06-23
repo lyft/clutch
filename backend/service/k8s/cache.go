@@ -22,8 +22,10 @@ import (
 // Setting a large channel buffer mostly for first boot and the  resync timer,
 // this really should be sized according to the size of your k8s deployment.
 // However this should be a large enough buffer for the datastore to keep up with.
-const topologyObjectChanBufferSize = 5000
-const topologyInformerLockId = 1
+const (
+	topologyObjectChanBufferSize = 5000
+	topologyInformerLockId       = 1
+)
 
 func (s *svc) CacheEnabled() bool {
 	return true
@@ -133,7 +135,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 				podItems := pods.(*corev1.PodList).Items
 				for i := range podItems {
 					pod := &podItems[i]
-					if err := ApplyClusterMetadata(cluster, pod); err != nil {
+					if err := ApplyClusterLabels(cluster, pod); err != nil {
 						s.log.Error("Unable to apply cluster name to pod object", zap.Error(err))
 					}
 					s.processInformerEvent(pod, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
@@ -147,7 +149,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 				deploymentItems := deployments.(*appsv1.DeploymentList).Items
 				for i := range deploymentItems {
 					deployment := &deploymentItems[i]
-					if err := ApplyClusterMetadata(cluster, deployment); err != nil {
+					if err := ApplyClusterLabels(cluster, deployment); err != nil {
 						s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
 					}
 					s.processInformerEvent(deployment, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
@@ -161,7 +163,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 				hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
 				for i := range hpaItems {
 					hpa := &hpaItems[i]
-					if err := ApplyClusterMetadata(cluster, hpa); err != nil {
+					if err := ApplyClusterLabels(cluster, hpa); err != nil {
 						s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
 					}
 					s.processInformerEvent(hpa, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
@@ -175,7 +177,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDep
 				nodeItems := nodes.(*corev1.NodeList).Items
 				for i := range nodeItems {
 					node := &nodeItems[i]
-					if err := ApplyClusterMetadata(cluster, node); err != nil {
+					if err := ApplyClusterLabels(cluster, node); err != nil {
 						s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
 					}
 					s.processInformerEvent(node, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
