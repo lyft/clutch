@@ -73,7 +73,7 @@ func TestDeleteCron(t *testing.T) {
 func TestProtoForCron(t *testing.T) {
 	t.Parallel()
 
-	var cronTestCases = []struct {
+	cronTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -87,8 +87,10 @@ func TestProtoForCron(t *testing.T) {
 			expectedName:        "test1",
 			cron: &v1beta1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
-					Name:        "test1",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
+					Name: "test1",
 				},
 			},
 		},
@@ -99,8 +101,10 @@ func TestProtoForCron(t *testing.T) {
 			expectedName:        "test2",
 			cron: &v1beta1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
-					Name:        "test2",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "",
+					},
+					Name: "test2",
 				},
 				Spec: v1beta1.CronJobSpec{
 					ConcurrencyPolicy:       v1beta1.AllowConcurrent,

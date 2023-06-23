@@ -5,6 +5,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/cache"
 )
@@ -58,7 +59,7 @@ func NewLightweightInformer(
 		ObjectType:       objType,
 		FullResyncPeriod: 0,
 		RetryOnError:     false,
-		Process: func(obj interface{}) error {
+		Process: func(obj interface{}, isInInitialList bool) error {
 			for _, d := range obj.(cache.Deltas) {
 				incomingObjectMeta, err := meta.Accessor(d.Object)
 				if err != nil {
@@ -70,9 +71,9 @@ func NewLightweightInformer(
 					Namespace: incomingObjectMeta.GetNamespace(),
 				}
 
-				// ClusterName is still not set in kube v1.20 so we are setting this manually.
-				// https://github.com/kubernetes/apimachinery/blob/2456ebdaba229616fab2161a615148884b46644b/pkg/apis/meta/v1/types.go#L266-L270
-				incomingObjectMeta.SetClusterName(clusterName)
+				incomingObjectMeta.SetLabels(labels.Merge(incomingObjectMeta.GetLabels(), labels.Set{
+					clusterClutchNameLabel: clusterName,
+				}))
 
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
@@ -90,7 +91,8 @@ func NewLightweightInformer(
 						if err := cacheStore.Add(lightweightObj); err != nil {
 							return err
 						}
-						h.OnAdd(d.Object)
+						// (mikecutalo) : double check what isInInitialList is doing
+						h.OnAdd(d.Object, false)
 					}
 				case cache.Deleted:
 					if err := cacheStore.Delete(lightweightObj); err != nil {

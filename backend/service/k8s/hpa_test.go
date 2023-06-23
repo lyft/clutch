@@ -13,9 +13,7 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-var (
-	newInt32 = func(n int32) *int32 { return &n }
-)
+var newInt32 = func(n int32) *int32 { return &n }
 
 func testHPAClientset() k8s.Interface {
 	hpa := &autoscalingv1.HorizontalPodAutoscaler{
@@ -33,7 +31,7 @@ func testHPAClientset() k8s.Interface {
 func TestNormalizeChanges(t *testing.T) {
 	t.Parallel()
 
-	var applyScalingTestCases = []struct {
+	applyScalingTestCases := []struct {
 		id         string
 		sizing     *k8sapiv1.ResizeHPARequest_Sizing
 		resultSpec autoscalingv1.HorizontalPodAutoscalerSpec
@@ -124,7 +122,7 @@ func TestResizeHPA(t *testing.T) {
 func TestProtoForHPAClusterName(t *testing.T) {
 	t.Parallel()
 
-	var hpaTestCases = []struct {
+	hpaTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -136,7 +134,9 @@ func TestProtoForHPAClusterName(t *testing.T) {
 			expectedClusterName: "production",
 			hpa: &autoscalingv1.HorizontalPodAutoscaler{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
 					MinReplicas: newInt32(1),
@@ -150,7 +150,9 @@ func TestProtoForHPAClusterName(t *testing.T) {
 			expectedClusterName: "staging",
 			hpa: &autoscalingv1.HorizontalPodAutoscaler{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "",
+					},
 				},
 				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
 					MinReplicas: newInt32(1),

@@ -16,9 +16,7 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-var (
-	t1 = time.Date(2021, time.May, 4, 0, 0, 0, 0, time.UTC)
-)
+var t1 = time.Date(2021, time.May, 4, 0, 0, 0, 0, time.UTC)
 
 func testDeploymentClientset() k8s.Interface {
 	deployment := &appsv1.Deployment{
@@ -125,7 +123,7 @@ func TestDeleteDeployment(t *testing.T) {
 func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 	t.Parallel()
 
-	var mergeDeploymentLabelAnnotationsTestCases = []struct {
+	mergeDeploymentLabelAnnotationsTestCases := []struct {
 		id     string
 		fields *k8sapiv1.UpdateDeploymentRequest_Fields
 		expect *appsv1.Deployment
@@ -216,7 +214,7 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 func TestProtoForDeploymentClusterName(t *testing.T) {
 	t.Parallel()
 
-	var deploymentTestCases = []struct {
+	deploymentTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -228,7 +226,9 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 			expectedClusterName: "production",
 			deployment: &appsv1.Deployment{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 			},
 		},
@@ -238,7 +238,9 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 			expectedClusterName: "staging",
 			deployment: &appsv1.Deployment{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "",
+					},
 				},
 			},
 		},
@@ -258,7 +260,7 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 func TestProtoForDeploymentSpec(t *testing.T) {
 	t.Parallel()
 
-	var deploymentTestCases = []struct {
+	deploymentTestCases := []struct {
 		id         string
 		deployment *appsv1.Deployment
 	}{
@@ -306,7 +308,7 @@ func TestProtoForDeploymentSpec(t *testing.T) {
 func TestProtoForDeploymentStatus(t *testing.T) {
 	t.Parallel()
 
-	var deploymentTestCases = []struct {
+	deploymentTestCases := []struct {
 		id         string
 		deployment *appsv1.Deployment
 	}{

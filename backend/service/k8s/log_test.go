@@ -20,10 +20,12 @@ func TestGetPodLogs(t *testing.T) {
 	testPods := []runtime.Object{
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:        "testing-pod-name",
-				Namespace:   "testing-namespace",
-				ClusterName: "core-testing",
-				Labels:      map[string]string{"foo": "bar"},
+				Name:      "testing-pod-name",
+				Namespace: "testing-namespace",
+				Labels: map[string]string{
+					"foo":                  "bar",
+					clusterClutchNameLabel: "core-testing",
+				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
@@ -73,7 +75,9 @@ func TestBufferToResponse(t *testing.T) {
 					{
 						S: "Hello!",
 					},
-				}}},
+				},
+			},
+		},
 	}
 
 	for idx, tc := range tcs {

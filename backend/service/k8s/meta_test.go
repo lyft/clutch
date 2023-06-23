@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 
@@ -16,7 +15,7 @@ import (
 func TestApplyListOptions(t *testing.T) {
 	t.Parallel()
 
-	var testCases = []struct {
+	testCases := []struct {
 		id                  string
 		listOptions         *k8sapiv1.ListOptions
 		expectedListOptions metav1.ListOptions
@@ -98,7 +97,7 @@ func TestApplyListOptions(t *testing.T) {
 func TestApplyClusterMetadata(t *testing.T) {
 	t.Parallel()
 
-	var tests = []struct {
+	tests := []struct {
 		id          string
 		cluster     string
 		obj         runtime.Object
@@ -130,10 +129,7 @@ func TestApplyClusterMetadata(t *testing.T) {
 			err := ApplyClusterMetadata(tt.cluster, tt.obj)
 			if !tt.shouldError {
 				assert.NoError(t, err)
-
-				objMeta, err := meta.Accessor(tt.obj)
-				assert.NoError(t, err)
-				assert.Equal(t, tt.cluster, objMeta.GetClusterName())
+				assert.Equal(t, tt.cluster, GetKubeCluster(tt.obj))
 			} else {
 				assert.Error(t, err)
 			}

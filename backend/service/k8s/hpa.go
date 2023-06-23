@@ -35,7 +35,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
-	clusterName := autoscaler.ClusterName
+	clusterName := GetKubeCluster(autoscaler)
 	if clusterName == "" {
 		clusterName = cluster
 	}

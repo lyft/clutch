@@ -33,10 +33,12 @@ func testPodClientset() *fake.Clientset {
 	testPods := []runtime.Object{
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:        "testing-pod-name",
-				Namespace:   "testing-namespace",
-				ClusterName: "production",
-				Labels:      map[string]string{"foo": "bar"},
+				Name:      "testing-pod-name",
+				Namespace: "testing-namespace",
+				Labels: map[string]string{
+					"foo":                  "bar",
+					clusterClutchNameLabel: "production",
+				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
@@ -50,10 +52,12 @@ func testPodClientset() *fake.Clientset {
 		},
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:        "testing-pod-name-1",
-				Namespace:   "testing-namespace",
-				ClusterName: "staging",
-				Labels:      map[string]string{"foo": "bar"},
+				Name:      "testing-pod-name-1",
+				Namespace: "testing-namespace",
+				Labels: map[string]string{
+					"foo":                  "bar",
+					clusterClutchNameLabel: "staging",
+				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
@@ -95,9 +99,11 @@ func testListFakeClientset(numPods int) *fake.Clientset {
 			for i := 0; i < numPods; i++ {
 				pods.Items = append(pods.Items, corev1.Pod{
 					ObjectMeta: metav1.ObjectMeta{
-						Name:        fmt.Sprintf("testing-pod-name-%b", i),
-						Namespace:   "testing-namespace",
-						ClusterName: "staging",
+						Name:      fmt.Sprintf("testing-pod-name-%b", i),
+						Namespace: "testing-namespace",
+						Labels: map[string]string{
+							clusterClutchNameLabel: "staging",
+						},
 					},
 				})
 			}
@@ -218,7 +224,7 @@ func TestListPods(t *testing.T) {
 func TestPodDescription(t *testing.T) {
 	t.Parallel()
 
-	var podTestCases = []struct {
+	podTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -230,7 +236,9 @@ func TestPodDescription(t *testing.T) {
 			expectedClusterName: "production",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					StartTime: &metav1.Time{},
@@ -260,7 +268,9 @@ func TestPodDescription(t *testing.T) {
 			expectedClusterName: "staging",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "",
+					},
 				},
 				Status: corev1.PodStatus{
 					StartTime: &metav1.Time{},
@@ -309,10 +319,12 @@ func TestUpdatePod(t *testing.T) {
 	pods := &corev1.PodList{}
 	pods.Items = append(pods.Items, corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        "testing-pod-name",
-			Namespace:   "testing-namespace",
-			ClusterName: "staging",
-			Labels:      map[string]string{"foo": "bar"},
+			Name:      "testing-pod-name",
+			Namespace: "testing-namespace",
+			Labels: map[string]string{
+				"foo":                  "bar",
+				clusterClutchNameLabel: "staging",
+			},
 			Annotations: map[string]string{"baz": "quuz"},
 		},
 	})
@@ -340,7 +352,8 @@ func TestUpdatePod(t *testing.T) {
 					Interface: &fakeClient,
 					namespace: "testing-namespace",
 					cluster:   "testing-cluster",
-				}},
+				},
+			},
 		},
 	}
 
@@ -431,7 +444,7 @@ func TestUpdatePod(t *testing.T) {
 func TestMakeContainers(t *testing.T) {
 	t.Parallel()
 
-	var podTestCases = []struct {
+	podTestCases := []struct {
 		id                 string
 		expectedContainers []*k8sv1.Container
 		statuses           []corev1.ContainerStatus
@@ -523,7 +536,7 @@ func TestPodStatus(t *testing.T) {
 	t.Parallel()
 
 	timeStamp := metav1.Now()
-	var podTestCases = []struct {
+	podTestCases := []struct {
 		id                string
 		expectedPodStatus string
 		pod               *corev1.Pod
@@ -533,7 +546,9 @@ func TestPodStatus(t *testing.T) {
 			expectedPodStatus: "CreateContainerError",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{
@@ -556,7 +571,9 @@ func TestPodStatus(t *testing.T) {
 			expectedPodStatus: "CrashLoopBackOff",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{
@@ -579,7 +596,9 @@ func TestPodStatus(t *testing.T) {
 			expectedPodStatus: "Running",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					Phase: "Running",
@@ -612,7 +631,9 @@ func TestPodStatus(t *testing.T) {
 			expectedPodStatus: "Init: 0/0",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					InitContainerStatuses: []corev1.ContainerStatus{
@@ -635,7 +656,9 @@ func TestPodStatus(t *testing.T) {
 			expectedPodStatus: "Signal: 9",
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clusterClutchNameLabel: "production",
+					},
 				},
 				Status: corev1.PodStatus{
 					ContainerStatuses: []corev1.ContainerStatus{

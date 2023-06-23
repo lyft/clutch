@@ -26,9 +26,11 @@ func TestProcessInformerEvent(t *testing.T) {
 
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			ClusterName: "cluster",
-			Name:        "test-pod-1",
-			Namespace:   "testing-namespace",
+			Name:      "test-pod-1",
+			Namespace: "testing-namespace",
+			Labels: map[string]string{
+				clusterClutchNameLabel: "cluster",
+			},
 		},
 	}
 
