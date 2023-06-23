@@ -89,6 +89,7 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 
 func ProcessObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
 	HandlerObj := &k8sapiv1.Probe{}
+
 	if objProbe.ProbeHandler.HTTPGet != nil {
 		ObjProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(objProbe.ProbeHandler.HTTPGet.HTTPHeaders))
 		for _, value := range objProbe.ProbeHandler.HTTPGet.HTTPHeaders {
