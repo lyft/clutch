@@ -87,9 +87,16 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		return nil, err
 	}
 
-	// Note if field selector is blank it will return everything
 	totalEventList := []corev1.Event{}
 	fs := convertTypesToFieldSelectors(types)
+	// Note if field selector is blank it will return everything
+	if len(fs) == 0 {
+		eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{})
+		if err != nil {
+			return nil, err
+		}
+		totalEventList = append(totalEventList, eventList.Items...)
+	}
 	for _, f := range fs {
 		eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: f})
 		if err != nil {
