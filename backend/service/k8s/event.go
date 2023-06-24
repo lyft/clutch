@@ -35,6 +35,7 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 	return events, nil
 }
 
+// For ease of use, we can sort the events in reverse chronological order
 func sortEventsByTime(events []*k8sapiv1.Event) {
 	sort.Slice(events, func(i, j int) bool {
 		return events[i].CreationTimeMillis > events[j].CreationTimeMillis
@@ -132,7 +133,7 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
-	// Sort by CreationTimeMillis
+	// Sort by CreationTimeMillis, this is needed because we might have multiple types of events
 	sortEventsByTime(events)
 
 	return events, nil
