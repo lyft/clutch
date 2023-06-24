@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"sort"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -34,6 +35,25 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 	return events, nil
 }
 
+func sortEventsByTime(events []*k8sapiv1.Event) {
+	sort.Slice(events, func(i, j int) bool {
+		return events[i].CreationTimeMillis > events[j].CreationTimeMillis
+	})
+}
+
+func convertTypeStringToEnum(str string) k8sapiv1.EventType {
+	switch str {
+	case "Normal":
+		return k8sapiv1.EventType_NORMAL
+	case "Warning":
+		return k8sapiv1.EventType_WARNING
+	case "Error":
+		return k8sapiv1.EventType_ERROR
+	default:
+		return k8sapiv1.EventType_TYPE_UNSPECIFIED
+	}
+}
+
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	clusterName := k8sEvent.ClusterName
 	if clusterName == "" {
@@ -53,6 +73,7 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 		InvolvedObjectName: k8sEvent.InvolvedObject.Name,
 		Kind:               protoForObjectKind(k8sEvent.InvolvedObject.Kind),
 		CreationTimeMillis: k8sEvent.GetObjectMeta().GetCreationTimestamp().UnixMilli(),
+		Type:               convertTypeStringToEnum(k8sEvent.Type),
 	}
 }
 
@@ -111,6 +132,8 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
+	// Sort by CreationTimeMillis
+	sortEventsByTime(events)
 
 	return events, nil
 }
