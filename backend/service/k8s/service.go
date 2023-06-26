@@ -69,7 +69,7 @@ func (s *svc) DeleteService(ctx context.Context, clientset, cluster, namespace, 
 }
 
 func ProtoForService(cluster string, k8sservice *corev1.Service) *k8sapiv1.Service {
-	clusterName := GetKubeCluster(k8sservice)
+	clusterName := GetKubeClusterName(k8sservice)
 	if clusterName == "" {
 		clusterName = cluster
 	}

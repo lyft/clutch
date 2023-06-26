@@ -185,7 +185,7 @@ func TestProtoForJob(t *testing.T) {
 			job: &v1.Job{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 			},
@@ -197,7 +197,7 @@ func TestProtoForJob(t *testing.T) {
 			job: &v1.Job{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "staging",
+						clutchLabelClusterName: "staging",
 					},
 				},
 			},

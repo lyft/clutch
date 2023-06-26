@@ -33,7 +33,7 @@ func (s *svc) DescribeNamespace(ctx context.Context, clientset, cluster, name st
 }
 
 func ProtoForNamespace(cluster string, k8snamespace *corev1.Namespace) *k8sapiv1.Namespace {
-	clusterName := GetKubeCluster(k8snamespace)
+	clusterName := GetKubeClusterName(k8snamespace)
 	if clusterName == "" {
 		clusterName = cluster
 	}

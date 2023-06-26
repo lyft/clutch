@@ -24,7 +24,7 @@ func TestGetPodLogs(t *testing.T) {
 				Namespace: "testing-namespace",
 				Labels: map[string]string{
 					"foo":                  "bar",
-					clusterClutchNameLabel: "core-testing",
+					clutchLabelClusterName: "core-testing",
 				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},

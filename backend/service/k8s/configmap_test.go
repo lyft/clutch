@@ -171,7 +171,7 @@ func TestProtoForConfigMap(t *testing.T) {
 			configMap: &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"cluster.clutch.sh/name": "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 			},
@@ -183,7 +183,7 @@ func TestProtoForConfigMap(t *testing.T) {
 			configMap: &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"cluster.clutch.sh/name": "staging",
+						clutchLabelClusterName: "staging",
 					},
 				},
 			},
@@ -195,7 +195,7 @@ func TestProtoForConfigMap(t *testing.T) {
 			configMap: &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"cluster.clutch.sh/name": "test",
+						clutchLabelClusterName: "test",
 					},
 				},
 				Data: map[string]string{

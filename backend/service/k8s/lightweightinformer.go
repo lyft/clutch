@@ -72,7 +72,7 @@ func NewLightweightInformer(
 				}
 
 				incomingObjectMeta.SetLabels(labels.Merge(incomingObjectMeta.GetLabels(), labels.Set{
-					clusterClutchNameLabel: clusterName,
+					clutchLabelClusterName: clusterName,
 				}))
 
 				switch d.Type {
@@ -91,8 +91,7 @@ func NewLightweightInformer(
 						if err := cacheStore.Add(lightweightObj); err != nil {
 							return err
 						}
-						// (mikecutalo) : double check what isInInitialList is doing
-						h.OnAdd(d.Object, false)
+						h.OnAdd(d.Object, isInInitialList)
 					}
 				case cache.Deleted:
 					if err := cacheStore.Delete(lightweightObj); err != nil {

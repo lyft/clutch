@@ -227,7 +227,7 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 			deployment: &appsv1.Deployment{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 			},
@@ -239,7 +239,7 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 			deployment: &appsv1.Deployment{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 				},
 			},

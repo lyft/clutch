@@ -35,7 +35,7 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 }
 
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
-	clusterName := GetKubeCluster(k8sEvent)
+	clusterName := GetKubeClusterName(k8sEvent)
 	if clusterName == "" {
 		clusterName = cluster
 	}

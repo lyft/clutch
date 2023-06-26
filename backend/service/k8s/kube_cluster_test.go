@@ -10,7 +10,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
-func TestGetKubeCluster(t *testing.T) {
+func TestGetKubeClusterName(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name   string
@@ -21,7 +21,7 @@ func TestGetKubeCluster(t *testing.T) {
 			name: "should find cluster",
 			obj: &metav1.ObjectMeta{
 				Labels: map[string]string{
-					clusterClutchNameLabel: "meow",
+					clutchLabelClusterName: "meow",
 				},
 			},
 			expect: "meow",
@@ -39,7 +39,7 @@ func TestGetKubeCluster(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, tt.expect, GetKubeCluster(tt.obj))
+			assert.Equal(t, tt.expect, GetKubeClusterName(tt.obj))
 		})
 	}
 }
@@ -79,7 +79,7 @@ func TestApplyClusterLabels(t *testing.T) {
 			err := ApplyClusterLabels(tt.cluster, tt.obj)
 			if !tt.shouldError {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.cluster, GetKubeCluster(tt.obj))
+				assert.Equal(t, tt.cluster, GetKubeClusterName(tt.obj))
 			} else {
 				assert.Error(t, err)
 			}

@@ -69,7 +69,7 @@ func (s *svc) ListConfigMaps(ctx context.Context, clientset, cluster, namespace 
 }
 
 func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.ConfigMap {
-	clusterName := GetKubeCluster(k8sconfigMap)
+	clusterName := GetKubeClusterName(k8sconfigMap)
 	if clusterName == "" {
 		clusterName = cluster
 	}

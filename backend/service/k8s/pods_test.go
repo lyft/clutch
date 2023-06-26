@@ -37,7 +37,7 @@ func testPodClientset() *fake.Clientset {
 				Namespace: "testing-namespace",
 				Labels: map[string]string{
 					"foo":                  "bar",
-					clusterClutchNameLabel: "production",
+					clutchLabelClusterName: "production",
 				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -56,7 +56,7 @@ func testPodClientset() *fake.Clientset {
 				Namespace: "testing-namespace",
 				Labels: map[string]string{
 					"foo":                  "bar",
-					clusterClutchNameLabel: "staging",
+					clutchLabelClusterName: "staging",
 				},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -102,7 +102,7 @@ func testListFakeClientset(numPods int) *fake.Clientset {
 						Name:      fmt.Sprintf("testing-pod-name-%b", i),
 						Namespace: "testing-namespace",
 						Labels: map[string]string{
-							clusterClutchNameLabel: "staging",
+							clutchLabelClusterName: "staging",
 						},
 					},
 				})
@@ -237,7 +237,7 @@ func TestPodDescription(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -269,7 +269,7 @@ func TestPodDescription(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -323,7 +323,7 @@ func TestUpdatePod(t *testing.T) {
 			Namespace: "testing-namespace",
 			Labels: map[string]string{
 				"foo":                  "bar",
-				clusterClutchNameLabel: "staging",
+				clutchLabelClusterName: "staging",
 			},
 			Annotations: map[string]string{"baz": "quuz"},
 		},
@@ -547,7 +547,7 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -572,7 +572,7 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -597,7 +597,7 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -632,7 +632,7 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{
@@ -657,7 +657,7 @@ func TestPodStatus(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Status: corev1.PodStatus{

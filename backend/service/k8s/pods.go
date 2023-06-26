@@ -171,7 +171,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
 	// 	launch = converted
 	// }
-	clusterName := GetKubeCluster(k8spod)
+	clusterName := GetKubeClusterName(k8spod)
 	if clusterName == "" {
 		clusterName = cluster
 	}

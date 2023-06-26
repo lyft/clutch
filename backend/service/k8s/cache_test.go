@@ -29,7 +29,7 @@ func TestProcessInformerEvent(t *testing.T) {
 			Name:      "test-pod-1",
 			Namespace: "testing-namespace",
 			Labels: map[string]string{
-				clusterClutchNameLabel: "cluster",
+				clutchLabelClusterName: "cluster",
 			},
 		},
 	}

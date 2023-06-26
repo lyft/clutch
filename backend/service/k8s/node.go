@@ -34,7 +34,7 @@ func (s *svc) DescribeNode(ctx context.Context, clientset, cluster, name string)
 }
 
 func ProtoForNode(cluster string, k8snode *corev1.Node) *k8sapiv1.Node {
-	clusterName := GetKubeCluster(k8snode)
+	clusterName := GetKubeClusterName(k8snode)
 	if clusterName == "" {
 		clusterName = cluster
 	}

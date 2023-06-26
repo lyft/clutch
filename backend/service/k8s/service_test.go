@@ -105,7 +105,7 @@ func TestProtoForServiceClusterName(t *testing.T) {
 			service: &corev1.Service{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 			},
@@ -117,7 +117,7 @@ func TestProtoForServiceClusterName(t *testing.T) {
 			service: &corev1.Service{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 				},
 			},

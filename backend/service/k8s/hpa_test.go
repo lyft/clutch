@@ -135,7 +135,7 @@ func TestProtoForHPAClusterName(t *testing.T) {
 			hpa: &autoscalingv1.HorizontalPodAutoscaler{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
@@ -151,7 +151,7 @@ func TestProtoForHPAClusterName(t *testing.T) {
 			hpa: &autoscalingv1.HorizontalPodAutoscaler{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 				},
 				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{

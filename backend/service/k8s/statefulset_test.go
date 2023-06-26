@@ -183,7 +183,7 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 				},
 			},
@@ -195,7 +195,7 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 				},
 			},

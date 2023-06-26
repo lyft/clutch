@@ -88,7 +88,7 @@ func TestProtoForCron(t *testing.T) {
 			cron: &v1beta1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "production",
+						clutchLabelClusterName: "production",
 					},
 					Name: "test1",
 				},
@@ -102,7 +102,7 @@ func TestProtoForCron(t *testing.T) {
 			cron: &v1beta1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						clusterClutchNameLabel: "",
+						clutchLabelClusterName: "",
 					},
 					Name: "test2",
 				},
