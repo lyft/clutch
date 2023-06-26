@@ -423,6 +423,20 @@ func TestProtoForDeploymentSpecWithProbes(t *testing.T) {
 			deployment := ProtoForDeployment("", tt.deployment)
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds)
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						LivenessProbe: &k8sapiv1.Probe{
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
 		})
 	}
 }
