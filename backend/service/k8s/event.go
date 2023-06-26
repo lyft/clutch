@@ -127,7 +127,8 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		totalEventList = append(totalEventList, eventList.Items...)
 	}
 
-	// in the future, could also potentially return full event object rather than the subset in ProtoForEvent
+	// in the future, could also potentially return full event object rather than the subset in
+	// ProtoForEvent()
 	var events []*k8sapiv1.Event
 	for _, ev := range totalEventList {
 		ev := ev
