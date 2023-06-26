@@ -69,12 +69,15 @@ func getClutchComponentFromFile(path string) (*Component, bool) {
 	relPath := regexp.MustCompile(`^.*?(backend/.*?)$`).FindStringSubmatch(path)[1]
 	url := fmt.Sprintf("https://github.com/lyft/clutch/blob/main/%s", relPath)
 
-	t := regexp.MustCompile(`clutch\.(\w+)\.`).FindStringSubmatch(nameStr)[1]
+	t := regexp.MustCompile(`clutch\.(\w+)\.`).FindStringSubmatch(nameStr)
+	if len(t) == 0 {
+		return nil, false
+	}
 
 	component := &Component{
 		Name:      nameStr,
 		URL:       url,
-		Type:      t,
+		Type:      t[1],
 		ClutchDoc: cd,
 	}
 	return component, true
