@@ -172,7 +172,7 @@ func TestCreateJob(t *testing.T) {
 func TestProtoForJob(t *testing.T) {
 	t.Parallel()
 
-	var jobTestCases = []struct {
+	jobTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -184,7 +184,9 @@ func TestProtoForJob(t *testing.T) {
 			expectedClusterName: "production",
 			job: &v1.Job{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clutchLabelClusterName: "production",
+					},
 				},
 			},
 		},
@@ -194,7 +196,9 @@ func TestProtoForJob(t *testing.T) {
 			expectedClusterName: "staging",
 			job: &v1.Job{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clutchLabelClusterName: "staging",
+					},
 				},
 			},
 		},

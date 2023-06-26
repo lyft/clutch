@@ -70,7 +70,7 @@ func (s *svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, 
 }
 
 func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.CronJob {
-	clusterName := k8scronJob.ClusterName
+	clusterName := GetKubeClusterName(k8scronJob)
 	if clusterName == "" {
 		clusterName = cluster
 	}

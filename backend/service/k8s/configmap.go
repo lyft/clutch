@@ -20,7 +20,6 @@ func (s *svc) DescribeConfigMap(ctx context.Context, clientset, cluster, namespa
 	configMapList, err := cs.CoreV1().ConfigMaps(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +69,7 @@ func (s *svc) ListConfigMaps(ctx context.Context, clientset, cluster, namespace 
 }
 
 func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.ConfigMap {
-	clusterName := k8sconfigMap.ClusterName
+	clusterName := GetKubeClusterName(k8sconfigMap)
 	if clusterName == "" {
 		clusterName = cluster
 	}

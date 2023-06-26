@@ -85,7 +85,7 @@ func (s *svc) ListJobs(ctx context.Context, clientset, cluster, namespace string
 }
 
 func protoForJob(cluster string, k8sJob *v1.Job) *k8sapiv1.Job {
-	clusterName := k8sJob.ClusterName
+	clusterName := GetKubeClusterName(k8sJob)
 	if clusterName == "" {
 		clusterName = cluster
 	}

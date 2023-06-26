@@ -21,7 +21,6 @@ func (s *svc) DescribeNode(ctx context.Context, clientset, cluster, name string)
 	nodes, err := cs.CoreV1().Nodes().List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +34,7 @@ func (s *svc) DescribeNode(ctx context.Context, clientset, cluster, name string)
 }
 
 func ProtoForNode(cluster string, k8snode *corev1.Node) *k8sapiv1.Node {
-	clusterName := k8snode.ClusterName
+	clusterName := GetKubeClusterName(k8snode)
 	if clusterName == "" {
 		clusterName = cluster
 	}
