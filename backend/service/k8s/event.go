@@ -56,7 +56,7 @@ func convertTypeStringToEnum(str string) k8sapiv1.EventType {
 }
 
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
-	clusterName := GetKubeClusterName(k8sEvent)
+	clusterName := k8sEvent.ClusterName
 	if clusterName == "" {
 		clusterName = cluster
 	}
@@ -133,7 +133,8 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
-	// Sort by CreationTimeMillis, this is needed because we might have multiple types of events
+	// Sort in reverse chronological order (by CreationTimeMillis),
+	// this is needed because we might have multiple types of events
 	sortEventsByTime(events)
 
 	return events, nil
