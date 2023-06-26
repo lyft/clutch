@@ -56,6 +56,10 @@ func convertTypeStringToEnum(str string) k8sapiv1.EventType {
 }
 
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
+	clusterName := GetKubeClusterName(k8sEvent)
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	// Note for timestamps - in k8s 1.25 LastTimestamp is deprecated in favor of
 	// EventTime. However, some objects currently use EventTime, while others use LastTimestamp. Using the
 	// CreationTime from the Metadata is an option as it refers to the creation of the object by the server.
