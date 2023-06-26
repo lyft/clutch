@@ -66,7 +66,7 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	// See https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
 	// See also https://github.com/kubernetes/kubernetes/issues/90482 for a discussion on different timestamps.
 	return &k8sapiv1.Event{
-		Cluster:            cluster,
+		Cluster:            clusterName,
 		Namespace:          k8sEvent.Namespace,
 		Name:               k8sEvent.Name,
 		Reason:             k8sEvent.Reason,
