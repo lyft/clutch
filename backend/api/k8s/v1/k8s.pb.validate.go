@@ -3884,6 +3884,51 @@ func (m *HTTPGetAction) validate(all bool) error {
 
 	var errors []error
 
+	if !_HTTPGetAction_Path_Pattern.MatchString(m.GetPath()) {
+		err := HTTPGetActionValidationError{
+			field:  "Path",
+			reason: "value does not match regex pattern \"^/.*$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetPort(); val < 0 || val > 65535 {
+		err := HTTPGetActionValidationError{
+			field:  "Port",
+			reason: "value must be inside range [0, 65535]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if err := m._validateHostname(m.GetHost()); err != nil {
+		err = HTTPGetActionValidationError{
+			field:  "Host",
+			reason: "value must be a valid hostname",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if !_HTTPGetAction_Scheme_Pattern.MatchString(m.GetScheme()) {
+		err := HTTPGetActionValidationError{
+			field:  "Scheme",
+			reason: "value does not match regex pattern \"^(http|https)$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	for idx, item := range m.GetHttpHeaders() {
 		_, _ = idx, item
 
@@ -3918,24 +3963,38 @@ func (m *HTTPGetAction) validate(all bool) error {
 
 	}
 
-	if m.Path != nil {
-		// no validation rules for Path
-	}
-
-	if m.Port != nil {
-		// no validation rules for Port
-	}
-
-	if m.Host != nil {
-		// no validation rules for Host
-	}
-
-	if m.Scheme != nil {
-		// no validation rules for Scheme
-	}
-
 	if len(errors) > 0 {
 		return HTTPGetActionMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *HTTPGetAction) _validateHostname(host string) error {
+	s := strings.ToLower(strings.TrimSuffix(host, "."))
+
+	if len(host) > 253 {
+		return errors.New("hostname cannot exceed 253 characters")
+	}
+
+	for _, part := range strings.Split(s, ".") {
+		if l := len(part); l == 0 || l > 63 {
+			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
+		}
+
+		if part[0] == '-' {
+			return errors.New("hostname parts cannot begin with hyphens")
+		}
+
+		if part[len(part)-1] == '-' {
+			return errors.New("hostname parts cannot end with hyphens")
+		}
+
+		for _, r := range part {
+			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
+				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
+			}
+		}
 	}
 
 	return nil
@@ -4011,6 +4070,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = HTTPGetActionValidationError{}
+
+var _HTTPGetAction_Path_Pattern = regexp.MustCompile("^/.*$")
+
+var _HTTPGetAction_Scheme_Pattern = regexp.MustCompile("^(http|https)$")
 
 // Validate checks the field values on HTTPHeader with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -4141,16 +4204,61 @@ func (m *TCPSocketAction) validate(all bool) error {
 
 	var errors []error
 
-	if m.Port != nil {
-		// no validation rules for Port
+	if val := m.GetPort(); val < 0 || val > 65535 {
+		err := TCPSocketActionValidationError{
+			field:  "Port",
+			reason: "value must be inside range [0, 65535]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.Host != nil {
-		// no validation rules for Host
+	if err := m._validateHostname(m.GetHost()); err != nil {
+		err = TCPSocketActionValidationError{
+			field:  "Host",
+			reason: "value must be a valid hostname",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
 		return TCPSocketActionMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *TCPSocketAction) _validateHostname(host string) error {
+	s := strings.ToLower(strings.TrimSuffix(host, "."))
+
+	if len(host) > 253 {
+		return errors.New("hostname cannot exceed 253 characters")
+	}
+
+	for _, part := range strings.Split(s, ".") {
+		if l := len(part); l == 0 || l > 63 {
+			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
+		}
+
+		if part[0] == '-' {
+			return errors.New("hostname parts cannot begin with hyphens")
+		}
+
+		if part[len(part)-1] == '-' {
+			return errors.New("hostname parts cannot end with hyphens")
+		}
+
+		for _, r := range part {
+			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
+				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
+			}
+		}
 	}
 
 	return nil
@@ -4249,12 +4357,26 @@ func (m *GRPCAction) validate(all bool) error {
 
 	var errors []error
 
-	if m.Port != nil {
-		// no validation rules for Port
+	if val := m.GetPort(); val < 0 || val > 65535 {
+		err := GRPCActionValidationError{
+			field:  "Port",
+			reason: "value must be inside range [0, 65535]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if m.Service != nil {
-		// no validation rules for Service
+	if !_GRPCAction_Service_Pattern.MatchString(m.GetService()) {
+		err := GRPCActionValidationError{
+			field:  "Service",
+			reason: "value does not match regex pattern \"^$|^[a-zA-Z0-9.-]+$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -4333,6 +4455,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GRPCActionValidationError{}
+
+var _GRPCAction_Service_Pattern = regexp.MustCompile("^$|^[a-zA-Z0-9.-]+$")
 
 // Validate checks the field values on Probe with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

@@ -39955,35 +39955,35 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * HTTPGetAction path.
-                 * @member {string|null|undefined} path
+                 * @member {string} path
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.path = null;
+                HTTPGetAction.prototype.path = "";
 
                 /**
                  * HTTPGetAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.port = null;
+                HTTPGetAction.prototype.port = 0;
 
                 /**
                  * HTTPGetAction host.
-                 * @member {string|null|undefined} host
+                 * @member {string} host
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.host = null;
+                HTTPGetAction.prototype.host = "";
 
                 /**
                  * HTTPGetAction scheme.
-                 * @member {string|null|undefined} scheme
+                 * @member {string} scheme
                  * @memberof clutch.k8s.v1.HTTPGetAction
                  * @instance
                  */
-                HTTPGetAction.prototype.scheme = null;
+                HTTPGetAction.prototype.scheme = "";
 
                 /**
                  * HTTPGetAction httpHeaders.
@@ -39992,53 +39992,6 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 HTTPGetAction.prototype.httpHeaders = $util.emptyArray;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * HTTPGetAction _path.
-                 * @member {"path"|undefined} _path
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_path", {
-                    get: $util.oneOfGetter($oneOfFields = ["path"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _host.
-                 * @member {"host"|undefined} _host
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_host", {
-                    get: $util.oneOfGetter($oneOfFields = ["host"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * HTTPGetAction _scheme.
-                 * @member {"scheme"|undefined} _scheme
-                 * @memberof clutch.k8s.v1.HTTPGetAction
-                 * @instance
-                 */
-                Object.defineProperty(HTTPGetAction.prototype, "_scheme", {
-                    get: $util.oneOfGetter($oneOfFields = ["scheme"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
 
                 /**
                  * Verifies a HTTPGetAction message.
@@ -40051,27 +40004,18 @@ export const clutch = $root.clutch = (() => {
                 HTTPGetAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.path != null && message.hasOwnProperty("path")) {
-                        properties._path = 1;
+                    if (message.path != null && message.hasOwnProperty("path"))
                         if (!$util.isString(message.path))
                             return "path: string expected";
-                    }
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
-                        properties._host = 1;
+                    if (message.host != null && message.hasOwnProperty("host"))
                         if (!$util.isString(message.host))
                             return "host: string expected";
-                    }
-                    if (message.scheme != null && message.hasOwnProperty("scheme")) {
-                        properties._scheme = 1;
+                    if (message.scheme != null && message.hasOwnProperty("scheme"))
                         if (!$util.isString(message.scheme))
                             return "scheme: string expected";
-                    }
                     if (message.httpHeaders != null && message.hasOwnProperty("httpHeaders")) {
                         if (!Array.isArray(message.httpHeaders))
                             return "httpHeaders: array expected";
@@ -40132,26 +40076,20 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.httpHeaders = [];
-                    if (message.path != null && message.hasOwnProperty("path")) {
+                    if (options.defaults) {
+                        object.path = "";
+                        object.port = 0;
+                        object.host = "";
+                        object.scheme = "";
+                    }
+                    if (message.path != null && message.hasOwnProperty("path"))
                         object.path = message.path;
-                        if (options.oneofs)
-                            object._path = "path";
-                    }
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
+                    if (message.host != null && message.hasOwnProperty("host"))
                         object.host = message.host;
-                        if (options.oneofs)
-                            object._host = "host";
-                    }
-                    if (message.scheme != null && message.hasOwnProperty("scheme")) {
+                    if (message.scheme != null && message.hasOwnProperty("scheme"))
                         object.scheme = message.scheme;
-                        if (options.oneofs)
-                            object._scheme = "scheme";
-                    }
                     if (message.httpHeaders && message.httpHeaders.length) {
                         object.httpHeaders = [];
                         for (let j = 0; j < message.httpHeaders.length; ++j)
@@ -40351,44 +40289,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * TCPSocketAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.TCPSocketAction
                  * @instance
                  */
-                TCPSocketAction.prototype.port = null;
+                TCPSocketAction.prototype.port = 0;
 
                 /**
                  * TCPSocketAction host.
-                 * @member {string|null|undefined} host
+                 * @member {string} host
                  * @memberof clutch.k8s.v1.TCPSocketAction
                  * @instance
                  */
-                TCPSocketAction.prototype.host = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * TCPSocketAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.TCPSocketAction
-                 * @instance
-                 */
-                Object.defineProperty(TCPSocketAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * TCPSocketAction _host.
-                 * @member {"host"|undefined} _host
-                 * @memberof clutch.k8s.v1.TCPSocketAction
-                 * @instance
-                 */
-                Object.defineProperty(TCPSocketAction.prototype, "_host", {
-                    get: $util.oneOfGetter($oneOfFields = ["host"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
+                TCPSocketAction.prototype.host = "";
 
                 /**
                  * Verifies a TCPSocketAction message.
@@ -40401,17 +40314,12 @@ export const clutch = $root.clutch = (() => {
                 TCPSocketAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
-                        properties._host = 1;
+                    if (message.host != null && message.hasOwnProperty("host"))
                         if (!$util.isString(message.host))
                             return "host: string expected";
-                    }
                     return null;
                 };
 
@@ -40447,16 +40355,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (options.defaults) {
+                        object.port = 0;
+                        object.host = "";
+                    }
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.host != null && message.hasOwnProperty("host")) {
+                    if (message.host != null && message.hasOwnProperty("host"))
                         object.host = message.host;
-                        if (options.oneofs)
-                            object._host = "host";
-                    }
                     return object;
                 };
 
@@ -40501,44 +40407,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * GRPCAction port.
-                 * @member {number|null|undefined} port
+                 * @member {number} port
                  * @memberof clutch.k8s.v1.GRPCAction
                  * @instance
                  */
-                GRPCAction.prototype.port = null;
+                GRPCAction.prototype.port = 0;
 
                 /**
                  * GRPCAction service.
-                 * @member {string|null|undefined} service
+                 * @member {string} service
                  * @memberof clutch.k8s.v1.GRPCAction
                  * @instance
                  */
-                GRPCAction.prototype.service = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * GRPCAction _port.
-                 * @member {"port"|undefined} _port
-                 * @memberof clutch.k8s.v1.GRPCAction
-                 * @instance
-                 */
-                Object.defineProperty(GRPCAction.prototype, "_port", {
-                    get: $util.oneOfGetter($oneOfFields = ["port"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * GRPCAction _service.
-                 * @member {"service"|undefined} _service
-                 * @memberof clutch.k8s.v1.GRPCAction
-                 * @instance
-                 */
-                Object.defineProperty(GRPCAction.prototype, "_service", {
-                    get: $util.oneOfGetter($oneOfFields = ["service"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
+                GRPCAction.prototype.service = "";
 
                 /**
                  * Verifies a GRPCAction message.
@@ -40551,17 +40432,12 @@ export const clutch = $root.clutch = (() => {
                 GRPCAction.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    let properties = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
-                        properties._port = 1;
+                    if (message.port != null && message.hasOwnProperty("port"))
                         if (!$util.isInteger(message.port))
                             return "port: integer expected";
-                    }
-                    if (message.service != null && message.hasOwnProperty("service")) {
-                        properties._service = 1;
+                    if (message.service != null && message.hasOwnProperty("service"))
                         if (!$util.isString(message.service))
                             return "service: string expected";
-                    }
                     return null;
                 };
 
@@ -40597,16 +40473,14 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (message.port != null && message.hasOwnProperty("port")) {
+                    if (options.defaults) {
+                        object.port = 0;
+                        object.service = "";
+                    }
+                    if (message.port != null && message.hasOwnProperty("port"))
                         object.port = message.port;
-                        if (options.oneofs)
-                            object._port = "port";
-                    }
-                    if (message.service != null && message.hasOwnProperty("service")) {
+                    if (message.service != null && message.hasOwnProperty("service"))
                         object.service = message.service;
-                        if (options.oneofs)
-                            object._service = "service";
-                    }
                     return object;
                 };
 

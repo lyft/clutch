@@ -79,7 +79,7 @@ func TestUpdateStatefulSet(t *testing.T) {
 func TestMergeStatefulSetLabelsAndAnnotations(t *testing.T) {
 	t.Parallel()
 
-	var mergeLabelAnnotationsTestCases = []struct {
+	mergeLabelAnnotationsTestCases := []struct {
 		id     string
 		fields *k8sapiv1.UpdateStatefulSetRequest_Fields
 		expect *appsv1.StatefulSet
@@ -170,7 +170,7 @@ func TestMergeStatefulSetLabelsAndAnnotations(t *testing.T) {
 func TestProtoForStatefulSetClusterName(t *testing.T) {
 	t.Parallel()
 
-	var statefulSetTestCases = []struct {
+	statefulSetTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -182,7 +182,9 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 			expectedClusterName: "production",
 			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clutchLabelClusterName: "production",
+					},
 				},
 			},
 		},
@@ -192,7 +194,9 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 			expectedClusterName: "staging",
 			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clutchLabelClusterName: "",
+					},
 				},
 			},
 		},
@@ -236,7 +240,7 @@ func TestDeleteStatefulSet(t *testing.T) {
 func TestProtoForStatus(t *testing.T) {
 	t.Parallel()
 
-	var testCases = []struct {
+	testCases := []struct {
 		id          string
 		statefulSet *appsv1.StatefulSet
 	}{

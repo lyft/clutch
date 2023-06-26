@@ -92,7 +92,7 @@ func TestListServices(t *testing.T) {
 func TestProtoForServiceClusterName(t *testing.T) {
 	t.Parallel()
 
-	var serviceTestCases = []struct {
+	serviceTestCases := []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
@@ -104,7 +104,9 @@ func TestProtoForServiceClusterName(t *testing.T) {
 			expectedClusterName: "production",
 			service: &corev1.Service{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "production",
+					Labels: map[string]string{
+						clutchLabelClusterName: "production",
+					},
 				},
 			},
 		},
@@ -114,7 +116,9 @@ func TestProtoForServiceClusterName(t *testing.T) {
 			expectedClusterName: "staging",
 			service: &corev1.Service{
 				ObjectMeta: metav1.ObjectMeta{
-					ClusterName: "",
+					Labels: map[string]string{
+						clutchLabelClusterName: "",
+					},
 				},
 			},
 		},

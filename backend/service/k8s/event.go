@@ -56,7 +56,7 @@ func convertTypeStringToEnum(str string) k8sapiv1.EventType {
 }
 
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
-	clusterName := k8sEvent.ClusterName
+	clusterName := GetKubeClusterName(k8sEvent)
 	if clusterName == "" {
 		clusterName = cluster
 	}

@@ -65,7 +65,7 @@ func (s *svc) ListDeployments(ctx context.Context, clientset, cluster, namespace
 }
 
 func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1.Deployment {
-	clusterName := deployment.ClusterName
+	clusterName := GetKubeClusterName(deployment)
 	if clusterName == "" {
 		clusterName = cluster
 	}

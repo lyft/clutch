@@ -171,7 +171,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
 	// 	launch = converted
 	// }
-	clusterName := k8spod.ClusterName
+	clusterName := GetKubeClusterName(k8spod)
 	if clusterName == "" {
 		clusterName = cluster
 	}
@@ -183,7 +183,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		NodeIp:     k8spod.Status.HostIP,
 		PodIp:      k8spod.Status.PodIP,
 		State:      protoForPodState(k8spod.Status.Phase),
-		//StartTime:   launch,
+		// StartTime:   launch,
 		Labels:         k8spod.Labels,
 		Annotations:    k8spod.Annotations,
 		StateReason:    k8spod.Status.Reason,
@@ -284,7 +284,7 @@ func protoForContainerStateRunning(state *corev1.ContainerStateRunning) *k8sapiv
 	return &k8sapiv1.Container_StateRunning{
 		StateRunning: &k8sapiv1.StateRunning{
 			// FE serialization currently does not support timestamp
-			//StartTime: state.StartedAt,
+			// StartTime: state.StartedAt,
 		},
 	}
 }
@@ -303,6 +303,7 @@ func protoForConditionType(conditionType corev1.PodConditionType) k8sapiv1.PodCo
 		return k8sapiv1.PodCondition_TYPE_UNSPECIFIED
 	}
 }
+
 func protoForConditionStatus(status corev1.ConditionStatus) k8sapiv1.PodCondition_Status {
 	switch status {
 	case corev1.ConditionTrue:

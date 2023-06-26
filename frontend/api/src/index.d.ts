@@ -16712,31 +16712,19 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IHTTPGetAction);
 
                 /** HTTPGetAction path. */
-                public path?: (string|null);
+                public path: string;
 
                 /** HTTPGetAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** HTTPGetAction host. */
-                public host?: (string|null);
+                public host: string;
 
                 /** HTTPGetAction scheme. */
-                public scheme?: (string|null);
+                public scheme: string;
 
                 /** HTTPGetAction httpHeaders. */
                 public httpHeaders: clutch.k8s.v1.IHTTPHeader[];
-
-                /** HTTPGetAction _path. */
-                public _path?: "path";
-
-                /** HTTPGetAction _port. */
-                public _port?: "port";
-
-                /** HTTPGetAction _host. */
-                public _host?: "host";
-
-                /** HTTPGetAction _scheme. */
-                public _scheme?: "scheme";
 
                 /**
                  * Verifies a HTTPGetAction message.
@@ -16847,16 +16835,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.ITCPSocketAction);
 
                 /** TCPSocketAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** TCPSocketAction host. */
-                public host?: (string|null);
-
-                /** TCPSocketAction _port. */
-                public _port?: "port";
-
-                /** TCPSocketAction _host. */
-                public _host?: "host";
+                public host: string;
 
                 /**
                  * Verifies a TCPSocketAction message.
@@ -16907,16 +16889,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IGRPCAction);
 
                 /** GRPCAction port. */
-                public port?: (number|null);
+                public port: number;
 
                 /** GRPCAction service. */
-                public service?: (string|null);
-
-                /** GRPCAction _port. */
-                public _port?: "port";
-
-                /** GRPCAction _service. */
-                public _service?: "service";
+                public service: string;
 
                 /**
                  * Verifies a GRPCAction message.
