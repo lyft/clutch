@@ -150,13 +150,13 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 	}
 
 	if identifer == column {
-		query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, columnIdentifer))
+		query = query.OrderBy(fmt.Sprintf("%s %s", strings.TrimPrefix(s.Field, columnIdentifer), direction))
 	} else if identifer == metadata {
 		mdQuery, err := convertMetadataToQuery(s.Field)
 		if err != nil {
 			return sq.SelectBuilder{}, err
 		}
-		query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
+		query = query.OrderBy(fmt.Sprintf("%s %s", mdQuery, direction))
 	}
 
 	return query, nil
