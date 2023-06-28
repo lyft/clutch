@@ -102,16 +102,19 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			},
 			pageToken: "10",
 			limit:     5,
-			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->>'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY $4 ASC LIMIT 5 OFFSET 50",
+			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->>'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY metadata->'meow'->'iam'->'a'->>'cat' ASC LIMIT 5 OFFSET 50",
 		},
 	}
-	for _, test := range testCases {
-		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit)
-		assert.NoError(t, err)
+	for _, tt := range testCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			output, _, err := paginatedQueryBuilder(tt.filter, tt.sort, tt.pageToken, tt.limit)
+			assert.NoError(t, err)
 
-		sql, _, err := output.ToSql()
-		assert.NoError(t, err)
-		assert.Equal(t, test.expect, sql)
+			sql, _, err := output.ToSql()
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expect, sql)
+		})
 	}
 }
 
@@ -269,7 +272,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "column.cat",
 				Direction: topologyv1.SearchRequest_Sort_DESCENDING,
 			},
-			expect:      "SELECT * FROM topology_cache ORDER BY $1 DESC",
+			expect:      "SELECT * FROM topology_cache ORDER BY cat DESC",
 			shouldError: false,
 		},
 		{
@@ -278,7 +281,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect:      "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			expect:      "SELECT * FROM topology_cache ORDER BY metadata->>'meow' ASC",
 			shouldError: false,
 		},
 		{
@@ -287,7 +290,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow.iam.a.cat",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect:      "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			expect:      "SELECT * FROM topology_cache ORDER BY metadata->'meow'->'iam'->'a'->>'cat' ASC",
 			shouldError: false,
 		},
 	}
