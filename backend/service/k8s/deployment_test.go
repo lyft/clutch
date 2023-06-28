@@ -692,7 +692,7 @@ func TestProtoForDeploymentSpecWithProbesReadinessHTTPGet(t *testing.T) {
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
 
 			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
-			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.HTTPGet.Host, *&probeDeployment.GetHttpGet().Host)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.HTTPGet.Host, probeDeployment.GetHttpGet().Host)
 
 			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
 			assert.NoError(t, err)
@@ -762,7 +762,7 @@ func TestProtoForDeploymentSpecWithProbesReadinessExec(t *testing.T) {
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
 
 			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
-			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.Exec.Command, *&probeDeployment.GetExec().Command)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.Exec.Command, probeDeployment.GetExec().Command)
 
 			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
 			assert.NoError(t, err)
@@ -835,7 +835,7 @@ func TestProtoForDeploymentSpecWithProbesReadinessTCP(t *testing.T) {
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
 
 			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
-			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.TCPSocket.Host, *&probeDeployment.GetTcpSocket().Host)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.TCPSocket.Host, probeDeployment.GetTcpSocket().Host)
 
 			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
 			assert.NoError(t, err)
@@ -908,7 +908,7 @@ func TestProtoForDeploymentSpecWithProbesReadinessGRPC(t *testing.T) {
 			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
 
 			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
-			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.GRPC.Port, *&probeDeployment.GetGrpc().Port)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.GRPC.Port, probeDeployment.GetGrpc().Port)
 
 			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
 			assert.NoError(t, err)
