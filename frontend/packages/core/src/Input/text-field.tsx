@@ -385,7 +385,6 @@ const TextFieldRef = (
           // Will call onChange with the value of the selected option before calling onReturn, allowing
           // the calling component to submit the form with the selected value.
           if (v && onReturn) {
-            console.log("CALLIING ONRETURN", { v });
             changeCallback({
               ...e,
               target: { ...e.target, value: v?.label || v?.id },
