@@ -366,7 +366,7 @@ func TestProtoForDeploymentStatus(t *testing.T) {
 	}
 }
 
-func TestProtoForDeploymentSpecWithProbes(t *testing.T) {
+func TestProtoForDeploymentSpecWithProbesLivenessHTTPGet(t *testing.T) {
 	t.Parallel()
 	var terminationVar int64 = 30
 	var deploymentTestCases = []struct {
@@ -374,23 +374,13 @@ func TestProtoForDeploymentSpecWithProbes(t *testing.T) {
 		deployment *appsv1.Deployment
 	}{
 		{
-			id: "foo",
+			id: "LivenessProbeHttpGetAction",
 			deployment: &appsv1.Deployment{
 				Spec: appsv1.DeploymentSpec{
 					Template: v1.PodTemplateSpec{
 						Spec: v1.PodSpec{
 							Containers: []v1.Container{
 								{
-									Resources: v1.ResourceRequirements{
-										Limits: v1.ResourceList{
-											"cpu":    resource.MustParse("500m"),
-											"memory": resource.MustParse("128Mi"),
-										},
-										Requests: v1.ResourceList{
-											"cpu":    resource.MustParse("250m"),
-											"memory": resource.MustParse("64Mi"),
-										},
-									},
 									LivenessProbe: &v1.Probe{
 										ProbeHandler: v1.ProbeHandler{
 											HTTPGet: &v1.HTTPGetAction{
@@ -430,6 +420,507 @@ func TestProtoForDeploymentSpecWithProbes(t *testing.T) {
 				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
 					{
 						LivenessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_HttpGet{
+								HttpGet: &k8sapiv1.HTTPGetAction{
+									Port: 8081,
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesLivenessExec(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "LivenessProbeExecAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									LivenessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											Exec: &v1.ExecAction{
+												Command: []string{"ls", "-l"},
+											},
+										},
+										InitialDelaySeconds:           5,
+										PeriodSeconds:                 25,
+										TimeoutSeconds:                5,
+										SuccessThreshold:              4,
+										FailureThreshold:              8,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						LivenessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_Exec{
+								Exec: &k8sapiv1.ExecAction{
+									Command: []string{"ps"},
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesLivenessTCP(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "LivenessProbeTCPAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									LivenessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											TCPSocket: &v1.TCPSocketAction{
+												Port: intstr.IntOrString{
+													IntVal: 8080,
+												},
+												Host: "/",
+											},
+										},
+										InitialDelaySeconds:           6,
+										PeriodSeconds:                 26,
+										TimeoutSeconds:                6,
+										SuccessThreshold:              10,
+										FailureThreshold:              9,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						LivenessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_TcpSocket{
+								TcpSocket: &k8sapiv1.TCPSocketAction{
+									Port: 8081,
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesLivenessGRPC(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var portGRPC int32 = 8080
+	var serviceGRPC string = "service"
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "LivenessProbeGRPCAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									LivenessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											GRPC: &v1.GRPCAction{
+												Port:    portGRPC,
+												Service: &serviceGRPC,
+											},
+										},
+										InitialDelaySeconds:           4,
+										PeriodSeconds:                 24,
+										TimeoutSeconds:                2,
+										SuccessThreshold:              4,
+										FailureThreshold:              5,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].LivenessProbe.PeriodSeconds)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						LivenessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_Grpc{
+								Grpc: &k8sapiv1.GRPCAction{
+									Service: "tmp",
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesReadinessHTTPGet(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "ReadinessProbeHttpGetAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									ReadinessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											HTTPGet: &v1.HTTPGetAction{
+												Path: "/",
+												Port: intstr.IntOrString{
+													IntVal: 8080,
+												},
+											},
+										},
+										InitialDelaySeconds:           10,
+										PeriodSeconds:                 30,
+										TimeoutSeconds:                1,
+										SuccessThreshold:              1,
+										FailureThreshold:              3,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
+
+			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.HTTPGet.Host, *&probeDeployment.GetHttpGet().Host)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						ReadinessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_HttpGet{
+								HttpGet: &k8sapiv1.HTTPGetAction{
+									Host: "/test",
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesReadinessExec(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "ReadinessProbeExecAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									ReadinessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											Exec: &v1.ExecAction{
+												Command: []string{"ls", "-l"},
+											},
+										},
+										InitialDelaySeconds:           5,
+										PeriodSeconds:                 25,
+										TimeoutSeconds:                5,
+										SuccessThreshold:              4,
+										FailureThreshold:              8,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
+
+			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.Exec.Command, *&probeDeployment.GetExec().Command)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						ReadinessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_Exec{
+								Exec: &k8sapiv1.ExecAction{
+									Command: []string{"pwd"},
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesReadinessTCP(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "ReadinessProbeTCPAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									ReadinessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											TCPSocket: &v1.TCPSocketAction{
+												Port: intstr.IntOrString{
+													IntVal: 8080,
+												},
+												Host: "/",
+											},
+										},
+										InitialDelaySeconds:           6,
+										PeriodSeconds:                 26,
+										TimeoutSeconds:                6,
+										SuccessThreshold:              10,
+										FailureThreshold:              9,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
+
+			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.TCPSocket.Host, *&probeDeployment.GetTcpSocket().Host)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						ReadinessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_TcpSocket{
+								TcpSocket: &k8sapiv1.TCPSocketAction{
+									Host: "/test",
+								},
+							},
+							InitialDelaySeconds: newInt32(20),
+							PeriodSeconds:       newInt32(15),
+						},
+					},
+				},
+			})
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestProtoForDeploymentSpecWithProbesReadinessGRPC(t *testing.T) {
+	t.Parallel()
+	var terminationVar int64 = 30
+	var portGRPC int32 = 8080
+	var serviceGRPC string = "service"
+	var deploymentTestCases = []struct {
+		id         string
+		deployment *appsv1.Deployment
+	}{
+		{
+			id: "ReadinessProbeGRPCAction",
+			deployment: &appsv1.Deployment{
+				Spec: appsv1.DeploymentSpec{
+					Template: v1.PodTemplateSpec{
+						Spec: v1.PodSpec{
+							Containers: []v1.Container{
+								{
+									ReadinessProbe: &v1.Probe{
+										ProbeHandler: v1.ProbeHandler{
+											GRPC: &v1.GRPCAction{
+												Port:    portGRPC,
+												Service: &serviceGRPC,
+											},
+										},
+										InitialDelaySeconds:           4,
+										PeriodSeconds:                 24,
+										TimeoutSeconds:                2,
+										SuccessThreshold:              4,
+										FailureThreshold:              5,
+										TerminationGracePeriodSeconds: &terminationVar,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.InitialDelaySeconds)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds, *deployment.DeploymentSpec.Template.Spec.Containers[0].ReadinessProbe.PeriodSeconds)
+
+			probeDeployment := processObjProbe(tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe)
+			assert.Equal(t, tt.deployment.Spec.Template.Spec.Containers[0].ReadinessProbe.GRPC.Port, *&probeDeployment.GetGrpc().Port)
+
+			err := updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{})
+			assert.NoError(t, err)
+			err = updateContainerProbes(tt.deployment, &k8sapiv1.UpdateDeploymentRequest_Fields{
+				ContainerProbes: []*k8sapiv1.UpdateDeploymentRequest_Fields_ContainerProbes{
+					{
+						ReadinessProbe: &k8sapiv1.Probe{
+							Handler: &k8sapiv1.Probe_Grpc{
+								Grpc: &k8sapiv1.GRPCAction{
+									Service: "tmp",
+								},
+							},
 							InitialDelaySeconds: newInt32(20),
 							PeriodSeconds:       newInt32(15),
 						},

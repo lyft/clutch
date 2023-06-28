@@ -87,7 +87,7 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 	return k8sDeployment
 }
 
-func ProcessObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
+func processObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
 	HandlerObj := &k8sapiv1.Probe{}
 
 	if objProbe.ProbeHandler.HTTPGet != nil {
@@ -160,7 +160,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 		LivenessProbeObject := &k8sapiv1.Probe{}
 		ReadinessProbeObject := &k8sapiv1.Probe{}
 		if container.LivenessProbe != nil {
-			HandlerObj := ProcessObjProbe(container.LivenessProbe)
+			HandlerObj := processObjProbe(container.LivenessProbe)
 
 			LivenessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.LivenessProbe.InitialDelaySeconds,
@@ -174,7 +174,7 @@ func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Depl
 		}
 
 		if container.ReadinessProbe != nil {
-			HandlerObj := ProcessObjProbe(container.LivenessProbe)
+			HandlerObj := processObjProbe(container.ReadinessProbe)
 
 			ReadinessProbeObject = &k8sapiv1.Probe{
 				InitialDelaySeconds:           &container.ReadinessProbe.InitialDelaySeconds,
@@ -393,18 +393,18 @@ func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.Updat
 				if handler := resourceReadinessProbe.Handler; handler != nil {
 					switch resourceReadinessProbe.Handler.(type) {
 					case *k8sapiv1.Probe_Exec:
-						container.LivenessProbe.ProbeHandler.Exec.Command = resourceReadinessProbe.GetExec().Command
+						container.ReadinessProbe.ProbeHandler.Exec.Command = resourceReadinessProbe.GetExec().Command
 					case *k8sapiv1.Probe_Grpc:
-						container.LivenessProbe.ProbeHandler.GRPC.Port = resourceReadinessProbe.GetGrpc().Port
-						container.LivenessProbe.ProbeHandler.GRPC.Service = &resourceReadinessProbe.GetGrpc().Service
+						container.ReadinessProbe.ProbeHandler.GRPC.Port = resourceReadinessProbe.GetGrpc().Port
+						container.ReadinessProbe.ProbeHandler.GRPC.Service = &resourceReadinessProbe.GetGrpc().Service
 					case *k8sapiv1.Probe_TcpSocket:
-						container.LivenessProbe.ProbeHandler.TCPSocket.Port.IntVal = resourceReadinessProbe.GetTcpSocket().Port
-						container.LivenessProbe.ProbeHandler.TCPSocket.Host = resourceReadinessProbe.GetTcpSocket().Host
+						container.ReadinessProbe.ProbeHandler.TCPSocket.Port.IntVal = resourceReadinessProbe.GetTcpSocket().Port
+						container.ReadinessProbe.ProbeHandler.TCPSocket.Host = resourceReadinessProbe.GetTcpSocket().Host
 					case *k8sapiv1.Probe_HttpGet:
-						container.LivenessProbe.ProbeHandler.HTTPGet.Host = resourceReadinessProbe.GetHttpGet().Host
-						container.LivenessProbe.ProbeHandler.HTTPGet.Path = resourceReadinessProbe.GetHttpGet().Path
-						container.LivenessProbe.ProbeHandler.HTTPGet.Port.IntVal = resourceReadinessProbe.GetHttpGet().Port
-						container.LivenessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(resourceReadinessProbe.GetHttpGet().Scheme)
+						container.ReadinessProbe.ProbeHandler.HTTPGet.Host = resourceReadinessProbe.GetHttpGet().Host
+						container.ReadinessProbe.ProbeHandler.HTTPGet.Path = resourceReadinessProbe.GetHttpGet().Path
+						container.ReadinessProbe.ProbeHandler.HTTPGet.Port.IntVal = resourceReadinessProbe.GetHttpGet().Port
+						container.ReadinessProbe.ProbeHandler.HTTPGet.Scheme = (v1.URIScheme)(resourceReadinessProbe.GetHttpGet().Scheme)
 					}
 				}
 			}
