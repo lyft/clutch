@@ -255,6 +255,7 @@ const TextFieldRef = (
   const formValidation =
     formRegistration !== undefined ? formRegistration(name, { required }) : undefined;
   const changeCallback = onChange !== undefined ? onChange : e => {};
+  const returnCallback = _.debounce(onReturn !== undefined ? onReturn : () => {}, 100);
   const onKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -263,7 +264,7 @@ const TextFieldRef = (
     }
     changeCallback(e as React.ChangeEvent<any>);
     if (e.keyCode === KEY_ENTER && onReturn && !error) {
-      onReturn();
+      returnCallback();
     }
   };
 
@@ -380,9 +381,15 @@ const TextFieldRef = (
         // the choice has updated. Note that this does not work if the `value` prop is being set
         // manually (as is the case in proj selector and proj catalog)
         // TODO: Make it work for all cases, not just the resolver and k8s dash.
-        onChange={(_e, v) => {
+        onChange={(e, v: AutocompleteResultProps) => {
+          // Will call onChange with the value of the selected option before calling onReturn, allowing
+          // the calling component to submit the form with the selected value.
           if (v && onReturn) {
-            onReturn();
+            changeCallback({
+              ...e,
+              target: { ...e.target, value: v?.label || v?.id },
+            } as React.ChangeEvent<any>);
+            returnCallback();
           }
         }}
       />

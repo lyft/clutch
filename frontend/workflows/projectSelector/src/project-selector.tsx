@@ -277,20 +277,20 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
     updateSelected(dashState);
   }, [state]);
 
-  const handleAdd = () => {
-    if (customProject === "") {
+  const handleAdd = v => {
+    if (!v.project || v?.project === "") {
       return;
     }
     dispatch({
       type: "ADD_PROJECTS",
-      payload: { group: Group.PROJECTS, projects: [customProject] },
+      payload: { group: Group.PROJECTS, projects: [v.project] },
     });
     setCustomProject("");
   };
 
   const hasError = state.error !== undefined && state.error !== null;
 
-  const { handleSubmit } = useForm({
+  const { handleSubmit, register } = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
     shouldFocusError: false,
@@ -299,6 +299,10 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const handleChanges = event => {
     setCustomProject(event.target.value);
   };
+
+  const handleSubmission = _.debounce(() => {
+    handleSubmit(handleAdd)();
+  }, 100);
 
   const { updateRefreshRate } = useRefreshUpdater();
 
@@ -398,15 +402,24 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
             {state.loading && <LinearProgress color="secondary" />}
           </StyledProgressContainer>
           <Divider />
-          <Form noValidate onSubmit={handleSubmit(handleAdd)}>
+          <Form
+            noValidate
+            onSubmit={e => {
+              e.preventDefault();
+              handleSubmission();
+            }}
+          >
             <StyledProjectTextField
               disabled={state.loading}
               placeholder="Add a project"
+              name="project"
               value={customProject}
               onChange={handleChanges}
+              onReturn={handleSubmission}
               helperText={state.error?.message}
               error={hasError}
               autocompleteCallback={v => autoComplete(v)}
+              formRegistration={register}
               endAdornment={<AddIcon />}
             />
           </Form>
