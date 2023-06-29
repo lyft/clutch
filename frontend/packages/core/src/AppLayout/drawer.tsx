@@ -9,11 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import _ from "lodash";
-import { useNavigate } from "../navigation";
 
 import type { WorkflowIcon } from "../AppProvider";
 import type { Workflow } from "../AppProvider/workflow";
 import { useAppContext } from "../Contexts";
+import { useNavigate } from "../navigation";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
 
