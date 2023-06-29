@@ -258,20 +258,12 @@ const StyledLandingCard = styled(Card)({
     lineHeight: "36px",
     color: "rgba(13, 16, 48, 0.6)",
   },
-
-  "& .header .icon .MuiAvatar-root": {
-    height: "36px",
-    width: "36px",
-    marginRight: "8px",
-    color: "rgba(13, 16, 48, 0.38)",
-    backgroundColor: "rgba(13, 16, 48, 0.12)",
-  },
 });
 
 const TruncatedText = styled(Typography)({
   display: "-webkit-box",
   overflow: "hidden",
-  "-webkit-box-orient": "vertical",
+  WebkitBoxOrient: "vertical",
   "-webkit-line-clamp": "3",
   [`@media screen and (max-width: 595px),
   screen and (min-width: 900px) and (max-width: 950px),
@@ -280,31 +272,55 @@ const TruncatedText = styled(Typography)({
   },
 });
 
+const IconAvatar = styled(Avatar)({
+  height: "36px",
+  width: "36px",
+  marginRight: "8px",
+});
+
+const StyledAvatar = styled(IconAvatar)({
+  color: "rgba(13, 16, 48, 0.38)",
+  backgroundColor: "rgba(13, 16, 48, 0.12)",
+});
+
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
   group: string;
   title: string;
   description: string;
+  icon: string;
 }
 
-export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
-  <StyledLandingCard {...props}>
-    <StyledCardActionArea className="cardActionArea" onClick={onClick}>
-      <CardContent padding={4}>
-        <div className="header">
-          <div className="icon">
-            <Avatar>{group.charAt(0)}</Avatar>
+export const LandingCard = ({
+  group,
+  title,
+  description,
+  icon,
+  onClick,
+  ...props
+}: LandingCardProps) => {
+  const validIcon = icon && icon.length > 0;
+  return (
+    <StyledLandingCard {...props}>
+      <StyledCardActionArea className="cardActionArea" onClick={onClick}>
+        <CardContent padding={4}>
+          <div className="header">
+            {validIcon ? (
+              <IconAvatar src={icon}>{group.charAt(0)}</IconAvatar>
+            ) : (
+              <StyledAvatar>{group.charAt(0)}</StyledAvatar>
+            )}
+            <span>{group}</span>
           </div>
-          <span>{group}</span>
-        </div>
-        <div>
-          <TruncatedText variant="h3">{title}</TruncatedText>
-          <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
-            {description}
-          </TruncatedText>
-        </div>
-      </CardContent>
-    </StyledCardActionArea>
-  </StyledLandingCard>
-);
+          <div>
+            <TruncatedText variant="h3">{title}</TruncatedText>
+            <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
+              {description}
+            </TruncatedText>
+          </div>
+        </CardContent>
+      </StyledCardActionArea>
+    </StyledLandingCard>
+  );
+};
 
 export { Card, CardContent, CardHeader };

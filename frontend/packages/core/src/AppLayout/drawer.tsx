@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import _ from "lodash";
+import { useNavigate } from "../navigation";
 
 import type { WorkflowIcon } from "../AppProvider";
 import type { Workflow } from "../AppProvider/workflow";
@@ -37,7 +38,7 @@ const GroupList = styled(List)({
   padding: "0px",
 });
 
-const GroupListItem = styled(ListItemButton)<{ icon: boolean }>(
+const GroupListItem = styled(ListItemButton)<{ icon: number }>(
   {
     flexDirection: "column",
     minHeight: "82px",
@@ -115,7 +116,9 @@ const Group = ({
   closeGroup,
   children,
 }: GroupProps) => {
+  const navigate = useNavigate();
   const anchorRef = React.useRef(null);
+  const singleChild = React.Children.count(children) === 1;
   const validIcon = icon.path && icon.path.length > 0;
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
@@ -133,8 +136,11 @@ const Group = ({
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
-        icon={validIcon}
+        icon={+validIcon}
         onClick={() => {
+          if (singleChild) {
+            navigate(children[0].props.to);
+          }
           updateOpenGroup(heading);
         }}
       >
@@ -144,7 +150,12 @@ const Group = ({
           <Avatar>{heading.charAt(0)}</Avatar>
         )}
         <GroupHeading align="center">{heading}</GroupHeading>
-        <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef} id="workflow-options">
+        <Popper
+          open={open && !singleChild}
+          onClickAway={closeGroup}
+          anchorRef={anchorRef}
+          id="workflow-options"
+        >
           {children}
         </Popper>
       </GroupListItem>
