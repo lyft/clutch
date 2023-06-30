@@ -82,6 +82,7 @@ const Landing: React.FC<{}> = () => {
                   description={workflow.description}
                   onClick={() => navigateTo(workflow.path)}
                   key={workflow.path}
+                  icon={workflow.icon}
                 />
               </Grid>
             ))}

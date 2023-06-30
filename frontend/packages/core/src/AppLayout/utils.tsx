@@ -19,6 +19,7 @@ interface TrendingWorkflow {
   group: string;
   description: string;
   path: string;
+  icon: string;
 }
 
 const getDisplayName = (workflow: Workflow, route: Route, delimiter: string = ":"): string => {
@@ -36,6 +37,13 @@ const getDisplayName = (workflow: Workflow, route: Route, delimiter: string = ":
 
 const workflowsByTrending = (workflows: Workflow[]): TrendingWorkflow[] => {
   const trending = [];
+  const trendingIcons = {};
+
+  workflows.forEach(workflow => {
+    if (workflow?.icon?.path && !trendingIcons[workflow.group]) {
+      trendingIcons[workflow.group] = workflow.icon.path;
+    }
+  });
 
   workflows.forEach(workflow => {
     workflow.routes.forEach(route => {
@@ -45,6 +53,7 @@ const workflowsByTrending = (workflows: Workflow[]): TrendingWorkflow[] => {
           group: workflow.group,
           description: route.description,
           path: `${workflow.path}/${route.path}`,
+          icon: trendingIcons[workflow.group] ?? "",
         });
       }
     });
