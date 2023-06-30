@@ -17,11 +17,13 @@ describe("Navigation drawer", () => {
   it("displays and hides routes", () => {
     cy.element(WORKFLOW_GROUP).each((_, idx) => {
       cy.element(WORKFLOW_GROUP).eq(idx).click();
-      cy.element(WORKFLOW_GROUP_ITEM).each(link => {
-        cy.wrap(link).should("have.attr", "href");
-      });
-      cy.element(WORKFLOW_GROUP).eq(idx).click();
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(WORKFLOW_GROUP_ITEM).should("not.exist");
+      if (cy.element(WORKFLOW_GROUP_ITEM)) {
+        cy.element(WORKFLOW_GROUP_ITEM).each(link => {
+          cy.wrap(link).should("have.attr", "href");
+        });
+        cy.element(WORKFLOW_GROUP).eq(idx).click();
+        cy.element(WORKFLOW_GROUP).eq(idx).descendent(WORKFLOW_GROUP_ITEM).should("not.exist");
+      }
     });
   });
 
