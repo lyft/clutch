@@ -188,11 +188,8 @@ const Result: React.FC<ResultProps> = ({ option, handleSelection }) => (
   </ResultGrid>
 );
 
-const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState<SearchIndex>) => {
-  return _.filter(searchOptions, o => {
-    return o.label.toLowerCase().includes(state.inputValue.toLowerCase());
-  });
-};
+const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState<SearchIndex>) =>
+  _.filter(searchOptions, o => o.label.toLowerCase().includes(state.inputValue.toLowerCase()));
 
 const SearchField: React.FC = () => {
   const { workflows } = useAppContext();
@@ -222,12 +219,13 @@ const SearchField: React.FC = () => {
       setShowOptions(true);
       setInputValue(value);
     }
-    const option = _.find(options, o => {
-      return o.label === value;
-    });
+
+    // If full match will auto navigate user to the workflow
+    const option = _.find(options, o => o.label.toLowerCase() === value.toLowerCase());
     if (option !== undefined) {
       setShowOptions(false);
       setInputValue("");
+      navigate(option.path);
     }
   };
 
