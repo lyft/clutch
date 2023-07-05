@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	v1beta1 "k8s.io/api/batch/v1beta1"
+	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
@@ -15,7 +15,7 @@ import (
 )
 
 func testCronService() *svc {
-	cron := &v1beta1.CronJob{
+	cron := &batchv1.CronJob{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        "testing-cron-name",
 			Namespace:   "testing-namespace",
@@ -78,14 +78,14 @@ func TestProtoForCron(t *testing.T) {
 		inputClusterName    string
 		expectedClusterName string
 		expectedName        string
-		cron                *v1beta1.CronJob
+		cron                *batchv1.CronJob
 	}{
 		{
 			id:                  "clustername already set",
 			inputClusterName:    "abc",
 			expectedClusterName: "production",
 			expectedName:        "test1",
-			cron: &v1beta1.CronJob{
+			cron: &batchv1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						clutchLabelClusterName: "production",
@@ -99,20 +99,20 @@ func TestProtoForCron(t *testing.T) {
 			inputClusterName:    "staging",
 			expectedClusterName: "staging",
 			expectedName:        "test2",
-			cron: &v1beta1.CronJob{
+			cron: &batchv1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						clutchLabelClusterName: "",
 					},
 					Name: "test2",
 				},
-				Spec: v1beta1.CronJobSpec{
-					ConcurrencyPolicy:       v1beta1.AllowConcurrent,
+				Spec: batchv1.CronJobSpec{
+					ConcurrencyPolicy:       batchv1.AllowConcurrent,
 					Schedule:                "5 4 * * *",
 					Suspend:                 &[]bool{true}[0],
 					StartingDeadlineSeconds: &[]int64{69}[0],
 				},
-				Status: v1beta1.CronJobStatus{
+				Status: batchv1.CronJobStatus{
 					Active: []v1.ObjectReference{{}, {}},
 				},
 			},
