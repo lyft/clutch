@@ -10,42 +10,52 @@ import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 
-const StyledLanding = styled.div({
-  backgroundColor: "#f9f9fe",
-  display: "flex",
-  flexDirection: "column",
-  flexGrow: 1,
-  "& .welcome": {
+const StyledLanding = styled.div(
+  {
     display: "flex",
-    backgroundColor: "white",
-    padding: "32px 80px",
-  },
+    flexDirection: "column",
+    flexGrow: 1,
+    "& .welcome": {
+      display: "flex",
+      padding: "32px 80px",
+    },
 
-  "& .welcome svg": {
-    flex: "0 0 auto",
-    margin: "auto 24px auto 0",
-  },
+    "& .welcome svg": {
+      flex: "0 0 auto",
+      margin: "auto 24px auto 0",
+    },
 
-  "& .welcome .welcomeText": {
-    flex: "1 1 auto",
-  },
+    "& .welcome .welcomeText": {
+      flex: "1 1 auto",
+    },
 
-  "& .welcome .title": {
-    fontWeight: "bold",
-    fontSize: "22px",
-    color: "#0d1030",
-  },
+    "& .welcome .title": {
+      fontWeight: "bold",
+      fontSize: "22px",
+    },
 
-  "& .welcome .subtitle": {
-    fontSize: "16px",
-    fontWeight: "normal",
-    color: "rgba(13, 16, 48, 0.6)",
-  },
+    "& .welcome .subtitle": {
+      fontSize: "16px",
+      fontWeight: "normal",
+    },
 
-  "& .content": {
-    padding: "32px 80px",
+    "& .content": {
+      padding: "32px 80px",
+    },
   },
-});
+  props => ({
+    backgroundColor: props.theme.palette.primary[50],
+    "& .welcome": {
+      backgroundColor: props.theme.palette.background.default,
+      "& .title": {
+        color: props.theme.palette.text.primary,
+      },
+      "& .subtitle": {
+        color: props.theme.palette.text.secondary,
+      },
+    },
+  })
+);
 
 const Landing: React.FC<{}> = () => {
   const navigate = useNavigate();

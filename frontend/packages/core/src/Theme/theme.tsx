@@ -18,25 +18,69 @@ declare module "@mui/styles/defaultTheme" {
   interface DefaultTheme extends MuiTheme {}
 }
 
+declare module "@emotion/react" {
+  interface Theme extends MuiTheme {}
+}
+
 // Create a Material UI theme is propagated to all children.
-const createTheme = (variant: ThemeVariant): MuiTheme => {
-  return createMuiTheme(
-    adaptV4Theme({
-      // inject in custom colors
-      ...clutchColors(variant),
-      palette: palette(variant),
-      transitions: {
-        // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
-        create: () => "none",
-      },
-      props: {
-        MuiButtonBase: {
-          // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+const createTheme = (variant: ThemeVariant): MuiTheme =>
+  // return createMuiTheme(
+  //   adaptV4Theme({
+  //     // inject in custom colors
+  //     ...clutchColors(variant),
+  //     palette: palette(variant),
+  //     transitions: {
+  //       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+  //       create: () => "none",
+  //     },
+  //     props: {
+  //       MuiButtonBase: {
+  //         // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+  //         disableRipple: true,
+  //       },
+  //     },
+  //     overrides: {
+  //       MuiAccordion: {
+  //         root: {
+  //           "&$expanded": {
+  //             // remove the additional margin rule when expanded so the original margin is used.
+  //             margin: null,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   })
+  // );
+  createMuiTheme({
+    palette: palette(variant),
+    transitions: {
+      create: () => "none",
+    },
+    components: {
+      MuiButtonBase: {
+        // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+        defaultProps: {
           disableRipple: true,
         },
       },
-      overrides: {
-        MuiAccordion: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            // Default as MUI changed fontSize to 1rem
+            fontSize: "0.875rem",
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          select: {
+            fontSize: "0.875rem",
+            height: "20px",
+          },
+        },
+      },
+      MuiAccordion: {
+        styleOverrides: {
           root: {
             "&$expanded": {
               // remove the additional margin rule when expanded so the original margin is used.
@@ -45,9 +89,20 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
           },
         },
       },
-    })
-  );
-};
+      // MuiTypography: {
+      //   styleOverrides: {
+      //     root: {
+      //       colorPrimary: {
+      //         color: NAVY,
+      //       },
+      //       colorSecondary: {
+      //         color: GRAY,
+      //       },
+      //     },
+      //   },
+      // },
+    },
+  });
 
 interface ThemeProps {
   variant?: "light" | "dark";
@@ -56,12 +111,10 @@ interface ThemeProps {
 
 const ThemeProvider = ({ children, variant = "light" }: ThemeProps) => (
   <StyledEngineProvider injectFirst>
-    <MuiThemeProvider theme={createTheme(variant)}>
-      <EmotionThemeProvider theme={createTheme(variant)}>
-        <CssBaseline />
-        <StylesProvider injectFirst>{children}</StylesProvider>
-      </EmotionThemeProvider>
-    </MuiThemeProvider>
+    <EmotionThemeProvider theme={createTheme(variant)}>
+      <CssBaseline />
+      <StylesProvider injectFirst>{children}</StylesProvider>
+    </EmotionThemeProvider>
   </StyledEngineProvider>
 );
 

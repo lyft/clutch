@@ -59,7 +59,6 @@ const lightPalette = (): ClutchPalette => {
 };
 
 const lightTheme = createTheme({
-  // adaptV4Theme({
   palette: lightPalette(),
   transitions: {
     // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
