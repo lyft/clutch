@@ -128,8 +128,9 @@ func (s *svc) S3GetBucketPolicy(ctx context.Context, account, region, bucket, ac
 
 func (s *svc) DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error) {
 	ret := &dynamodbv1.Table{
-		Name:   tableName,
-		Region: region,
+		Name:    tableName,
+		Region:  region,
+		Account: "default",
 		ProvisionedThroughput: &dynamodbv1.Throughput{
 			ReadCapacityUnits:  100,
 			WriteCapacityUnits: 200,
@@ -194,6 +195,7 @@ func (s *svc) UpdateCapacity(ctx context.Context, account, region, tableName str
 	ret := &dynamodbv1.Table{
 		Name:                   tableName,
 		Region:                 region,
+		Account:                "default",
 		ProvisionedThroughput:  currentThroughput,
 		Status:                 dynamodbv1.Table_Status(3),
 		GlobalSecondaryIndexes: gsis,
