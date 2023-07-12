@@ -30,7 +30,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "resolutions": {
+  "overrides": {
     "esbuild": "0.12.16"
   },
   "proxy": "http://localhost:8080"
