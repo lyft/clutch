@@ -6091,8 +6091,9 @@ type Event struct {
 	// https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
 	CreationTimeMillis int64 `protobuf:"varint,10,opt,name=creation_time_millis,json=creationTimeMillis,proto3" json:"creation_time_millis,omitempty"`
 	// type is string so that in the future it is open-ended
-	Type                string `protobuf:"bytes,11,opt,name=type,proto3" json:"type,omitempty"`
-	LastTimestampMillis int64  `protobuf:"varint,12,opt,name=last_timestamp_millis,json=lastTimestampMillis,proto3" json:"last_timestamp_millis,omitempty"`
+	Type string `protobuf:"bytes,11,opt,name=type,proto3" json:"type,omitempty"`
+	// last timestamp is the most recent time the event occurred (which can be different from the first time)
+	LastTimestampMillis int64 `protobuf:"varint,12,opt,name=last_timestamp_millis,json=lastTimestampMillis,proto3" json:"last_timestamp_millis,omitempty"`
 }
 
 func (x *Event) Reset() {

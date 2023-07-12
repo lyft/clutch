@@ -42,19 +42,6 @@ func sortEventsByLastTime(events []*k8sapiv1.Event) {
 	})
 }
 
-func convertTypeStringToEnum(str string) k8sapiv1.EventType {
-	switch str {
-	case "Normal":
-		return k8sapiv1.EventType_NORMAL
-	case "Warning":
-		return k8sapiv1.EventType_WARNING
-	case "Error":
-		return k8sapiv1.EventType_ERROR
-	default:
-		return k8sapiv1.EventType_TYPE_UNSPECIFIED
-	}
-}
-
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	clusterName := GetKubeClusterName(k8sEvent)
 	if clusterName == "" {

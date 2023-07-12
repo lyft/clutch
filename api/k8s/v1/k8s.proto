@@ -1301,6 +1301,7 @@ message Event {
   // type is string so that in the future it is open-ended
   string type = 11;
 
+  // last timestamp is the most recent time the event occurred (which can be different from the first time)
   int64 last_timestamp_millis = 12;
 }
 
