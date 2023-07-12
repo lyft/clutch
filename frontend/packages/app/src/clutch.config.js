@@ -72,6 +72,12 @@ module.exports = {
         resolverType: "clutch.k8s.v1.Node",
       },
     },
+    updateLiveness: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Deployment",
+      },
+    },
   },
   "@clutch-sh/project-catalog": {
     catalog: {
