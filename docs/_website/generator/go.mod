@@ -4,6 +4,6 @@ go 1.14
 
 require (
 	github.com/Masterminds/sprig/v3 v3.2.3
-	github.com/yoheimuta/go-protoparser/v4 v4.7.0
+	github.com/yoheimuta/go-protoparser/v4 v4.9.0
 	gopkg.in/yaml.v3 v3.0.1
 )
