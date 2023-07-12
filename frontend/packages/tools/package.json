@@ -54,8 +54,8 @@
     "react-scripts": "^5.0.1",
     "typescript": "^4.2.3"
   },
-  "overrides": {
-    "esbuild": "0.12.16"
+  "resolutions": {
+    "**/esbuild": "0.12.16"
   },
   "engines": {
     "node": ">=16.0.0 <17"
