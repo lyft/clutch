@@ -51,6 +51,7 @@ var g = []*dynamodbv1.GlobalSecondaryIndex{
 var testTable = &dynamodbv1.Table{
 	Name:                   "",
 	Region:                 "",
+	Account:                "default",
 	ProvisionedThroughput:  pt,
 	GlobalSecondaryIndexes: g,
 	Status:                 dynamodbv1.Table_Status(3),
