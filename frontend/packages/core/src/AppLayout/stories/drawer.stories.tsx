@@ -27,6 +27,7 @@ export default {
                 displayName: "EC2",
                 group: "AWS",
                 path: "ec2",
+                icon: { path: "" },
                 routes: [
                   {
                     component: () => null,
