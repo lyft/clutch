@@ -21031,7 +21031,10 @@ export namespace clutch {
                 creationTimeMillis?: (number|Long|null);
 
                 /** Event type */
-                type?: (clutch.k8s.v1.EventType|null);
+                type?: (string|null);
+
+                /** Event lastTimestampMillis */
+                lastTimestampMillis?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -21068,7 +21071,10 @@ export namespace clutch {
                 public creationTimeMillis: (number|Long);
 
                 /** Event type. */
-                public type: clutch.k8s.v1.EventType;
+                public type: string;
+
+                /** Event lastTimestampMillis. */
+                public lastTimestampMillis: (number|Long);
 
                 /**
                  * Verifies an Event message.

@@ -1294,13 +1294,15 @@ message Event {
   ObjectKind kind = 7;
 
   // This creation time refers to the metadata creation time, which the server
-  // marks when the object is created. This is generally the same as the
-  // `lastTimestamp` and `eventTime` fields in the Event object.
+  // marks when the object is created.
   // https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
   int64 creation_time_millis = 10;
 
-  // type is normal, warning, or error
-  EventType type = 11;
+  // type is string so that in the future it is open-ended
+  string type = 11;
+
+  // last timestamp is the most recent time the event occurred (which can be different from the first time)
+  int64 last_timestamp_millis = 12;
 }
 
 message ListEventsRequest {
