@@ -66,15 +66,16 @@ func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
 	// See https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#ObjectMeta
 	// See also https://github.com/kubernetes/kubernetes/issues/90482 for a discussion on different timestamps.
 	return &k8sapiv1.Event{
-		Cluster:            clusterName,
-		Namespace:          k8sEvent.Namespace,
-		Name:               k8sEvent.Name,
-		Reason:             k8sEvent.Reason,
-		Description:        k8sEvent.Message,
-		InvolvedObjectName: k8sEvent.InvolvedObject.Name,
-		Kind:               protoForObjectKind(k8sEvent.InvolvedObject.Kind),
-		CreationTimeMillis: k8sEvent.GetObjectMeta().GetCreationTimestamp().UnixMilli(),
-		Type:               convertTypeStringToEnum(k8sEvent.Type),
+		Cluster:             clusterName,
+		Namespace:           k8sEvent.Namespace,
+		Name:                k8sEvent.Name,
+		Reason:              k8sEvent.Reason,
+		Description:         k8sEvent.Message,
+		InvolvedObjectName:  k8sEvent.InvolvedObject.Name,
+		Kind:                protoForObjectKind(k8sEvent.InvolvedObject.Kind),
+		CreationTimeMillis:  k8sEvent.GetObjectMeta().GetCreationTimestamp().UnixMilli(),
+		Type:                k8sEvent.Type,
+		LastTimestampMillis: k8sEvent.LastTimestamp.UnixMilli(),
 	}
 }
 
