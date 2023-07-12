@@ -26,7 +26,6 @@ const DeploymentIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const inputData = useDataLayout("inputData");
 
   const onResolve = ({ results, input }) => {
-    // Decide how to process results.
     deploymentData.assign(results[0]);
     inputData.assign(input);
     onSubmit();
