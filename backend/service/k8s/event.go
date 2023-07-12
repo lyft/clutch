@@ -36,9 +36,9 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 }
 
 // For ease of use, we can sort the events in reverse chronological order
-func sortEventsByTime(events []*k8sapiv1.Event) {
+func sortEventsByLastTime(events []*k8sapiv1.Event) {
 	sort.Slice(events, func(i, j int) bool {
-		return events[i].CreationTimeMillis > events[j].CreationTimeMillis
+		return events[i].LastTimestampMillis > events[j].LastTimestampMillis
 	})
 }
 
@@ -123,7 +123,8 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 	for _, f := range fs {
 		eventList, err := cs.CoreV1().Events(cs.Namespace()).List(ctx, metav1.ListOptions{FieldSelector: f})
 		if err != nil {
-			return nil, err
+			// swallow any errors since we don't support partial errors right now, and if there are no events a 404 is returned
+			continue
 		}
 		totalEventList = append(totalEventList, eventList.Items...)
 	}
@@ -132,12 +133,13 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 	// ProtoForEvent()
 	var events []*k8sapiv1.Event
 	for _, ev := range totalEventList {
+		// scopelint
 		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
-	// Sort in reverse chronological order (by CreationTimeMillis),
+	// Sort in reverse chronological order (by LastTimestampMillis),
 	// this is needed because we might have multiple types of events
-	sortEventsByTime(events)
+	sortEventsByLastTime(events)
 
 	return events, nil
 }
