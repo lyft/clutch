@@ -101,7 +101,7 @@ interface GroupProps {
   heading: string;
   open: boolean;
   selected: boolean;
-  icon?: WorkflowIcon;
+  icon: WorkflowIcon;
   updateOpenGroup: (heading: string) => void;
   closeGroup: () => void;
   children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
@@ -119,7 +119,7 @@ const Group = ({
   const navigate = useNavigate();
   const anchorRef = React.useRef(null);
   const singleChild = React.Children.count(children) === 1;
-  const validIcon = icon?.path && icon?.path.length > 0;
+  const validIcon = icon.path && icon.path.length > 0;
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
