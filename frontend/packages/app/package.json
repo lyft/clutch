@@ -25,10 +25,13 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^2.0.0-beta",
-    "esbuild-loader": "^3.0.0"
+    "esbuild-loader": "^2.10.0"
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "resolutions": {
+    "esbuild": "0.12.16"
   },
   "proxy": "http://localhost:8080"
 }
