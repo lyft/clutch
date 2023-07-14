@@ -33,10 +33,12 @@ const PrimaryTemplate = ({ stepCount, activeStep }: StepperProps & { stepCount: 
   return (
     <>
       <Stepper activeStep={curStep}>
-        {[...Array(stepCount)].map((_, index: number) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Step key={index} label={`Step ${index + 1}`} />
-        ))}
+        {Array(stepCount)
+          .fill(null)
+          .map((_, index: number) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Step key={index} label={`Step ${index + 1}`} />
+          ))}
       </Stepper>
       <div>
         <Text>Step{curStep + 1} content</Text>
@@ -73,13 +75,15 @@ const FailureTemplate = ({ failedStep = 2, activeStep }: StepperProps & { failed
   return (
     <>
       <Stepper activeStep={curStep}>
-        {[...Array(stepCount)].map((_, index: number) => (
-          <Step
-            error={curStep === failedStep && index === failedStep}
-            key={index} // eslint-disable-line react/no-array-index-key
-            label={`Step ${index + 1}`}
-          />
-        ))}
+        {Array(stepCount)
+          .fill(null)
+          .map((_, index: number) => (
+            <Step
+              error={curStep === failedStep && index === failedStep}
+              key={index} // eslint-disable-line react/no-array-index-key
+              label={`Step ${index + 1}`}
+            />
+          ))}
       </Stepper>
       <div>
         <Text>Step{curStep + 1} content</Text>

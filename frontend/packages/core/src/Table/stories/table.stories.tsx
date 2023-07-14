@@ -20,10 +20,10 @@ export default {
 const Template = ({ row, ...props }: TableProps & { row: React.ReactElement }) => (
   <div style={{ maxHeight: "300px", display: "flex" }}>
     <Table {...props} columns={["Column 1", "Column 2", "Column 3", "Column 4", "Column 5"]}>
-      {
+      {Array(10)
+        .fill(null)
         // eslint-disable-next-line react/no-array-index-key
-        [...Array(10)].map((_, index: number) => React.cloneElement(row, { key: index }))
-      }
+        .map((_, index: number) => React.cloneElement(row, { key: index }))}
     </Table>
   </div>
 );
