@@ -221,12 +221,15 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 					if err != nil {
 						return false, err
 					}
-					return parsedUrl.Path == t.Path && strings.EqualFold(method, ar.Method), nil
+					if parsedUrl.Path == t.Path && strings.EqualFold(method, ar.Method) {
+						return true, nil
+					}
 				case *proxyv1cfg.AllowRequest_PathRegex:
 					// MatchString reports whether the string contains any match of the regular expression so we add the ‘^’ and ‘$’ to ensure the regex matches the full string
 					r := regexp.MustCompile(fmt.Sprintf("^%s$", t.PathRegex))
-					matched := r.MatchString(path)
-					return matched, nil
+					if r.MatchString(path) {
+						return true, nil
+					}
 				default:
 					return false, fmt.Errorf("path type not supported: %s", t)
 				}
