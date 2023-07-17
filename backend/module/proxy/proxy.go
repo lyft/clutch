@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -26,6 +27,10 @@ import (
 const (
 	Name          = "clutch.module.proxy"
 	HostHeaderKey = "Host"
+)
+
+var (
+	PathParameterRegexp = regexp.MustCompile(`{(\w+)}`)
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -92,11 +97,10 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		headers.Add(k, v)
 	}
 
-	// Parse the URL by joining both the HOST and PATH specifed by the config
-	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
+	parsedUrl, err := getParsedUrl(req, service)
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
+		return nil, err
 	}
 
 	// Constructing the request object
@@ -194,10 +198,11 @@ func responseToGetResponse(resp *proxyv1.RequestProxyResponse) *proxyv1.RequestP
 
 func getRequestToRequest(req *proxyv1.RequestProxyGetRequest) *proxyv1.RequestProxyRequest {
 	return &proxyv1.RequestProxyRequest{
-		Service:    req.Service,
-		HttpMethod: req.HttpMethod,
-		Path:       req.Path,
-		Request:    req.Request,
+		Service:       req.Service,
+		HttpMethod:    req.HttpMethod,
+		Path:          req.Path,
+		PathParameter: req.PathParameter,
+		Request:       req.Request,
 	}
 }
 
@@ -234,4 +239,17 @@ func addExcludedHeaders(request *http.Request) {
 	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
 		request.Host = hostHeader
 	}
+}
+
+func getParsedUrl(req *proxyv1.RequestProxyRequest, service *proxyv1cfg.Service) (*url.URL, error) {
+	path := req.Path
+	if req.PathParameter != "" {
+		path = PathParameterRegexp.ReplaceAllString(req.Path, req.PathParameter)
+	}
+	// Parse the URL by joining both the HOST and PATH specifed by the config
+	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, path))
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
+	}
+	return parsedUrl, nil
 }

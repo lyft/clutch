@@ -54529,6 +54529,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [httpMethod] RequestProxyRequest httpMethod
                  * @property {string|null} [path] RequestProxyRequest path
                  * @property {google.protobuf.IValue|null} [request] RequestProxyRequest request
+                 * @property {string|null} [pathParameter] RequestProxyRequest pathParameter
                  */
 
                 /**
@@ -54579,6 +54580,14 @@ export const clutch = $root.clutch = (() => {
                 RequestProxyRequest.prototype.request = null;
 
                 /**
+                 * RequestProxyRequest pathParameter.
+                 * @member {string} pathParameter
+                 * @memberof clutch.proxy.v1.RequestProxyRequest
+                 * @instance
+                 */
+                RequestProxyRequest.prototype.pathParameter = "";
+
+                /**
                  * Verifies a RequestProxyRequest message.
                  * @function verify
                  * @memberof clutch.proxy.v1.RequestProxyRequest
@@ -54603,6 +54612,9 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "request." + error;
                     }
+                    if (message.pathParameter != null && message.hasOwnProperty("pathParameter"))
+                        if (!$util.isString(message.pathParameter))
+                            return "pathParameter: string expected";
                     return null;
                 };
 
@@ -54629,6 +54641,8 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.proxy.v1.RequestProxyRequest.request: object expected");
                         message.request = $root.google.protobuf.Value.fromObject(object.request);
                     }
+                    if (object.pathParameter != null)
+                        message.pathParameter = String(object.pathParameter);
                     return message;
                 };
 
@@ -54650,6 +54664,7 @@ export const clutch = $root.clutch = (() => {
                         object.httpMethod = "";
                         object.path = "";
                         object.request = null;
+                        object.pathParameter = "";
                     }
                     if (message.service != null && message.hasOwnProperty("service"))
                         object.service = message.service;
@@ -54659,6 +54674,8 @@ export const clutch = $root.clutch = (() => {
                         object.path = message.path;
                     if (message.request != null && message.hasOwnProperty("request"))
                         object.request = $root.google.protobuf.Value.toObject(message.request, options);
+                    if (message.pathParameter != null && message.hasOwnProperty("pathParameter"))
+                        object.pathParameter = message.pathParameter;
                     return object;
                 };
 
@@ -54847,6 +54864,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [httpMethod] RequestProxyGetRequest httpMethod
                  * @property {string|null} [path] RequestProxyGetRequest path
                  * @property {google.protobuf.IValue|null} [request] RequestProxyGetRequest request
+                 * @property {string|null} [pathParameter] RequestProxyGetRequest pathParameter
                  */
 
                 /**
@@ -54897,6 +54915,14 @@ export const clutch = $root.clutch = (() => {
                 RequestProxyGetRequest.prototype.request = null;
 
                 /**
+                 * RequestProxyGetRequest pathParameter.
+                 * @member {string} pathParameter
+                 * @memberof clutch.proxy.v1.RequestProxyGetRequest
+                 * @instance
+                 */
+                RequestProxyGetRequest.prototype.pathParameter = "";
+
+                /**
                  * Verifies a RequestProxyGetRequest message.
                  * @function verify
                  * @memberof clutch.proxy.v1.RequestProxyGetRequest
@@ -54921,6 +54947,9 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "request." + error;
                     }
+                    if (message.pathParameter != null && message.hasOwnProperty("pathParameter"))
+                        if (!$util.isString(message.pathParameter))
+                            return "pathParameter: string expected";
                     return null;
                 };
 
@@ -54947,6 +54976,8 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.proxy.v1.RequestProxyGetRequest.request: object expected");
                         message.request = $root.google.protobuf.Value.fromObject(object.request);
                     }
+                    if (object.pathParameter != null)
+                        message.pathParameter = String(object.pathParameter);
                     return message;
                 };
 
@@ -54968,6 +54999,7 @@ export const clutch = $root.clutch = (() => {
                         object.httpMethod = "";
                         object.path = "";
                         object.request = null;
+                        object.pathParameter = "";
                     }
                     if (message.service != null && message.hasOwnProperty("service"))
                         object.service = message.service;
@@ -54977,6 +55009,8 @@ export const clutch = $root.clutch = (() => {
                         object.path = message.path;
                     if (message.request != null && message.hasOwnProperty("request"))
                         object.request = $root.google.protobuf.Value.toObject(message.request, options);
+                    if (message.pathParameter != null && message.hasOwnProperty("pathParameter"))
+                        object.pathParameter = message.pathParameter;
                     return object;
                 };
 

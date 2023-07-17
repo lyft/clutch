@@ -22640,6 +22640,9 @@ export namespace clutch {
 
                 /** RequestProxyRequest request */
                 request?: (google.protobuf.IValue|null);
+
+                /** RequestProxyRequest pathParameter */
+                pathParameter?: (string|null);
             }
 
             /** Represents a RequestProxyRequest. */
@@ -22662,6 +22665,9 @@ export namespace clutch {
 
                 /** RequestProxyRequest request. */
                 public request?: (google.protobuf.IValue|null);
+
+                /** RequestProxyRequest pathParameter. */
+                public pathParameter: string;
 
                 /**
                  * Verifies a RequestProxyRequest message.
@@ -22766,6 +22772,9 @@ export namespace clutch {
 
                 /** RequestProxyGetRequest request */
                 request?: (google.protobuf.IValue|null);
+
+                /** RequestProxyGetRequest pathParameter */
+                pathParameter?: (string|null);
             }
 
             /** Represents a RequestProxyGetRequest. */
@@ -22788,6 +22797,9 @@ export namespace clutch {
 
                 /** RequestProxyGetRequest request. */
                 public request?: (google.protobuf.IValue|null);
+
+                /** RequestProxyGetRequest pathParameter. */
+                public pathParameter: string;
 
                 /**
                  * Verifies a RequestProxyGetRequest message.

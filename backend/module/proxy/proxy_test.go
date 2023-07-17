@@ -306,3 +306,42 @@ func TestAddExcludedHeaders(t *testing.T) {
 		assert.Equal(t, test.expected, req.Host)
 	}
 }
+
+func TestGetParsedUrl(t *testing.T) {
+	tests := []struct {
+		request       *proxyv1.RequestProxyRequest
+		expectedPath  string
+		expectedQuery string
+	}{
+		{
+			request: &proxyv1.RequestProxyRequest{
+				Path:          "/cars/{vehicle}/count",
+				PathParameter: "foo",
+			},
+			expectedPath: "/cars/foo/count",
+		},
+		{
+			request: &proxyv1.RequestProxyRequest{
+				Path:          "/cars/{vehicle}?color=blue",
+				PathParameter: "foo",
+			},
+			expectedPath:  "/cars/foo",
+			expectedQuery: "color=blue",
+		},
+		{
+			request: &proxyv1.RequestProxyRequest{
+				Path: "/cars?color=blue",
+			},
+			expectedPath:  "/cars",
+			expectedQuery: "color=blue",
+		},
+	}
+
+	for _, test := range tests {
+		res, err := getParsedUrl(test.request, &proxyv1cfg.Service{Host: "http://test.test"})
+		assert.NoError(t, err)
+		assert.Equal(t, "test.test", res.Host)
+		assert.Equal(t, test.expectedPath, res.Path)
+		assert.Equal(t, test.expectedQuery, res.RawQuery)
+	}
+}
