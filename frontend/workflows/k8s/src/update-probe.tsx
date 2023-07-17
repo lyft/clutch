@@ -99,9 +99,7 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
                   setContainerIndex(containers.findIndex(container => container.name === value));
                   deploymentData.updateData("containerName", value);
                 }}
-                options={containers.map(container => {
-                  return { label: container.name };
-                })}
+                options={containers.map(container => ({ label: container.name }))}
               />
             ),
           },
@@ -114,104 +112,72 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
                 onChange={value => {
                   setProbeType(value);
                 }}
-                options={listedProbes.map(probe => {
-                  return { label: probe };
-                })}
+                options={listedProbes.map(probe => ({ label: probe }))}
               />
             ),
           },
           {
             name: "Initial Delay Seconds",
-            value:
-              probeType === "livenessProbe"
-                ? currentDeployment.livenessProbe.initialDelaySeconds
-                : currentDeployment.readinessProbe.initialDelaySeconds,
+            value: currentDeployment[probeType].initialDelaySeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key:
-                probeType === "livenessProbe"
-                  ? `${containerBase}.livenessProbe.initialDelaySeconds`
-                  : `${containerBase}.readinessProbe.initialDelaySeconds`,
+              key: `${containerBase}.${probeType}.initialDelaySeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Period Seconds",
-            value:
-              probeType === "livenessProbe"
-                ? currentDeployment.livenessProbe.periodSeconds
-                : currentDeployment.readinessProbe.periodSeconds,
+            value: currentDeployment[probeType].periodSeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key:
-                probeType === "livenessProbe"
-                  ? `${containerBase}.livenessProbe.periodSeconds`
-                  : `${containerBase}.readinessProbe.periodSeconds`,
+              key: `${containerBase}.${probeType}.periodSeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Timeout Seconds",
-            value:
-              probeType === "livenessProbe"
-                ? currentDeployment.livenessProbe.timeoutSeconds
-                : currentDeployment.readinessProbe.timeoutSeconds,
+            value: currentDeployment[probeType].timeoutSeconds,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key:
-                probeType === "livenessProbe"
-                  ? `${containerBase}.livenessProbe.timeoutSeconds`
-                  : `${containerBase}.readinessProbe.timeoutSeconds`,
+              key: `${containerBase}.${probeType}.timeoutSeconds`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Success Threshold",
-            value:
-              probeType === "livenessProbe"
-                ? currentDeployment.livenessProbe.successThreshold
-                : currentDeployment.readinessProbe.successThreshold,
+            value: currentDeployment[probeType].successThreshold,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key:
-                probeType === "livenessProbe"
-                  ? `${containerBase}.livenessProbe.successThreshold`
-                  : `${containerBase}.readinessProbe.successThreshold`,
+              key: `${containerBase}.${probeType}.successThreshold`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
           {
             name: "Failure Threshold",
-            value:
-              probeType === "livenessProbe"
-                ? currentDeployment.livenessProbe.failureThreshold
-                : currentDeployment.readinessProbe.failureThreshold,
+            value: currentDeployment[probeType].failureThreshold,
             textFieldLabels: {
               disabledField: "Current Value",
               updatedField: "New Value",
             },
             input: {
               type: "string",
-              key:
-                probeType === "livenessProbe"
-                  ? `${containerBase}.livenessProbe.failureThreshold`
-                  : `${containerBase}.readinessProbe.failureThreshold`,
+              key: `${containerBase}.${probeType}.failureThreshold`,
               validation: string().matches(SECONDS_REGEX),
             },
           },
@@ -241,47 +207,28 @@ const Confirm: React.FC<ConfirmChild> = () => {
       updateRows.push({ name: "Container Name", value: container.name });
       updatedContainer = true;
     }
-    Object.keys(container.livenessProbe).forEach(livenessAttribute => {
-      const typeValue = typeof container.livenessProbe[livenessAttribute];
-      if (typeValue !== "object") {
-        const newValue = container.livenessProbe[livenessAttribute];
-        const oldValue = findContainer({
-          deploymentSpec: currentDeploymentData.deploymentSpec,
-          containerName: container.name,
-        }).livenessProbe[livenessAttribute];
-        if (newValue !== oldValue) {
-          updateRows.push({
-            name: `Old ${livenessAttribute}`,
-            value: oldValue,
-          });
-          updateRows.push({
-            name: `New ${livenessAttribute}`,
-            value: newValue,
-          });
-          probeType = "livenessProbe";
+    ["livenessProbe", "readinessProbe"].forEach(pType => {
+      Object.keys(container[pType]).forEach(probeAttribute => {
+        const typeValue = typeof container[pType][probeAttribute];
+        if (typeValue !== "object") {
+          const newValue = container[pType][probeAttribute];
+          const oldValue = findContainer({
+            deploymentSpec: currentDeploymentData.deploymentSpec,
+            containerName: container.name,
+          }).livenessProbe[probeAttribute];
+          if (newValue !== oldValue) {
+            updateRows.push({
+              name: `Old ${probeAttribute}`,
+              value: oldValue,
+            });
+            updateRows.push({
+              name: `New ${probeAttribute}`,
+              value: newValue,
+            });
+            probeType = pType;
+          }
         }
-      }
-    });
-    Object.keys(container.readinessProbe).forEach(readinessAttribute => {
-      const typeValue = typeof container.readinessProbe[readinessAttribute];
-      if (typeValue !== "object") {
-        const newValue = container.readinessProbe[readinessAttribute];
-        const oldValue = findContainer({
-          deploymentSpec: currentDeploymentData.deploymentSpec,
-          containerName: container.name,
-        }).readinessProbe[readinessAttribute];
-        if (newValue !== oldValue) {
-          updateRows.push({
-            name: `Old ${readinessAttribute}`,
-            value: oldValue,
-          });
-          updateRows.push({
-            name: `New ${readinessAttribute}`,
-            value: newValue,
-          });
-          probeType = "readnessProbe";
-        }
-      }
+      });
     });
     updateRows.push({ name: "Probe type", value: probeType });
   });
