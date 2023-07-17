@@ -36,12 +36,10 @@ message RequestProxyRequest {
   string service = 1 [ (validate.rules).string.min_len = 1 ];
   // The HTTP method that will be used for the request
   string http_method = 2 [ (validate.rules).string.min_len = 1 ];
-  // The URI path to call. To specify a parameter use the pattern /path/{param}
+  // The URI path to call
   string path = 3 [ (validate.rules).string.min_len = 1 ];
   // The request body
   google.protobuf.Value request = 4 [ (clutch.api.v1.log) = false ];
-  // the paramater for the dynamic path
-  string path_parameter = 5;
 }
 
 message RequestProxyResponse {
@@ -60,12 +58,10 @@ message RequestProxyGetRequest {
   string service = 1 [ (validate.rules).string.min_len = 1 ];
   // The HTTP method that will be used for the request
   string http_method = 2 [ (validate.rules).string.min_len = 1 ];
-  // The URI path to call. To specify a parameter use the pattern /path/{param}
+  // The URI path to call
   string path = 3 [ (validate.rules).string.min_len = 1 ];
   // The request body
   google.protobuf.Value request = 4 [ (clutch.api.v1.log) = false ];
-  // the paramater for the dynamic path
-  string path_parameter = 5;
 }
 
 message RequestProxyGetResponse {

@@ -119,8 +119,6 @@ func (m *RequestProxyRequest) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for PathParameter
-
 	if len(errors) > 0 {
 		return RequestProxyRequestMultiError(errors)
 	}
@@ -463,8 +461,6 @@ func (m *RequestProxyGetRequest) validate(all bool) error {
 			}
 		}
 	}
-
-	// no validation rules for PathParameter
 
 	if len(errors) > 0 {
 		return RequestProxyGetRequestMultiError(errors)

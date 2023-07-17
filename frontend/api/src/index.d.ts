@@ -8562,6 +8562,9 @@ export namespace clutch {
                         /** AllowRequest path */
                         path?: (string|null);
 
+                        /** AllowRequest pathRegex */
+                        pathRegex?: (string|null);
+
                         /** AllowRequest method */
                         method?: (string|null);
                     }
@@ -8576,10 +8579,16 @@ export namespace clutch {
                         constructor(properties?: clutch.config.module.proxy.v1.IAllowRequest);
 
                         /** AllowRequest path. */
-                        public path: string;
+                        public path?: (string|null);
+
+                        /** AllowRequest pathRegex. */
+                        public pathRegex?: (string|null);
 
                         /** AllowRequest method. */
                         public method: string;
+
+                        /** AllowRequest pathType. */
+                        public pathType?: ("path"|"pathRegex");
 
                         /**
                          * Verifies an AllowRequest message.
@@ -22640,9 +22649,6 @@ export namespace clutch {
 
                 /** RequestProxyRequest request */
                 request?: (google.protobuf.IValue|null);
-
-                /** RequestProxyRequest pathParameter */
-                pathParameter?: (string|null);
             }
 
             /** Represents a RequestProxyRequest. */
@@ -22665,9 +22671,6 @@ export namespace clutch {
 
                 /** RequestProxyRequest request. */
                 public request?: (google.protobuf.IValue|null);
-
-                /** RequestProxyRequest pathParameter. */
-                public pathParameter: string;
 
                 /**
                  * Verifies a RequestProxyRequest message.
@@ -22772,9 +22775,6 @@ export namespace clutch {
 
                 /** RequestProxyGetRequest request */
                 request?: (google.protobuf.IValue|null);
-
-                /** RequestProxyGetRequest pathParameter */
-                pathParameter?: (string|null);
             }
 
             /** Represents a RequestProxyGetRequest. */
@@ -22797,9 +22797,6 @@ export namespace clutch {
 
                 /** RequestProxyGetRequest request. */
                 public request?: (google.protobuf.IValue|null);
-
-                /** RequestProxyGetRequest pathParameter. */
-                public pathParameter: string;
 
                 /**
                  * Verifies a RequestProxyGetRequest message.

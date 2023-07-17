@@ -29,10 +29,6 @@ const (
 	HostHeaderKey = "Host"
 )
 
-var (
-	PathParameterRegexp = regexp.MustCompile(`{(\w+)}`)
-)
-
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &proxyv1cfg.Config{}
 	err := cfg.UnmarshalTo(config)
@@ -43,7 +39,16 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 	// Validate that each services constructs a parsable URL
 	for _, service := range config.Services {
 		for _, ar := range service.AllowedRequests {
-			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, ar.Path))
+			var path string
+			switch t := ar.PathType.(type) {
+			case *proxyv1cfg.AllowRequest_Path:
+				path = t.Path
+			case *proxyv1cfg.AllowRequest_PathRegex:
+				path = t.PathRegex
+			default:
+				return nil, fmt.Errorf("path type not supported: %s", t)
+			}
+			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, path))
 			if err != nil {
 				return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 			}
@@ -97,10 +102,11 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 		headers.Add(k, v)
 	}
 
-	parsedUrl, err := getParsedUrl(req, service)
+	// Parse the URL by joining both the HOST and PATH specifed by the config
+	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, req.Path))
 	if err != nil {
 		m.logger.Error("Unable to parse the configured URL", zap.Error(err))
-		return nil, err
+		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
 	}
 
 	// Constructing the request object
@@ -198,11 +204,10 @@ func responseToGetResponse(resp *proxyv1.RequestProxyResponse) *proxyv1.RequestP
 
 func getRequestToRequest(req *proxyv1.RequestProxyGetRequest) *proxyv1.RequestProxyRequest {
 	return &proxyv1.RequestProxyRequest{
-		Service:       req.Service,
-		HttpMethod:    req.HttpMethod,
-		Path:          req.Path,
-		PathParameter: req.PathParameter,
-		Request:       req.Request,
+		Service:    req.Service,
+		HttpMethod: req.HttpMethod,
+		Path:       req.Path,
+		Request:    req.Request,
 	}
 }
 
@@ -210,13 +215,20 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 	for _, s := range services {
 		if s.Name == service {
 			for _, ar := range s.AllowedRequests {
-				parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", s.Host, path))
-				if err != nil {
-					return false, err
-				}
-
-				if parsedUrl.Path == ar.Path && strings.EqualFold(method, ar.Method) {
-					return true, nil
+				switch t := ar.PathType.(type) {
+				case *proxyv1cfg.AllowRequest_Path:
+					parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", s.Host, path))
+					if err != nil {
+						return false, err
+					}
+					return parsedUrl.Path == t.Path && strings.EqualFold(method, ar.Method), nil
+				case *proxyv1cfg.AllowRequest_PathRegex:
+					// MatchString reports whether the string contains any match of the regular expression so we add the ‘^’ and ‘$’ to ensure the regex matches the full string
+					r := regexp.MustCompile(fmt.Sprintf("^%s$", t.PathRegex))
+					matched := r.MatchString(path)
+					return matched, nil
+				default:
+					return false, fmt.Errorf("path type not supported: %s", t)
 				}
 			}
 			// return early here as were done checking allowed request for this service
@@ -239,17 +251,4 @@ func addExcludedHeaders(request *http.Request) {
 	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
 		request.Host = hostHeader
 	}
-}
-
-func getParsedUrl(req *proxyv1.RequestProxyRequest, service *proxyv1cfg.Service) (*url.URL, error) {
-	path := req.Path
-	if req.PathParameter != "" {
-		path = PathParameterRegexp.ReplaceAllString(req.Path, req.PathParameter)
-	}
-	// Parse the URL by joining both the HOST and PATH specifed by the config
-	parsedUrl, err := url.Parse(fmt.Sprintf("%s%s", service.Host, path))
-	if err != nil {
-		return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
-	}
-	return parsedUrl, nil
 }
