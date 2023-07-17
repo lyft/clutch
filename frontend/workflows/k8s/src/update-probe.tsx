@@ -55,7 +55,9 @@ const DeploymentDetails: React.FC<WizardChild> = () => {
 
   const { containers } = deployment.deploymentSpec.template.spec;
 
-  const [containerName, setContainerName] = React.useState(containers[0].name);
+  const [containerName, setContainerName] = React.useState(
+    containers && containers.length > 0 ? containers[0].name : ""
+  );
   const [probeType, setProbeType] = React.useState("livenessProbe");
 
   const [containerIndex, setContainerIndex] = React.useState(0);
@@ -294,24 +296,25 @@ const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
             ],
           },
         };
-        if (Object.keys(container.livenessProbe).length !== 0) {
-          bodyRequest.fields.containerProbes[0].livenessProbe = {
-            timeoutSeconds: container.livenessProbe.timeoutSeconds,
-            initialDelaySeconds: container.livenessProbe.initialDelaySeconds,
-            periodSeconds: container.livenessProbe.periodSeconds,
-            successThreshold: container.livenessProbe.successThreshold,
-            failureThreshold: container.livenessProbe.failureThreshold,
-          };
-        }
-        if (Object.keys(container.readinessProbe).length !== 0) {
-          bodyRequest.fields.containerProbes[0].readinessProbe = {
-            timeoutSeconds: container.readinessProbe.timeoutSeconds,
-            initialDelaySeconds: container.readinessProbe.initialDelaySeconds,
-            periodSeconds: container.readinessProbe.periodSeconds,
-            successThreshold: container.readinessProbe.successThreshold,
-            failureThreshold: container.readinessProbe.failureThreshold,
-          };
-        }
+        ["livenessProbe", "readinessProbe"].forEach(probeType => {
+          if (Object.keys(container[probeType]).length !== 0) {
+            const {
+              timeoutSeconds,
+              initialDelaySeconds,
+              periodSeconds,
+              successThreshold,
+              failureThreshold,
+            } = container[probeType];
+
+            bodyRequest.fields.containerProbes[0][probeType] = {
+              timeoutSeconds,
+              initialDelaySeconds,
+              periodSeconds,
+              successThreshold,
+              failureThreshold,
+            };
+          }
+        });
         return client.post(
           "/v1/k8s/updateDeployment",
           bodyRequest as IClutch.k8s.v1.UpdateDeploymentRequest
