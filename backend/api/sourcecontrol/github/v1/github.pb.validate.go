@@ -60,7 +60,7 @@ func (m *RepositoryParameters) validate(all bool) error {
 	if _, ok := _RepositoryParameters_Visibility_NotInLookup[m.GetVisibility()]; ok {
 		err := RepositoryParametersValidationError{
 			field:  "Visibility",
-			reason: "value must not be in list [0]",
+			reason: "value must not be in list [UNSPECIFIED]",
 		}
 		if !all {
 			return err

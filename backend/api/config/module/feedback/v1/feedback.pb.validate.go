@@ -220,7 +220,7 @@ func (m *SurveyOrigin) validate(all bool) error {
 	if _, ok := _SurveyOrigin_Origin_NotInLookup[m.GetOrigin()]; ok {
 		err := SurveyOriginValidationError{
 			field:  "Origin",
-			reason: "value must not be in list [0]",
+			reason: "value must not be in list [ORIGIN_UNSPECIFIED]",
 		}
 		if !all {
 			return err

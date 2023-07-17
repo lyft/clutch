@@ -571,7 +571,7 @@ func (m *CreateTokenRequest) validate(all bool) error {
 	if _, ok := _CreateTokenRequest_TokenType_NotInLookup[m.GetTokenType()]; ok {
 		err := CreateTokenRequestValidationError{
 			field:  "TokenType",
-			reason: "value must not be in list [0]",
+			reason: "value must not be in list [UNSPECIFIED]",
 		}
 		if !all {
 			return err
