@@ -86,7 +86,7 @@ func (m *RatingLabel) validate(all bool) error {
 		if _, ok := _RatingLabel_Emoji_NotInLookup[m.GetEmoji()]; ok {
 			err := RatingLabelValidationError{
 				field:  "Emoji",
-				reason: "value must not be in list [0]",
+				reason: "value must not be in list [EMOJI_UNSPECIFIED]",
 			}
 			if !all {
 				return err
@@ -240,7 +240,7 @@ func (m *RatingScale) validate(all bool) error {
 		if _, ok := _RatingScale_Emoji_NotInLookup[m.GetEmoji()]; ok {
 			err := RatingScaleValidationError{
 				field:  "Emoji",
-				reason: "value must not be in list [0]",
+				reason: "value must not be in list [EMOJI_UNSPECIFIED]",
 			}
 			if !all {
 				return err
@@ -807,7 +807,7 @@ func (m *FeedbackMetadata) validate(all bool) error {
 	if _, ok := _FeedbackMetadata_Origin_NotInLookup[m.GetOrigin()]; ok {
 		err := FeedbackMetadataValidationError{
 			field:  "Origin",
-			reason: "value must not be in list [0]",
+			reason: "value must not be in list [ORIGIN_UNSPECIFIED]",
 		}
 		if !all {
 			return err
