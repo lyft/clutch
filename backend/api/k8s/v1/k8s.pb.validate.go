@@ -11958,6 +11958,8 @@ func (m *Event) validate(all bool) error {
 
 	// no validation rules for LastTimestampMillis
 
+	// no validation rules for FirstTimestampMillis
+
 	if len(errors) > 0 {
 		return EventMultiError(errors)
 	}

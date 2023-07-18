@@ -1303,6 +1303,8 @@ message Event {
 
   // last timestamp is the most recent time the event occurred (which can be different from the first time)
   int64 last_timestamp_millis = 12;
+
+  int64 first_timestamp_millis = 13;
 }
 
 message ListEventsRequest {

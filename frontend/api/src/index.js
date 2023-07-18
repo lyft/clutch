@@ -50536,6 +50536,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {number|Long|null} [creationTimeMillis] Event creationTimeMillis
                  * @property {string|null} [type] Event type
                  * @property {number|Long|null} [lastTimestampMillis] Event lastTimestampMillis
+                 * @property {number|Long|null} [firstTimestampMillis] Event firstTimestampMillis
                  */
 
                 /**
@@ -50634,6 +50635,14 @@ export const clutch = $root.clutch = (() => {
                 Event.prototype.lastTimestampMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
+                 * Event firstTimestampMillis.
+                 * @member {number|Long} firstTimestampMillis
+                 * @memberof clutch.k8s.v1.Event
+                 * @instance
+                 */
+                Event.prototype.firstTimestampMillis = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
                  * Verifies an Event message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Event
@@ -50680,6 +50689,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.lastTimestampMillis != null && message.hasOwnProperty("lastTimestampMillis"))
                         if (!$util.isInteger(message.lastTimestampMillis) && !(message.lastTimestampMillis && $util.isInteger(message.lastTimestampMillis.low) && $util.isInteger(message.lastTimestampMillis.high)))
                             return "lastTimestampMillis: integer|Long expected";
+                    if (message.firstTimestampMillis != null && message.hasOwnProperty("firstTimestampMillis"))
+                        if (!$util.isInteger(message.firstTimestampMillis) && !(message.firstTimestampMillis && $util.isInteger(message.firstTimestampMillis.low) && $util.isInteger(message.firstTimestampMillis.high)))
+                            return "firstTimestampMillis: integer|Long expected";
                     return null;
                 };
 
@@ -50741,6 +50753,15 @@ export const clutch = $root.clutch = (() => {
                             message.lastTimestampMillis = object.lastTimestampMillis;
                         else if (typeof object.lastTimestampMillis === "object")
                             message.lastTimestampMillis = new $util.LongBits(object.lastTimestampMillis.low >>> 0, object.lastTimestampMillis.high >>> 0).toNumber();
+                    if (object.firstTimestampMillis != null)
+                        if ($util.Long)
+                            (message.firstTimestampMillis = $util.Long.fromValue(object.firstTimestampMillis)).unsigned = false;
+                        else if (typeof object.firstTimestampMillis === "string")
+                            message.firstTimestampMillis = parseInt(object.firstTimestampMillis, 10);
+                        else if (typeof object.firstTimestampMillis === "number")
+                            message.firstTimestampMillis = object.firstTimestampMillis;
+                        else if (typeof object.firstTimestampMillis === "object")
+                            message.firstTimestampMillis = new $util.LongBits(object.firstTimestampMillis.low >>> 0, object.firstTimestampMillis.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -50776,6 +50797,11 @@ export const clutch = $root.clutch = (() => {
                             object.lastTimestampMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.lastTimestampMillis = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.firstTimestampMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.firstTimestampMillis = options.longs === String ? "0" : 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -50803,6 +50829,11 @@ export const clutch = $root.clutch = (() => {
                             object.lastTimestampMillis = options.longs === String ? String(message.lastTimestampMillis) : message.lastTimestampMillis;
                         else
                             object.lastTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.lastTimestampMillis) : options.longs === Number ? new $util.LongBits(message.lastTimestampMillis.low >>> 0, message.lastTimestampMillis.high >>> 0).toNumber() : message.lastTimestampMillis;
+                    if (message.firstTimestampMillis != null && message.hasOwnProperty("firstTimestampMillis"))
+                        if (typeof message.firstTimestampMillis === "number")
+                            object.firstTimestampMillis = options.longs === String ? String(message.firstTimestampMillis) : message.firstTimestampMillis;
+                        else
+                            object.firstTimestampMillis = options.longs === String ? $util.Long.prototype.toString.call(message.firstTimestampMillis) : options.longs === Number ? new $util.LongBits(message.firstTimestampMillis.low >>> 0, message.firstTimestampMillis.high >>> 0).toNumber() : message.firstTimestampMillis;
                     return object;
                 };
 
