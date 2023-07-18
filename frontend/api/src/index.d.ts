@@ -21035,6 +21035,9 @@ export namespace clutch {
 
                 /** Event lastTimestampMillis */
                 lastTimestampMillis?: (number|Long|null);
+
+                /** Event firstTimestampMillis */
+                firstTimestampMillis?: (number|Long|null);
             }
 
             /** Represents an Event. */
@@ -21075,6 +21078,9 @@ export namespace clutch {
 
                 /** Event lastTimestampMillis. */
                 public lastTimestampMillis: (number|Long);
+
+                /** Event firstTimestampMillis. */
+                public firstTimestampMillis: (number|Long);
 
                 /**
                  * Verifies an Event message.
