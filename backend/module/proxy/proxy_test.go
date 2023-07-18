@@ -341,6 +341,72 @@ func TestIsAllowedRequest(t *testing.T) {
 	}
 }
 
+func TestValidateConfigPaths(t *testing.T) {
+	tests := []struct {
+		id          string
+		config      *proxyv1cfg.Config
+		shouldError bool
+	}{
+		{
+			id: "All paths parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}},
+						},
+					},
+				},
+			},
+			shouldError: false,
+		},
+		{
+			id: "Exact path type not parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: `^meow`}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}},
+						},
+					},
+				},
+			},
+			shouldError: true,
+		},
+		{
+			id: "Regex path type not parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `?:\/\/)?`}},
+						},
+					},
+				},
+			},
+			shouldError: true,
+		},
+	}
+
+	for _, test := range tests {
+		err := validateConfigPaths(test.config)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+		}
+	}
+}
+
 func TestAddExcludedHeaders(t *testing.T) {
 	tests := []struct {
 		id       string

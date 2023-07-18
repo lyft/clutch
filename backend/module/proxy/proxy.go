@@ -36,19 +36,9 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		return nil, err
 	}
 
-	for _, service := range config.Services {
-		for _, ar := range service.AllowedRequests {
-			switch t := ar.PathType.(type) {
-			case *proxyv1cfg.AllowRequest_Path:
-				// For exact path type, validate that each services constructs a parsable URL
-				_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, t.Path))
-				if err != nil {
-					return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
-				}
-			default:
-				break
-			}
-		}
+	err = validateConfigPaths(config)
+	if err != nil {
+		return nil, err
 	}
 
 	m := &mod{
@@ -221,12 +211,15 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 						return true, nil
 					}
 				case *proxyv1cfg.AllowRequest_PathRegex:
-					r := regexp.MustCompile(t.PathRegex)
+					r, err := regexp.Compile(t.PathRegex)
+					if err != nil {
+						return false, err
+					}
 					if r.MatchString(path) {
 						return true, nil
 					}
 				default:
-					return false, fmt.Errorf("path type not supported: %s", t)
+					return false, fmt.Errorf("path type not supported: %T", t)
 				}
 			}
 			// return early here as were done checking allowed request for this service
@@ -249,4 +242,28 @@ func addExcludedHeaders(request *http.Request) {
 	if hostHeader := request.Header.Get(HostHeaderKey); hostHeader != "" {
 		request.Host = hostHeader
 	}
+}
+
+func validateConfigPaths(config *proxyv1cfg.Config) error {
+	for _, service := range config.Services {
+		for _, ar := range service.AllowedRequests {
+			switch t := ar.PathType.(type) {
+			case *proxyv1cfg.AllowRequest_Path:
+				// For exact path type, validate that string constructs a parsable URL
+				_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, t.Path))
+				if err != nil {
+					return fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
+				}
+			case *proxyv1cfg.AllowRequest_PathRegex:
+				// For path regex type, validate that expression can be parsed
+				_, err := regexp.Compile(t.PathRegex)
+				if err != nil {
+					return err
+				}
+			default:
+				return fmt.Errorf("path type not supported: %T", t)
+			}
+		}
+	}
+	return nil
 }
