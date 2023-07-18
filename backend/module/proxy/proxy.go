@@ -36,21 +36,17 @@ func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error
 		return nil, err
 	}
 
-	// Validate that each services constructs a parsable URL
 	for _, service := range config.Services {
 		for _, ar := range service.AllowedRequests {
-			var path string
 			switch t := ar.PathType.(type) {
 			case *proxyv1cfg.AllowRequest_Path:
-				path = t.Path
-			case *proxyv1cfg.AllowRequest_PathRegex:
-				path = t.PathRegex
+				// For exact path type, validate that each services constructs a parsable URL
+				_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, t.Path))
+				if err != nil {
+					return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
+				}
 			default:
-				return nil, fmt.Errorf("path type not supported: %s", t)
-			}
-			_, err := url.Parse(fmt.Sprintf("%s%s", service.Host, path))
-			if err != nil {
-				return nil, fmt.Errorf("unable to parse the configured URL for service [%s]", service.Name)
+				break
 			}
 		}
 	}
@@ -225,8 +221,7 @@ func isAllowedRequest(services []*proxyv1cfg.Service, service, path, method stri
 						return true, nil
 					}
 				case *proxyv1cfg.AllowRequest_PathRegex:
-					// MatchString reports whether the string contains any match of the regular expression so we add the ‘^’ and ‘$’ to ensure the regex matches the full string
-					r := regexp.MustCompile(fmt.Sprintf("^%s$", t.PathRegex))
+					r := regexp.MustCompile(t.PathRegex)
 					if r.MatchString(path) {
 						return true, nil
 					}
