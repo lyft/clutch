@@ -371,7 +371,7 @@ func TestValidateConfigPaths(t *testing.T) {
 						Name: "cat",
 						Host: "http://test.test",
 						AllowedRequests: []*proxyv1cfg.AllowRequest{
-							{PathType: &proxyv1cfg.AllowRequest_Path{Path: `^meow`}},
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "^meow"}},
 							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}},
 						},
 					},
