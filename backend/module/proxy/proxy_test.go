@@ -28,16 +28,18 @@ func generateServicesConfig(host string) []*proxyv1cfg.Service {
 			Name: "cat",
 			Host: host,
 			AllowedRequests: []*proxyv1cfg.AllowRequest{
-				{Path: "/meow", Method: "GET"},
-				{Path: "/nom", Method: "POST"},
+				{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}, Method: "GET"},
+				{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/nom"}, Method: "POST"},
+				{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}, Method: "GET"},
 			},
 		},
 		{
 			Name: "meow",
 			Host: host,
 			AllowedRequests: []*proxyv1cfg.AllowRequest{
-				{Path: "/meow", Method: "GET"},
-				{Path: "/nom", Method: "POST"},
+				{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}, Method: "GET"},
+				{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/nom"}, Method: "POST"},
+				{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `^/meow/\w+/\w+$`}, Method: "GET"},
 			},
 		},
 	}
@@ -268,6 +270,62 @@ func TestIsAllowedRequest(t *testing.T) {
 			expect:      false,
 			shouldError: false,
 		},
+		{
+			id:          "Path string matches regex",
+			service:     "cat",
+			path:        "/cat/bengal/1",
+			method:      "POST",
+			expect:      true,
+			shouldError: false,
+		},
+		{
+			id:          "Regex expects number in path string",
+			service:     "cat",
+			path:        "/cat/bengal/abc",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
+		},
+		{
+			id:          "Regex expects third parameter in string",
+			service:     "cat",
+			path:        "/cat/bengal",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
+		},
+		{
+			id:          "Regex does not have a rule for end of string",
+			service:     "cat",
+			path:        "/cat/bengal/1/comments",
+			method:      "POST",
+			expect:      true,
+			shouldError: false,
+		},
+		{
+			id:          "Path string matches regex",
+			service:     "meow",
+			path:        "/meow/foo/sound",
+			method:      "POST",
+			expect:      true,
+			shouldError: false,
+		},
+		{
+			id:          "Path string does not match regex last character",
+			service:     "meow",
+			path:        "/meow/foo/sound/play",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
+		},
+		{
+			id:          "Path string does not match regex first character",
+			service:     "meow",
+			path:        "animals/meow/foo/sound/play",
+			method:      "POST",
+			expect:      false,
+			shouldError: false,
+		},
 	}
 
 	services := generateServicesConfig("http://test.test")
@@ -279,6 +337,72 @@ func TestIsAllowedRequest(t *testing.T) {
 		} else {
 			assert.NoError(t, err)
 			assert.Equal(t, test.expect, isAllowed)
+		}
+	}
+}
+
+func TestValidateConfigPaths(t *testing.T) {
+	tests := []struct {
+		id          string
+		config      *proxyv1cfg.Config
+		shouldError bool
+	}{
+		{
+			id: "All paths parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}},
+						},
+					},
+				},
+			},
+			shouldError: false,
+		},
+		{
+			id: "Exact path type not parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "^meow"}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `/cat/\w+/[0-9]`}},
+						},
+					},
+				},
+			},
+			shouldError: true,
+		},
+		{
+			id: "Regex path type not parsable",
+			config: &proxyv1cfg.Config{
+				Services: []*proxyv1cfg.Service{
+					{
+						Name: "cat",
+						Host: "http://test.test",
+						AllowedRequests: []*proxyv1cfg.AllowRequest{
+							{PathType: &proxyv1cfg.AllowRequest_Path{Path: "/meow"}},
+							{PathType: &proxyv1cfg.AllowRequest_PathRegex{PathRegex: `?:\/\/)?`}},
+						},
+					},
+				},
+			},
+			shouldError: true,
+		},
+	}
+
+	for _, test := range tests {
+		err := validateConfigPaths(test.config)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
 		}
 	}
 }

@@ -20536,6 +20536,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.module.proxy.v1
                          * @interface IAllowRequest
                          * @property {string|null} [path] AllowRequest path
+                         * @property {string|null} [pathRegex] AllowRequest pathRegex
                          * @property {string|null} [method] AllowRequest method
                          */
 
@@ -20556,11 +20557,19 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * AllowRequest path.
-                         * @member {string} path
+                         * @member {string|null|undefined} path
                          * @memberof clutch.config.module.proxy.v1.AllowRequest
                          * @instance
                          */
-                        AllowRequest.prototype.path = "";
+                        AllowRequest.prototype.path = null;
+
+                        /**
+                         * AllowRequest pathRegex.
+                         * @member {string|null|undefined} pathRegex
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
+                         * @instance
+                         */
+                        AllowRequest.prototype.pathRegex = null;
 
                         /**
                          * AllowRequest method.
@@ -20569,6 +20578,20 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         AllowRequest.prototype.method = "";
+
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * AllowRequest pathType.
+                         * @member {"path"|"pathRegex"|undefined} pathType
+                         * @memberof clutch.config.module.proxy.v1.AllowRequest
+                         * @instance
+                         */
+                        Object.defineProperty(AllowRequest.prototype, "pathType", {
+                            get: $util.oneOfGetter($oneOfFields = ["path", "pathRegex"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
 
                         /**
                          * Verifies an AllowRequest message.
@@ -20581,9 +20604,19 @@ export const clutch = $root.clutch = (() => {
                         AllowRequest.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.path != null && message.hasOwnProperty("path"))
+                            let properties = {};
+                            if (message.path != null && message.hasOwnProperty("path")) {
+                                properties.pathType = 1;
                                 if (!$util.isString(message.path))
                                     return "path: string expected";
+                            }
+                            if (message.pathRegex != null && message.hasOwnProperty("pathRegex")) {
+                                if (properties.pathType === 1)
+                                    return "pathType: multiple values";
+                                properties.pathType = 1;
+                                if (!$util.isString(message.pathRegex))
+                                    return "pathRegex: string expected";
+                            }
                             if (message.method != null && message.hasOwnProperty("method"))
                                 if (!$util.isString(message.method))
                                     return "method: string expected";
@@ -20604,6 +20637,8 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.module.proxy.v1.AllowRequest();
                             if (object.path != null)
                                 message.path = String(object.path);
+                            if (object.pathRegex != null)
+                                message.pathRegex = String(object.pathRegex);
                             if (object.method != null)
                                 message.method = String(object.method);
                             return message;
@@ -20622,14 +20657,20 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
-                                object.path = "";
+                            if (options.defaults)
                                 object.method = "";
-                            }
-                            if (message.path != null && message.hasOwnProperty("path"))
+                            if (message.path != null && message.hasOwnProperty("path")) {
                                 object.path = message.path;
+                                if (options.oneofs)
+                                    object.pathType = "path";
+                            }
                             if (message.method != null && message.hasOwnProperty("method"))
                                 object.method = message.method;
+                            if (message.pathRegex != null && message.hasOwnProperty("pathRegex")) {
+                                object.pathRegex = message.pathRegex;
+                                if (options.oneofs)
+                                    object.pathType = "pathRegex";
+                            }
                             return object;
                         };
 

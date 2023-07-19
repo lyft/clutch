@@ -356,9 +356,9 @@ func (m *AllowRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetPath()) < 1 {
+	if utf8.RuneCountInString(m.GetMethod()) < 1 {
 		err := AllowRequestValidationError{
-			field:  "Path",
+			field:  "Method",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -367,10 +367,63 @@ func (m *AllowRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetMethod()) < 1 {
+	oneofPathTypePresent := false
+	switch v := m.PathType.(type) {
+	case *AllowRequest_Path:
+		if v == nil {
+			err := AllowRequestValidationError{
+				field:  "PathType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofPathTypePresent = true
+
+		if utf8.RuneCountInString(m.GetPath()) < 1 {
+			err := AllowRequestValidationError{
+				field:  "Path",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	case *AllowRequest_PathRegex:
+		if v == nil {
+			err := AllowRequestValidationError{
+				field:  "PathType",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofPathTypePresent = true
+
+		if utf8.RuneCountInString(m.GetPathRegex()) < 1 {
+			err := AllowRequestValidationError{
+				field:  "PathRegex",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+	if !oneofPathTypePresent {
 		err := AllowRequestValidationError{
-			field:  "Method",
-			reason: "value length must be at least 1 runes",
+			field:  "PathType",
+			reason: "value is required",
 		}
 		if !all {
 			return err

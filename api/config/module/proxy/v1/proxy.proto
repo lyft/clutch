@@ -22,6 +22,12 @@ message Service {
 }
 
 message AllowRequest {
-  string path = 1 [ (validate.rules).string.min_len = 1 ];
+  oneof path_type {
+    option (validate.required) = true;
+    // Must match the request path exactly
+    string path = 1 [ (validate.rules).string.min_len = 1 ];
+    // Request path must match the regex pattern
+    string path_regex = 3 [ (validate.rules).string.min_len = 1 ];
+  }
   string method = 2 [ (validate.rules).string.min_len = 1 ];
 }
