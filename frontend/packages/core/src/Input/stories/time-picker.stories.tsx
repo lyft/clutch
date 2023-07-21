@@ -1,31 +1,34 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { DateTimePickerProps } from "../date-time";
-import DateTimePicker from "../date-time";
+import type { TimePickerProps } from "../time-picker";
+import TimePicker from "../time-picker";
 
 export default {
-  title: "Core/Input/DateTimePicker",
-  component: DateTimePicker,
+  title: "Core/Input/TimePicker",
+  component: TimePicker,
   argTypes: {
+    label: {
+      control: "text",
+    },
     value: {
       control: "date",
     },
   },
 } as Meta;
 
-const Template = (props: DateTimePickerProps) => <DateTimePicker {...props} />;
+const Template = (props: TimePickerProps) => <TimePicker {...props} />;
 
 export const PrimaryDemo = ({ ...props }) => {
-  const [dateValue, setDateValue] = React.useState<Date | null>(props.value);
+  const [timeValue, setTimeValue] = React.useState<Date | null>(props.value);
 
   return (
-    <DateTimePicker
+    <TimePicker
       label={props.label}
       onChange={(newValue: unknown) => {
-        setDateValue(newValue as Date);
+        setTimeValue(newValue as Date);
       }}
-      value={dateValue ?? props.value}
+      value={timeValue ?? props.value}
     />
   );
 };
@@ -33,10 +36,10 @@ export const PrimaryDemo = ({ ...props }) => {
 PrimaryDemo.args = {
   label: "My Label",
   value: new Date(),
-} as DateTimePickerProps;
+} as TimePickerProps;
 
 export const Disabled = Template.bind({});
 Disabled.args = {
   ...PrimaryDemo.args,
   disabled: true,
-} as DateTimePickerProps;
+} as TimePickerProps;

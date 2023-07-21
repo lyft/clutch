@@ -28,7 +28,11 @@ const TimePicker = ({ onChange, ...props }: TimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
     <MuiTimePicker
       renderInput={inputProps => <PaddedTextField {...inputProps} />}
-      onChange={(value: Dayjs | null) => onChange(value)}
+      onChange={(value: Dayjs | null) => {
+        if (value && value.isValid()) {
+          onChange(value.toDate());
+        }
+      }}
       {...props}
     />
   </LocalizationProvider>
