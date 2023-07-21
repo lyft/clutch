@@ -14,7 +14,8 @@ const CHIP_VARIANTS = [
   "success",
 ] as const;
 
-export interface ChipProps extends Pick<MuiChipProps, "label" | "size" | "icon"> {
+export interface ChipProps
+  extends Pick<MuiChipProps, "clickable" | "onClick" | "label" | "size" | "icon"> {
   /**
    * Variant of chip.
    *
