@@ -1,6 +1,6 @@
 import React from "react";
-import type { DateTimePickerProps as MuiDateTimePickerProps } from "@mui/lab";
-import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers";
+import type { TimePickerProps as MuiTimePickerProps } from "@mui/lab";
+import { TimePicker as MuiTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import type { Dayjs } from "dayjs";
@@ -18,21 +18,20 @@ const PaddedTextField = styled(TextField)({
   },
 });
 
-export interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
+export interface TimePickerProps
+  extends Pick<
+    MuiTimePickerProps,
+    "disabled" | "value" | "onChange" | "label" | "PaperProps" | "PopperProps"
+  > {}
 
-const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
+const TimePicker = ({ onChange, ...props }: TimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <MuiDateTimePicker
+    <MuiTimePicker
       renderInput={inputProps => <PaddedTextField {...inputProps} />}
-      onChange={(value: Dayjs | null) => {
-        if (value && value.isValid()) {
-          onChange(value.toDate());
-        }
-      }}
+      onChange={(value: Dayjs | null) => onChange(value)}
       {...props}
     />
   </LocalizationProvider>
 );
 
-export default DateTimePicker;
+export default TimePicker;
