@@ -1,5 +1,6 @@
 export { Checkbox, CheckboxPanel } from "./checkbox";
 export { default as DateTimePicker } from "./date-time";
+export { default as TimePicker } from "./time-picker";
 export { Form, FormRow } from "./form";
 export { default as Radio } from "./radio";
 export { default as RadioGroup } from "./radio-group";
