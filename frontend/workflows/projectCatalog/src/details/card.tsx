@@ -13,7 +13,7 @@ export interface CatalogDetailsCard {
 }
 
 interface CardTitleProps {
-  title?: string;
+  title?: string | Element | React.ReactNode;
   titleVariant?: TypographyProps["variant"];
   titleIcon?: React.ReactNode;
   endAdornment?: React.ReactNode;
