@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import { flatten } from "lodash";
 
+import { Chip } from "../chip";
+
 const StyledFormHelperText = styled(MuiFormHelperText)({
   alignItems: "center",
   display: "flex",
@@ -139,7 +141,7 @@ const StyledSelect = styled(BaseSelect)({
     marginTop: "5px",
     border: "none",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-    maxHeight: "50vh",
+    maxHeight: "25vh",
   },
 
   ".MuiSelect-icon": {
@@ -240,7 +242,7 @@ const calculateDefaultOptions = (
   return options;
 };
 
-export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
+export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" | "value"> {
   defaultOption?: number | string;
   helperText?: string;
   label?: string;
@@ -258,6 +260,7 @@ const Select = ({
   name,
   options,
   onChange,
+  value,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
@@ -277,13 +280,18 @@ const Select = ({
   }, []);
 
   const updateSelectedOption = event => {
-    const { value } = event.target;
+    const targetValue = event.target.value;
+
     // handle if selecting a header option
-    if (!value) {
+    if (!targetValue) {
       return;
     }
-    setSelectedIdx(flatOptions.findIndex(opt => opt?.value === value || opt?.label === value));
-    onChange && onChange(value);
+
+    setSelectedIdx(
+      flatOptions.findIndex(opt => opt?.value === targetValue || opt?.label === targetValue)
+    );
+
+    onChange && onChange(targetValue);
   };
 
   if (flatOptions.length === 0) {
@@ -296,7 +304,7 @@ const Select = ({
       {flatOptions.length && (
         <StyledSelect
           id={`${name}-select`}
-          value={flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label}
+          value={value ?? (flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label)}
           onChange={updateSelectedOption}
           label={label}
         >
@@ -319,6 +327,7 @@ export interface MultiSelectProps extends Pick<MuiSelectProps, "disabled" | "err
   label?: string;
   name: string;
   selectOptions: SelectOption[];
+  chipDisplay?: boolean;
   onChange?: (values: Array<string>) => void;
 }
 
@@ -330,6 +339,7 @@ const MultiSelect = ({
   label,
   name,
   selectOptions,
+  chipDisplay = false,
   onChange,
 }: MultiSelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
@@ -372,6 +382,15 @@ const MultiSelect = ({
           value={selectedValues()}
           onChange={updateSelectedOptions}
           label={label}
+          {...(chipDisplay && {
+            renderValue: (selected: string[]) => (
+              <div style={{ display: "flex", gap: "4px" }}>
+                {selected.sort().map(value => (
+                  <Chip variant="neutral" label={value} key={value} size="small" />
+                ))}
+              </div>
+            ),
+          })}
         >
           {selectOptions?.map(option => renderSelectItems(option))}
         </StyledSelect>
