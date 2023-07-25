@@ -292,7 +292,7 @@ message ListNamespaceEventsRequest {
 }
 
 message ListNamespaceEventsResponse {
-  repeated Event events = 1;
+  repeated Event events = 1 [ (clutch.api.v1.log) = false ];
 }
 
 message DescribePodRequest {
