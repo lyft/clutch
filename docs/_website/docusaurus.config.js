@@ -113,6 +113,7 @@ module.exports = {
       apiKey: "e9fd4dc1b48bb4b9e8763d3adc9df6d1",
       appId: "XFPMTG0051",
       indexName: "lyft_clutch",
+      contextualSearch: false,
     },
     prism: {
       additionalLanguages: ["protobuf", "typescript"],
