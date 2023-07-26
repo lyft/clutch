@@ -18,6 +18,8 @@
     "test:e2e": "cypress run"
   },
   "dependencies": {
+    "@bugsnag/js": "^7.20.2",
+    "@bugsnag/plugin-react": "^7.19.0",
     "@clutch-sh/core": "^2.0.0-beta",
     "react": "^17.0.2",
     "react-app-rewired": "^2.1.8",
