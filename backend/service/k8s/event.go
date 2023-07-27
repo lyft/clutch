@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"context"
-	"sort"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -33,13 +32,6 @@ func (s *svc) ListEvents(ctx context.Context, clientset, cluster, namespace, obj
 	}
 
 	return events, nil
-}
-
-// For ease of use, we can sort the events in reverse chronological order
-func sortEventsByLastTime(events []*k8sapiv1.Event) {
-	sort.Slice(events, func(i, j int) bool {
-		return events[i].LastTimestampMillis > events[j].LastTimestampMillis
-	})
 }
 
 func ProtoForEvent(cluster string, k8sEvent *corev1.Event) *k8sapiv1.Event {
@@ -125,9 +117,6 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 		ev := ev
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
-	// Sort in reverse chronological order (by LastTimestampMillis),
-	// this is needed because we might have multiple types of events
-	sortEventsByLastTime(events)
 
 	return events, nil
 }
