@@ -11,7 +11,7 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -43,7 +43,7 @@ func (s *svc) GetPodLogs(ctx context.Context, clientset, cluster, namespace, nam
 		return nil, err
 	}
 
-	k8sOpts.LimitBytes = pointer.Int64(limitBytes)
+	k8sOpts.LimitBytes = ptr.To(int64(limitBytes))
 	req := cs.CoreV1().Pods(cs.Namespace()).GetLogs(name, k8sOpts)
 	if req == nil {
 		return nil, fmt.Errorf("an unknown error occurred when constructing the GetLogs request")
@@ -112,7 +112,7 @@ func protoOptsToK8sOpts(in *k8sapiv1.PodLogsOptions) (*v1.PodLogOptions, error) 
 	ret.Previous = in.Previous
 
 	if in.TailNumLines != 0 {
-		ret.TailLines = pointer.Int64(in.TailNumLines)
+		ret.TailLines = ptr.To(in.TailNumLines)
 	}
 	if in.SinceTs != "" {
 		ts, err := time.Parse(rfc3339NanoFixed, in.SinceTs)
