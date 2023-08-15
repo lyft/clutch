@@ -11,7 +11,7 @@
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "node workflow-registrar.js",
-    "upload-bugsnag-sourcemaps": "node upload-sourcemaps.ts"
+    "uploadSourcemaps": "node upload-sourcemaps.js"
   },
   "dependencies": {
     "@babel/cli": "^7.7.5",
@@ -36,6 +36,7 @@
     "babel-jest": "^27.4.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "cypress": "9.7.0",
+    "dotenv": "^16.3.1",
     "enzyme": "^3.11.0",
     "esbuild": "^0.18.0",
     "eslint": "^8.3.0",
