@@ -1,6 +1,4 @@
 const { browser } = require("@bugsnag/source-maps");
-const path = require("path");
-const fs = require("fs");
 const srcDir = process.argv[2];
 const buildDir = process.argv[3];
 const envFile = process.argv[4];
@@ -39,14 +37,11 @@ const uploadBugsnagSourcemaps = () => {
     return Promise.reject(new Error("[BugSnag] BaseUrl missing"));
   }
 
-  const options = {
+  return uploadToBugsnag({
     apiKey,
     baseUrl: `${baseUrl}${process.env.REACT_APP_BASE_URL_PATH ?? "/static/js/"}`,
     distDir: process.env.SOURCEMAPS_DIR || `${srcDir}/${buildDir}`,
-    serviceName: process.env.REACT_APP_SERVICE_NAME ?? "clutch",
-  };
-
-  return uploadToBugsnag(options);
+  });
 };
 
 uploadBugsnagSourcemaps();

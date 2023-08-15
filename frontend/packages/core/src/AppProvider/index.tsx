@@ -207,11 +207,13 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   );
 
   if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
-    Bugsnag.start({
-      apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,
-      plugins: [new BugsnagPluginReact()],
-      releaseStage: process.env.APPLICATION_ENV || "production",
-    });
+    if (!(Bugsnag as any)._client) {
+      Bugsnag.start({
+        apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,
+        plugins: [new BugsnagPluginReact()],
+        releaseStage: process.env.APPLICATION_ENV || "production",
+      });
+    }
     const BugsnagBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
     return <BugsnagBoundary>{appLayout}</BugsnagBoundary>;
   }
