@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import Bugsnag from "@bugsnag/js";
+import BugsnagPluginReact from "@bugsnag/plugin-react";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
@@ -127,7 +129,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     [discoverableWorkflows, triggeredHeaderData]
   );
 
-  return (
+  const appLayout = (
     <Router>
       {/* TODO: use the ThemeProvider for proper theming in the future 
         See https://github.com/lyft/clutch/commit/f6c6706b9ba29c4d4c3e5d0ac0c5d0f038203937 */}
@@ -203,6 +205,18 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       </Theme>
     </Router>
   );
+
+  if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
+    Bugsnag.start({
+      apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,
+      plugins: [new BugsnagPluginReact()],
+      releaseStage: process.env.APPLICATION_ENV || "production",
+    });
+    const BugsnagBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
+    return <BugsnagBoundary>{appLayout}</BugsnagBoundary>;
+  }
+
+  return appLayout;
 };
 
 export default ClutchApp;

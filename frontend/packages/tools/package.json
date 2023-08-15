@@ -10,7 +10,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
-    "registerWorkflows": "node workflow-registrar.js"
+    "registerWorkflows": "node workflow-registrar.js",
+    "upload-bugsnag-sourcemaps": "node upload-sourcemaps.ts"
   },
   "dependencies": {
     "@babel/cli": "^7.7.5",
@@ -22,6 +23,7 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
+    "@bugsnag/source-maps": "^2.3.1",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^29.0.0",
     "@types/mocha": "^10.0.0",

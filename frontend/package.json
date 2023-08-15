@@ -91,5 +91,6 @@
   "engines": {
     "node": ">=16.0.0 <17",
     "yarn": "^1.22.11"
-  }
+  },
+  "dependencies": {}
 }
