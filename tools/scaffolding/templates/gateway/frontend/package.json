@@ -18,7 +18,7 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "protobufjs": "6.11.3"
+    "protobufjs": "6.11.4"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
