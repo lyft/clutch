@@ -129,7 +129,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     [discoverableWorkflows, triggeredHeaderData]
   );
 
-  const appLayout = (
+  return (
     <Router>
       {/* TODO: use the ThemeProvider for proper theming in the future 
         See https://github.com/lyft/clutch/commit/f6c6706b9ba29c4d4c3e5d0ac0c5d0f038203937 */}
@@ -205,7 +205,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       </Theme>
     </Router>
   );
+};
 
+const BugSnagApp = props => {
   if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
     if (!(Bugsnag as any)._client) {
       Bugsnag.start({
@@ -215,10 +217,14 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       });
     }
     const BugsnagBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
-    return <BugsnagBoundary>{appLayout}</BugsnagBoundary>;
+    return (
+      <BugsnagBoundary>
+        <ClutchApp {...props} />
+      </BugsnagBoundary>
+    );
   }
 
-  return appLayout;
+  return <ClutchApp {...props} />;
 };
 
-export default ClutchApp;
+export default BugSnagApp;
