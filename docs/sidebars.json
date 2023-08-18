@@ -37,6 +37,7 @@
           "items": [
             "development/frontend/overview",
             "development/frontend/storybook",
+            "development/frontend/bugsnag",
             {
               "type": "link",
               "label": "Clutch's Storybook",
