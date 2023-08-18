@@ -59,6 +59,7 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@mui/material": "^5.8.5",
@@ -91,6 +92,5 @@
   "engines": {
     "node": ">=16.0.0 <17",
     "yarn": "^1.22.11"
-  },
-  "dependencies": {}
+  }
 }
