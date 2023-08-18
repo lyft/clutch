@@ -209,6 +209,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
 
 const BugSnagApp = props => {
   if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
+    // eslint-disable-next-line no-underscore-dangle
     if (!(Bugsnag as any)._client) {
       Bugsnag.start({
         apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,

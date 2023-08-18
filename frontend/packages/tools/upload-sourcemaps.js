@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 const { browser } = require("@bugsnag/source-maps");
+const { config } = require("dotenv");
+
 const srcDir = process.argv[2];
 const buildDir = process.argv[3];
 const envFile = process.argv[4];
-const { config } = require("dotenv");
 
 const dotEnvFile = `${srcDir}/${envFile}`;
 
