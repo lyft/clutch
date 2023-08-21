@@ -32,7 +32,7 @@ const uploadBugsnagSourcemaps = () => {
     return Promise.reject(new Error("[BugSnag] API Key missing"));
   }
 
-  if (!baseUrl || baseUrl === "") {
+  if (!baseUrl) {
     console.error(
       `[BugSnag] No BaseUrl defined in process.env.BASE_URL in ${dotEnvFile}. Skipping Upload`
     );
