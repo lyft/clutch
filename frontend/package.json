@@ -59,6 +59,7 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@mui/material": "^5.8.5",

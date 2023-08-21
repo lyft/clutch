@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
+import Bugsnag from "@bugsnag/js";
+import BugsnagPluginReact from "@bugsnag/plugin-react";
 
 import AppLayout from "../AppLayout";
 import { ApplicationContext, ShortLinkContext } from "../Contexts";
@@ -205,4 +207,25 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   );
 };
 
-export default ClutchApp;
+const BugSnagApp = props => {
+  if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
+    // eslint-disable-next-line no-underscore-dangle
+    if (!(Bugsnag as any)._client) {
+      Bugsnag.start({
+        apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,
+        plugins: [new BugsnagPluginReact()],
+        releaseStage: process.env.APPLICATION_ENV || "production",
+      });
+    }
+    const BugsnagBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
+    return (
+      <BugsnagBoundary>
+        <ClutchApp {...props} />
+      </BugsnagBoundary>
+    );
+  }
+
+  return <ClutchApp {...props} />;
+};
+
+export default BugSnagApp;
