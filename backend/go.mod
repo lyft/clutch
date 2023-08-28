@@ -31,6 +31,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/golang/protobuf v1.5.3
 	github.com/google/go-github/v50 v50.2.0
+	github.com/google/go-github/v54 v54.0.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
@@ -48,8 +49,8 @@ require (
 	go.temporal.io/sdk v1.24.0
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.25.0
-	golang.org/x/net v0.11.0
-	golang.org/x/oauth2 v0.8.0
+	golang.org/x/net v0.14.0
+	golang.org/x/oauth2 v0.11.0
 	golang.org/x/sync v0.2.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230815205213-6bfd019c3878
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230815205213-6bfd019c3878
@@ -150,12 +151,12 @@ require (
 	go.temporal.io/api v1.21.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/crypto v0.10.0 // indirect
+	golang.org/x/crypto v0.12.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/sys v0.9.0 // indirect
-	golang.org/x/term v0.9.0 // indirect
-	golang.org/x/text v0.10.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/term v0.11.0 // indirect
+	golang.org/x/text v0.12.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
