@@ -421,7 +421,7 @@ var compareCommitsTests = []struct {
 	{
 		name:         "v3 error",
 		generalError: true,
-		errorText:    "Could not get comparison",
+		errorText:    "could not get comparison",
 		mockRepo:     &mockRepositories{generalError: true},
 	},
 	{
