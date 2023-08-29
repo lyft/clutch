@@ -23,7 +23,7 @@ import (
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v50/github"
+	githubv3 "github.com/google/go-github/v54/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
@@ -108,7 +108,7 @@ type Client interface {
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
 	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
-	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error)
+	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.ListOptions) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
@@ -267,7 +267,7 @@ func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title
 	}, nil
 }
 
-func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*PullRequestInfo, error) {
+func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.ListOptions) ([]*PullRequestInfo, error) {
 	respPRs, _, err := s.rest.PullRequests.ListPullRequestsWithCommit(ctx, ref.RepoOwner, ref.RepoName, sha, opts)
 	if err != nil {
 		return nil, err
@@ -475,7 +475,7 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*githubv3.CommitsComparison, error) {
 	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref, nil)
 	if err != nil {
-		return nil, fmt.Errorf("Could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
+		return nil, fmt.Errorf("could not get comparison for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
 
 	return comp, nil

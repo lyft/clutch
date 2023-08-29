@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	githubv3 "github.com/google/go-github/v50/github"
+	githubv3 "github.com/google/go-github/v54/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
@@ -786,7 +786,7 @@ func (m *mockPullRequests) Create(ctx context.Context, owner string, repo string
 }
 
 // Mock of ListPullRequestsWithCommit API
-func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.PullRequestListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error) {
+func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error) {
 	if m.generalError {
 		return nil, nil, errors.New(problem)
 	}
@@ -798,7 +798,6 @@ func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner
 	return []*githubv3.PullRequest{
 		{
 			Number:  intPtr(m.actualNumber),
-			State:   strPtr(opts.State),
 			HTMLURL: strPtr(m.actualHTMLURL),
 			Head: &githubv3.PullRequestBranch{
 				Ref: strPtr(m.actualBranchName),
@@ -822,7 +821,6 @@ var listPullRequestsWithCommitTests = []struct {
 	repoName    string
 	ref         string
 	sha         string
-	opts        *githubv3.PullRequestListOptions
 }{
 	{
 		name:        "happy path",
@@ -831,10 +829,6 @@ var listPullRequestsWithCommitTests = []struct {
 		repoName:    "my-repo",
 		ref:         "my-branch",
 		sha:         "asdf12345",
-		opts: &githubv3.PullRequestListOptions{
-			// Possible values for State: "open", "closed", "all". Default is "open", manually setting it to "all".
-			State: "all",
-		},
 	},
 	{
 		name:        "v3 client error",
@@ -844,9 +838,6 @@ var listPullRequestsWithCommitTests = []struct {
 		repoName:    "my-repo",
 		ref:         "my-branch",
 		sha:         "asdf12345",
-		opts: &githubv3.PullRequestListOptions{
-			State: "all",
-		},
 	},
 }
 
@@ -867,8 +858,7 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 					RepoName:  tt.repoName,
 					Ref:       tt.ref,
 				},
-				tt.sha,
-				tt.opts)
+				tt.sha, nil)
 
 			if tt.errorText != "" {
 				assert.Error(t, err)
