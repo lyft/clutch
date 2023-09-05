@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v50/github"
+	githubv3 "github.com/google/go-github/v54/github"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 
@@ -65,7 +65,7 @@ func (s svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Or
 	}, nil
 }
 
-func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteRef, sha string, opts *githubv3.PullRequestListOptions) ([]*github.PullRequestInfo, error) {
+func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteRef, sha string, opts *githubv3.ListOptions) ([]*github.PullRequestInfo, error) {
 	prNumber := 12345
 	return []*github.PullRequestInfo{
 		{
