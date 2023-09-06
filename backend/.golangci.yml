@@ -36,6 +36,6 @@ issues:
       linters:
         - staticcheck
 run:
-  timeout: 5m
+  timeout: 10m
   skip-dirs:
     - api/
