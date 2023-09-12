@@ -4,7 +4,7 @@ import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
 
 import AppLayout from "../AppLayout";
-import { ApplicationContext, ShortLinkContext } from "../Contexts";
+import { ApplicationContext, ShortLinkContext, UserPreferencesProvider } from "../Contexts";
 import type { HeaderItem, TriggeredHeaderData } from "../Contexts/app-context";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
 import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-context/types";
@@ -65,12 +65,14 @@ interface ClutchAppProps {
   };
   configuration: UserConfiguration;
   appConfiguration: AppConfiguration;
+  children?: React.ReactElement<any> | React.ReactElement<any>[];
 }
 
 const ClutchApp: React.FC<ClutchAppProps> = ({
   availableWorkflows,
   configuration: userConfiguration,
   appConfiguration,
+  children,
 }) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -79,6 +81,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   const [hydrateError, setHydrateError] = React.useState<ClutchError | null>(null);
   const [hasCustomLanding, setHasCustomLanding] = React.useState<boolean>(false);
   const [triggeredHeaderData, setTriggeredHeaderData] = React.useState<TriggeredHeaderData>();
+  const [customHeader, setCustomHeader] = React.useState<React.ReactElement>();
 
   /** Used to control a race condition from displaying the workflow and the state being updated with the hydrated data */
   const [shortLinkLoading, setShortLinkLoading] = React.useState<boolean>(false);
@@ -129,6 +132,20 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     [discoverableWorkflows, triggeredHeaderData]
   );
 
+  React.useEffect(() => {
+    if (children) {
+      React.Children.forEach(children, child => {
+        if (React.isValidElement(child)) {
+          const { type } = child?.props || {};
+
+          if (type === "HEADER") {
+            setCustomHeader(child);
+          }
+        }
+      });
+    }
+  }, [children]);
+
   return (
     <Router>
       {/* TODO: use the ThemeProvider for proper theming in the future 
@@ -136,70 +153,82 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
       <Theme variant="light">
         <div id="App">
           <ApplicationContext.Provider value={appContextValue}>
-            <ShortLinkContext.Provider value={shortLinkProviderProps}>
-              {hydrateError && (
-                <Toast onClose={() => setHydrateError(null)}>
-                  Unable to retrieve short link: {hydrateError?.status?.text}
-                </Toast>
-              )}
-              <Routes>
-                <Route
-                  path="/"
-                  element={<AppLayout isLoading={isLoading} configuration={appConfiguration} />}
-                >
-                  {!hasCustomLanding && <Route key="landing" path="" element={<Landing />} />}
-                  {workflows.map((workflow: Workflow) => {
-                    const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
-                    const workflowKey = workflow.path.split("/")[0];
-                    return (
-                      <Route
-                        path={`${workflowPath}/`}
-                        key={workflowKey}
-                        element={
-                          <ErrorBoundary workflow={workflow}>
-                            <ShortLinkStateHydrator
-                              sharedState={hydrateState}
-                              clearTemporaryState={() => setHydrateState(null)}
-                            >
-                              {!shortLinkLoading && <Outlet />}
-                            </ShortLinkStateHydrator>
-                          </ErrorBoundary>
-                        }
-                      >
-                        {workflow.routes.map(route => {
-                          const heading = route.displayName
-                            ? `${workflow.displayName}: ${route.displayName}`
-                            : workflow.displayName;
-                          return (
-                            <Route
-                              key={workflow.path}
-                              path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
-                              element={React.cloneElement(<route.component />, {
-                                ...route.componentProps,
-                                heading,
-                              })}
-                            />
-                          );
-                        })}
-                        <Route key={`${workflow.path}/notFound`} path="*" element={<NotFound />} />
-                      </Route>
-                    );
-                  })}
+            <UserPreferencesProvider>
+              <ShortLinkContext.Provider value={shortLinkProviderProps}>
+                {hydrateError && (
+                  <Toast onClose={() => setHydrateError(null)}>
+                    Unable to retrieve short link: {hydrateError?.status?.text}
+                  </Toast>
+                )}
+                <Routes>
                   <Route
-                    key="short-links"
-                    path={`/${ShortLinkBaseRoute}/:hash`}
+                    path="/"
                     element={
-                      <ShortLinkProxy
-                        setLoading={setShortLinkLoading}
-                        hydrate={setHydrateState}
-                        onError={setHydrateError}
+                      <AppLayout
+                        isLoading={isLoading}
+                        configuration={appConfiguration}
+                        header={customHeader}
                       />
                     }
-                  />
-                  <Route key="notFound" path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
-            </ShortLinkContext.Provider>
+                  >
+                    {!hasCustomLanding && <Route key="landing" path="" element={<Landing />} />}
+                    {workflows.map((workflow: Workflow) => {
+                      const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
+                      const workflowKey = workflow.path.split("/")[0];
+                      return (
+                        <Route
+                          path={`${workflowPath}/`}
+                          key={workflowKey}
+                          element={
+                            <ErrorBoundary workflow={workflow}>
+                              <ShortLinkStateHydrator
+                                sharedState={hydrateState}
+                                clearTemporaryState={() => setHydrateState(null)}
+                              >
+                                {!shortLinkLoading && <Outlet />}
+                              </ShortLinkStateHydrator>
+                            </ErrorBoundary>
+                          }
+                        >
+                          {workflow.routes.map(route => {
+                            const heading = route.displayName
+                              ? `${workflow.displayName}: ${route.displayName}`
+                              : workflow.displayName;
+                            return (
+                              <Route
+                                key={workflow.path}
+                                path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
+                                element={React.cloneElement(<route.component />, {
+                                  ...route.componentProps,
+                                  heading,
+                                })}
+                              />
+                            );
+                          })}
+                          <Route
+                            key={`${workflow.path}/notFound`}
+                            path="*"
+                            element={<NotFound />}
+                          />
+                        </Route>
+                      );
+                    })}
+                    <Route
+                      key="short-links"
+                      path={`/${ShortLinkBaseRoute}/:hash`}
+                      element={
+                        <ShortLinkProxy
+                          setLoading={setShortLinkLoading}
+                          hydrate={setHydrateState}
+                          onError={setHydrateError}
+                        />
+                      }
+                    />
+                    <Route key="notFound" path="*" element={<NotFound />} />
+                  </Route>
+                </Routes>
+              </ShortLinkContext.Provider>
+            </UserPreferencesProvider>
           </ApplicationContext.Provider>
         </div>
       </Theme>

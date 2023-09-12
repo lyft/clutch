@@ -23,6 +23,11 @@ interface HeaderProps extends AppConfiguration {
    * Will enable the NPS feedback component in the header
    */
   enableNPS?: boolean;
+  search?: boolean;
+  feedback?: boolean;
+  shortLinks?: boolean;
+  notifications?: boolean;
+  userInfo?: boolean;
 }
 
 const AppBar = styled(MuiAppBar)({
@@ -54,9 +59,13 @@ const Header: React.FC<HeaderProps> = ({
   title = "clutch",
   logo = <Logo />,
   enableNPS = false,
+  search = true,
+  feedback = true,
+  shortLinks = true,
+  notifications = false,
+  userInfo = true,
+  children = null,
 }) => {
-  const showNotifications = false;
-
   return (
     <>
       <AppBar position="fixed" elevation={0}>
@@ -64,26 +73,34 @@ const Header: React.FC<HeaderProps> = ({
           <Link to="/">{typeof logo === "string" ? <StyledLogo src={logo} /> : logo}</Link>
           <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
-            <Box>
-              <SearchField />
-            </Box>
-            <SimpleFeatureFlag feature="shortLinks">
-              <FeatureOn>
-                <ShortLinker />
-              </FeatureOn>
-            </SimpleFeatureFlag>
-            {showNotifications && <Notifications />}
-            {enableNPS ? (
-              <NPSHeader />
-            ) : (
-              <SimpleFeatureFlag feature="npsHeader">
+            {search && (
+              <Box>
+                <SearchField />
+              </Box>
+            )}
+            {shortLinks && (
+              <SimpleFeatureFlag feature="shortLinks">
                 <FeatureOn>
-                  <NPSHeader />
+                  <ShortLinker />
                 </FeatureOn>
               </SimpleFeatureFlag>
             )}
-
-            <UserInformation />
+            {notifications && <Notifications />}
+            {feedback && (
+              <>
+                {enableNPS ? (
+                  <NPSHeader />
+                ) : (
+                  <SimpleFeatureFlag feature="npsHeader">
+                    <FeatureOn>
+                      <NPSHeader />
+                    </FeatureOn>
+                  </SimpleFeatureFlag>
+                )}
+              </>
+            )}
+            {children && children}
+            {userInfo && <UserInformation />}
           </Grid>
         </Toolbar>
       </AppBar>

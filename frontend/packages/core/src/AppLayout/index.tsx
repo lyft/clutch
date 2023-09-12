@@ -23,12 +23,18 @@ const MainContent = styled.div({ overflowY: "auto", width: "100%" });
 interface AppLayoutProps {
   isLoading?: boolean;
   configuration?: AppConfiguration;
+  header?: React.ReactElement<any>;
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({ isLoading = false, configuration = {} }) => {
+const AppLayout: React.FC<AppLayoutProps> = ({
+  isLoading = false,
+  configuration = {},
+  header = null,
+}) => {
   return (
     <AppGrid container direction="column" data-testid="app-layout-component">
-      <Header {...configuration} />
+      {header && React.cloneElement(header, { ...configuration, ...header.props })}
+      {!header && <Header {...configuration} />}
       <ContentGrid container wrap="nowrap">
         {isLoading ? (
           <Loadable isLoading={isLoading} variant="overlay" />
