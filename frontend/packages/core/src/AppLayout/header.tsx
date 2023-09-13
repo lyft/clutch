@@ -23,10 +23,25 @@ interface HeaderProps extends AppConfiguration {
    * Will enable the NPS feedback component in the header
    */
   enableNPS?: boolean;
+  /**
+   * Will enable the workflow search component in the header
+   */
   search?: boolean;
+  /**
+   * Will enable the NPS feedback component in the header
+   */
   feedback?: boolean;
+  /**
+   * Will enable the shortlinks component in the header
+   */
   shortLinks?: boolean;
+  /**
+   * Will enable the notifications component in the header
+   */
   notifications?: boolean;
+  /**
+   * Will enable the user information component in the header
+   */
   userInfo?: boolean;
 }
 
