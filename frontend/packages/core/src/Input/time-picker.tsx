@@ -18,8 +18,10 @@ const PaddedTextField = styled(TextField)({
   },
 });
 
+type OptionalExceptFor<T, TRequired extends keyof T> = Pick<T, TRequired> & Omit<T, TRequired>;
+
 export interface TimePickerProps
-  extends Pick<
+  extends OptionalExceptFor<
     MuiTimePickerProps,
     "disabled" | "value" | "onChange" | "label" | "PaperProps" | "PopperProps"
   > {}

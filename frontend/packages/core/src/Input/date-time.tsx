@@ -18,8 +18,10 @@ const PaddedTextField = styled(TextField)({
   },
 });
 
+type OptionalExceptFor<T, TRequired extends keyof T> = Pick<T, TRequired> & Omit<T, TRequired>;
+
 export interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
+  extends OptionalExceptFor<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
 
 const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
