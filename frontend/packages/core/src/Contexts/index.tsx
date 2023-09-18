@@ -7,3 +7,4 @@ export type {
   WorkflowRetrieveDataFn,
   WorkflowStoreDataFn,
 } from "./workflow-storage-context";
+export { useUserPreferences, UserPreferencesProvider } from "./preferences-context";

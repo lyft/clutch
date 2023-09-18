@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
+import * as _ from "lodash";
 
 const UserPhoto = styled(IconButton)({
   padding: "12px",
@@ -162,7 +163,11 @@ export interface UserInformationProps {
 }
 
 // TODO (sperry): investigate using popover instead of popper
-const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId() }) => {
+const UserInformation: React.FC<UserInformationProps> = ({
+  data,
+  user = userId(),
+  children = null,
+}) => {
   const userInitials = user.slice(0, 2).toUpperCase();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -172,12 +177,14 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
   };
 
   const handleClose = event => {
+    if (event.target.localName === "body") {
+      return;
+    }
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
     setOpen(false);
   };
-
   const handleListKeyDown = event => {
     if (event.key === "Tab") {
       event.preventDefault();
@@ -219,6 +226,15 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
                       {i > 0 && i < data.length && <Divider />}
                     </>
                   ))}
+                  {_.castArray(children).length > 0 && <Divider />}
+                  <div style={{ marginBottom: "8px" }}>
+                    {_.castArray(children)?.map((c, i) => (
+                      <>
+                        <MenuItem>{c}</MenuItem>
+                        {i < _.castArray(children).length - 1 && <Divider />}
+                      </>
+                    ))}
+                  </div>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

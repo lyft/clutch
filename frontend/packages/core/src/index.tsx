@@ -5,7 +5,8 @@ export {
   AccordionDivider,
   AccordionGroup,
 } from "./accordion";
-export { userId } from "./AppLayout/user";
+export { default as Header } from "./AppLayout/header";
+export { UserInformation, userId } from "./AppLayout/user";
 export * from "./Assets/emojis";
 export * from "./Assets/icons";
 export { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
@@ -13,7 +14,12 @@ export { Card, CardContent, CardHeader } from "./card";
 export * from "./Charts";
 export * from "./chip";
 export { default as Confirmation } from "./confirmation";
-export { useWorkflowStorageContext, useWizardContext, WizardContext } from "./Contexts";
+export {
+  useWorkflowStorageContext,
+  useWizardContext,
+  WizardContext,
+  useUserPreferences,
+} from "./Contexts";
 export { Dialog, DialogActions, DialogContent } from "./dialog";
 export * from "./Feedback";
 export { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
