@@ -59,21 +59,33 @@ const featureFlagFilter = (workflows: Workflow[]): Promise<Workflow[]> => {
   );
 };
 
+enum ChildType {
+  HEADER = "header",
+}
+
+interface ChildTypes {
+  type: ChildType;
+}
+
+type ClutchAppChildType = ChildTypes;
+
+type ClutchAppChild = React.ReactElement<ClutchAppChildType>;
+
 interface ClutchAppProps {
   availableWorkflows: {
     [key: string]: () => WorkflowConfiguration;
   };
   configuration: UserConfiguration;
   appConfiguration: AppConfiguration;
-  children?: React.ReactElement<any> | React.ReactElement<any>[];
+  children?: ClutchAppChild | ClutchAppChild[];
 }
 
-const ClutchApp: React.FC<ClutchAppProps> = ({
+const ClutchApp = ({
   availableWorkflows,
   configuration: userConfiguration,
   appConfiguration,
   children,
-}) => {
+}: ClutchAppProps) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [workflowSessionStore, setWorkflowSessionStore] = React.useState<HydratedData>();
@@ -136,9 +148,9 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
     if (children) {
       React.Children.forEach(children, child => {
         if (React.isValidElement(child)) {
-          const { type } = child?.props || {};
+          const { type = "" } = child?.props || {};
 
-          if (type === "HEADER") {
+          if (type.toLowerCase() === ChildType.HEADER) {
             setCustomHeader(child);
           }
         }
@@ -236,7 +248,7 @@ const ClutchApp: React.FC<ClutchAppProps> = ({
   );
 };
 
-const BugSnagApp = props => {
+const BugSnagApp = (props: ClutchAppProps) => {
   if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
     // eslint-disable-next-line no-underscore-dangle
     if (!(Bugsnag as any)._client) {
