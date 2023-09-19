@@ -56,7 +56,7 @@ message ReadResponse {
 }
 
 message Address {
-  string host = 1 [ (validate.rules).string.address = true ];
+  string host = 1 [ (validate.rules).string.ip = true ];
   uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
 }
 
