@@ -24,7 +24,7 @@ require (
 	github.com/envoyproxy/go-control-plane v0.11.1-0.20230524094728-9239064ad72f
 	github.com/envoyproxy/protoc-gen-validate v0.10.1
 	github.com/fullstorydev/grpcurl v1.8.7
-	github.com/go-git/go-billy/v5 v5.4.1
+	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/gobwas/glob v0.2.3
 	github.com/gogo/status v1.1.1
@@ -89,6 +89,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cloudflare/circl v1.3.3 // indirect
 	github.com/cncf/xds/go v0.0.0-20230607035331-e9ce68804cb4 // indirect
+	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
