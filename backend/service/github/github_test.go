@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	githubv3 "github.com/google/go-github/v54/github"
+	githubv3 "github.com/google/go-github/v55/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
