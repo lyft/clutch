@@ -166,7 +166,7 @@ export interface UserInformationProps {
 const UserInformation: React.FC<UserInformationProps> = ({
   data,
   user = userId(),
-  children = null,
+  children = [],
 }) => {
   const userInitials = user.slice(0, 2).toUpperCase();
   const [open, setOpen] = React.useState(false);
