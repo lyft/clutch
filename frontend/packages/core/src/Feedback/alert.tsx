@@ -75,7 +75,10 @@ const iconMappings = {
 export const SEVERITIES = Object.keys(iconMappings);
 
 export interface AlertProps
-  extends Pick<MuiAlertProps, "severity" | "action" | "onClose" | "elevation" | "variant"> {
+  extends Pick<
+    MuiAlertProps,
+    "severity" | "action" | "onClose" | "elevation" | "variant" | "icon"
+  > {
   title?: React.ReactNode;
 }
 
