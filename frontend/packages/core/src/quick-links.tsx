@@ -18,8 +18,12 @@ interface LinkGroupProps {
   linkGroupImage: string;
 }
 
+interface QLink extends IClutch.core.project.v1.ILink {
+  trackingId?: string;
+}
+
 interface QuickLinkProps extends LinkGroupProps {
-  link: IClutch.core.project.v1.ILink;
+  link: QLink;
 }
 
 interface QuickLinkContainerProps {
@@ -48,7 +52,7 @@ const QuickLinkContainer = ({ keyProp, name, children }: QuickLinkContainerProps
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   link?.url ? (
     <QuickLinkContainer keyProp={link.name} name={linkGroupName}>
-      <Link href={link.url}>
+      <Link href={link.url} data-tracking-action={link.trackingId}>
         <img
           width={ICON_SIZE}
           height={ICON_SIZE}
@@ -113,14 +117,19 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
     </QuickLinkContainer>
   );
 };
+
+interface LinkGroup extends IClutch.core.project.v1.ILinkGroup {
+  links?: QLink[];
+}
+
 export interface QuickLinksProps {
-  linkGroups: IClutch.core.project.v1.ILinkGroup[];
+  linkGroups: LinkGroup[];
 }
 
 // TODO(smonero): Wasn't sure if I should make an interface for this or just reuse
 // or not make one at all since its so simple
 interface SlicedLinkGroupProps {
-  slicedLinkGroups: IClutch.core.project.v1.ILinkGroup[];
+  slicedLinkGroups: LinkGroup[];
 }
 
 const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
@@ -166,7 +175,9 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
         direction="row"
         alignItems="center"
         spacing={1}
+        justifyContent="space-around"
         style={{ padding: "10px", margin: "-4px" }}
+        flexWrap="nowrap"
       >
         <SlicedLinkGroup slicedLinkGroups={firstFive} />
         {overflow.length > 0 && (
