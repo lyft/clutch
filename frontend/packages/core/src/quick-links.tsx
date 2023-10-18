@@ -1,17 +1,14 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import {
-  Card,
-  Grid,
-  IconButton,
-  Link,
-  Popper,
-  PopperItem,
-  Tooltip,
-  TooltipContainer,
-  Typography,
-} from "@clutch-sh/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { IconButton } from "./button";
+import { Card } from "./card";
+import { Tooltip, TooltipContainer } from "./Feedback";
+import Grid from "./grid";
+import { Link } from "./link";
+import { Popper, PopperItem } from "./popper";
+import { Typography } from "./typography";
 
 interface LinkGroupProps {
   linkGroupName: string;
