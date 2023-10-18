@@ -15,13 +15,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { capitalize, isEmpty } from "lodash";
+import * as _ from "lodash";
 
 import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
 
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
-import { fetchProjectInfo } from "./helpers";
+import { fetchProjectInfo, getRepositoryFromString } from "./helpers";
 import ProjectInfoCard from "./info";
 
 const StyledContainer = styled(Grid)({
@@ -40,8 +41,24 @@ const DisabledItem = ({ name }: { name: string }) => (
   </Grid>
 );
 
-const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
+const QuickLinksAndSettingsBtn = ({ projectInfo }) => {
   const navigate = useNavigate();
+  const { manager, url } = getRepositoryFromString(projectInfo.data.repository);
+  const quickLinks = [...(projectInfo?.linkGroups ?? [])];
+
+  if (url && manager === "github.com") {
+    quickLinks.push({
+      name: "Github",
+      links: [
+        {
+          name: "Default",
+          trackingId: "catalog-github-link",
+          url,
+        },
+      ],
+      imagePath: "/icons/Github.svg",
+    });
+  }
 
   return (
     <Grid
@@ -54,9 +71,9 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
         padding: "8px 32px 0px 0px",
       }}
     >
-      {!isEmpty(linkGroups) && (
+      {!isEmpty(quickLinks) && (
         <Grid item>
-          <QuickLinksCard linkGroups={linkGroups} />
+          <QuickLinksCard linkGroups={quickLinks} />
         </Grid>
       )}
       <SimpleFeatureFlag feature="projectCatalogSettings">
@@ -147,7 +164,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
             </StyledHeadingContainer>
             {projectInfo && (
               <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
-                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups || []} />
+                <QuickLinksAndSettingsBtn projectInfo={projectInfo} />
               </Grid>
             )}
           </Grid>

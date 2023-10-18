@@ -5,7 +5,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCode, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { LinkText } from "../helpers";
+import { getRepositoryFromString, LinkText } from "../helpers";
 
 interface ProjectPullRequests {
   number: number;
@@ -22,33 +22,16 @@ const RepositoryRow = ({ repo }: { repo: string }) => {
 
   React.useEffect(() => {
     if (repo) {
-      const [base, splitProject] = repo.split(":");
-      const project = splitProject.replace(".git", "");
-      const [, manager] = base.split("@");
+      const { name: repoName, icon: repoIcon, url: repoUrl } = getRepositoryFromString(repo);
+      setName(repoName);
+      setIcon(repoIcon);
+      setUrl(repoUrl);
 
-      if (project.indexOf("/") > 0) {
-        setName(project.split("/").pop() || project);
-      } else {
-        setName(project);
-      }
-
-      if (manager) {
-        setUrl(`https://${manager}/${project}`);
-
-        switch (manager.toLowerCase()) {
-          case "github.com":
-            setIcon(faGithub);
-            break;
-          default:
-            setIcon(faCode);
-        }
-
-        // TODO (jslaughter): fetch open PR's count
-        // setRequests({
-        //   number: 0,
-        //   url: `https://${manager}/${project}/pulls`,
-        // });
-      }
+      // TODO (jslaughter): fetch open PR's count
+      // setRequests({
+      //   number: 0,
+      //   url: `https://${manager}/${project}/pulls`,
+      // });
     }
   }, [repo]);
 
