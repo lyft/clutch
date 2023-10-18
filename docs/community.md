@@ -14,12 +14,6 @@ Join the **Lyft OSS Slack** and come see us in channel **`#clutch`**!
 
 </CommunityCard>
 
-<CommunityCard icon="twitter" to="https://twitter.com/clutchdotsh">
-
-Follow us on **Twitter** for news and updates `@clutchdotsh`.
-
-</CommunityCard>
-
 <CommunityCard icon="github" to="https://github.com/lyft/clutch/issues">
 
 File a GitHub issue in **`lyft/clutch`**.
