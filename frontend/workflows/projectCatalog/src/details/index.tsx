@@ -51,7 +51,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       justifyContent="flex-end"
       spacing={1}
       style={{
-        padding: "8px 32px 0px 0px",
+        padding: "8px 0px 0px 0px",
       }}
     >
       {!isEmpty(linkGroups) && (
