@@ -40,6 +40,7 @@ export * from "./NPS";
 export { default as ExpansionPanel } from "./panel";
 export { default as Paper } from "./paper";
 export { Popper, PopperItem } from "./popper";
+export { default as QuickLinksCard } from "./quick-links";
 export { default as Resolver } from "./Resolver";
 export { Step, Stepper } from "./stepper";
 export { default as styled } from "./styled";

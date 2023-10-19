@@ -1,7 +1,15 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { FeatureOn, Grid, IconButton, SimpleFeatureFlag, styled, Tooltip } from "@clutch-sh/core";
+import {
+  FeatureOn,
+  Grid,
+  IconButton,
+  QuickLinksCard,
+  SimpleFeatureFlag,
+  styled,
+  Tooltip,
+} from "@clutch-sh/core";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GroupIcon from "@mui/icons-material/Group";
@@ -15,7 +23,6 @@ import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import { fetchProjectInfo } from "./helpers";
 import ProjectInfoCard from "./info";
-import QuickLinksCard from "./quick-links";
 
 const StyledContainer = styled(Grid)({
   padding: "16px",
@@ -44,7 +51,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
       justifyContent="flex-end"
       spacing={1}
       style={{
-        padding: "8px 32px 0px 0px",
+        padding: "8px 0px 0px 0px",
       }}
     >
       {!isEmpty(linkGroups) && (
