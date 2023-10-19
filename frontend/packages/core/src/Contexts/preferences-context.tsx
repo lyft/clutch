@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 export type ActionType = "SetPref" | "RemovePref" | "SetLocalPref" | "RemoveLocalPref";
 const STORAGE_KEY = "userPreferences";
@@ -62,6 +63,12 @@ const UserPreferencesProvider = ({ children }: UserPreferencesProviderProps) => 
   let pref = DEFAULT_PREFERENCES;
   try {
     pref = JSON.parse(localStorage.getItem(STORAGE_KEY) || "");
+    // If there are any missing default preferences, add them
+    Object.keys(DEFAULT_PREFERENCES).forEach(key => {
+      if (_.isEmpty(pref[key]) || !pref[key]) {
+        pref[key] = DEFAULT_PREFERENCES[key];
+      }
+    });
   } catch {
     localStorage.removeItem(STORAGE_KEY);
   }
