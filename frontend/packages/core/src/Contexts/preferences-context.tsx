@@ -6,7 +6,9 @@ type State = { key: string; value?: unknown };
 type Action = { type: ActionType; payload: State };
 type Dispatch = (action: Action) => void;
 type UserPreferencesProviderProps = { children: React.ReactNode };
-const DEFAULT_PREFERENCES = {} as State;
+const DEFAULT_PREFERENCES: State = {
+  timeFormat: "UTC",
+} as any;
 interface ContextProps {
   preferences: State;
   dispatch: Dispatch;
