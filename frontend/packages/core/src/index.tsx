@@ -22,7 +22,7 @@ export {
 } from "./Contexts";
 export { Dialog, DialogActions, DialogContent } from "./dialog";
 export * from "./Feedback";
-export { FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
+export { checkFeatureEnabled, FeatureOff, FeatureOn, SimpleFeatureFlag } from "./flags";
 export { default as Grid } from "./grid";
 export { AvatarIcon, StatusIcon } from "./icon";
 export * from "./Input";

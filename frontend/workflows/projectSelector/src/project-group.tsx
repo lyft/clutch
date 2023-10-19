@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox, Switch } from "@clutch-sh/core";
+import { Checkbox, checkFeatureEnabled, Switch } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -139,6 +139,26 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
   const numProjects = groupKeys.length;
   const checkedProjects = groupKeys.filter(k => state?.[group][k].checked);
 
+  const additionalQuickLinks = (key: string) => {
+    const links: any[] = [];
+
+    if (checkFeatureEnabled({ feature: "projectCatalog" })) {
+      links.push({
+        name: "Project Catalog",
+        links: [
+          {
+            name: "Project Catalog",
+            trackingId: "dash-project-catalog",
+            url: `/catalog/${key}`,
+          },
+        ],
+        imagePath: "/icons/Catalog.svg",
+      });
+    }
+
+    return links;
+  };
+
   // We need to keep track of which project has its quick links open so that we know
   // to hide the other projects' buttons
   const [quickLinksWindowKey, setQuickLinksWindowKey] = React.useState<string>("");
@@ -235,7 +255,10 @@ const ProjectGroup: React.FC<ProjectGroupProps> = ({ title, group, displayToggle
               </StyledHoverOptions>
               {!state?.loading && state?.projectData?.[key]?.linkGroups && (
                 <ProjectLinks
-                  linkGroups={state?.projectData?.[key]?.linkGroups ?? []}
+                  linkGroups={[
+                    ...(state?.projectData?.[key]?.linkGroups ?? []),
+                    ...additionalQuickLinks(key),
+                  ]}
                   onOpen={() => onOpenQuickLinks(key)}
                   onClose={onCloseQuickLinks}
                   showOpenButton={quickLinksWindowKey !== key}

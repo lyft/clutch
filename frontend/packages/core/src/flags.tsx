@@ -72,9 +72,26 @@ interface SimpleFeatureFlagStateProps {
   children: React.ReactNode;
 }
 
+interface SimpleFeatureEnabledProps {
+  /** The name of the feature flag to lookup */
+  feature: string;
+}
+
 const FeatureOn = ({ children }: SimpleFeatureFlagStateProps) => <>{children}</>;
 
 const FeatureOff = ({ children }: SimpleFeatureFlagStateProps) => <>{children}</>;
+
+const checkFeatureEnabled = ({ feature }: SimpleFeatureEnabledProps) => {
+  const cachedFlags = JSON.parse(sessionStorage.getItem("featureFlags"));
+  let featureEnabled = false;
+
+  const flag = cachedFlags?.flags?.[feature];
+  if (flag !== undefined) {
+    featureEnabled = flag.booleanValue;
+  }
+
+  return featureEnabled;
+};
 
 /**
  * A feature flag wrapper that evaluates a binary value of a specified flag to determine
@@ -114,4 +131,11 @@ const SimpleFeatureFlag = ({ feature, children }: SimpleFeatureFlagProps) => {
   return <>{statefulChildren}</>;
 };
 
-export { FEATURE_FLAG_POLL_RATE, featureFlags, FeatureOff, FeatureOn, SimpleFeatureFlag };
+export {
+  FEATURE_FLAG_POLL_RATE,
+  featureFlags,
+  checkFeatureEnabled,
+  FeatureOff,
+  FeatureOn,
+  SimpleFeatureFlag,
+};
