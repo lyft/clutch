@@ -8,7 +8,29 @@ import { Tooltip, TooltipContainer } from "./Feedback";
 import Grid from "./grid";
 import { Link } from "./link";
 import { Popper, PopperItem } from "./popper";
+import styled from "./styled";
 import { Typography } from "./typography";
+
+const StyledGrid = styled(Grid)({
+  padding: "10px",
+  margin: "-4px",
+});
+
+const StyledQLGrid = styled(Grid)({
+  padding: "8px",
+});
+
+const StyledButton = styled("button")({
+  padding: 0,
+  background: "transparent",
+  border: "0",
+  cursor: "pointer",
+  display: "flex",
+});
+
+const StyledSpan = styled("span")({
+  whiteSpace: "nowrap",
+});
 
 interface LinkGroupProps {
   linkGroupName: string;
@@ -39,9 +61,9 @@ const QuickLinkContainer = ({ keyProp, name, children }: QuickLinkContainerProps
   );
 
   return (
-    <Grid item key={keyProp ?? ""} style={{ padding: "8px" }}>
+    <StyledQLGrid item key={keyProp ?? ""}>
       {name ? container : children}
-    </Grid>
+    </StyledQLGrid>
   );
 };
 
@@ -77,20 +99,9 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 
   return (
     <QuickLinkContainer keyProp={linkGroupName} name={linkGroupName}>
-      <button
-        type="button"
-        style={{
-          padding: 0,
-          background: "transparent",
-          border: "0",
-          cursor: "pointer",
-          display: "flex",
-        }}
-        ref={anchorRef}
-        onClick={() => setOpen(true)}
-      >
+      <StyledButton type="button" ref={anchorRef} onClick={() => setOpen(true)}>
         <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
-      </button>
+      </StyledButton>
       <Popper
         open={open}
         anchorRef={anchorRef}
@@ -101,11 +112,11 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
           <PopperItem key={link.name}>
             {link?.url && (
               <Link href={link.url}>
-                <span style={{ whiteSpace: "nowrap" }}>
+                <StyledSpan>
                   <Typography color="inherit" variant="body4">
                     {link.name}
                   </Typography>
-                </span>
+                </StyledSpan>
               </Link>
             )}
           </PopperItem>
@@ -166,14 +177,13 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
 
   return (
     <Card>
-      <Grid
+      <StyledGrid
         container
         item
         direction="row"
         alignItems="center"
         spacing={1}
         justifyContent="space-around"
-        style={{ padding: "10px", margin: "-4px" }}
         flexWrap="nowrap"
       >
         <SlicedLinkGroup slicedLinkGroups={firstFive} />
@@ -193,13 +203,13 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
               onClickAway={() => setOpen(false)}
               placement="bottom-end"
             >
-              <Grid style={{ padding: "8px" }} direction="row" container>
+              <StyledQLGrid direction="row" container>
                 <SlicedLinkGroup slicedLinkGroups={overflow} />
-              </Grid>
+              </StyledQLGrid>
             </Popper>
           </>
         )}
-      </Grid>
+      </StyledGrid>
     </Card>
   );
 };
