@@ -219,12 +219,13 @@ const UserInformation: React.FC<UserInformationProps> = ({
                     <AvatarListItemText>{user}</AvatarListItemText>
                   </AvatarMenuItem>
                   {data?.map((d, i) => (
-                    <>
+                    // eslint-disable-next-line react/no-array-index-key
+                    <React.Fragment key={i}>
                       <MenuItem>
                         <ListItemText>{d.value}</ListItemText>
                       </MenuItem>
                       {i > 0 && i < data.length && <Divider />}
-                    </>
+                    </React.Fragment>
                   ))}
                   {_.castArray(children).length > 0 && <Divider />}
                   <div style={{ marginBottom: "8px" }}>
