@@ -23,7 +23,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.11.1-0.20230524094728-9239064ad72f
 	github.com/envoyproxy/protoc-gen-validate v0.10.1
-	github.com/fullstorydev/grpcurl v1.8.7
+	github.com/fullstorydev/grpcurl v1.8.9
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/gobwas/glob v0.2.3
@@ -35,7 +35,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/iancoleman/strcase v0.3.0
-	github.com/jhump/protoreflect v1.15.2
+	github.com/jhump/protoreflect v1.15.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.8
 	github.com/mitchellh/hashstructure/v2 v2.0.2
@@ -48,7 +48,7 @@ require (
 	go.temporal.io/sdk v1.24.0
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.26.0
-	golang.org/x/net v0.15.0
+	golang.org/x/net v0.17.0
 	golang.org/x/oauth2 v0.12.0
 	golang.org/x/sync v0.3.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230920204549-e6e6cdab5c13
@@ -150,11 +150,11 @@ require (
 	go.temporal.io/api v1.21.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/sys v0.12.0 // indirect
-	golang.org/x/term v0.12.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
