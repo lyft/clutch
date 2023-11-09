@@ -6,25 +6,56 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	v1beta1 "k8s.io/api/batch/v1beta1"
+	batchv1 "k8s.io/api/batch/v1"
+	"k8s.io/api/batch/v1beta1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/version"
+	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-func testCronService() *svc {
-	cron := &v1beta1.CronJob{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:        "testing-cron-name",
-			Namespace:   "testing-namespace",
-			Labels:      map[string]string{"test": "foo"},
-			Annotations: map[string]string{"test": "bar"},
-		},
+func testCronService(t *testing.T, legacy bool) *svc {
+	var cs *fake.Clientset
+	if legacy {
+		cron := &v1beta1.CronJob{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:        "testing-cron-name",
+				Namespace:   "testing-namespace",
+				Labels:      map[string]string{"test": "foo"},
+				Annotations: map[string]string{"test": "bar"},
+			},
+		}
+		cs = fake.NewSimpleClientset(cron)
+		fakeDiscovery, ok := cs.Discovery().(*fakediscovery.FakeDiscovery)
+		if !ok {
+			t.Fatalf("couldn't convert Discovery() to *FakeDiscovery")
+		}
+		fakeDiscovery.FakedServerVersion = &version.Info{
+			Major: "1",
+			Minor: "20",
+		}
+	} else {
+		cron := &batchv1.CronJob{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:        "testing-cron-name",
+				Namespace:   "testing-namespace",
+				Labels:      map[string]string{"test": "foo"},
+				Annotations: map[string]string{"test": "bar"},
+			},
+		}
+		cs = fake.NewSimpleClientset(cron)
+		fakeDiscovery, ok := cs.Discovery().(*fakediscovery.FakeDiscovery)
+		if !ok {
+			t.Fatalf("couldn't convert Discovery() to *FakeDiscovery")
+		}
+		fakeDiscovery.FakedServerVersion = &version.Info{
+			Major: "1",
+			Minor: "22",
+		}
 	}
-
-	cs := fake.NewSimpleClientset(cron)
 	return &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"foo": {
@@ -37,18 +68,30 @@ func testCronService() *svc {
 }
 
 func TestDescribeCron(t *testing.T) {
-	s := testCronService()
+	s := testCronService(t, true)
 	cron, err := s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
+	assert.NoError(t, err)
+	assert.NotNil(t, cron)
+
+	s = testCronService(t, false)
+	cron, err = s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, cron)
 }
 
 func TestListCron(t *testing.T) {
-	s := testCronService()
+	s := testCronService(t, true)
 	opts := &k8sapiv1.ListOptions{Labels: map[string]string{"test": "foo"}}
 	list, err := s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(list))
+
+	s = testCronService(t, false)
+	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"test": "foo"}}
+	list, err = s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+
 	// Not Found
 	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"unknown": "bar"}}
 	list, err = s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
@@ -57,7 +100,7 @@ func TestListCron(t *testing.T) {
 }
 
 func TestDeleteCron(t *testing.T) {
-	s := testCronService()
+	s := testCronService(t, true)
 	// Not found.
 	err := s.DeleteCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
 	assert.Error(t, err)
@@ -68,6 +111,10 @@ func TestDeleteCron(t *testing.T) {
 	// Not found.
 	_, err = s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.Error(t, err)
+
+	s = testCronService(t, false)
+	err = s.DeleteCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
+	assert.NoError(t, err)
 }
 
 func TestProtoForCron(t *testing.T) {
@@ -124,7 +171,7 @@ func TestProtoForCron(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			cron := ProtoForCronJob(tt.inputClusterName, tt.cron)
+			cron := ProtoForV1Beta1CronJob(tt.inputClusterName, tt.cron)
 			assert.Equal(t, tt.expectedClusterName, cron.Cluster)
 			assert.Equal(t, tt.expectedName, cron.Name)
 			assert.Equal(t, tt.cron.Spec.Schedule, cron.Schedule)
