@@ -42,7 +42,6 @@ func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace
 			return nil, status.Error(codes.FailedPrecondition, "located multiple cron jobs")
 		}
 		return nil, status.Error(codes.NotFound, "unable to locate specified cron job")
-
 	}
 
 	cronJobs, err := cs.BatchV1().CronJobs(cs.Namespace()).List(ctx, metav1.ListOptions{

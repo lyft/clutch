@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"context"
-	"k8s.io/apimachinery/pkg/version"
 	"strings"
 	"testing"
 
@@ -11,10 +10,11 @@ import (
 	"k8s.io/api/batch/v1beta1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/version"
+	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	fakediscovery "k8s.io/client-go/discovery/fake"
 )
 
 func testCronService(t *testing.T, legacy bool) *svc {
