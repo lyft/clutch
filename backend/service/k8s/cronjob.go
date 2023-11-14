@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	v1beta1 "k8s.io/api/batch/v1beta1"
+	"k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -19,16 +19,16 @@ func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace
 		return nil, err
 	}
 
-	cronJobs, err := cs.BatchV1beta1().CronJobs(cs.Namespace()).List(ctx, metav1.ListOptions{
+	cronJobs, err := cs.BatchV1().CronJobs(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
 		return nil, err
 	}
-
 	if len(cronJobs.Items) == 1 {
 		return ProtoForCronJob(cs.Cluster(), &cronJobs.Items[0]), nil
-	} else if len(cronJobs.Items) > 1 {
+	}
+	if len(cronJobs.Items) > 1 {
 		return nil, status.Error(codes.FailedPrecondition, "located multiple cron jobs")
 	}
 	return nil, status.Error(codes.NotFound, "unable to locate specified cron job")
@@ -45,7 +45,7 @@ func (s *svc) ListCronJobs(ctx context.Context, clientset, cluster, namespace st
 		return nil, err
 	}
 
-	cronJobList, err := cs.BatchV1beta1().CronJobs(cs.Namespace()).List(ctx, opts)
+	cronJobList, err := cs.BatchV1().CronJobs(cs.Namespace()).List(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,6 @@ func (s *svc) ListCronJobs(ctx context.Context, clientset, cluster, namespace st
 		cronJob := d
 		cronJobs = append(cronJobs, ProtoForCronJob(cs.Cluster(), &cronJob))
 	}
-
 	return cronJobs, nil
 }
 
@@ -66,10 +65,10 @@ func (s *svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, 
 	}
 
 	opts := metav1.DeleteOptions{}
-	return cs.BatchV1beta1().CronJobs(cs.Namespace()).Delete(ctx, name, opts)
+	return cs.BatchV1().CronJobs(cs.Namespace()).Delete(ctx, name, opts)
 }
 
-func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.CronJob {
+func ProtoForCronJob(cluster string, k8scronJob *v1.CronJob) *k8sapiv1.CronJob {
 	clusterName := GetKubeClusterName(k8scronJob)
 	if clusterName == "" {
 		clusterName = cluster
