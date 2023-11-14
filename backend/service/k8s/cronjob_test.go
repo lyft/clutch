@@ -7,55 +7,24 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	batchv1 "k8s.io/api/batch/v1"
-	"k8s.io/api/batch/v1beta1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/version"
-	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-func testCronService(t *testing.T, legacy bool) *svc {
+func testCronService(t *testing.T) *svc {
 	var cs *fake.Clientset
-	if legacy {
-		cron := &v1beta1.CronJob{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:        "testing-cron-name",
-				Namespace:   "testing-namespace",
-				Labels:      map[string]string{"test": "foo"},
-				Annotations: map[string]string{"test": "bar"},
-			},
-		}
-		cs = fake.NewSimpleClientset(cron)
-		fakeDiscovery, ok := cs.Discovery().(*fakediscovery.FakeDiscovery)
-		if !ok {
-			t.Fatalf("couldn't convert Discovery() to *FakeDiscovery")
-		}
-		fakeDiscovery.FakedServerVersion = &version.Info{
-			Major: "1",
-			Minor: "20",
-		}
-	} else {
-		cron := &batchv1.CronJob{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:        "testing-cron-name",
-				Namespace:   "testing-namespace",
-				Labels:      map[string]string{"test": "foo"},
-				Annotations: map[string]string{"test": "bar"},
-			},
-		}
-		cs = fake.NewSimpleClientset(cron)
-		fakeDiscovery, ok := cs.Discovery().(*fakediscovery.FakeDiscovery)
-		if !ok {
-			t.Fatalf("couldn't convert Discovery() to *FakeDiscovery")
-		}
-		fakeDiscovery.FakedServerVersion = &version.Info{
-			Major: "1",
-			Minor: "22",
-		}
+	cron := &batchv1.CronJob{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "testing-cron-name",
+			Namespace:   "testing-namespace",
+			Labels:      map[string]string{"test": "foo"},
+			Annotations: map[string]string{"test": "bar"},
+		},
 	}
+	cs = fake.NewSimpleClientset(cron)
 	return &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"foo": {
@@ -68,27 +37,16 @@ func testCronService(t *testing.T, legacy bool) *svc {
 }
 
 func TestDescribeCron(t *testing.T) {
-	s := testCronService(t, true)
+	s := testCronService(t)
 	cron, err := s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
-	assert.NoError(t, err)
-	assert.NotNil(t, cron)
-
-	s = testCronService(t, false)
-	cron, err = s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, cron)
 }
 
 func TestListCron(t *testing.T) {
-	s := testCronService(t, true)
+	s := testCronService(t)
 	opts := &k8sapiv1.ListOptions{Labels: map[string]string{"test": "foo"}}
 	list, err := s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
-	assert.NoError(t, err)
-	assert.Equal(t, 1, len(list))
-
-	s = testCronService(t, false)
-	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"test": "foo"}}
-	list, err = s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(list))
 
@@ -100,7 +58,7 @@ func TestListCron(t *testing.T) {
 }
 
 func TestDeleteCron(t *testing.T) {
-	s := testCronService(t, true)
+	s := testCronService(t)
 	// Not found.
 	err := s.DeleteCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
 	assert.Error(t, err)
@@ -111,10 +69,6 @@ func TestDeleteCron(t *testing.T) {
 	// Not found.
 	_, err = s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.Error(t, err)
-
-	s = testCronService(t, false)
-	err = s.DeleteCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
-	assert.NoError(t, err)
 }
 
 func TestProtoForCron(t *testing.T) {
@@ -125,14 +79,14 @@ func TestProtoForCron(t *testing.T) {
 		inputClusterName    string
 		expectedClusterName string
 		expectedName        string
-		cron                *v1beta1.CronJob
+		cron                *batchv1.CronJob
 	}{
 		{
 			id:                  "clustername already set",
 			inputClusterName:    "abc",
 			expectedClusterName: "production",
 			expectedName:        "test1",
-			cron: &v1beta1.CronJob{
+			cron: &batchv1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						clutchLabelClusterName: "production",
@@ -146,20 +100,20 @@ func TestProtoForCron(t *testing.T) {
 			inputClusterName:    "staging",
 			expectedClusterName: "staging",
 			expectedName:        "test2",
-			cron: &v1beta1.CronJob{
+			cron: &batchv1.CronJob{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						clutchLabelClusterName: "",
 					},
 					Name: "test2",
 				},
-				Spec: v1beta1.CronJobSpec{
-					ConcurrencyPolicy:       v1beta1.AllowConcurrent,
+				Spec: batchv1.CronJobSpec{
+					ConcurrencyPolicy:       batchv1.AllowConcurrent,
 					Schedule:                "5 4 * * *",
 					Suspend:                 &[]bool{true}[0],
 					StartingDeadlineSeconds: &[]int64{69}[0],
 				},
-				Status: v1beta1.CronJobStatus{
+				Status: batchv1.CronJobStatus{
 					Active: []v1.ObjectReference{{}, {}},
 				},
 			},
@@ -171,7 +125,7 @@ func TestProtoForCron(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			cron := ProtoForV1Beta1CronJob(tt.inputClusterName, tt.cron)
+			cron := ProtoForCronJob(tt.inputClusterName, tt.cron)
 			assert.Equal(t, tt.expectedClusterName, cron.Cluster)
 			assert.Equal(t, tt.expectedName, cron.Name)
 			assert.Equal(t, tt.cron.Spec.Schedule, cron.Schedule)
