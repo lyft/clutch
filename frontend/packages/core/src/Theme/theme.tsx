@@ -1,8 +1,6 @@
 import React from "react";
-import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
 import type { Theme as MuiTheme } from "@mui/material";
 import {
-  adaptV4Theme,
   createTheme as createMuiTheme,
   CssBaseline,
   StyledEngineProvider,
@@ -20,23 +18,23 @@ declare module "@mui/styles/defaultTheme" {
 
 // Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
-  return createMuiTheme(
-    adaptV4Theme({
-      // inject in custom colors
-      ...clutchColors(variant),
-      palette: palette(variant),
-      transitions: {
-        // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
-        create: () => "none",
-      },
-      props: {
-        MuiButtonBase: {
+  return createMuiTheme({
+    // inject in custom colors
+    ...clutchColors(variant),
+    palette: palette(variant),
+    transitions: {
+      // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+      create: () => "none",
+    },
+    components: {
+      MuiButtonBase: {
+        defaultProps: {
           // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
           disableRipple: true,
         },
       },
-      overrides: {
-        MuiAccordion: {
+      MuiAccordion: {
+        styleOverrides: {
           root: {
             "&$expanded": {
               // remove the additional margin rule when expanded so the original margin is used.
@@ -45,8 +43,23 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
           },
         },
       },
-    })
-  );
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            fontSize: "0.875rem",
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          select: {
+            fontSize: "0.875rem",
+            height: "20px",
+          },
+        },
+      },
+    },
+  });
 };
 
 interface ThemeProps {
@@ -57,10 +70,8 @@ interface ThemeProps {
 const ThemeProvider = ({ children, variant = "light" }: ThemeProps) => (
   <StyledEngineProvider injectFirst>
     <MuiThemeProvider theme={createTheme(variant)}>
-      <EmotionThemeProvider theme={createTheme(variant)}>
-        <CssBaseline />
-        <StylesProvider injectFirst>{children}</StylesProvider>
-      </EmotionThemeProvider>
+      <CssBaseline />
+      <StylesProvider injectFirst>{children}</StylesProvider>
     </MuiThemeProvider>
   </StyledEngineProvider>
 );

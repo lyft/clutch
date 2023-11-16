@@ -11,7 +11,6 @@ import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 
 const StyledLanding = styled.div({
-  backgroundColor: "#f9f9fe",
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,
