@@ -7,6 +7,7 @@ import {
   List,
   ListItemButton,
   Typography,
+  useTheme,
 } from "@mui/material";
 import _ from "lodash";
 
@@ -20,17 +21,21 @@ import { Popper, PopperItem } from "../popper";
 import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 
 // sidebar
-const DrawerPanel = styled(MuiDrawer)({
-  width: "100px",
-  overflowY: "auto",
-  ".MuiDrawer-paper": {
-    top: "unset",
-    width: "inherit",
-    backgroundColor: "#FFFFFF",
-    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-    position: "relative",
-    display: "flex",
-  },
+const DrawerPanel = styled(MuiDrawer)(() => {
+  const theme = useTheme();
+  return {
+    width: "100px",
+    overflowY: "auto",
+    ".MuiDrawer-paper": {
+      top: "unset",
+      width: "inherit",
+      backgroundColor:
+        theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.common.white,
+      boxShadow: `0px 5px 15px ${theme.palette.primary[400]}`,
+      position: "relative",
+      display: "flex",
+    },
+  };
 });
 
 // sidebar groupings
@@ -39,50 +44,59 @@ const GroupList = styled(List)({
 });
 
 const GroupListItem = styled(ListItemButton)<{ icon: number }>(
-  {
-    flexDirection: "column",
-    minHeight: "82px",
-    padding: "16px 8px 16px 8px",
-    height: "fit-content",
-    "&:hover": {
-      backgroundColor: "#F5F6FD",
-    },
-    "&:active": {
-      backgroundColor: "#D7DAF6",
-    },
-    "&.Mui-selected": {
-      backgroundColor: "#EBEDFB",
+  () => {
+    const theme = useTheme();
+    return {
+      flexDirection: "column",
+      minHeight: "82px",
+      padding: "16px 8px 16px 8px",
+      height: "fit-content",
       "&:hover": {
-        backgroundColor: "#F5F6FD",
+        backgroundColor: theme.palette.primary[100],
       },
       "&:active": {
-        backgroundColor: "#D7DAF6",
+        backgroundColor: theme.palette.primary[300],
       },
-    },
+      "&.Mui-selected": {
+        backgroundColor: theme.palette.primary[200],
+        "&:hover": {
+          backgroundColor: theme.palette.primary[100],
+        },
+        "&:active": {
+          backgroundColor: theme.palette.primary[300],
+        },
+      },
+    };
   },
-  props => ({
-    // avatar and label
-    "&:hover, &:active, &.Mui-selected": {
-      ".MuiAvatar-root": {
-        backgroundColor: props.icon ? "unset" : "#3548D4",
+  props => {
+    const theme = useTheme();
+    return {
+      // avatar and label
+      "&:hover, &:active, &.Mui-selected": {
+        ".MuiAvatar-root": {
+          backgroundColor: props.icon ? "unset" : theme.palette.primary[600],
+        },
+        ".MuiTypography-root": {
+          color: theme.palette.primary[600],
+        },
       },
-      ".MuiTypography-root": {
-        color: "#3548D4",
-      },
-    },
-  })
+    };
+  }
 );
 
-const GroupHeading = styled(Typography)({
-  color: "rgba(13, 16, 48, 0.6)",
-  fontWeight: 500,
-  fontSize: "14px",
-  lineHeight: "18px",
-  flexGrow: 1,
-  paddingTop: "11px",
-  width: "100%",
-  textOverflow: "ellipsis",
-  overflow: "hidden",
+const GroupHeading = styled(Typography)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.secondary[700],
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "18px",
+    flexGrow: 1,
+    paddingTop: "11px",
+    width: "100%",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+  };
 });
 
 const IconAvatar = styled(MuiAvatar)({
@@ -90,11 +104,14 @@ const IconAvatar = styled(MuiAvatar)({
   width: "24px",
 });
 
-const Avatar = styled(IconAvatar)({
-  background: "rgba(13, 16, 48, 0.6)",
-  color: "#FFFFFF",
-  fontSize: "14px",
-  borderRadius: "4px",
+const Avatar = styled(IconAvatar)(() => {
+  const theme = useTheme();
+  return {
+    background: theme.palette.secondary[700],
+    color: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
+    fontSize: "14px",
+    borderRadius: "4px",
+  };
 });
 
 interface GroupProps {

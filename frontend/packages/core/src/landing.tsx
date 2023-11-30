@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid } from "@mui/material";
+import { Grid, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { userId } from "./AppLayout/user";
@@ -10,40 +10,44 @@ import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 
-const StyledLanding = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  flexGrow: 1,
-  "& .welcome": {
+const StyledLanding = styled.div(() => {
+  const theme = useTheme();
+  return {
     display: "flex",
-    backgroundColor: "white",
-    padding: "32px 80px",
-  },
+    flexDirection: "column",
+    flexGrow: 1,
+    "& .welcome": {
+      display: "flex",
+      backgroundColor:
+        theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.common.white,
+      padding: "32px 80px",
+    },
 
-  "& .welcome svg": {
-    flex: "0 0 auto",
-    margin: "auto 24px auto 0",
-  },
+    "& .welcome svg": {
+      flex: "0 0 auto",
+      margin: "auto 24px auto 0",
+    },
 
-  "& .welcome .welcomeText": {
-    flex: "1 1 auto",
-  },
+    "& .welcome .welcomeText": {
+      flex: "1 1 auto",
+    },
 
-  "& .welcome .title": {
-    fontWeight: "bold",
-    fontSize: "22px",
-    color: "#0d1030",
-  },
+    "& .welcome .title": {
+      fontWeight: "bold",
+      fontSize: "22px",
+      color: theme.palette.text.primary,
+    },
 
-  "& .welcome .subtitle": {
-    fontSize: "16px",
-    fontWeight: "normal",
-    color: "rgba(13, 16, 48, 0.6)",
-  },
+    "& .welcome .subtitle": {
+      fontSize: "16px",
+      fontWeight: "normal",
+      color: theme.palette.text.secondary,
+    },
 
-  "& .content": {
-    padding: "32px 80px",
-  },
+    "& .content": {
+      padding: "32px 80px",
+    },
+  };
 });
 
 const Landing: React.FC<{}> = () => {
