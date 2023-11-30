@@ -29,6 +29,7 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
   // TODO: add all clutch colors to "common colors"
   return {
     type: variant,
+    mode: variant,
     primary: color.blue,
     secondary: color.neutral,
     error: color.red,
@@ -38,6 +39,7 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
     grey: color.neutral,
     background: {
       default: color.blue[50],
+      paper: isLightMode ? color.neutral.A100 : "#1c1e3c",
     },
     text: isLightMode ? lightText : darkText,
   };

@@ -19,8 +19,7 @@ declare module "@mui/styles/defaultTheme" {
 // Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
-    // inject in custom colors
-    ...clutchColors(variant),
+    colors: clutchColors(variant),
     palette: palette(variant),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
