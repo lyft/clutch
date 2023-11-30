@@ -177,9 +177,6 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
 const clutchColors = (variant: ThemeVariant) => {
   const colors = variant === "light" ? LIGHT_COLORS : DARK_COLORS;
   return {
-    typography: {},
-    stroke: {},
-    background: {},
     ...colors,
   };
 };
