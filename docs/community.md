@@ -20,14 +20,6 @@ File a GitHub issue in **`lyft/clutch`**.
 
 </CommunityCard>
 
-<CommunityCard icon="calendar" to="https://calendly.com/clutchsh/office-hours">
-
-Schedule time during our office hours with **Calendly**.
-
-*Available in 15-minute slots on Tuesdays from 11am - 12pm Pacific.*
-
-</CommunityCard>
-
 ## Contributing
 
 Please view the [Code of Conduct](https://github.com/lyft/clutch/blob/main/CODE_OF_CONDUCT.md) if you're interested in contributing.
