@@ -12,6 +12,9 @@ declare module "@mui/material/styles" {
   interface ThemeOptions {
     colors?: ClutchColors;
   }
+  interface Palette {
+    contrastColor: string;
+  }
 }
 
 const Theme: React.FC = ({ children }) => {
