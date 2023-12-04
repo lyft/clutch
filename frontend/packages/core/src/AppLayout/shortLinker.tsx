@@ -9,6 +9,7 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  useTheme,
 } from "@mui/material";
 
 import { generateShortLinkRoute } from "../AppProvider/short-link-proxy";
@@ -33,12 +34,15 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const Paper = styled(MuiPaper)({
-  width: "400px",
-  height: "100px",
-  padding: "15px",
-  boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
-  borderRadius: "8px",
+const Paper = styled(MuiPaper)(() => {
+  const theme = useTheme();
+  return {
+    width: "400px",
+    height: "100px",
+    padding: "15px",
+    boxShadow: `0px 5px 35px ${theme.palette.primary[400]}22`,
+    borderRadius: "8px",
+  };
 });
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(

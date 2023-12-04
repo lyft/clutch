@@ -11,6 +11,7 @@ import {
   Popper as MuiPopper,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -99,26 +100,29 @@ const StyledCloseIcon = styled(Icon)({
 });
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)({
-  ".MuiPaper-root": {
-    border: "1px solid #e7e7ea",
-    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+const Popper = styled(MuiPopper)(() => {
+  const theme = useTheme();
+  return {
+    ".MuiPaper-root": {
+      border: "1px solid #e7e7ea",
+      boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
 
-    "> .MuiAutocomplete-listbox": {
-      "> .MuiAutocomplete-option": {
-        height: "48px",
-        padding: "0px",
+      "> .MuiAutocomplete-listbox": {
+        "> .MuiAutocomplete-option": {
+          height: "48px",
+          padding: "0px",
 
-        "&.Mui-focused": {
-          background: "#ebedfb",
+          "&.Mui-focused": {
+            background: "#ebedfb",
+          },
         },
       },
     },
-  },
-  ".MuiAutocomplete-noOptions": {
-    fontSize: "14px",
-    color: "#0d1030",
-  },
+    ".MuiAutocomplete-noOptions": {
+      fontSize: "14px",
+      color: "#0d1030",
+    },
+  };
 });
 
 const renderPopper = props => {

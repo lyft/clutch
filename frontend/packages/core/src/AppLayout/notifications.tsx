@@ -10,18 +10,22 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  useTheme,
 } from "@mui/material";
 
-const StyledNotificationsIcon = styled(IconButton)({
-  color: "#ffffff",
-  marginRight: "8px",
-  padding: "12px",
-  "&:hover": {
-    background: "#2d3db4",
-  },
-  "&:active": {
-    background: "#2938a5",
-  },
+const StyledNotificationsIcon = styled(IconButton)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
+    marginRight: "8px",
+    padding: "12px",
+    "&:hover": {
+      background: theme.palette.primary[400],
+    },
+    "&:active": {
+      background: theme.palette.primary[300],
+    },
+  };
 });
 
 const Popper = styled(MuiPopper)({
@@ -29,21 +33,27 @@ const Popper = styled(MuiPopper)({
   marginLeft: "12px",
 });
 
-const Paper = styled(MuiPaper)({
-  width: "242px",
-  border: "1px solid #E7E7EA",
-  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+const Paper = styled(MuiPaper)(() => {
+  const theme = useTheme();
+  return {
+    width: "242px",
+    border: `1px solid ${theme.palette.secondary[700]}`,
+    boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
+  };
 });
 
-const MenuItem = styled(MuiMenuItem)({
-  height: "48px",
-  padding: "12px",
-  "&:hover": {
-    backgroundColor: "#E7E7EA",
-  },
-  "&:active": {
-    backgroundColor: "#EBEDFB",
-  },
+const MenuItem = styled(MuiMenuItem)(() => {
+  const theme = useTheme();
+  return {
+    height: "48px",
+    padding: "12px",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary[700],
+    },
+    "&:active": {
+      backgroundColor: theme.palette.secondary[800],
+    },
+  };
 });
 
 const ListItemText = styled(MuiListItemText)({

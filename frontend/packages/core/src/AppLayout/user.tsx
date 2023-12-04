@@ -12,6 +12,7 @@ import {
   MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  useTheme,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
@@ -41,10 +42,13 @@ const Avatar = styled(MuiAvatar)({
   fontWeight: 500,
 });
 
-const Paper = styled(MuiPaper)({
-  width: "242px",
-  border: "1px solid #E7E7EA",
-  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+const Paper = styled(MuiPaper)(() => {
+  const theme = useTheme();
+  return {
+    width: "242px",
+    border: "1px solid #E7E7EA",
+    boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
+  };
 });
 
 const Popper = styled(MuiPopper)({
