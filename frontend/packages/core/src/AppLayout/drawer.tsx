@@ -108,7 +108,7 @@ const Avatar = styled(IconAvatar)(() => {
   const theme = useTheme();
   return {
     background: theme.palette.secondary[700],
-    color: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
+    color: theme.palette.contrastColor,
     fontSize: "14px",
     borderRadius: "4px",
   };

@@ -24,6 +24,7 @@ export default {
                 developer: { name: "Lyft", contactUrl: "mailto:hello@clutch.sh" },
                 displayName: "EC2",
                 group: "AWS",
+                icon: { path: "" },
                 path: "ec2",
                 routes: [
                   {

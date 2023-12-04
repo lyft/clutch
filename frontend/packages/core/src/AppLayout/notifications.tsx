@@ -16,7 +16,7 @@ import {
 const StyledNotificationsIcon = styled(IconButton)(() => {
   const theme = useTheme();
   return {
-    color: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
+    color: theme.palette.contrastColor,
     marginRight: "8px",
     padding: "12px",
     "&:hover": {
@@ -56,13 +56,16 @@ const MenuItem = styled(MuiMenuItem)(() => {
   };
 });
 
-const ListItemText = styled(MuiListItemText)({
-  margin: "0px",
-  ".MuiTypography-root": {
-    color: "#0D1030",
-    fontSize: "14px",
-    lineHeight: "24px",
-  },
+const ListItemText = styled(MuiListItemText)(() => {
+  const theme = useTheme();
+  return {
+    margin: "0px",
+    ".MuiTypography-root": {
+      color: theme.palette.secondary[900],
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
+  };
 });
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({

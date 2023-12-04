@@ -26,39 +26,42 @@ import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const InputField = styled(TextField)({
-  // input field
-  maxWidth: "551px",
-  minWidth: "551px",
-  "@media screen and (max-width: 880px)": {
-    minWidth: "125px",
-  },
-  ".MuiInputBase-root": {
-    height: "46px",
-    border: "1px solid #3548d4",
-    borderRadius: "4px",
-    background: "#ffffff",
-  },
-  // input text color
-  ".MuiAutocomplete-input": {
-    color: "#0d1030",
-  },
+const InputField = styled(TextField)(() => {
+  const theme = useTheme();
+  return {
+    // input field
+    maxWidth: "551px",
+    minWidth: "551px",
+    "@media screen and (max-width: 880px)": {
+      minWidth: "125px",
+    },
+    ".MuiInputBase-root": {
+      height: "46px",
+      border: `1px solid ${theme.palette.primary[600]}`,
+      borderRadius: "4px",
+      background: theme.palette.contrastColor,
+    },
+    // input text color
+    ".MuiAutocomplete-input": {
+      color: theme.palette.secondary[900],
+    },
 
-  // close icon's container
-  "div.MuiAutocomplete-endAdornment": {
-    ".MuiAutocomplete-popupIndicatorOpen": {
-      width: "32px",
-      height: "32px",
-      borderRadius: "30px",
-      marginRight: "8px",
-      "&:hover": {
-        background: "#e7e7ea",
-      },
-      "&:active": {
-        background: "#DBDBE0",
+    // close icon's container
+    "div.MuiAutocomplete-endAdornment": {
+      ".MuiAutocomplete-popupIndicatorOpen": {
+        width: "32px",
+        height: "32px",
+        borderRadius: "30px",
+        marginRight: "8px",
+        "&:hover": {
+          background: theme.palette.secondary[700],
+        },
+        "&:active": {
+          background: theme.palette.secondary[200],
+        },
       },
     },
-  },
+  };
 });
 
 // search's result options container
@@ -68,35 +71,47 @@ const ResultGrid = styled(Grid)({
 });
 
 // search's result options
-const ResultLabel = styled(Typography)({
-  color: "#0d1030",
-  fontSize: "14px",
+const ResultLabel = styled(Typography)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.secondary[900],
+    fontSize: "14px",
+  };
 });
 
 // main search icon on header
-const SearchIconButton = styled(IconButton)({
-  color: "#ffffff",
-  fontSize: "24px",
-  padding: "12px",
-  marginRight: "8px",
-  "&:hover": {
-    background: "#2d3db4",
-  },
-  "&:active": {
-    background: "#2938a5",
-  },
+const SearchIconButton = styled(IconButton)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.contrastColor,
+    fontSize: "24px",
+    padding: "12px",
+    marginRight: "8px",
+    "&:hover": {
+      background: theme.palette.primary[600],
+    },
+    "&:active": {
+      background: theme.palette.primary[700],
+    },
+  };
 });
 
 // search icon in input field
-const StartInputAdornment = styled(MuiInputAdornment)({
-  color: "#0c0b31",
-  marginLeft: "8px",
+const StartInputAdornment = styled(MuiInputAdornment)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.secondary[900],
+    marginLeft: "8px",
+  };
 });
 
 // closed icon svg
-const StyledCloseIcon = styled(Icon)({
-  color: "#0c0b31",
-  fontSize: "24px",
+const StyledCloseIcon = styled(Icon)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.secondary[900],
+    fontSize: "24px",
+  };
 });
 
 // popper containing the search result options
@@ -104,7 +119,7 @@ const Popper = styled(MuiPopper)(() => {
   const theme = useTheme();
   return {
     ".MuiPaper-root": {
-      border: "1px solid #e7e7ea",
+      border: `1px solid ${theme.palette.secondary[700]}`,
       boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
 
       "> .MuiAutocomplete-listbox": {
@@ -113,14 +128,14 @@ const Popper = styled(MuiPopper)(() => {
           padding: "0px",
 
           "&.Mui-focused": {
-            background: "#ebedfb",
+            background: theme.palette.secondary[800],
           },
         },
       },
     },
     ".MuiAutocomplete-noOptions": {
       fontSize: "14px",
-      color: "#0d1030",
+      color: theme.palette.secondary[900],
     },
   };
 });

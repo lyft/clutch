@@ -49,10 +49,7 @@ const AppBar = styled(MuiAppBar)(() => {
   const theme = useTheme();
   return {
     minWidth: "fit-content",
-    background:
-      theme.palette.mode === "light"
-        ? "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)"
-        : "#0D1030",
+    background: theme.palette.headerGradient,
     zIndex: 1201,
     height: APP_BAR_HEIGHT,
   };
@@ -68,7 +65,7 @@ const Title = styled(Typography)(() => {
     fontWeight: "bold",
     fontSize: "30px",
     paddingLeft: "5px",
-    color: theme.colors.neutral.A100,
+    color: theme.palette.common.white,
   };
 });
 

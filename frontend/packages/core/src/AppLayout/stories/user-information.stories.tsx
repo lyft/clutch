@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Grid as MuiGrid } from "@mui/material";
+import { Grid as MuiGrid, useTheme } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import type { UserInformationProps } from "../user";
@@ -11,9 +11,12 @@ export default {
   component: UserInformationComponent,
 } as Meta;
 
-const Grid = styled(MuiGrid)({
-  height: "64px",
-  backgroundColor: "#131C5F",
+const Grid = styled(MuiGrid)(() => {
+  const theme = useTheme();
+  return {
+    height: "64px",
+    backgroundColor: theme.palette.primary[900],
+  };
 });
 
 const Template = (props: UserInformationProps) => (

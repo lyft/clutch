@@ -18,35 +18,41 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import * as _ from "lodash";
 
-const UserPhoto = styled(IconButton)({
-  padding: "12px",
-  "&:hover": {
-    background: "#2d3db4",
-  },
-  "&:active": {
-    background: "#2938a5",
-  },
-  // avatar on header
-  ".MuiAvatar-root": {
-    height: "32px",
-    width: "32px",
-    fontSize: "14px",
-    lineHeight: "18px",
-  },
+const UserPhoto = styled(IconButton)(() => {
+  const theme = useTheme();
+  return {
+    padding: "12px",
+    "&:hover": {
+      background: theme.palette.primary[600],
+    },
+    "&:active": {
+      background: theme.palette.primary[700],
+    },
+    // avatar on header
+    ".MuiAvatar-root": {
+      height: "32px",
+      width: "32px",
+      fontSize: "14px",
+      lineHeight: "18px",
+    },
+  };
 });
 
 // header and menu avatar
-const Avatar = styled(MuiAvatar)({
-  backgroundColor: "#727FE1",
-  color: "#FFFFFF",
-  fontWeight: 500,
+const Avatar = styled(MuiAvatar)(() => {
+  const theme = useTheme();
+  return {
+    backgroundColor: theme.palette.primary[500],
+    color: theme.palette.contrastColor,
+    fontWeight: 500,
+  };
 });
 
 const Paper = styled(MuiPaper)(() => {
   const theme = useTheme();
   return {
     width: "242px",
-    border: "1px solid #E7E7EA",
+    border: `1px solid ${theme.palette.secondary[700]}`,
     boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
   };
 });
@@ -57,17 +63,20 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const MenuList = styled(MuiMenuList)({
-  padding: "0px",
-  borderRadius: "4px",
-  ".MuiMenuItem-root": {
-    "&:hover": {
-      backgroundColor: "#E7E7EA",
+const MenuList = styled(MuiMenuList)(() => {
+  const theme = useTheme();
+  return {
+    padding: "0px",
+    borderRadius: "4px",
+    ".MuiMenuItem-root": {
+      "&:hover": {
+        backgroundColor: theme.palette.secondary[700],
+      },
+      "&:active": {
+        backgroundColor: theme.palette.secondary[800],
+      },
     },
-    "&:active": {
-      backgroundColor: "#EBEDFB",
-    },
-  },
+  };
 });
 
 // user details menu item
@@ -89,14 +98,17 @@ const AvatarListItemIcon = styled(ListItemIcon)({
   },
 });
 
-const AvatarListItemText = styled(MuiListItemText)({
-  paddingLeft: "16px",
-  margin: "0px",
-  ".MuiTypography-root": {
-    color: "rgba(13, 16, 48, 0.6)",
-    fontSize: "14px",
-    lineHeight: "24px",
-  },
+const AvatarListItemText = styled(MuiListItemText)(() => {
+  const theme = useTheme();
+  return {
+    paddingLeft: "16px",
+    margin: "0px",
+    ".MuiTypography-root": {
+      color: `${theme.palette.secondary[900]}99}`,
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
+  };
 });
 
 // default menu items
@@ -105,17 +117,23 @@ const MenuItem = styled(MuiMenuItem)({
   padding: "12px",
 });
 
-const ListItemText = styled(MuiListItemText)({
-  margin: "0px",
-  ".MuiTypography-root": {
-    color: "#0D1030",
-    fontSize: "14px",
-    lineHeight: "24px",
-  },
+const ListItemText = styled(MuiListItemText)(() => {
+  const theme = useTheme();
+  return {
+    margin: "0px",
+    ".MuiTypography-root": {
+      color: theme.palette.secondary[900],
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
+  };
 });
 
-const Divider = styled(MuiDivider)({
-  backgroundColor: "#E7E7EA",
+const Divider = styled(MuiDivider)(() => {
+  const theme = useTheme();
+  return {
+    backgroundColor: theme.palette.secondary[700],
+  };
 });
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({

@@ -46,20 +46,26 @@ const Paper = styled(MuiPaper)(() => {
 });
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
-  {
-    color: "#ffffff",
-    marginRight: "8px",
-    padding: "12px",
-    "&:hover": {
-      background: "#2d3db4",
-    },
-    "&:active": {
-      background: "#2938a5",
-    },
+  () => {
+    const theme = useTheme();
+    return {
+      color: theme.palette.contrastColor,
+      marginRight: "8px",
+      padding: "12px",
+      "&:hover": {
+        background: theme.palette.primary[600],
+      },
+      "&:active": {
+        background: theme.palette.primary[700],
+      },
+    };
   },
-  props => ({
-    background: props.$open ? "#2d3db4" : "unset",
-  })
+  props => {
+    const theme = useTheme();
+    return {
+      background: props.$open ? theme.palette.primary[600] : "unset",
+    };
+  }
 );
 
 /**
