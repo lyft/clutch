@@ -6,6 +6,7 @@ import type { ClutchColors, ThemeVariant } from "./types";
 
 interface PaletteOptions extends MuiPaletteOptions {
   type: ThemeVariant;
+  contrastColor: string;
 }
 
 const lightText: Partial<TypeText> = {
@@ -42,6 +43,7 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
       paper: isLightMode ? color.neutral.A100 : "#1c1e3c",
     },
     text: isLightMode ? lightText : darkText,
+    contrastColor: isLightMode ? "#ffffff" : "#000000", // Either black or white depending on theme
   };
 };
 
