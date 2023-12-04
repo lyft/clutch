@@ -1,30 +1,33 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import type { TooltipProps as MuiTooltipProps } from "@mui/material";
-import { Tooltip as MuiTooltip } from "@mui/material";
+import { Tooltip as MuiTooltip, useTheme } from "@mui/material";
 
 const BaseTooltip = ({ className, ...props }: MuiTooltipProps) => (
   <MuiTooltip classes={{ tooltip: className }} {...props} />
 );
 
 // TODO: sync with Design on margins for each possible placement
-const StyledTooltip = styled(BaseTooltip)((props: { maxwidth?: string }) => ({
-  maxWidth: props.maxwidth,
-  backgroundColor: "#0D1030",
-  borderRadius: "6px",
-  "&.MuiTooltip-tooltipPlacementLeft": {
-    margin: "0 2px",
-  },
-  "&.MuiTooltip-tooltipPlacementRight": {
-    margin: "0 2px",
-  },
-  "&.MuiTooltip-tooltipPlacementTop": {
-    margin: "2px 0",
-  },
-  "&.MuiTooltip-tooltipPlacementBottom": {
-    margin: "2px 0",
-  },
-}));
+const StyledTooltip = styled(BaseTooltip)((props: { maxwidth?: string }) => () => {
+  const theme = useTheme();
+  return {
+    maxWidth: props.maxwidth,
+    backgroundColor: theme.palette.secondary[900],
+    borderRadius: "6px",
+    "&.MuiTooltip-tooltipPlacementLeft": {
+      margin: "0 2px",
+    },
+    "&.MuiTooltip-tooltipPlacementRight": {
+      margin: "0 2px",
+    },
+    "&.MuiTooltip-tooltipPlacementTop": {
+      margin: "2px 0",
+    },
+    "&.MuiTooltip-tooltipPlacementBottom": {
+      margin: "2px 0",
+    },
+  };
+});
 
 export interface TooltipProps
   extends Pick<MuiTooltipProps, "disableInteractive" | "placement" | "arrow"> {

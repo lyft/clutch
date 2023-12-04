@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import MuiOpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { IconButton } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 
 import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
@@ -23,12 +23,15 @@ const ErrorSummaryMessage = styled.div({
   flex: "1",
 });
 
-const ErrorSummaryLink = styled(Link)({
-  fontSize: "14px",
-  fontWeight: 400,
-  color: "rgb(13,16,48,0.6)",
-  display: "flex",
-  alignItems: "center",
+const ErrorSummaryLink = styled(Link)(() => {
+  const theme = useTheme();
+  return {
+    fontSize: "14px",
+    fontWeight: 400,
+    color: theme.palette.secondary[700],
+    display: "flex",
+    alignItems: "center",
+  };
 });
 
 const ErrorAlert = styled(Alert)(props =>

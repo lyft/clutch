@@ -8,6 +8,7 @@ import {
   Button,
   Grid,
   useControlled,
+  useTheme,
 } from "@mui/material";
 
 import type { ClutchError } from "../../Network/errors";
@@ -19,10 +20,13 @@ import ErrorDetailsDialog from "./dialog";
 
 const ERROR_DETAILS_RENDER_MAX = 4;
 
-const ErrorDetailDivider = styled("div")({
-  background: "linear-gradient(to right, #DB3615 8px, rgba(219, 54, 21, 0.4) 0%)",
-  height: "1px",
-  width: "100%",
+const ErrorDetailDivider = styled("div")(() => {
+  const theme = useTheme();
+  return {
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[200]} 0%)`,
+    height: "1px",
+    width: "100%",
+  };
 });
 
 const Accordion = styled(MuiAccordion)({
@@ -35,20 +39,23 @@ const Accordion = styled(MuiAccordion)({
 });
 
 const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
-  {
-    background: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",
-    color: "#0D1030",
-    fontSize: "14px",
-    fontWeight: 400,
-    padding: "12px 16px 12px 24px",
-    minHeight: "fit-content",
-    "& .MuiAccordionSummary-content": {
-      margin: "0",
-      alignItems: "center",
-    },
-    "&.MuiAccordionSummary-root.Mui-expanded": {
-      minHeight: "unset",
-    },
+  () => {
+    const theme = useTheme();
+    return {
+      background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
+      color: theme.palette.secondary[900],
+      fontSize: "14px",
+      fontWeight: 400,
+      padding: "12px 16px 12px 24px",
+      minHeight: "fit-content",
+      "& .MuiAccordionSummary-content": {
+        margin: "0",
+        alignItems: "center",
+      },
+      "&.MuiAccordionSummary-root.Mui-expanded": {
+        minHeight: "unset",
+      },
+    };
   },
   props => ({
     borderBottomLeftRadius: props.$expanded ? "0" : "8px",
@@ -56,42 +63,57 @@ const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
   })
 );
 
-const AccordionDetails = styled(MuiAccordionDetails)({
-  background: "linear-gradient(to right, #DB3615 8px, #FFFFFF 0%)",
-  padding: "0",
-  paddingLeft: "8px",
-  borderBottomLeftRadius: "8px",
-  borderBottomRightRadius: "8px",
-  display: "flex",
-  flexDirection: "column",
+const AccordionDetails = styled(MuiAccordionDetails)(() => {
+  const theme = useTheme();
+  return {
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.common.white} 0%)`,
+    padding: "0",
+    paddingLeft: "8px",
+    borderBottomLeftRadius: "8px",
+    borderBottomRightRadius: "8px",
+    display: "flex",
+    flexDirection: "column",
+  };
 });
 
-const ListItem = styled("li")({
-  "::marker": {
-    color: "rgba(13, 16, 48, 0.6)",
-  },
-  padding: "2px 0",
+const ListItem = styled("li")(() => {
+  const theme = useTheme();
+  return {
+    "::marker": {
+      color: theme.palette.secondary[700],
+    },
+    padding: "2px 0",
+  };
 });
 
-const ErrorDetailContainer = styled("div")({
-  width: "100%",
-  border: "1px solid #E7E7EA",
-  padding: "16px 16px 16px 24px",
-  borderBottomRightRadius: "8px",
-  borderTop: "unset",
+const ErrorDetailContainer = styled("div")(() => {
+  const theme = useTheme();
+  return {
+    width: "100%",
+    border: `1px solid ${theme.palette.secondary[200]}`,
+    padding: "16px 16px 16px 24px",
+    borderBottomRightRadius: "8px",
+    borderTop: "unset",
+  };
 });
 
-const ErrorDetailText = styled("div")({
-  color: "rgba(13, 16, 48, 0.6)",
-  fontSize: "14px",
-  lineHeight: "24px",
+const ErrorDetailText = styled("div")(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.secondary[700],
+    fontSize: "14px",
+    lineHeight: "24px",
+  };
 });
 
-const DialogButton = styled(Button)({
-  color: "#3548D4",
-  fontWeight: 700,
-  fontSize: "14px",
-  padding: "9px 32px",
+const DialogButton = styled(Button)(() => {
+  const theme = useTheme();
+  return {
+    color: theme.palette.primary[600],
+    fontWeight: 700,
+    fontSize: "14px",
+    padding: "9px 32px",
+  };
 });
 
 interface ErrorDetailsProps {
@@ -99,6 +121,7 @@ interface ErrorDetailsProps {
 }
 
 const ErrorDetails = ({ error }: ErrorDetailsProps) => {
+  const theme = useTheme();
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [expanded, setExpanded] = useControlled({
     controlled: undefined,
@@ -139,7 +162,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
           <ErrorDetailContainer>
             {hasWrappedErrorDetails && (
               <div>
-                <ErrorDetailText style={{ color: "#0D1030" }}>
+                <ErrorDetailText style={{ color: theme.palette.secondary[900] }}>
                   The following errors were encountered:
                 </ErrorDetailText>
                 <ul style={{ paddingLeft: "16px", margin: "4px 0" }}>
@@ -152,7 +175,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                         <>
                           {renderItems.map((wrapped, idx) => {
                             // TODO: This color should be colored according to status code
-                            const color = "#DB3615";
+                            const color = theme.palette.secondary[600];
                             return (
                               // eslint-disable-next-line react/no-array-index-key
                               <ListItem key={`${idx}-${wrapped.message}`}>
