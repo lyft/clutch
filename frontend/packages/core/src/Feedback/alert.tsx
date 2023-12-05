@@ -4,7 +4,13 @@ import MuiErrorIcon from "@mui/icons-material/Error";
 import MuiInfoIcon from "@mui/icons-material/Info";
 import MuiWarningIcon from "@mui/icons-material/Warning";
 import type { AlertProps as MuiAlertProps } from "@mui/lab";
-import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, Grid, useTheme } from "@mui/material";
+import {
+  Alert as MuiAlert,
+  AlertTitle as MuiAlertTitle,
+  alpha,
+  Grid,
+  useTheme,
+} from "@mui/material";
 
 import styled from "../styled";
 
@@ -16,7 +22,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
       padding: "16px",
       paddingLeft: "24px",
       paddingBottom: "20px",
-      color: `${theme.palette.secondary[900]}66`,
+      color: alpha(theme.palette.secondary[900], 0.6),
       fontSize: "14px",
       overflow: "auto",
       ".MuiAlert-icon": {

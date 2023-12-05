@@ -5,6 +5,7 @@ import {
   Accordion as MuiAccordion,
   AccordionDetails as MuiAccordionDetails,
   AccordionSummary as MuiAccordionSummary,
+  alpha,
   Button,
   Grid,
   useControlled,
@@ -23,7 +24,10 @@ const ERROR_DETAILS_RENDER_MAX = 4;
 const ErrorDetailDivider = styled("div")(() => {
   const theme = useTheme();
   return {
-    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[600]}44 0%)`,
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${alpha(
+      theme.palette.error[600],
+      0.4
+    )} 0%)`,
     height: "1px",
     width: "100%",
   };
@@ -80,7 +84,7 @@ const ListItem = styled("li")(() => {
   const theme = useTheme();
   return {
     "::marker": {
-      color: `${theme.palette.secondary[900]}66`,
+      color: alpha(theme.palette.secondary[900], 0.6),
     },
     padding: "2px 0",
   };
@@ -100,7 +104,7 @@ const ErrorDetailContainer = styled("div")(() => {
 const ErrorDetailText = styled("div")(() => {
   const theme = useTheme();
   return {
-    color: `${theme.palette.secondary[900]}66`,
+    color: alpha(theme.palette.secondary[900], 0.6),
     fontSize: "14px",
     lineHeight: "24px",
   };
