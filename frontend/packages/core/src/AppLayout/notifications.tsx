@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import {
+  alpha,
   ClickAwayListener,
   Grow as MuiGrow,
   IconButton,
@@ -10,63 +11,50 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-  useTheme,
 } from "@mui/material";
 
-const StyledNotificationsIcon = styled(IconButton)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.contrastColor,
-    marginRight: "8px",
-    padding: "12px",
-    "&:hover": {
-      background: theme.palette.primary[400],
-    },
-    "&:active": {
-      background: theme.palette.primary[300],
-    },
-  };
-});
+const StyledNotificationsIcon = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.contrastColor,
+  marginRight: "8px",
+  padding: "12px",
+  "&:hover": {
+    background: theme.palette.primary[400],
+  },
+  "&:active": {
+    background: theme.palette.primary[300],
+  },
+}));
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
   marginLeft: "12px",
 });
 
-const Paper = styled(MuiPaper)(() => {
-  const theme = useTheme();
-  return {
-    width: "242px",
-    border: `1px solid ${theme.palette.secondary[700]}`,
-    boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
-  };
-});
+const Paper = styled(MuiPaper)(({ theme }) => ({
+  width: "242px",
+  border: `1px solid ${theme.palette.secondary[700]}`,
+  boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
+}));
 
-const MenuItem = styled(MuiMenuItem)(() => {
-  const theme = useTheme();
-  return {
-    height: "48px",
-    padding: "12px",
-    "&:hover": {
-      backgroundColor: theme.palette.secondary[700],
-    },
-    "&:active": {
-      backgroundColor: theme.palette.secondary[800],
-    },
-  };
-});
+const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
+  height: "48px",
+  padding: "12px",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary[700],
+  },
+  "&:active": {
+    backgroundColor: theme.palette.secondary[800],
+  },
+}));
 
-const ListItemText = styled(MuiListItemText)(() => {
-  const theme = useTheme();
-  return {
-    margin: "0px",
-    ".MuiTypography-root": {
-      color: theme.palette.secondary[900],
-      fontSize: "14px",
-      lineHeight: "24px",
-    },
-  };
-});
+const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+  margin: "0px",
+  ".MuiTypography-root": {
+    color: theme.palette.secondary[900],
+    fontSize: "14px",
+    lineHeight: "24px",
+  },
+}));
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
   transformOrigin: props.placement,

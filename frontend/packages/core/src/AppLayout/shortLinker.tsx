@@ -3,13 +3,13 @@ import { useLocation } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import LinkIcon from "@mui/icons-material/Link";
 import {
+  alpha,
   ClickAwayListener,
   Grid,
   Grow as MuiGrow,
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-  useTheme,
 } from "@mui/material";
 
 import { generateShortLinkRoute } from "../AppProvider/short-link-proxy";
@@ -34,38 +34,29 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const Paper = styled(MuiPaper)(() => {
-  const theme = useTheme();
-  return {
-    width: "400px",
-    height: "100px",
-    padding: "15px",
-    boxShadow: `0px 5px 35px ${theme.palette.primary[400]}22`,
-    borderRadius: "8px",
-  };
-});
+const Paper = styled(MuiPaper)(({ theme }) => ({
+  width: "400px",
+  height: "100px",
+  padding: "15px",
+  boxShadow: `0px 5px 35px ${alpha(theme.palette.primary[400], 0.2)}`,
+  borderRadius: "8px",
+}));
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
-  () => {
-    const theme = useTheme();
-    return {
-      color: theme.palette.contrastColor,
-      marginRight: "8px",
-      padding: "12px",
-      "&:hover": {
-        background: theme.palette.primary[600],
-      },
-      "&:active": {
-        background: theme.palette.primary[700],
-      },
-    };
-  },
-  props => {
-    const theme = useTheme();
-    return {
-      background: props.$open ? theme.palette.primary[600] : "unset",
-    };
-  }
+  ({ theme }) => ({
+    color: theme.palette.contrastColor,
+    marginRight: "8px",
+    padding: "12px",
+    "&:hover": {
+      background: theme.palette.primary[600],
+    },
+    "&:active": {
+      background: theme.palette.primary[700],
+    },
+  }),
+  props => ({
+    background: props.$open ? props.theme.palette.primary[600] : "unset",
+  })
 );
 
 /**

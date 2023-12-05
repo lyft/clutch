@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography, useTheme } from "@mui/material";
+import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
@@ -45,29 +45,23 @@ interface HeaderProps extends AppConfiguration {
   userInfo?: boolean;
 }
 
-const AppBar = styled(MuiAppBar)(() => {
-  const theme = useTheme();
-  return {
-    minWidth: "fit-content",
-    background: theme.palette.headerGradient,
-    zIndex: 1201,
-    height: APP_BAR_HEIGHT,
-  };
-});
+const AppBar = styled(MuiAppBar)(({ theme }) => ({
+  minWidth: "fit-content",
+  background: theme.palette.headerGradient,
+  zIndex: 1201,
+  height: APP_BAR_HEIGHT,
+}));
 
 // Since the AppBar is fixed we need a div to take up its height in order to push other content down.
 const ClearAppBar = styled.div({ height: APP_BAR_HEIGHT });
 
-const Title = styled(Typography)(() => {
-  const theme = useTheme();
-  return {
-    margin: "12px 0px 12px 8px",
-    fontWeight: "bold",
-    fontSize: "30px",
-    paddingLeft: "5px",
-    color: theme.palette.common.white,
-  };
-});
+const Title = styled(Typography)(({ theme }) => ({
+  margin: "12px 0px 12px 8px",
+  fontWeight: "bold",
+  fontSize: "30px",
+  paddingLeft: "5px",
+  color: theme.palette.common.white,
+}));
 
 const StyledLogo = styled("img")({
   width: "48px",

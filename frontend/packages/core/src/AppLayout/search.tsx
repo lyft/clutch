@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import {
+  alpha,
   ClickAwayListener,
   Grid,
   Icon,
@@ -11,7 +12,6 @@ import {
   Popper as MuiPopper,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -26,43 +26,40 @@ import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const InputField = styled(TextField)(() => {
-  const theme = useTheme();
-  return {
-    // input field
-    maxWidth: "551px",
-    minWidth: "551px",
-    "@media screen and (max-width: 880px)": {
-      minWidth: "125px",
-    },
-    ".MuiInputBase-root": {
-      height: "46px",
-      border: `1px solid ${theme.palette.primary[600]}`,
-      borderRadius: "4px",
-      background: theme.palette.contrastColor,
-    },
-    // input text color
-    ".MuiAutocomplete-input": {
-      color: theme.palette.secondary[900],
-    },
+const InputField = styled(TextField)(props => ({
+  // input field
+  maxWidth: "551px",
+  minWidth: "551px",
+  "@media screen and (max-width: 880px)": {
+    minWidth: "125px",
+  },
+  ".MuiInputBase-root": {
+    height: "46px",
+    border: `1px solid ${props.theme.palette.primary[600]}`,
+    borderRadius: "4px",
+    background: props.theme.palette.contrastColor,
+  },
+  // input text color
+  ".MuiAutocomplete-input": {
+    color: props.theme.palette.secondary[900],
+  },
 
-    // close icon's container
-    "div.MuiAutocomplete-endAdornment": {
-      ".MuiAutocomplete-popupIndicatorOpen": {
-        width: "32px",
-        height: "32px",
-        borderRadius: "30px",
-        marginRight: "8px",
-        "&:hover": {
-          background: theme.palette.secondary[700],
-        },
-        "&:active": {
-          background: theme.palette.secondary[200],
-        },
+  // close icon's container
+  "div.MuiAutocomplete-endAdornment": {
+    ".MuiAutocomplete-popupIndicatorOpen": {
+      width: "32px",
+      height: "32px",
+      borderRadius: "30px",
+      marginRight: "8px",
+      "&:hover": {
+        background: props.theme.palette.secondary[700],
+      },
+      "&:active": {
+        background: props.theme.palette.secondary[200],
       },
     },
-  };
-});
+  },
+}));
 
 // search's result options container
 const ResultGrid = styled(Grid)({
@@ -71,74 +68,59 @@ const ResultGrid = styled(Grid)({
 });
 
 // search's result options
-const ResultLabel = styled(Typography)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.secondary[900],
-    fontSize: "14px",
-  };
-});
+const ResultLabel = styled(Typography)(({ theme }) => ({
+  color: theme.palette.secondary[900],
+  fontSize: "14px",
+}));
 
 // main search icon on header
-const SearchIconButton = styled(IconButton)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.contrastColor,
-    fontSize: "24px",
-    padding: "12px",
-    marginRight: "8px",
-    "&:hover": {
-      background: theme.palette.primary[600],
-    },
-    "&:active": {
-      background: theme.palette.primary[700],
-    },
-  };
-});
+const SearchIconButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.contrastColor,
+  fontSize: "24px",
+  padding: "12px",
+  marginRight: "8px",
+  "&:hover": {
+    background: theme.palette.primary[600],
+  },
+  "&:active": {
+    background: theme.palette.primary[700],
+  },
+}));
 
 // search icon in input field
-const StartInputAdornment = styled(MuiInputAdornment)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.secondary[900],
-    marginLeft: "8px",
-  };
-});
+const StartInputAdornment = styled(MuiInputAdornment)(({ theme }) => ({
+  color: theme.palette.secondary[900],
+  marginLeft: "8px",
+}));
 
 // closed icon svg
-const StyledCloseIcon = styled(Icon)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.secondary[900],
-    fontSize: "24px",
-  };
-});
+const StyledCloseIcon = styled(Icon)(({ theme }) => ({
+  color: theme.palette.secondary[900],
+  fontSize: "24px",
+}));
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)(() => {
-  const theme = useTheme();
-  return {
-    ".MuiPaper-root": {
-      border: `1px solid ${theme.palette.secondary[700]}`,
-      boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
+const Popper = styled(MuiPopper)(({ theme }) => ({
+  ".MuiPaper-root": {
+    border: `1px solid ${theme.palette.secondary[700]}`,
+    boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
 
-      "> .MuiAutocomplete-listbox": {
-        "> .MuiAutocomplete-option": {
-          height: "48px",
-          padding: "0px",
+    "> .MuiAutocomplete-listbox": {
+      "> .MuiAutocomplete-option": {
+        height: "48px",
+        padding: "0px",
 
-          "&.Mui-focused": {
-            background: theme.palette.secondary[800],
-          },
+        "&.Mui-focused": {
+          background: theme.palette.secondary[800],
         },
       },
     },
-    ".MuiAutocomplete-noOptions": {
-      fontSize: "14px",
-      color: theme.palette.secondary[900],
-    },
-  };
-});
+  },
+  ".MuiAutocomplete-noOptions": {
+    fontSize: "14px",
+    color: theme.palette.secondary[900],
+  },
+}));
 
 const renderPopper = props => {
   return <Popper {...props} />;
@@ -173,6 +155,7 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
 
   return (
     <InputField
+      variant="filled"
       {...params}
       autoFocus
       placeholder="Search..."
