@@ -1,16 +1,14 @@
 import React from "react";
-import styled from "@emotion/styled";
 import HelpIcon from "@mui/icons-material/Help";
-import { Popover, Typography, useTheme } from "@mui/material";
+import { Popover, Typography } from "@mui/material";
 
-const HelpIconContainer = styled.div(() => {
-  const theme = useTheme();
-  return {
-    display: "flex",
-    color: theme.palette.secondary[300],
-    padding: "5px",
-  };
-});
+import styled from "../styled";
+
+const HelpIconContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  color: theme.palette.secondary[300],
+  padding: "5px",
+}));
 
 const Hint: React.FC = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

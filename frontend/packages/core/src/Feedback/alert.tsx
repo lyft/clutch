@@ -15,31 +15,28 @@ import {
 import styled from "../styled";
 
 const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
-  () => {
-    const theme = useTheme();
-    return {
-      borderRadius: "8px",
-      padding: "16px",
-      paddingLeft: "24px",
-      paddingBottom: "20px",
-      color: alpha(theme.palette.secondary[900], 0.6),
-      fontSize: "14px",
-      overflow: "auto",
-      ".MuiAlert-icon": {
-        marginRight: "16px",
-        padding: "0",
+  ({ theme }) => ({
+    borderRadius: "8px",
+    padding: "16px",
+    paddingLeft: "24px",
+    paddingBottom: "20px",
+    color: alpha(theme.palette.secondary[900], 0.6),
+    fontSize: "14px",
+    overflow: "auto",
+    ".MuiAlert-icon": {
+      marginRight: "16px",
+      padding: "0",
+    },
+    ".MuiAlert-message": {
+      maxWidth: "calc(100% - 40px)",
+      width: "100%",
+      padding: "0",
+      ".MuiAlertTitle-root": {
+        marginBottom: "0",
+        color: theme.palette.secondary[900],
       },
-      ".MuiAlert-message": {
-        maxWidth: "calc(100% - 40px)",
-        width: "100%",
-        padding: "0",
-        ".MuiAlertTitle-root": {
-          marginBottom: "0",
-          color: theme.palette.secondary[900],
-        },
-      },
-    };
-  },
+    },
+  }),
   props => () => {
     const theme = useTheme();
     const backgroundColors = {
@@ -55,42 +52,27 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
   }
 );
 
-const ErrorIcon = styled(MuiErrorIcon)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.error[700],
-  };
-});
+const ErrorIcon = styled(MuiErrorIcon)(({ theme }) => ({
+  color: theme.palette.error[700],
+}));
 
-const InfoIcon = styled(MuiInfoIcon)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.primary[600],
-  };
-});
+const InfoIcon = styled(MuiInfoIcon)(({ theme }) => ({
+  color: theme.palette.primary[600],
+}));
 
-const SuccessIcon = styled(MuiSuccessIcon)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.success[500],
-  };
-});
+const SuccessIcon = styled(MuiSuccessIcon)(({ theme }) => ({
+  color: theme.palette.success[500],
+}));
 
-const WarningIcon = styled(MuiWarningIcon)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.warning[500],
-  };
-});
+const WarningIcon = styled(MuiWarningIcon)(({ theme }) => ({
+  color: theme.palette.warning[500],
+}));
 
-const AlertTitle = styled(MuiAlertTitle)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.secondary[900],
-    fontWeight: 600,
-    fontSize: "16px",
-  };
-});
+const AlertTitle = styled(MuiAlertTitle)(({ theme }) => ({
+  color: theme.palette.secondary[900],
+  fontWeight: 600,
+  fontSize: "16px",
+}));
 
 const iconMappings = {
   error: <ErrorIcon />,

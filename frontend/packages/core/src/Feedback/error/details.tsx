@@ -21,17 +21,14 @@ import ErrorDetailsDialog from "./dialog";
 
 const ERROR_DETAILS_RENDER_MAX = 4;
 
-const ErrorDetailDivider = styled("div")(() => {
-  const theme = useTheme();
-  return {
-    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${alpha(
-      theme.palette.error[600],
-      0.4
-    )} 0%)`,
-    height: "1px",
-    width: "100%",
-  };
-});
+const ErrorDetailDivider = styled("div")(({ theme }) => ({
+  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${alpha(
+    theme.palette.error[600],
+    0.4
+  )} 0%)`,
+  height: "1px",
+  width: "100%",
+}));
 
 const Accordion = styled(MuiAccordion)({
   "&.MuiAccordion-root.Mui-expanded": {
@@ -43,82 +40,64 @@ const Accordion = styled(MuiAccordion)({
 });
 
 const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
-  () => {
-    const theme = useTheme();
-    return {
-      background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
-      color: theme.palette.secondary[900],
-      fontSize: "14px",
-      fontWeight: 400,
-      padding: "12px 16px 12px 24px",
-      minHeight: "fit-content",
-      "& .MuiAccordionSummary-content": {
-        margin: "0",
-        alignItems: "center",
-      },
-      "&.MuiAccordionSummary-root.Mui-expanded": {
-        minHeight: "unset",
-      },
-    };
-  },
+  ({ theme }) => ({
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
+    color: theme.palette.secondary[900],
+    fontSize: "14px",
+    fontWeight: 400,
+    padding: "12px 16px 12px 24px",
+    minHeight: "fit-content",
+    "& .MuiAccordionSummary-content": {
+      margin: "0",
+      alignItems: "center",
+    },
+    "&.MuiAccordionSummary-root.Mui-expanded": {
+      minHeight: "unset",
+    },
+  }),
   props => ({
     borderBottomLeftRadius: props.$expanded ? "0" : "8px",
     borderBottomRightRadius: props.$expanded ? "0" : "8px",
   })
 );
 
-const AccordionDetails = styled(MuiAccordionDetails)(() => {
-  const theme = useTheme();
-  return {
-    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.common.white} 0%)`,
-    padding: "0",
-    paddingLeft: "8px",
-    borderBottomLeftRadius: "8px",
-    borderBottomRightRadius: "8px",
-    display: "flex",
-    flexDirection: "column",
-  };
-});
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.common.white} 0%)`,
+  padding: "0",
+  paddingLeft: "8px",
+  borderBottomLeftRadius: "8px",
+  borderBottomRightRadius: "8px",
+  display: "flex",
+  flexDirection: "column",
+}));
 
-const ListItem = styled("li")(() => {
-  const theme = useTheme();
-  return {
-    "::marker": {
-      color: alpha(theme.palette.secondary[900], 0.6),
-    },
-    padding: "2px 0",
-  };
-});
-
-const ErrorDetailContainer = styled("div")(() => {
-  const theme = useTheme();
-  return {
-    width: "100%",
-    border: `1px solid ${theme.palette.secondary[200]}`,
-    padding: "16px 16px 16px 24px",
-    borderBottomRightRadius: "8px",
-    borderTop: "unset",
-  };
-});
-
-const ErrorDetailText = styled("div")(() => {
-  const theme = useTheme();
-  return {
+const ListItem = styled("li")(({ theme }) => ({
+  "::marker": {
     color: alpha(theme.palette.secondary[900], 0.6),
-    fontSize: "14px",
-    lineHeight: "24px",
-  };
-});
+  },
+  padding: "2px 0",
+}));
 
-const DialogButton = styled(Button)(() => {
-  const theme = useTheme();
-  return {
-    color: theme.palette.primary[600],
-    fontWeight: 700,
-    fontSize: "14px",
-    padding: "9px 32px",
-  };
-});
+const ErrorDetailContainer = styled("div")(({ theme }) => ({
+  width: "100%",
+  border: `1px solid ${theme.palette.secondary[200]}`,
+  padding: "16px 16px 16px 24px",
+  borderBottomRightRadius: "8px",
+  borderTop: "unset",
+}));
+
+const ErrorDetailText = styled("div")(({ theme }) => ({
+  color: alpha(theme.palette.secondary[900], 0.6),
+  fontSize: "14px",
+  lineHeight: "24px",
+}));
+
+const DialogButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.primary[600],
+  fontWeight: 700,
+  fontSize: "14px",
+  padding: "9px 32px",
+}));
 
 interface ErrorDetailsProps {
   error: ClutchError;
