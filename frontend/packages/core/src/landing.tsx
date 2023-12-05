@@ -35,13 +35,13 @@ const StyledLanding = styled.div(() => {
     "& .welcome .title": {
       fontWeight: "bold",
       fontSize: "22px",
-      color: theme.palette.text.primary,
+      color: theme.palette.text.primary[900],
     },
 
     "& .welcome .subtitle": {
       fontSize: "16px",
       fontWeight: "normal",
-      color: theme.palette.text.secondary,
+      color: `${theme.palette.secondary[900]}66`,
     },
 
     "& .content": {

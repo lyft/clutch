@@ -30,7 +30,9 @@ const DrawerPanel = styled(MuiDrawer)(() => {
       top: "unset",
       width: "inherit",
       backgroundColor:
-        theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.common.white,
+        theme.palette.mode === "light"
+          ? theme.palette.common.white
+          : theme.palette.background.paper,
       boxShadow: `0px 5px 15px ${theme.palette.primary[400]}22`,
       position: "relative",
       display: "flex",
@@ -87,7 +89,7 @@ const GroupListItem = styled(ListItemButton)<{ icon: number }>(
 const GroupHeading = styled(Typography)(() => {
   const theme = useTheme();
   return {
-    color: theme.palette.secondary[700],
+    color: `${theme.palette.secondary[900]}66`,
     fontWeight: 500,
     fontSize: "14px",
     lineHeight: "18px",
@@ -107,7 +109,7 @@ const IconAvatar = styled(MuiAvatar)({
 const Avatar = styled(IconAvatar)(() => {
   const theme = useTheme();
   return {
-    background: theme.palette.secondary[700],
+    background: `${theme.palette.secondary[900]}66`,
     color: theme.palette.contrastColor,
     fontSize: "14px",
     borderRadius: "4px",
