@@ -28,7 +28,7 @@ const ErrorSummaryLink = styled(Link)(() => {
   return {
     fontSize: "14px",
     fontWeight: 400,
-    color: theme.palette.secondary[700],
+    color: `${theme.palette.secondary[900]}66`,
     display: "flex",
     alignItems: "center",
   };

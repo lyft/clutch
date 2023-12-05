@@ -23,7 +23,7 @@ const ERROR_DETAILS_RENDER_MAX = 4;
 const ErrorDetailDivider = styled("div")(() => {
   const theme = useTheme();
   return {
-    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[200]}44 0%)`,
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[600]}44 0%)`,
     height: "1px",
     width: "100%",
   };
@@ -80,7 +80,7 @@ const ListItem = styled("li")(() => {
   const theme = useTheme();
   return {
     "::marker": {
-      color: `${theme.palette.secondary[700]}66`,
+      color: `${theme.palette.secondary[900]}66`,
     },
     padding: "2px 0",
   };
@@ -100,7 +100,7 @@ const ErrorDetailContainer = styled("div")(() => {
 const ErrorDetailText = styled("div")(() => {
   const theme = useTheme();
   return {
-    color: `${theme.palette.secondary[700]}66`,
+    color: `${theme.palette.secondary[900]}66`,
     fontSize: "14px",
     lineHeight: "24px",
   };
