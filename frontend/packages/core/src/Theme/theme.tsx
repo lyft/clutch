@@ -16,6 +16,10 @@ declare module "@mui/styles/defaultTheme" {
   interface DefaultTheme extends MuiTheme {}
 }
 
+declare module "@emotion/react" {
+  export interface Theme extends MuiTheme {}
+}
+
 // Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
