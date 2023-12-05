@@ -56,6 +56,6 @@
     "typescript": "*"
   },
   "engines": {
-    "node": ">=16.0.0 <17"
+    "node": "<19"
   }
 }
