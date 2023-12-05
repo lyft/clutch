@@ -19,7 +19,9 @@ const StyledLanding = styled.div(() => {
     "& .welcome": {
       display: "flex",
       backgroundColor:
-        theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.common.white,
+        theme.palette.mode === "light"
+          ? theme.palette.common.white
+          : theme.palette.background.paper,
       padding: "32px 80px",
     },
 
