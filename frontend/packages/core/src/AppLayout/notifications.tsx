@@ -29,22 +29,22 @@ const Popper = styled(MuiPopper)({
   marginLeft: "12px",
 });
 
-const Paper = styled(MuiPaper)({
+const Paper = styled(MuiPaper)(({ theme }) => ({
   width: "242px",
-  border: "1px solid #E7E7EA",
+  border: `1px solid ${theme.palette.secondary[200]}`,
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-});
+}));
 
-const MenuItem = styled(MuiMenuItem)({
+const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   height: "48px",
   padding: "12px",
   "&:hover": {
-    backgroundColor: "#E7E7EA",
+    backgroundColor: theme.palette.secondary[200],
   },
   "&:active": {
     backgroundColor: "#EBEDFB",
   },
-});
+}));
 
 const ListItemText = styled(MuiListItemText)({
   margin: "0px",

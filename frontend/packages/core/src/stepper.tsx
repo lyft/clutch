@@ -7,9 +7,10 @@ import {
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
+  useTheme,
 } from "@mui/material";
 
-const StepContainer = styled.div({
+const StepContainer = styled.div(({ theme }) => ({
   margin: "0px 2px 30px 2px",
   ".MuiStepLabel-label": {
     fontWeight: 500,
@@ -67,7 +68,7 @@ const StepContainer = styled.div({
   ".MuiStepConnector-line": {
     height: "5px",
     border: 0,
-    backgroundColor: "#E7E7EA",
+    backgroundColor: theme.palette.secondary[200],
     borderRadius: "4px",
   },
 
@@ -78,7 +79,7 @@ const StepContainer = styled.div({
   ".Mui-completed .MuiStepConnector-line": {
     backgroundColor: "#3548D4",
   },
-});
+}));
 
 const Circle = styled.div((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
@@ -115,30 +116,30 @@ export interface StepIconProps {
   variant: StepIconVariant;
 }
 
-const stepIconVariants = {
-  active: {
-    background: "#FFFFFF",
-    border: "1px solid #3548D4",
-    font: "#3548D4",
-  },
-  pending: {
-    background: "#E7E7EA",
-    border: "#E7E7EA",
-    font: "rgba(13, 16, 48, 0.38)",
-  },
-  success: {
-    background: "#3548D4",
-    border: "#3548D4",
-    font: "#FFFFFF",
-  },
-  failed: {
-    background: "#DB3615",
-    border: "#DB3615",
-    font: "#FFFFFF",
-  },
-};
-
 const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
+  const theme = useTheme();
+  const stepIconVariants = {
+    active: {
+      background: "#FFFFFF",
+      border: "1px solid #3548D4",
+      font: "#3548D4",
+    },
+    pending: {
+      background: theme.palette.secondary[200],
+      border: theme.palette.secondary[200],
+      font: "rgba(13, 16, 48, 0.38)",
+    },
+    success: {
+      background: "#3548D4",
+      border: "#3548D4",
+      font: "#FFFFFF",
+    },
+    failed: {
+      background: theme.palette.secondary[600],
+      border: theme.palette.secondary[600],
+      font: "#FFFFFF",
+    },
+  };
   const color = stepIconVariants[variant || "pending"];
   let Icon = <>{index}</>;
   if (variant === "success") {

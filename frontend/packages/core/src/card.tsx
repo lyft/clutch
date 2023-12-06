@@ -58,11 +58,11 @@ const StyledCardHeaderAvatar = styled.div({
 });
 
 // TODO: make the divider a core component
-const StyledDivider = styled(Divider)({
-  color: "#A3A4B0",
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  color: theme.palette.secondary[400],
   height: "24px",
   alignSelf: "center",
-});
+}));
 
 const StyledGridItem = styled(Grid)({
   textAlign: "center",

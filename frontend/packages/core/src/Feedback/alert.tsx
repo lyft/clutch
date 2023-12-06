@@ -4,13 +4,7 @@ import MuiErrorIcon from "@mui/icons-material/Error";
 import MuiInfoIcon from "@mui/icons-material/Info";
 import MuiWarningIcon from "@mui/icons-material/Warning";
 import type { AlertProps as MuiAlertProps } from "@mui/lab";
-import {
-  Alert as MuiAlert,
-  AlertTitle as MuiAlertTitle,
-  alpha,
-  Grid,
-  useTheme,
-} from "@mui/material";
+import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, alpha, Grid } from "@mui/material";
 
 import styled from "../styled";
 

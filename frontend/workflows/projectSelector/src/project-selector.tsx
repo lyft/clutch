@@ -17,7 +17,7 @@ import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-import { Divider, LinearProgress } from "@mui/material";
+import { Divider, LinearProgress, useTheme } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -219,6 +219,8 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
 
+  const theme = useTheme();
+
   const { removeData, retrieveData, fromShortLink, storeData } = useWorkflowStorageContext();
 
   const [state, dispatch] = React.useReducer(
@@ -363,10 +365,10 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       },
                     ].map(item => (
                       <TooltipContainer key={item.title}>
-                        <Typography variant="subtitle3" color="#FFFFFF">
+                        <Typography variant="subtitle3" color={theme.palette.secondary[200]}>
                           {item.title}
                         </Typography>
-                        <Typography variant="body4" color="#E7E7EA">
+                        <Typography variant="body4" color={theme.palette.secondary[200]}>
                           {item.description}
                         </Typography>
                       </TooltipContainer>

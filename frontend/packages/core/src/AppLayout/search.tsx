@@ -25,7 +25,7 @@ import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const InputField = styled(TextField)({
+const InputField = styled(TextField)(({ theme }) => ({
   // input field
   maxWidth: "551px",
   minWidth: "551px",
@@ -51,14 +51,14 @@ const InputField = styled(TextField)({
       borderRadius: "30px",
       marginRight: "8px",
       "&:hover": {
-        background: "#e7e7ea",
+        background: theme.palette.secondary[200],
       },
       "&:active": {
         background: "#DBDBE0",
       },
     },
   },
-});
+}));
 
 // search's result options container
 const ResultGrid = styled(Grid)({
@@ -99,9 +99,9 @@ const StyledCloseIcon = styled(Icon)({
 });
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)({
+const Popper = styled(MuiPopper)(({ theme }) => ({
   ".MuiPaper-root": {
-    border: "1px solid #e7e7ea",
+    border: `1px solid ${theme.palette.secondary[200]}`,
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
 
     "> .MuiAutocomplete-listbox": {
@@ -119,7 +119,7 @@ const Popper = styled(MuiPopper)({
     fontSize: "14px",
     color: "#0d1030",
   },
-});
+}));
 
 const renderPopper = props => {
   return <Popper {...props} />;

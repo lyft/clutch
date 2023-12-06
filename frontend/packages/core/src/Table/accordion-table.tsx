@@ -13,8 +13,8 @@ const IconButton = styled(MuiIconButton)({
   color: "#0D1030",
 });
 
-const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(props => ({
-  color: props?.$disabled ? "#E7E7EA" : "unset",
+const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(props => ({ theme }) => ({
+  color: props?.$disabled ? theme.palette.secondary[200] : "unset",
 }));
 
 export interface AccordionRowProps {

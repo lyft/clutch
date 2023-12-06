@@ -41,11 +41,11 @@ const Avatar = styled(MuiAvatar)({
   fontWeight: 500,
 });
 
-const Paper = styled(MuiPaper)({
+const Paper = styled(MuiPaper)(({ theme }) => ({
   width: "242px",
-  border: "1px solid #E7E7EA",
+  border: `1px solid ${theme.palette.secondary[200]}`,
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-});
+}));
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
@@ -53,18 +53,18 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const MenuList = styled(MuiMenuList)({
+const MenuList = styled(MuiMenuList)(({ theme }) => ({
   padding: "0px",
   borderRadius: "4px",
   ".MuiMenuItem-root": {
     "&:hover": {
-      backgroundColor: "#E7E7EA",
+      backgroundColor: theme.palette.secondary[200],
     },
     "&:active": {
       backgroundColor: "#EBEDFB",
     },
   },
-});
+}));
 
 // user details menu item
 const AvatarMenuItem = styled(MuiMenuItem)({
@@ -110,9 +110,9 @@ const ListItemText = styled(MuiListItemText)({
   },
 });
 
-const Divider = styled(MuiDivider)({
-  backgroundColor: "#E7E7EA",
-});
+const Divider = styled(MuiDivider)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary[200],
+}));
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
   transformOrigin: props.placement,
