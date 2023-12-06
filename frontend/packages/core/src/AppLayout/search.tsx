@@ -11,6 +11,7 @@ import {
   InputAdornment as MuiInputAdornment,
   Popper as MuiPopper,
   TextField,
+  TextFieldProps,
   Typography,
 } from "@mui/material";
 import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
@@ -26,7 +27,7 @@ import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const InputField = styled(TextField)(props => ({
+const InputField: React.FC<TextFieldProps> = styled(TextField)(({ theme }) => ({
   // input field
   maxWidth: "551px",
   minWidth: "551px",
@@ -35,13 +36,13 @@ const InputField = styled(TextField)(props => ({
   },
   ".MuiInputBase-root": {
     height: "46px",
-    border: `1px solid ${props.theme.palette.primary[600]}`,
+    border: `1px solid ${theme.palette.primary[600]}`,
     borderRadius: "4px",
-    background: props.theme.palette.contrastColor,
+    background: theme.palette.contrastColor,
   },
   // input text color
   ".MuiAutocomplete-input": {
-    color: props.theme.palette.secondary[900],
+    color: theme.palette.secondary[900],
   },
 
   // close icon's container
@@ -52,10 +53,10 @@ const InputField = styled(TextField)(props => ({
       borderRadius: "30px",
       marginRight: "8px",
       "&:hover": {
-        background: props.theme.palette.secondary[700],
+        background: theme.palette.secondary[200],
       },
       "&:active": {
-        background: props.theme.palette.secondary[200],
+        background: theme.palette.secondary[300],
       },
     },
   },
@@ -155,7 +156,6 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
 
   return (
     <InputField
-      variant="filled"
       {...params}
       autoFocus
       placeholder="Search..."

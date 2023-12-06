@@ -44,8 +44,8 @@ const Avatar = styled(MuiAvatar)(({ theme }) => ({
 
 const Paper = styled(MuiPaper)(({ theme }) => ({
   width: "242px",
-  border: `1px solid ${theme.palette.secondary[700]}`,
-  boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
+  border: `1px solid ${theme.palette.secondary[100]}`,
+  boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
 }));
 
 const Popper = styled(MuiPopper)({
@@ -59,10 +59,10 @@ const MenuList = styled(MuiMenuList)(({ theme }) => ({
   borderRadius: "4px",
   ".MuiMenuItem-root": {
     "&:hover": {
-      backgroundColor: theme.palette.secondary[700],
+      backgroundColor: theme.palette.secondary[200],
     },
     "&:active": {
-      backgroundColor: theme.palette.secondary[800],
+      backgroundColor: theme.palette.primary[200],
     },
   },
 }));
@@ -112,7 +112,7 @@ const ListItemText = styled(MuiListItemText)(({ theme }) => ({
 }));
 
 const Divider = styled(MuiDivider)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary[700],
+  backgroundColor: theme.palette.secondary[100],
 }));
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
