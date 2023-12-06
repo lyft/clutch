@@ -37,8 +37,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
       },
     },
   }),
-  props => () => {
-    const theme = useTheme();
+  props => ({ theme }) => {
     const backgroundColors = {
       error: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
       info: `linear-gradient(to right, ${theme.palette.primary[600]} 8px, ${theme.palette.primary[200]} 0%)`,

@@ -5,6 +5,7 @@ import { capitalize } from "lodash";
 
 import "@testing-library/jest-dom";
 
+import { ThemeProvider } from "../../Theme";
 import EmojiRatings from "../emojiRatings";
 
 const stringExample = [
@@ -29,7 +30,11 @@ const emojiMap = {
 };
 
 test("will display a given list of emojis and their capitalized labels", () => {
-  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
+  render(
+    <ThemeProvider>
+      <EmojiRatings ratings={stringExample} setRating={() => {}} />
+    </ThemeProvider>
+  );
 
   const elements = screen.getAllByRole("button");
 
@@ -41,7 +46,11 @@ test("will display a given list of emojis and their capitalized labels", () => {
 });
 
 test("all emojis have an initial opacity of 0.5 when not selected", () => {
-  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
+  render(
+    <ThemeProvider>
+      <EmojiRatings ratings={stringExample} setRating={() => {}} />
+    </ThemeProvider>
+  );
 
   const elements = screen.getAllByRole("button");
 
@@ -52,7 +61,11 @@ test("all emojis have an initial opacity of 0.5 when not selected", () => {
 
 test("emojis will have a tooltip show on hover", async () => {
   const user = userEvent.setup();
-  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
+  render(
+    <ThemeProvider>
+      <EmojiRatings ratings={stringExample} setRating={() => {}} />
+    </ThemeProvider>
+  );
 
   await user.hover(screen.getByLabelText(/Great/i));
   expect(await screen.findByText("Great")).toHaveClass("MuiTooltip-tooltip");
@@ -62,7 +75,11 @@ test("emojis will have a tooltip show on hover", async () => {
 
 test("emojis will update opacity to 1 on selection", async () => {
   const user = userEvent.setup();
-  render(<EmojiRatings ratings={stringExample} setRating={() => {}} />);
+  render(
+    <ThemeProvider>
+      <EmojiRatings ratings={stringExample} setRating={() => {}} />
+    </ThemeProvider>
+  );
 
   await user.click(screen.getByLabelText(/Great/i));
   expect(screen.getByLabelText(/Great/i)).toHaveStyle("opacity: 1");
@@ -73,12 +90,14 @@ test("will return a given emoji on select", async () => {
   let selected: any = null;
 
   render(
-    <EmojiRatings
-      ratings={stringExample}
-      setRating={rating => {
-        selected = rating;
-      }}
-    />
+    <ThemeProvider>
+      <EmojiRatings
+        ratings={stringExample}
+        setRating={rating => {
+          selected = rating;
+        }}
+      />
+    </ThemeProvider>
   );
 
   expect(selected).toBeNull();
