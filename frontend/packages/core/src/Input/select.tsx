@@ -27,7 +27,7 @@ const StyledFormHelperText = styled(MuiFormHelperText)(({ theme }) => ({
   color: "grey",
 
   "&.Mui-error": {
-    color: theme.palette.secondary[600],
+    color: theme.palette.error[600],
   },
 
   svg: {
@@ -93,7 +93,7 @@ const StyledSelect = styled(BaseSelect)(({ theme }) => ({
     },
   },
   "&.Mui-error > .MuiOutlinedInput-notchedOutline": {
-    borderColor: theme.palette.secondary[600],
+    borderColor: theme.palette.error[600],
     borderWidth: "var(--notched-border-width)",
   },
 

@@ -135,8 +135,8 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
       font: "#FFFFFF",
     },
     failed: {
-      background: theme.palette.secondary[600],
-      border: theme.palette.secondary[600],
+      background: theme.palette.error[600],
+      border: theme.palette.error[600],
       font: "#FFFFFF",
     },
   };

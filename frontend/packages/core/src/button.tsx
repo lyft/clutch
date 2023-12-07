@@ -140,7 +140,7 @@ const variantPalette = (variant: ButtonVariant, theme): ButtonPalette => {
     },
     danger: {
       background: {
-        primary: theme.palette.secondary[600],
+        primary: theme.palette.error[600],
         hover: "#BA2E12",
         active: "#AB2A10",
         disabled: "#F1B3A6",
