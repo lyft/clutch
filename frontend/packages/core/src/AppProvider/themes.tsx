@@ -14,6 +14,7 @@ declare module "@mui/material/styles" {
   }
   interface Palette {
     contrastColor: string;
+    headerGradient: string;
   }
 }
 

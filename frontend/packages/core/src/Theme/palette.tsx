@@ -7,6 +7,7 @@ import type { ClutchColors, ThemeVariant } from "./types";
 interface PaletteOptions extends MuiPaletteOptions {
   type: ThemeVariant;
   contrastColor: string;
+  headerGradient: string;
 }
 
 const lightText: Partial<TypeText> = {
@@ -44,6 +45,9 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
     },
     text: isLightMode ? lightText : darkText,
     contrastColor: isLightMode ? "#ffffff" : "#000000", // Either black or white depending on theme
+    headerGradient: isLightMode
+      ? "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)"
+      : "#0D1030",
   };
 };
 
