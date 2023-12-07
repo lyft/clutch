@@ -59,7 +59,7 @@ const StyledTextField = styled(BaseTextField)<{
     info: theme.palette.primary[600],
     success: theme.palette.success[500],
     warning: theme.palette.warning[300],
-    error: theme.palette.secondary[600],
+    error: theme.palette.error[600],
   };
 
   return {
