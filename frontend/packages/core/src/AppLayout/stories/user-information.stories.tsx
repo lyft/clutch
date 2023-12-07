@@ -11,10 +11,10 @@ export default {
   component: UserInformationComponent,
 } as Meta;
 
-const Grid = styled(MuiGrid)({
+const Grid = styled(MuiGrid)(({ theme }) => ({
   height: "64px",
-  backgroundColor: "#131C5F",
-});
+  backgroundColor: theme.palette.primary[900],
+}));
 
 const Template = (props: UserInformationProps) => (
   <Grid container alignItems="center" justifyContent="center">

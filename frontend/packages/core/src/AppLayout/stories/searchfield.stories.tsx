@@ -28,6 +28,7 @@ export default {
                 developer: { name: "Lyft", contactUrl: "mailto:hello@clutch.sh" },
                 displayName: "EC2",
                 group: "AWS",
+                icon: { path: "" },
                 path: "ec2",
                 routes: [
                   {
@@ -59,10 +60,10 @@ export default {
   ],
 } as Meta;
 
-const Grid = styled(MuiGrid)({
+const Grid = styled(MuiGrid)(({ theme }) => ({
   height: "64px",
-  backgroundColor: "#131C5F",
-});
+  backgroundColor: theme.palette.primary[900],
+}));
 
 const Template = () => (
   <Grid container alignItems="center" justifyContent="center">

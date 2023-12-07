@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import LinkIcon from "@mui/icons-material/Link";
 import {
+  alpha,
   ClickAwayListener,
   Grid,
   Grow as MuiGrow,
@@ -33,28 +34,28 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const Paper = styled(MuiPaper)({
+const Paper = styled(MuiPaper)(({ theme }) => ({
   width: "400px",
   height: "100px",
   padding: "15px",
-  boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
+  boxShadow: `0px 5px 35px ${alpha(theme.palette.primary[400], 0.2)}`,
   borderRadius: "8px",
-});
+}));
 
 const StyledLinkIcon = styled(IconButton)<{ $open: boolean }>(
-  {
-    color: "#ffffff",
+  ({ theme }) => ({
+    color: theme.palette.contrastColor,
     marginRight: "8px",
     padding: "12px",
     "&:hover": {
-      background: "#2d3db4",
+      background: theme.palette.primary[600],
     },
     "&:active": {
-      background: "#2938a5",
+      background: theme.palette.primary[700],
     },
-  },
+  }),
   props => ({
-    background: props.$open ? "#2d3db4" : "unset",
+    background: props.$open ? props.theme.palette.primary[600] : "unset",
   })
 );
 
