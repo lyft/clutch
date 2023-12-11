@@ -8,11 +8,12 @@ import {
   AccordionActions as MuiAccordionActions,
   AccordionDetails as MuiAccordionDetails,
   AccordionSummary as MuiAccordionSummary,
+  alpha,
   Divider as MuiDivider,
   useControlled,
 } from "@mui/material";
 
-const StyledAccordion = styled(MuiAccordion)({
+const StyledAccordion = styled(MuiAccordion)(({ theme }) => ({
   borderRadius: "4px",
   boxShadow: "none",
   border: "1px solid transparent",
@@ -21,16 +22,16 @@ const StyledAccordion = styled(MuiAccordion)({
   overflowWrap: "anywhere",
 
   "&.Mui-expanded": {
-    boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
-    borderColor: "rgba(13, 16, 48, 0.12)",
+    boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
+    borderColor: alpha(theme.palette.secondary[900], 0.12),
   },
 
   ".MuiIconButton-root": {
-    color: "rgba(13, 16, 48, 0.38)",
+    color: alpha(theme.palette.secondary[900], 0.38),
   },
 
   ".MuiIconButton-root.Mui-expanded": {
-    color: "rgba(13, 16, 48, 0.6)",
+    color: alpha(theme.palette.secondary[900], 0.6),
   },
 
   ".MuiAccordionDetails-root": {
@@ -45,7 +46,7 @@ const StyledAccordion = styled(MuiAccordion)({
   "&:before": {
     display: "none",
   },
-});
+}));
 
 const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => {
   return (
@@ -58,18 +59,18 @@ const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => 
   );
 };
 
-export const StyledAccordionSummary = styled(AccordionSummaryBase)({
-  backgroundColor: "#fafafb",
+export const StyledAccordionSummary = styled(AccordionSummaryBase)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary[50],
   borderRadius: "4px",
-  color: "#0d1030",
+  color: theme.palette.secondary[900],
   height: "48px",
 
   "&:hover": {
-    backgroundColor: "rgba(13, 16, 48, 0.03)",
+    backgroundColor: alpha(theme.palette.secondary[900], 0.03),
   },
 
   "&:active": {
-    backgroundColor: "rgba(13, 16, 48, 0.12)",
+    backgroundColor: alpha(theme.palette.secondary[900], 0.12),
   },
 
   ".MuiAccordionSummary-content": {
@@ -78,10 +79,10 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
   },
 
   "&.Mui-expanded": {
-    backgroundColor: "#e1e4f9",
+    backgroundColor: theme.palette.primary[200],
     minHeight: "48px",
   },
-});
+}));
 
 const StyledAccordionGroup = styled.div({
   width: "100%",

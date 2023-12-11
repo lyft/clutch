@@ -9,15 +9,15 @@ type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initia
 const StyledLink = styled(MuiLink)<{
   $textTransform: LinkProps["textTransform"];
 }>(
-  {
+  ({ theme }) => ({
     display: "flex",
     width: "100%",
     maxWidth: "fit-content",
     fontSize: "14px",
-    color: "#3548D4",
+    color: theme.palette.primary[600],
     overflow: "hidden",
     textOverflow: "ellipsis",
-  },
+  }),
   props => ({
     textTransform: props.$textTransform,
   })

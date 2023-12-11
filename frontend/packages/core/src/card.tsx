@@ -9,19 +9,20 @@ import {
   CardActionAreaProps,
   Divider,
   Grid,
+  useTheme,
 } from "@mui/material";
 import type { SpacingProps as MuiSpacingProps } from "@mui/system";
-import { spacing } from "@mui/system";
+import { alpha, spacing } from "@mui/system";
 
 import { IconButton } from "./button";
 import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
 
-const StyledCard = styled(MuiCard)({
-  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
-  border: "1px solid rgba(13, 16, 48, 0.1)",
-});
+const StyledCard = styled(MuiCard)(({ theme }) => ({
+  boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
+  border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
+}));
 
 export interface CardProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -29,9 +30,9 @@ export interface CardProps {
 
 const Card = ({ children, ...props }: CardProps) => <StyledCard {...props}>{children}</StyledCard>;
 
-const StyledCardHeaderContainer = styled.div({
-  background: "#EBEDFB",
-});
+const StyledCardHeaderContainer = styled.div(({ theme }) => ({
+  background: theme.palette.primary[200],
+}));
 
 const StyledCardHeader = styled(Grid)({
   padding: "6px 8px",
@@ -58,11 +59,11 @@ const StyledCardHeaderAvatar = styled.div({
 });
 
 // TODO: make the divider a core component
-const StyledDivider = styled(Divider)({
-  color: "#A3A4B0",
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  color: theme.palette.secondary[400],
   height: "24px",
   alignSelf: "center",
-});
+}));
 
 const StyledGridItem = styled(Grid)({
   textAlign: "center",
@@ -81,36 +82,39 @@ interface CardHeaderProps {
   title: React.ReactNode;
 }
 
-const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => (
-  <StyledCardHeaderContainer>
-    <StyledCardHeader container wrap="nowrap" alignItems="center">
-      <StyledCardHeaderAvatarContainer>
-        <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
-      </StyledCardHeaderAvatarContainer>
-      <Grid container wrap="nowrap" alignItems="center">
-        <Grid item xs>
-          <Typography variant="h4">{title}</Typography>
+const CardHeader = ({ actions, avatar, children, title, summary = [] }: CardHeaderProps) => {
+  const theme = useTheme();
+  return (
+    <StyledCardHeaderContainer>
+      <StyledCardHeader container wrap="nowrap" alignItems="center">
+        <StyledCardHeaderAvatarContainer>
+          <StyledCardHeaderAvatar>{avatar}</StyledCardHeaderAvatar>
+        </StyledCardHeaderAvatarContainer>
+        <Grid container wrap="nowrap" alignItems="center">
+          <Grid item xs>
+            <Typography variant="h4">{title}</Typography>
+          </Grid>
+          {summary.map((section: CardHeaderSummaryProps, idx: number) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <React.Fragment key={idx}>
+              <StyledDivider orientation="vertical" />
+              <StyledGridItem item xs>
+                {section.title}
+                {section.subheader && (
+                  <Typography variant="body4" color={alpha(theme.palette.secondary[900], 0.6)}>
+                    {section.subheader}
+                  </Typography>
+                )}
+              </StyledGridItem>
+            </React.Fragment>
+          ))}
         </Grid>
-        {summary.map((section: CardHeaderSummaryProps, idx: number) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <React.Fragment key={idx}>
-            <StyledDivider orientation="vertical" />
-            <StyledGridItem item xs>
-              {section.title}
-              {section.subheader && (
-                <Typography variant="body4" color="rgba(13, 16, 48, 0.6)">
-                  {section.subheader}
-                </Typography>
-              )}
-            </StyledGridItem>
-          </React.Fragment>
-        ))}
-      </Grid>
-      {actions}
-    </StyledCardHeader>
-    {children}
-  </StyledCardHeaderContainer>
-);
+        {actions}
+      </StyledCardHeader>
+      {children}
+    </StyledCardHeaderContainer>
+  );
+};
 
 // Material UI Spacing system supports many props https://material-ui.com/system/spacing/#api
 // We can add more to this list as use cases arise
@@ -133,24 +137,24 @@ const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardActionArea = styled(BaseCardActionArea)({
+const StyledCardActionArea = styled(BaseCardActionArea)(({ theme }) => ({
   ":hover": {
-    backgroundColor: "#F5F6FD",
+    backgroundColor: theme.palette.primary[100],
   },
 
   ":active": {
-    backgroundColor: "#D7DAF6",
+    backgroundColor: theme.palette.primary[300],
   },
-});
+}));
 
-const StyledExpandButton = styled(IconButton)({
+const StyledExpandButton = styled(IconButton)(({ theme }) => ({
   width: "32px",
   height: "32px",
-  color: "#3548D4",
+  color: theme.palette.primary[600],
   ":hover": {
     backgroundColor: "transparent",
   },
-});
+}));
 
 interface CollapsibleState {
   /** The text to show in the collapse action area when the card content is collapsed/not collapsed.
@@ -189,6 +193,7 @@ const CardContent = ({
   maxHeight = "none",
   ...props
 }: CardContentProps) => {
+  const theme = useTheme();
   const ref = React.useRef(null);
   const [showExpand, setShowExpand] = React.useState<boolean>(false);
   const [expanded, setExpanded] = React.useState<boolean>(true);
@@ -224,7 +229,7 @@ const CardContent = ({
         <StyledCardActionArea padding={0} onClick={() => setExpanded(!expanded)}>
           <Grid container alignItems="center" justifyContent="center">
             <Grid item>
-              <Typography variant="body4" color="#3548D4">
+              <Typography variant="body4" color={theme.palette.primary[600]}>
                 {expanded ? collapseAction?.open.title : collapseAction?.closed.title}
               </Typography>
             </Grid>
@@ -240,7 +245,7 @@ const CardContent = ({
   );
 };
 
-const StyledLandingCard = styled(Card)({
+const StyledLandingCard = styled(Card)(({ theme }) => ({
   border: "none",
   height: "214px",
   maxHeight: "100%",
@@ -256,9 +261,9 @@ const StyledLandingCard = styled(Card)({
     fontWeight: "bold",
     fontSize: "12px",
     lineHeight: "36px",
-    color: "rgba(13, 16, 48, 0.6)",
+    color: alpha(theme.palette.secondary[900], 0.6),
   },
-});
+}));
 
 const TruncatedText = styled(Typography)({
   display: "-webkit-box",
@@ -278,10 +283,10 @@ const IconAvatar = styled(Avatar)({
   marginRight: "8px",
 });
 
-const StyledAvatar = styled(IconAvatar)({
-  color: "rgba(13, 16, 48, 0.38)",
-  backgroundColor: "rgba(13, 16, 48, 0.12)",
-});
+const StyledAvatar = styled(IconAvatar)(({ theme }) => ({
+  color: "alpha(theme.palette.secondary[900], 0.38)",
+  backgroundColor: alpha(theme.palette.secondary[900], 0.12),
+}));
 
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
   group: string;
@@ -298,6 +303,7 @@ export const LandingCard = ({
   onClick,
   ...props
 }: LandingCardProps) => {
+  const theme = useTheme();
   const validIcon = icon && icon.length > 0;
   return (
     <StyledLandingCard {...props}>
@@ -313,7 +319,7 @@ export const LandingCard = ({
           </div>
           <div>
             <TruncatedText variant="h3">{title}</TruncatedText>
-            <TruncatedText color="rgba(13, 16, 48, 0.6)" variant="body2">
+            <TruncatedText color={alpha(theme.palette.secondary[900], 0.6)} variant="body2">
               {description}
             </TruncatedText>
           </div>

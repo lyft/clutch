@@ -4,8 +4,9 @@ import { Card, Grid, IconButton, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { alpha, useTheme } from "@mui/material";
 
-const StyledCard = styled(Card)({
+const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   width: "350px",
@@ -14,18 +15,18 @@ const StyledCard = styled(Card)({
   padding: "22px 19px 27px 29px",
   ":hover": {
     cursor: "pointer",
-    backgroundColor: "#F5F6FD",
+    backgroundColor: theme.palette.primary[100],
     ".showOnHover": {
       visibility: "visible",
     },
   },
   ":active": {
-    backgroundColor: "#D7DAF6",
+    backgroundColor: theme.palette.primary[300],
   },
   ".showOnHover": {
     visibility: "hidden",
   },
-});
+}));
 
 interface ProjectCardProps {
   project: IClutch.core.project.v1.IProject;
@@ -33,6 +34,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
+  const theme = useTheme();
   const remove = event => {
     event.stopPropagation();
     onRemove();
@@ -60,7 +62,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
         style={{ marginTop: "8px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
         zeroMinWidth
       >
-        <Typography variant="body2" color="rgba(13, 16, 48, 0.65)">
+        <Typography variant="body2" color={alpha(theme.palette.secondary[900], 0.65)}>
           {project?.data?.description}
         </Typography>
       </Grid>

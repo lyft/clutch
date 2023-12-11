@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Fab, Grid } from "@mui/material";
+import { alpha, Fab, Grid } from "@mui/material";
 
 import { ClipboardButton } from "./button";
 
@@ -13,8 +13,8 @@ const ContentContainer = styled(Grid)({
   flex: 1,
 });
 
-const Pre = styled.pre({
-  border: "1px solid rgba(13, 16, 48, 0.38)",
+const Pre = styled("pre")(({ theme }) => ({
+  border: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
   backgroundColor: "rgba(13,16,48,0.12)",
   borderRadius: "4px",
   fontSize: "16px",
@@ -26,7 +26,7 @@ const Pre = styled.pre({
   flexDirection: "row-reverse",
   display: "flex",
   overflowY: "scroll",
-});
+}));
 
 interface CodeProps {
   children: string;

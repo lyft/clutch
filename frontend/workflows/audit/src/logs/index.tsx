@@ -33,10 +33,10 @@ const LoadingContainer = styled("div")({
   width: "40px",
 });
 
-const LoadingSpinner = styled(CircularProgress)`
-  color: #3548d4;
-  position: absolute;
-`;
+const LoadingSpinner = styled(CircularProgress)(({ theme }) => ({
+  color: theme.palette.primary[600],
+  position: "absolute",
+}));
 
 const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloadPrefix }) => {
   const [searchParams, setSearchParams] = useSearchParams();

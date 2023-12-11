@@ -3,11 +3,11 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
 import { Cell, Pie, PieChart } from "recharts";
 
-const SummaryCardTitle = styled("div")({
+const SummaryCardTitle = styled("div")(({ theme }) => ({
   fontWeight: 600,
   fontSize: "14px",
-  color: "#0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
 const SummaryCardBody = styled("div")<{ $color?: string }>(
   {
@@ -15,7 +15,7 @@ const SummaryCardBody = styled("div")<{ $color?: string }>(
     fontSize: "20px",
   },
   props => ({
-    color: props.$color ? props.$color : "#3548D4",
+    color: props.$color ? props.$color : props.theme.palette.primary[600],
   })
 );
 
