@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ChipProps as MuiChipProps } from "@mui/material";
+import type { ChipProps as MuiChipProps, Theme } from "@mui/material";
 import { alpha, Chip as MuiChip } from "@mui/material";
 
 import styled from "./styled";
@@ -48,42 +48,42 @@ const StyledChip = styled(MuiChip)<{
       padding: "7px 12px",
     },
   },
-  props => {
+  props => ({ theme }: { theme: Theme }) => {
     const CHIP_COLOR_MAP = {
       error: {
-        background: props.theme.palette.error[50],
-        label: props.theme.palette.error[600],
-        borderColor: props.theme.palette.error[600],
+        background: theme.palette.error[50],
+        label: theme.palette.error[600],
+        borderColor: theme.palette.error[600],
       },
       warn: {
-        background: props.theme.palette.warning[50],
-        label: props.theme.palette.warning[600],
-        borderColor: props.theme.palette.warning[600],
+        background: theme.palette.warning[50],
+        label: theme.palette.warning[600],
+        borderColor: theme.palette.warning[600],
       },
       attention: {
-        background: props.theme.palette.secondary[200],
-        label: props.theme.palette.secondary[900],
-        borderColor: alpha(props.theme.palette.secondary[900], 0.6),
+        background: theme.palette.secondary[200],
+        label: theme.palette.secondary[900],
+        borderColor: alpha(theme.palette.secondary[900], 0.6),
       },
       neutral: {
-        background: props.theme.palette.secondary[50],
-        label: props.theme.palette.secondary[900],
-        borderColor: alpha(props.theme.palette.secondary[300], 0.6),
+        background: theme.palette.secondary[50],
+        label: theme.palette.secondary[900],
+        borderColor: alpha(theme.palette.secondary[300], 0.6),
       },
       active: {
-        background: props.theme.palette.primary[200],
-        label: props.theme.palette.primary[600],
-        borderColor: props.theme.palette.primary[600],
+        background: theme.palette.primary[200],
+        label: theme.palette.primary[600],
+        borderColor: theme.palette.primary[600],
       },
       pending: {
-        background: props.theme.palette.warning[50],
-        label: props.theme.palette.warning[500],
-        borderColor: props.theme.palette.warning[500],
+        background: theme.palette.warning[50],
+        label: theme.palette.warning[500],
+        borderColor: theme.palette.warning[500],
       },
       success: {
-        background: props.theme.palette.success[50],
-        label: props.theme.palette.success[500],
-        borderColor: props.theme.palette.success[500],
+        background: theme.palette.success[50],
+        label: theme.palette.success[500],
+        borderColor: theme.palette.success[500],
       },
     };
     return {
@@ -91,9 +91,7 @@ const StyledChip = styled(MuiChip)<{
       background: props.$filled
         ? CHIP_COLOR_MAP[props.$variant].borderColor
         : CHIP_COLOR_MAP[props.$variant].background,
-      color: props.$filled
-        ? props.theme.palette.contrastColor
-        : CHIP_COLOR_MAP[props.$variant].label,
+      color: props.$filled ? theme.palette.contrastColor : CHIP_COLOR_MAP[props.$variant].label,
       borderColor: CHIP_COLOR_MAP[props.$variant].borderColor,
     };
   }

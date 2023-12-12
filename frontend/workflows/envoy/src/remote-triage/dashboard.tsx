@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
+import type { Theme } from "@mui/material";
 import { Cell, Pie, PieChart } from "recharts";
 
 const SummaryCardTitle = styled("div")(({ theme }) => ({
@@ -14,8 +15,8 @@ const SummaryCardBody = styled("div")<{ $color?: string }>(
     fontWeight: "bold",
     fontSize: "20px",
   },
-  props => ({
-    color: props.$color ? props.$color : props.theme.palette.primary[600],
+  props => ({ theme }: { theme: Theme }) => ({
+    color: props.$color ? props.$color : theme.palette.primary[600],
   })
 );
 

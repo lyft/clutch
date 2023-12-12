@@ -63,7 +63,7 @@ const StyledTableRow = styled(MuiTableRow)<{
 }>(
   ({ theme }) => ({
     ":nth-of-type(even)": {
-      background: theme.palette.secondary[900],
+      background: theme.palette.secondary[50],
     },
     ":hover": {
       background: theme.palette.primary[200],
