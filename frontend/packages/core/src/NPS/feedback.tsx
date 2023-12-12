@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
 import MuiSuccessIcon from "@mui/icons-material/CheckCircle";
-import { Grid as MuiGrid } from "@mui/material";
+import { Grid as MuiGrid, useTheme } from "@mui/material";
 import { debounce } from "lodash";
 import { v4 as uuid } from "uuid";
 
@@ -70,9 +70,11 @@ const StyledTextField = styled(TextField)<{ $origin: Origin }>(
 );
 
 const FeedbackAlert = () => {
+  const theme = useTheme();
+
   const AlertProps = {
     iconMapping: {
-      info: <MuiSuccessIcon style={{ color: "#3548d4" }} />,
+      info: <MuiSuccessIcon style={{ color: theme.palette.primary[600] }} />,
     },
     style: {
       margin: "32px",
