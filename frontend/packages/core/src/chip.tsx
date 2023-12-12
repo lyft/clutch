@@ -61,14 +61,14 @@ const StyledChip = styled(MuiChip)<{
         borderColor: props.theme.palette.warning[600],
       },
       attention: {
-        background: props.theme.palette.primary[200],
+        background: props.theme.palette.secondary[200],
         label: props.theme.palette.secondary[900],
         borderColor: alpha(props.theme.palette.secondary[900], 0.6),
       },
       neutral: {
         background: props.theme.palette.secondary[50],
         label: props.theme.palette.secondary[900],
-        borderColor: alpha(props.theme.palette.secondary[900], 0.6),
+        borderColor: alpha(props.theme.palette.secondary[300], 0.6),
       },
       active: {
         background: props.theme.palette.primary[200],
@@ -77,8 +77,8 @@ const StyledChip = styled(MuiChip)<{
       },
       pending: {
         background: props.theme.palette.warning[50],
-        label: props.theme.palette.warning[400],
-        borderColor: props.theme.palette.warning[400],
+        label: props.theme.palette.warning[500],
+        borderColor: props.theme.palette.warning[500],
       },
       success: {
         background: props.theme.palette.success[50],

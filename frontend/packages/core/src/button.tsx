@@ -139,7 +139,7 @@ const variantPalette = (variant: ButtonVariant, theme: Theme): ButtonPalette => 
     primary: {
       background: {
         primary: theme.palette.primary[600],
-        hover: theme.palette.primary[500],
+        hover: theme.palette.primary[700],
         active: theme.palette.primary[600],
         disabled: theme.palette.secondary[200],
       },
