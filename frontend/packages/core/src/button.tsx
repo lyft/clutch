@@ -129,8 +129,8 @@ const variantPalette = (variant: ButtonVariant, theme): ButtonPalette => {
     primary: {
       background: {
         primary: "#3548D4",
-        hover: "#2D3DB4",
-        active: "#2938A5",
+        hover: theme.palette.primary[600],
+        active: theme.palette.primary[700],
         disabled: theme.palette.secondary[200],
       },
       font: {
