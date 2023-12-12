@@ -4,12 +4,12 @@ import { TabContext, TabList, TabPanel as MuiTabPanel } from "@mui/lab";
 import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@mui/material";
 import { Tab as MuiTab } from "@mui/material";
 
-const StyledTab = styled(MuiTab)({
+const StyledTab = styled(MuiTab)(({ theme }) => ({
   minWidth: "111px",
   height: "46px",
   padding: "12px 32px",
   color: "rgba(13, 16, 48, 0.6)",
-  borderBottom: "3px solid #E7E7EA",
+  borderBottom: `3px solid ${theme.palette.secondary[200]}`,
   fontSize: "14px",
   fontWeight: "bold",
   opacity: "1",
@@ -21,7 +21,7 @@ const StyledTab = styled(MuiTab)({
   },
   "&:hover": {
     color: "rgba(13, 16, 48, 0.6)",
-    backgroundColor: "#E7E7EA",
+    backgroundColor: theme.palette.secondary[200],
     outline: "none",
   },
   "&:focus": {
@@ -39,7 +39,7 @@ const StyledTab = styled(MuiTab)({
   ".MuiTab-wrapper": {
     margin: "auto",
   },
-});
+}));
 
 const StyledTabs = styled(TabList)({
   ".MuiTabs-indicator": {

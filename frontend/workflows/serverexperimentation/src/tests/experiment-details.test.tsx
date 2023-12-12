@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@clutch-sh/core/src/Theme";
 import { render } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
@@ -9,7 +10,9 @@ import { ExperimentDetails } from "../start-experiment";
 const setup = (props?) => {
   const utils = render(
     <BrowserRouter>
-      <ExperimentDetails environments={[]} onStart={() => {}} {...props} />
+      <ThemeProvider>
+        <ExperimentDetails environments={[]} onStart={() => {}} {...props} />
+      </ThemeProvider>
     </BrowserRouter>
   );
 
