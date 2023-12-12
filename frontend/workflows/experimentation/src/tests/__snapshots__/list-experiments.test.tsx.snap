@@ -19,11 +19,11 @@ exports[`renders correctly 1`] = `
         class="MuiGrid-root css-vj1n65-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-container css-9xw236-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-container css-n7th3n-MuiGrid-root"
           data-border="bottom"
         >
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ekjam5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-v5b4j7-MuiButtonBase-root-MuiButton-root"
             palette="[object Object]"
             tabindex="0"
             type="button"

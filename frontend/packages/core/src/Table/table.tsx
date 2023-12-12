@@ -23,7 +23,7 @@ import styled from "../styled";
 import { Typography } from "../typography";
 
 const StyledPaper = styled(MuiPaper)(({ theme }) => ({
-  border: `1px solid ${theme.palette.secondary[100]}`,
+  border: `1px solid ${theme.palette.secondary[200]}`,
 }));
 
 const StyledTable = styled(MuiTable)<{
@@ -88,8 +88,8 @@ const StyledTableCell = styled(MuiTableCell)<{
     background: "inherit",
     minHeight: "100%",
   }),
-  props => ({
-    borderBottom: props?.$border ? `1px solid ${props.theme.palette.secondary[100]}` : "0",
+  props => ({ theme }) => ({
+    borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
     display: props.$responsive ? "flex" : "",
     width: !props.$responsive && props.$action ? "80px" : "",
   })

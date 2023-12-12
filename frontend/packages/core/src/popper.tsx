@@ -23,7 +23,7 @@ const StyledPopper = styled(MuiPopper)({
 
 const Paper = styled(MuiPaper)(({ theme }) => ({
   minWidth: "fit-content",
-  border: `1px solid ${theme.palette.secondary[100]}`,
+  border: `1px solid ${theme.palette.secondary[200]}`,
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   ".MuiListItem-root[id='popperItem']": {
     backgroundColor: theme.palette.contrastColor,

@@ -212,13 +212,14 @@ const autoComplete = async (search: string): Promise<any> => {
 const Form = styled.form({});
 
 const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
-  const theme = useTheme();
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
 
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
+
+  const theme = useTheme();
 
   const { removeData, retrieveData, fromShortLink, storeData } = useWorkflowStorageContext();
 
@@ -367,7 +368,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                         <Typography variant="subtitle3" color={theme.palette.contrastColor}>
                           {item.title}
                         </Typography>
-                        <Typography variant="body4" color={theme.palette.secondary[100]}>
+                        <Typography variant="body4" color={theme.palette.secondary[200]}>
                           {item.description}
                         </Typography>
                       </TooltipContainer>

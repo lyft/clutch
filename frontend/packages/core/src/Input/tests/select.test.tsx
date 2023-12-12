@@ -3,11 +3,14 @@ import { render } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
 
+import { ThemeProvider } from "../../Theme";
 import { MultiSelect, Select } from "../select";
 
 test("select has lower bound", () => {
   const { container } = render(
-    <Select name="foobar" defaultOption={-1} options={[{ label: "foo" }, { label: "bar" }]} />
+    <ThemeProvider>
+      <Select name="foobar" defaultOption={-1} options={[{ label: "foo" }, { label: "bar" }]} />
+    </ThemeProvider>
   );
 
   expect(container.querySelector("#foobar-select")).toBeInTheDocument();
@@ -16,7 +19,9 @@ test("select has lower bound", () => {
 
 test("select has upper bound", () => {
   const { container } = render(
-    <Select name="foobar" defaultOption={2} options={[{ label: "foo" }]} />
+    <ThemeProvider>
+      <Select name="foobar" defaultOption={2} options={[{ label: "foo" }]} />
+    </ThemeProvider>
   );
 
   expect(container.querySelector("#foobar-select")).toBeInTheDocument();
@@ -25,11 +30,14 @@ test("select has upper bound", () => {
 
 test("multi select handles multiple", () => {
   const { container } = render(
-    <MultiSelect
-      defaultOptions={[0, 1]}
-      name="foobar"
-      selectOptions={[{ label: "foo" }, { label: "bar" }]}
-    />
+    <ThemeProvider>
+      {" "}
+      <MultiSelect
+        defaultOptions={[0, 1]}
+        name="foobar"
+        selectOptions={[{ label: "foo" }, { label: "bar" }]}
+      />
+    </ThemeProvider>
   );
 
   expect(container.querySelector("#foobar-multi-select")).toBeInTheDocument();

@@ -127,7 +127,7 @@ const variantPalette = (variant: ButtonVariant, theme: Theme): ButtonPalette => 
     neutral: {
       background: {
         primary: "transparent",
-        hover: theme.palette.secondary[100],
+        hover: theme.palette.secondary[200],
         active: theme.palette.secondary[300],
         disabled: theme.palette.contrastColor,
       },
@@ -141,7 +141,7 @@ const variantPalette = (variant: ButtonVariant, theme: Theme): ButtonPalette => 
         primary: theme.palette.primary[600],
         hover: theme.palette.primary[500],
         active: theme.palette.primary[600],
-        disabled: theme.palette.secondary[100],
+        disabled: theme.palette.secondary[200],
       },
       font: {
         primary: theme.palette.contrastColor,
@@ -238,6 +238,7 @@ export interface IconButtonProps
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ variant = "primary", size = "medium", children, ...props }: IconButtonProps, ref) => {
     const theme = useTheme();
+
     return (
       <StyledIconButton
         $palette={variantPalette(variant, theme)}
@@ -257,16 +258,16 @@ const ButtonGroupContainer = styled(Grid)(
       margin: "12px 8px",
     },
   },
-  props =>
+  props => ({ theme }) =>
     props["data-border"] === "bottom"
       ? {
           marginBottom: "12px",
-          borderBottom: `1px solid ${props.theme.palette.secondary[100]}`,
+          borderBottom: `1px solid ${theme.palette.secondary[200]}`,
           marginTop: "0",
         }
       : {
           marginTop: "12px",
-          borderTop: `1px solid ${props.theme.palette.secondary[100]}`,
+          borderTop: `1px solid ${theme.palette.secondary[200]}`,
           marginBottom: "0",
         }
 );

@@ -69,7 +69,7 @@ const StepContainer = styled.div(({ theme }) => ({
   ".MuiStepConnector-line": {
     height: "5px",
     border: 0,
-    backgroundColor: theme.palette.secondary[100],
+    backgroundColor: theme.palette.secondary[200],
     borderRadius: "4px",
   },
 
@@ -126,8 +126,8 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
       font: theme.palette.primary[600],
     },
     pending: {
-      background: theme.palette.secondary[100],
-      border: theme.palette.secondary[100],
+      background: theme.palette.secondary[200],
+      border: theme.palette.secondary[200],
       font: alpha(theme.palette.secondary[900], 0.38),
     },
     success: {

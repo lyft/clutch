@@ -13,7 +13,7 @@ exports[`renders correctly 1`] = `
         class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
       >
         <div
-          class="css-x0oqiv"
+          class="css-1ox5uwj"
         >
           <div
             class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
@@ -65,7 +65,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                 >
                   <div
-                    class="css-ih7ad3"
+                    class="css-yqpyq0"
                   >
                     <div
                       class="css-1c0nvhn"
@@ -94,7 +94,7 @@ exports[`renders correctly 1`] = `
             class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
           >
             <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
             >
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -130,11 +130,11 @@ exports[`renders correctly 1`] = `
               </div>
             </div>
             <div
-              class="MuiGrid-root MuiGrid-container css-hv0rjn-MuiGrid-root"
+              class="MuiGrid-root MuiGrid-container css-mgb5sa-MuiGrid-root"
               data-border="top"
             >
               <button
-                class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ekjam5-MuiButtonBase-root-MuiButton-root"
+                class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-v5b4j7-MuiButtonBase-root-MuiButton-root"
                 palette="[object Object]"
                 tabindex="0"
                 type="button"
