@@ -185,7 +185,7 @@ exports[`renders correctly 1`] = `
         Cancel
       </button>
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-v5b4j7-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-jc1w96-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="submit"
