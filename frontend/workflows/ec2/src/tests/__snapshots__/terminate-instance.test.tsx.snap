@@ -13,7 +13,7 @@ exports[`renders correctly 1`] = `
         class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
       >
         <div
-          class="css-hnlaxq"
+          class="css-1ox5uwj"
         >
           <div
             class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
@@ -28,7 +28,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                 >
                   <div
-                    class="css-pu8aqe"
+                    class="css-1t41j0i"
                   >
                     <div
                       class="css-h5bkmw"
@@ -131,7 +131,7 @@ exports[`renders correctly 1`] = `
             class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
           >
             <span
-              class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-9n93x5-MuiCircularProgress-root"
+              class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-vzjh3v-MuiCircularProgress-root"
               role="progressbar"
               style="width: 40px; height: 40px;"
             >

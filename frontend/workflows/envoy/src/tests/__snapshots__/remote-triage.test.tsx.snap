@@ -13,7 +13,7 @@ exports[`renders correctly 1`] = `
         class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
       >
         <div
-          class="css-hnlaxq"
+          class="css-1ox5uwj"
         >
           <div
             class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
@@ -28,7 +28,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                 >
                   <div
-                    class="css-pu8aqe"
+                    class="css-1t41j0i"
                   >
                     <div
                       class="css-h5bkmw"
@@ -94,7 +94,7 @@ exports[`renders correctly 1`] = `
             class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
           >
             <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
             >
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -134,7 +134,7 @@ exports[`renders correctly 1`] = `
               data-border="top"
             >
               <button
-                class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-rsbbnv-MuiButtonBase-root-MuiButton-root"
+                class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-jc1w96-MuiButtonBase-root-MuiButton-root"
                 palette="[object Object]"
                 tabindex="0"
                 type="button"

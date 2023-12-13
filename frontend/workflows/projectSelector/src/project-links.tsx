@@ -16,7 +16,7 @@ const itemHoverStyle = {
   display: "flex",
   alignItems: "center",
   "&:hover": {
-    backgroundColor: "rgba(13, 16, 48, 0.05)",
+    backgroundColor: "rgba(theme.palette.secondary[900], 0.05)",
   },
 };
 
@@ -34,7 +34,7 @@ const StyledSubLink = styled.div({
 const StyledMoreVertIcon = styled.span({
   ".MuiIconButton-root": {
     padding: "6px",
-    color: "rgba(13, 16, 48, 0.38)",
+    color: "rgba(theme.palette.secondary[900], 0.38)",
   },
   ".MuiIconButton-root:hover": {
     backgroundColor: "rgb(245, 246, 253)",

@@ -11,7 +11,6 @@ test("renders correctly", () => {
   const { asFragment } = render(
     <BrowserRouter>
       <ThemeProvider>
-        {" "}
         <ResizeAutoscalingGroup resolverType="clutch.aws.ec2.v1.AutoscalingGroup" />
       </ThemeProvider>
     </BrowserRouter>

@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { alpha } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
@@ -22,9 +23,9 @@ const StyledGroupTitle = styled.span({
   display: "inline-block",
 });
 
-const StyledCount = styled.span({
-  color: "rgba(13, 16, 48, 0.6)",
-  backgroundColor: "rgba(13, 16, 48, 0.03)",
+const StyledCount = styled("span")(({ theme }) => ({
+  color: alpha(theme.palette.secondary[900], 0.6),
+  backgroundColor: alpha(theme.palette.secondary[900], 0.03),
   fontVariantNumeric: "tabular-nums",
   borderRadius: "4px",
   fontWeight: "bold",
@@ -34,21 +35,21 @@ const StyledCount = styled.span({
   marginBottom: "10px",
   marginTop: "2px",
   display: "inline-block",
-});
+}));
 
 // This div used to have `padding: "0 25px 0 8px"` but that made it look weird when we implemented quicklinks
 // because the "only" and "x" buttons are hidden when the popper is expanded and mouse is no longer hovering.
-const StyledMenuItem = styled.div({
+const StyledMenuItem = styled("div")(({ theme }) => ({
   height: "48px",
   display: "flex",
   alignItems: "center",
   "&:hover": {
-    backgroundColor: "rgba(13, 16, 48, 0.03)",
+    backgroundColor: alpha(theme.palette.secondary[900], 0.03),
   },
   "&:hover > div": {
     display: "inline-flex", // Unhide hidden only button and x if necessary.
   },
-});
+}));
 
 const StyledProjectHeader = styled.div({
   display: "flex",
@@ -66,16 +67,16 @@ const StyledHeaderColumn = styled.div((props: { grow?: boolean }) => ({
   flexGrow: props.grow ? 1 : 0,
 }));
 
-const StyledNoProjectsText = styled.div({
-  color: "rgba(13, 16, 48, 0.38)",
+const StyledNoProjectsText = styled("div")(({ theme }) => ({
+  color: alpha(theme.palette.secondary[900], 0.38),
   textAlign: "center",
   fontSize: "12px",
   marginBottom: "16px",
-});
+}));
 
-const StyledAllText = styled.div({
-  color: "rgba(13, 16, 48, 0.38)",
-});
+const StyledAllText = styled("div")(({ theme }) => ({
+  color: alpha(theme.palette.secondary[900], 0.38),
+}));
 
 const StyledMenuItemName = styled.span({
   flexGrow: 1,
@@ -88,10 +89,10 @@ const StyledMenuItemName = styled.span({
   maxWidth: "160px",
 });
 
-const StyledClearIcon = styled.span({
+const StyledClearIcon = styled("span")(({ theme }) => ({
   ".MuiIconButton-root": {
     padding: "6px",
-    color: "rgba(13, 16, 48, 0.38)",
+    color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiIconButton-root:hover": {
     backgroundColor: "rgb(245, 246, 253)",
@@ -99,25 +100,25 @@ const StyledClearIcon = styled.span({
   ".MuiIconButton-root:active": {
     backgroundColor: "rgba(0,0,0, 0.1)",
   },
-});
+}));
 
-const StyledOnlyButton = styled.button({
+const StyledOnlyButton = styled("button")(({ theme }) => ({
   border: "none",
   cursor: "pointer",
   borderRadius: "4px",
   fontSize: "14px",
   padding: "5px",
   marginRight: "4px",
-  color: "rgba(53, 72, 212, 1)",
+  color: alpha(theme.palette.primary[600], 1),
   backgroundColor: "unset",
   fontFamily: "inherit",
   "&:hover": {
-    backgroundColor: "#f5f6fd",
+    backgroundColor: theme.palette.primary[100],
   },
   "&:active": {
-    backgroundColor: "#D7DAF6",
+    backgroundColor: theme.palette.primary[300],
   },
-});
+}));
 
 const StyledHoverOptions = styled.div({
   alignItems: "center",

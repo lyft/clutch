@@ -13,15 +13,15 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { LinearProgress } from "@mui/material";
 
-const StyledProgressContainer = styled.div({
+const StyledProgressContainer = styled("div")(({ theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
   },
   ".MuiLinearProgress-bar": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 interface CardProps {
   avatar?: React.ReactNode;

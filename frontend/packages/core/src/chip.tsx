@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { ChipProps as MuiChipProps } from "@mui/material";
-import { Chip as MuiChip } from "@mui/material";
+import type { ChipProps as MuiChipProps, Theme } from "@mui/material";
+import { alpha, Chip as MuiChip } from "@mui/material";
 
 import styled from "./styled";
 
@@ -32,44 +32,6 @@ export interface ChipProps
   filled?: boolean;
 }
 
-const CHIP_COLOR_MAP = {
-  error: {
-    background: "#F9EAE7",
-    label: "#C2302E",
-    borderColor: "#C2302E",
-  },
-  warn: {
-    background: "#FEF8E8",
-    label: "#D87313",
-    borderColor: "#D87313",
-  },
-  attention: {
-    background: "#E2E2E6",
-    label: "#0D1030",
-    borderColor: "##0D103061",
-  },
-  neutral: {
-    background: "#F8F8F9",
-    label: "#0D1030",
-    borderColor: "rgba(13, 16, 48, 0.1)",
-  },
-  active: {
-    background: "#EBEDFA",
-    label: "#3548D4",
-    borderColor: "#3548D4",
-  },
-  pending: {
-    background: "#FFFEE8",
-    label: "#B09027",
-    borderColor: "#B09027",
-  },
-  success: {
-    background: "#E9F6EC",
-    label: "#40A05A",
-    borderColor: "#40A05A",
-  },
-};
-
 const StyledChip = styled(MuiChip)<{
   $filled: ChipProps["filled"];
   $variant: ChipProps["variant"];
@@ -86,14 +48,53 @@ const StyledChip = styled(MuiChip)<{
       padding: "7px 12px",
     },
   },
-  props => ({
-    height: props.size === "small" ? "24px" : "32px",
-    background: props.$filled
-      ? CHIP_COLOR_MAP[props.$variant].borderColor
-      : CHIP_COLOR_MAP[props.$variant].background,
-    color: props.$filled ? "#FFFFFF" : CHIP_COLOR_MAP[props.$variant].label,
-    borderColor: CHIP_COLOR_MAP[props.$variant].borderColor,
-  })
+  props => ({ theme }: { theme: Theme }) => {
+    const CHIP_COLOR_MAP = {
+      error: {
+        background: theme.palette.error[50],
+        label: theme.palette.error[600],
+        borderColor: theme.palette.error[600],
+      },
+      warn: {
+        background: theme.palette.warning[50],
+        label: theme.palette.warning[600],
+        borderColor: theme.palette.warning[600],
+      },
+      attention: {
+        background: theme.palette.secondary[200],
+        label: theme.palette.secondary[900],
+        borderColor: alpha(theme.palette.secondary[900], 0.6),
+      },
+      neutral: {
+        background: theme.palette.secondary[50],
+        label: theme.palette.secondary[900],
+        borderColor: alpha(theme.palette.secondary[300], 0.6),
+      },
+      active: {
+        background: theme.palette.primary[200],
+        label: theme.palette.primary[600],
+        borderColor: theme.palette.primary[600],
+      },
+      pending: {
+        background: theme.palette.warning[50],
+        label: theme.palette.warning[500],
+        borderColor: theme.palette.warning[500],
+      },
+      success: {
+        background: theme.palette.success[50],
+        label: theme.palette.success[500],
+        borderColor: theme.palette.success[500],
+      },
+    };
+    return {
+      height: props.size === "small" ? "24px" : "32px",
+      background: props.$filled
+        ? CHIP_COLOR_MAP[props.$variant].borderColor
+        : CHIP_COLOR_MAP[props.$variant].background,
+      color: props.$filled ? theme.palette.contrastColor : CHIP_COLOR_MAP[props.$variant].label,
+      borderColor: CHIP_COLOR_MAP[props.$variant].borderColor,
+    };
+  }
 );
 
 const Chip = ({ variant, filled = false, size = "medium", ...props }: ChipProps) => (

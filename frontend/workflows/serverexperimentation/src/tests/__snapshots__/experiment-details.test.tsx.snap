@@ -11,7 +11,7 @@ exports[`renders correctly 1`] = `
       Cluster Pair
     </h3>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -47,7 +47,7 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -83,7 +83,7 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -134,7 +134,7 @@ exports[`renders correctly 1`] = `
         Fault Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1tg9r3q-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
@@ -183,7 +183,7 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -223,7 +223,7 @@ exports[`renders correctly 1`] = `
       data-border="top"
     >
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-vtyj5e-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ofve1n-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="button"
@@ -231,7 +231,7 @@ exports[`renders correctly 1`] = `
         Cancel
       </button>
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-rsbbnv-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-v5b4j7-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="submit"
@@ -254,7 +254,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       Cluster Pair
     </h3>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -290,7 +290,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -336,7 +336,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Upstream Cluster Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1tg9r3q-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
@@ -385,7 +385,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -436,7 +436,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Fault Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1tg9r3q-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
@@ -485,7 +485,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-137h3m1-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
     >
       <label
         class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -525,7 +525,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       data-border="top"
     >
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-vtyj5e-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ofve1n-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="button"
@@ -533,7 +533,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Cancel
       </button>
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-rsbbnv-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-v5b4j7-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="submit"

@@ -8,10 +8,10 @@ import styled from "../styled";
 import type { TableRowProps } from "./table";
 import { TableCell } from "./table";
 
-const IconButton = styled(MuiIconButton)({
+const IconButton = styled(MuiIconButton)(({ theme }) => ({
   padding: "0",
-  color: "#0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
 const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(props => ({ theme }) => ({
   color: props?.$disabled ? theme.palette.secondary[200] : "unset",

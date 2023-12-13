@@ -53,22 +53,22 @@ const StyledTableBody = styled(MuiTableBody)({
   display: "contents",
 });
 
-const StyledTableHeadRow = styled(MuiTableRow)({
+const StyledTableHeadRow = styled(MuiTableRow)(({ theme }) => ({
   display: "contents",
-  backgroundColor: "#D7DAF6",
-});
+  backgroundColor: theme.palette.primary[300],
+}));
 
 const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
-  {
+  ({ theme }) => ({
     ":nth-of-type(even)": {
-      background: "#F8F8F9",
+      background: theme.palette.secondary[50],
     },
     ":hover": {
-      background: "#EBEDFB",
+      background: theme.palette.primary[200],
     },
-  },
+  }),
   props => ({
     display: props.$responsive ? "contents" : "",
   })
@@ -79,15 +79,15 @@ const StyledTableCell = styled(MuiTableCell)<{
   $responsive?: TableCellProps["responsive"];
   $action?: TableCellProps["action"];
 }>(
-  {
+  ({ theme }) => ({
     alignItems: "center",
     fontSize: "14px",
     padding: "15px 16px",
-    color: "#0D1030",
+    color: theme.palette.secondary[900],
     overflow: "hidden",
     background: "inherit",
     minHeight: "100%",
-  },
+  }),
   props => ({ theme }) => ({
     borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
     display: props.$responsive ? "flex" : "",

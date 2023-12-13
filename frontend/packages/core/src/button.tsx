@@ -1,15 +1,22 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import type {
   ButtonProps as MuiButtonProps,
   IconButtonProps as MuiIconButtonProps,
+  Theme,
 } from "@mui/material";
-import { Button as MuiButton, Grid, IconButton as MuiIconButton, useTheme } from "@mui/material";
+import {
+  alpha,
+  Button as MuiButton,
+  Grid,
+  IconButton as MuiIconButton,
+  useTheme,
+} from "@mui/material";
 
 import { Tooltip } from "./Feedback/tooltip";
 import type { GridJustification } from "./grid";
-import styled from "./styled";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
@@ -65,7 +72,10 @@ const BUTTON_SIZE_MAP = {
 
 export type ButtonSize = keyof typeof BUTTON_SIZE_MAP;
 
-const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: ButtonSize }>(
+const StyledButton = styled(MuiButton)<{
+  palette: ButtonPalette;
+  size: ButtonSize;
+}>(
   {
     borderRadius: "4px",
     fontWeight: 500,
@@ -83,12 +93,12 @@ const StyledButton = styled(MuiButton)<{ palette: ButtonPalette; size: ButtonSiz
   })
 );
 
-const StyledBorderButton = styled(StyledButton)({
-  border: "1px solid #0D1030",
+const StyledBorderButton = styled(StyledButton)(({ theme }) => ({
+  border: `1px solid ${theme.palette.secondary[900]}`,
   "&.Mui-disabled": {
-    borderColor: "rgba(13, 16, 48, 0.1)",
+    borderColor: alpha(theme.palette.secondary[900], 0.1),
   },
-});
+}));
 
 /** Provides feedback to the user in regards to the action of the button. */
 type ButtonVariant = "neutral" | "primary" | "danger" | "destructive" | "secondary";
@@ -112,54 +122,54 @@ export type IconButtonSize = keyof typeof ICON_BUTTON_STYLE_MAP;
 export const ICON_BUTTON_VARIANTS = Object.keys(ICON_BUTTON_STYLE_MAP);
 
 /** A color palette from a @type ButtonPalette */
-const variantPalette = (variant: ButtonVariant, theme): ButtonPalette => {
+const variantPalette = (variant: ButtonVariant, theme: Theme): ButtonPalette => {
   const COLORS = {
     neutral: {
       background: {
         primary: "transparent",
         hover: theme.palette.secondary[200],
-        active: "#CFD3D7",
-        disabled: "#FFFFFF",
+        active: theme.palette.secondary[300],
+        disabled: theme.palette.contrastColor,
       },
       font: {
-        primary: "#0D1030",
-        disabled: "#0D1030",
+        primary: theme.palette.secondary[900],
+        disabled: theme.palette.secondary[900],
       },
     },
     primary: {
       background: {
-        primary: "#3548D4",
-        hover: theme.palette.primary[600],
-        active: theme.palette.primary[700],
+        primary: theme.palette.primary[600],
+        hover: theme.palette.primary[700],
+        active: theme.palette.primary[600],
         disabled: theme.palette.secondary[200],
       },
       font: {
-        primary: "#FFFFFF",
-        disabled: "rgba(13, 16, 48, 0.38)",
+        primary: theme.palette.contrastColor,
+        disabled: alpha(theme.palette.secondary[900], 0.38),
       },
     },
     danger: {
       background: {
         primary: theme.palette.error[600],
-        hover: "#BA2E12",
-        active: "#AB2A10",
-        disabled: "#F1B3A6",
+        hover: theme.palette.error[700],
+        active: theme.palette.error[800],
+        disabled: theme.palette.error[200],
       },
       font: {
-        primary: "#FFFFFF",
-        disabled: "#FFFFFF",
+        primary: theme.palette.contrastColor,
+        disabled: theme.palette.contrastColor,
       },
     },
     secondary: {
       background: {
         primary: "transparent",
-        hover: "#F5F6FD",
-        active: "#D7DAF6",
+        hover: theme.palette.primary[100],
+        active: theme.palette.primary[300],
         disabled: "transparent",
       },
       font: {
-        primary: "#3548D4",
-        disabled: "#0D1030",
+        primary: theme.palette.primary[600],
+        disabled: theme.palette.secondary[900],
       },
     },
   } as { [key: string]: ButtonPalette };
@@ -189,7 +199,7 @@ export interface ButtonProps
 const Button = ({ text, variant = "primary", size = "medium", ...props }: ButtonProps) => {
   const theme = useTheme();
   const palette = variantPalette(variant, theme);
-  const ButtonVariant = variant === "neutral" ? StyledBorderButton : StyledButton;
+  const ButtonVariant = (variant === "neutral" ? StyledBorderButton : StyledButton) as any;
 
   return (
     <ButtonVariant variant="contained" disableElevation palette={palette} size={size} {...props}>
@@ -278,12 +288,12 @@ const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonG
   </ButtonGroupContainer>
 );
 
-const StyledClipboardIconButton = styled(MuiIconButton)({
-  color: "#000000",
+const StyledClipboardIconButton = styled(MuiIconButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(theme.palette.contrastColor),
   ":hover": {
     backgroundColor: "transparent",
   },
-});
+}));
 
 export interface ClipboardButtonProps {
   /** Case-sensitive text to be copied. */

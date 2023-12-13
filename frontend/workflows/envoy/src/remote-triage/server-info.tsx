@@ -8,12 +8,12 @@ const Container = styled("div")({
   },
 });
 
-const Title = styled("div")({
+const Title = styled("div")(({ theme }) => ({
   fontWeight: "bold",
   fontSize: "20px",
-  color: "#0D1030",
+  color: theme.palette.secondary[900],
   textTransform: "capitalize",
-});
+}));
 
 interface ServerInformation {
   command_line_options: {

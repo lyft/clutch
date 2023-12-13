@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { TypographyProps as MuiTypographyProps } from "@mui/material";
+import { TypographyProps as MuiTypographyProps, useTheme } from "@mui/material";
 
 import styled from "./styled";
 
@@ -167,20 +167,23 @@ export interface TypographyProps extends Pick<MuiTypographyProps, "noWrap"> {
 const Typography = ({
   variant,
   children,
-  color = "#0D1030",
+  color,
   textTransform,
   noWrap,
   ...props
-}: TypographyProps) => (
-  <StyledTypography
-    $variant={variant}
-    $color={color}
-    $textTransform={textTransform}
-    $noWrap={noWrap}
-    {...props}
-  >
-    {children}
-  </StyledTypography>
-);
+}: TypographyProps) => {
+  const theme = useTheme();
+  return (
+    <StyledTypography
+      $variant={variant}
+      $color={color ?? theme.palette.secondary[900]}
+      $textTransform={textTransform}
+      $noWrap={noWrap}
+      {...props}
+    >
+      {children}
+    </StyledTypography>
+  );
+};
 
 export { StyledTypography, Typography };

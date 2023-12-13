@@ -7,6 +7,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
+import { alpha } from "@mui/material";
 
 import type { WorkflowProps } from ".";
 import CronTable from "./crons-table";
@@ -30,20 +31,20 @@ const Content = styled.div({
   margin: "32px 0",
 });
 
-const PlaceholderTitle = styled.div({
+const PlaceholderTitle = styled("div")(({ theme }) => ({
   paddingBottom: "16px",
   fontWeight: 700,
   fontSize: "22px",
   lineHeight: "28px",
-  color: "0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
-const PlaceholderText = styled.div({
+const PlaceholderText = styled("div")(({ theme }) => ({
   fontWeight: 400,
   fontSize: "16px",
   lineHeight: "22px",
-  color: "rgba(13, 16, 48, 0.6)",
-});
+  color: alpha(theme.palette.secondary[900], 0.6),
+}));
 
 const Placeholder = () => (
   <Paper>

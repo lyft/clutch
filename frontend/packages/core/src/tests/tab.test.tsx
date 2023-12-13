@@ -9,7 +9,6 @@ import { ThemeProvider } from "../Theme";
 beforeEach(() => {
   render(
     <ThemeProvider>
-      {" "}
       <Tabs value={1}>
         <Tab label="meow" />
         <Tab label="mix" />

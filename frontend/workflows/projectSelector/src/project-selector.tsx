@@ -17,7 +17,7 @@ import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-import { Divider, LinearProgress, useTheme } from "@mui/material";
+import { alpha, Divider, LinearProgress, useTheme } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -63,15 +63,15 @@ const initialState: State = {
   error: undefined,
 };
 
-const StyledSelectorContainer = styled.div({
+const StyledSelectorContainer = styled("div")(({ theme }) => ({
   backgroundColor: "#F9FAFE",
-  borderRight: "1px solid rgba(13, 16, 48, 0.1)",
-  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
+  borderRight: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
+  boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
   width: "245px",
   overflowY: "auto",
   overflowX: "hidden",
   maxHeight: "100%",
-});
+}));
 
 const StyledWorkflowHeader = styled.div({
   margin: "16px 16px 12px 16px",
@@ -92,15 +92,15 @@ const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
 
-const StyledProgressContainer = styled.div({
+const StyledProgressContainer = styled("div")(({ theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: "rgb(194, 200, 242)",
   },
   ".MuiLinearProgress-bar": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 // TODO(smonero): decide on styling for this
 const FlexCenterAlignContainer = styled.div({
@@ -365,7 +365,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       },
                     ].map(item => (
                       <TooltipContainer key={item.title}>
-                        <Typography variant="subtitle3" color={theme.palette.secondary[200]}>
+                        <Typography variant="subtitle3" color={theme.palette.contrastColor}>
                           {item.title}
                         </Typography>
                         <Typography variant="body4" color={theme.palette.secondary[200]}>
@@ -389,7 +389,9 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                     placement="bottom"
                   >
                     <UpdateIcon
-                      style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
+                      style={{
+                        color: autoRefresh ? theme.palette.primary[600] : "rgba(0, 0, 0, 0.26)",
+                      }}
                       fontSize="small"
                       onClick={() => {
                         handleRefreshRateChange();
