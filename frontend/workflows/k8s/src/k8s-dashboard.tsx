@@ -1,8 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, ClutchError, Error, Paper, Tab, Tabs } from "@clutch-sh/core";
+import { client, ClutchError, Error, Paper, styled, Tab, Tabs } from "@clutch-sh/core";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import styled from "@emotion/styled";
 import AppsIcon from "@mui/icons-material/Apps";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
@@ -17,7 +16,7 @@ import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
 import StatefulSetTable from "./stateful-sets-table";
 
-const Container = styled.div({
+const Container = styled("div")({
   flex: 1,
   margin: "32px",
   display: "flex",
@@ -27,7 +26,7 @@ const Container = styled.div({
   },
 });
 
-const Content = styled.div({
+const Content = styled("div")({
   margin: "32px 0",
 });
 

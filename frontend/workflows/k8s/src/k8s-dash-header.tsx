@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "@emotion/styled";
+import { styled } from "@clutch-sh/core";
 import { alpha } from "@mui/material";
 
 const Category = styled("div")(({ theme }) => ({

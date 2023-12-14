@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Checkbox, checkFeatureEnabled, Switch } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { Checkbox, checkFeatureEnabled, styled, Switch } from "@clutch-sh/core";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -11,14 +10,14 @@ import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
 import ProjectLinks from "./project-links";
 import type { Group } from "./types";
 
-const StyledGroup = styled.div({
+const StyledGroup = styled("div")({
   fontWeight: 500,
   marginLeft: "4px",
   marginTop: "9px",
   display: "block",
 });
 
-const StyledGroupTitle = styled.span({
+const StyledGroupTitle = styled("span")({
   marginRight: "4px",
   display: "inline-block",
 });
@@ -51,7 +50,7 @@ const StyledMenuItem = styled("div")(({ theme }) => ({
   },
 }));
 
-const StyledProjectHeader = styled.div({
+const StyledProjectHeader = styled("div")({
   display: "flex",
   maxWidth: "100%",
   alignItems: "flex-start",
@@ -60,7 +59,7 @@ const StyledProjectHeader = styled.div({
   padding: "0 12px",
 });
 
-const StyledHeaderColumn = styled.div((props: { grow?: boolean }) => ({
+const StyledHeaderColumn = styled("div")((props: { grow?: boolean }) => ({
   display: "flex",
   minHeight: "38px",
   alignItems: "center",
@@ -78,7 +77,7 @@ const StyledAllText = styled("div")(({ theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.38),
 }));
 
-const StyledMenuItemName = styled.span({
+const StyledMenuItemName = styled("span")({
   flexGrow: 1,
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
@@ -120,7 +119,7 @@ const StyledOnlyButton = styled("button")(({ theme }) => ({
   },
 }));
 
-const StyledHoverOptions = styled.div({
+const StyledHoverOptions = styled("div")({
   alignItems: "center",
 });
 

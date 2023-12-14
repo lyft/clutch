@@ -59,6 +59,7 @@ export { default as Code } from "./text";
 export { default as TimeAgo } from "./timeago";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
+export { useTheme } from "./AppProvider/themes";
 
 export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";
 

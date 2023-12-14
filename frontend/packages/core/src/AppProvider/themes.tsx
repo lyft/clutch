@@ -1,5 +1,6 @@
 import React from "react";
-import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import { CssBaseline, StyledEngineProvider, useTheme as useMuiTheme } from "@mui/material";
+import type { Theme as MuiTheme } from "@mui/material/styles";
 import { StylesProvider } from "@mui/styles";
 
 import { ThemeProvider } from "../Theme";
@@ -18,6 +19,8 @@ declare module "@mui/material/styles" {
   }
 }
 
+const useTheme = () => useMuiTheme() as MuiTheme;
+
 const Theme: React.FC = ({ children }) => {
   // Uncomment to use dark mode
   /* // Detect system color mode
@@ -34,4 +37,4 @@ const Theme: React.FC = ({ children }) => {
   );
 };
 
-export default Theme;
+export { Theme, useTheme };

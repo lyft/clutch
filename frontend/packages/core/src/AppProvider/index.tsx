@@ -17,7 +17,7 @@ import NotFound from "../not-found";
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
 import ShortLinkStateHydrator from "./short-link-state-hydrator";
-import Theme from "./themes";
+import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 

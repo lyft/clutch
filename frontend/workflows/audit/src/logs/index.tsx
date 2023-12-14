@@ -8,9 +8,10 @@ import {
   Table,
   Typography,
   useSearchParams,
+  useTheme,
 } from "@clutch-sh/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { CircularProgress, Stack, useMediaQuery } from "@mui/material";
 
 import type { AuditLogProps } from "..";
 

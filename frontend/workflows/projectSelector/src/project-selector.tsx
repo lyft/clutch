@@ -6,18 +6,19 @@ import {
   ClutchError,
   FeatureOn,
   SimpleFeatureFlag,
+  styled,
   TextField,
   Tooltip,
   TooltipContainer,
   Typography,
   userId,
+  useTheme,
   useWorkflowStorageContext,
 } from "@clutch-sh/core";
-import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-import { alpha, Divider, LinearProgress, useTheme } from "@mui/material";
+import { alpha, Divider, LinearProgress } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -73,7 +74,7 @@ const StyledSelectorContainer = styled("div")(({ theme }) => ({
   maxHeight: "100%",
 }));
 
-const StyledWorkflowHeader = styled.div({
+const StyledWorkflowHeader = styled("div")({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
@@ -81,7 +82,7 @@ const StyledWorkflowHeader = styled.div({
   height: "24px",
 });
 
-const StyledWorkflowTitle = styled.span({
+const StyledWorkflowTitle = styled("span")({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
@@ -103,7 +104,7 @@ const StyledProgressContainer = styled("div")(({ theme }) => ({
 }));
 
 // TODO(smonero): decide on styling for this
-const FlexCenterAlignContainer = styled.div({
+const FlexCenterAlignContainer = styled("div")({
   display: "flex",
   alignItems: "center",
 });
@@ -209,17 +210,16 @@ const autoComplete = async (search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
-const Form = styled.form({});
+const Form = styled("form")({});
 
 const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
+  const theme = useTheme();
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
 
   const [customProject, setCustomProject] = React.useState("");
   const { updateSelected } = useDashUpdater();
-
-  const theme = useTheme();
 
   const { removeData, retrieveData, fromShortLink, storeData } = useWorkflowStorageContext();
 
