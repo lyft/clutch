@@ -6,9 +6,9 @@ BUILD_ROOT="${REPO_ROOT}/build"
 BUILD_BIN="${BUILD_ROOT}/bin"
 
 NAME=golangci-lint
-RELEASE=v1.53.2
-OSX_RELEASE_256=a4e83f5bfe52f42134c9783aa68ba31104c36e2ad4c221a3c77510dda66ae81c
-LINUX_RELEASE_256=2298f73b9bc03b88b91fee06c5d519fc7f9d7f328e2c388615bbd7e85a9d6cae
+RELEASE=v1.55.2
+OSX_RELEASE_256=632e96e6d5294fbbe7b2c410a49c8fa01c60712a0af85a567de85bcc1623ea21
+LINUX_RELEASE_256=ca21c961a33be3bc15e4292dc40c98c8dcc5463a7b6768a3afc123761630c09c
 
 ARCH=amd64
 
@@ -28,9 +28,15 @@ ensure_binary() {
     mkdir -p "${BUILD_BIN}"
 
     case "${OSTYPE}" in
-      "darwin"*) os_type="darwin"; sum="${OSX_RELEASE_256}" ;;
-      "linux"*) os_type="linux"; sum="${LINUX_RELEASE_256}" ;;
-      *) echo "error: Unsupported OS '${OSTYPE}' for shellcheck install, please install manually" && exit 1 ;;
+    "darwin"*)
+      os_type="darwin"
+      sum="${OSX_RELEASE_256}"
+      ;;
+    "linux"*)
+      os_type="linux"
+      sum="${LINUX_RELEASE_256}"
+      ;;
+    *) echo "error: Unsupported OS '${OSTYPE}' for shellcheck install, please install manually" && exit 1 ;;
     esac
 
     release_archive="/tmp/${NAME}-${RELEASE}.tar.gz"
@@ -44,7 +50,7 @@ ensure_binary() {
     tar -xzf "${release_archive}" --strip=1 -C "${release_tmp_dir}"
 
     if [[ ! -f "${RELEASE_BINARY}" ]]; then
-      find "${BUILD_BIN}" -maxdepth 0 -regex '.*/'${NAME}'-[A-Za-z0-9\.]+$' -exec rm {} \;  # cleanup older versions
+      find "${BUILD_BIN}" -maxdepth 0 -regex '.*/'${NAME}'-[A-Za-z0-9\.]+$' -exec rm {} \; # cleanup older versions
       mv "${release_tmp_dir}/${NAME}" "${RELEASE_BINARY}"
     fi
 
