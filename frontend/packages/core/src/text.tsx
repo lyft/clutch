@@ -15,10 +15,10 @@ const ContentContainer = styled(Grid)({
 
 const Pre = styled("pre")(({ theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
-  backgroundColor: "rgba(13,16,48,0.12)",
+  backgroundColor: alpha(theme.palette.secondary[900], 0.12),
   borderRadius: "4px",
   fontSize: "16px",
-  color: "#242b8c",
+  color: theme.palette.primary[800],
   padding: "12px 16px",
   flex: 1,
   whiteSpace: "pre-wrap",

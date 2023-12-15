@@ -14,7 +14,7 @@ import {
 
 const DialogPaper = styled(Paper)(({ theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
-  boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+  boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}}`,
   boxSizing: "border-box",
   backgroundColor: theme.palette.contrastColor,
   width: "max-content",
