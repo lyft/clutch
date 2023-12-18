@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
 import type { DialogProps as MuiDialogProps } from "@mui/material";
 import {
@@ -12,9 +11,11 @@ import {
   Paper,
 } from "@mui/material";
 
+import styled from "./styled";
+
 const DialogPaper = styled(Paper)(({ theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
-  boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}}`,
+  boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}`,
   boxSizing: "border-box",
   backgroundColor: theme.palette.contrastColor,
   width: "max-content",
@@ -30,7 +31,7 @@ const DialogTitle = styled(MuiDialogTitle)(({ theme }) => ({
   color: theme.palette.secondary[900],
 }));
 
-const DialogTitleText = styled.div({
+const DialogTitleText = styled("div")({
   padding: "14px 0 0 0",
 });
 
