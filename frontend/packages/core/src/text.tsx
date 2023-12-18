@@ -28,6 +28,13 @@ const Pre = styled("pre")(({ theme }) => ({
   overflowY: "scroll",
 }));
 
+const StyledFab = styled(Fab)(({ theme }) => ({
+  background: theme.palette.secondary[200],
+  "&:hover": {
+    background: theme.palette.secondary[50],
+  },
+}));
+
 interface CodeProps {
   children: string;
   showCopyButton?: boolean;
@@ -38,9 +45,9 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
     {showCopyButton && (
       // TODO: Figure out a more permanent fix for the copy button
       <CopyButtonContainer container justifyContent="flex-end">
-        <Fab variant="circular" size="small">
+        <StyledFab variant="circular" size="small">
           <ClipboardButton text={children} />
-        </Fab>
+        </StyledFab>
       </CopyButtonContainer>
     )}
     <ContentContainer justifyContent="flex-start" alignItems="center">
