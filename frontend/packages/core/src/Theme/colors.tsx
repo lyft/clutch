@@ -1,5 +1,12 @@
 import type { ClutchColors, ComponentState, ThemeVariant } from "./types";
 
+export enum THEME_VARIANTS {
+  light = "light",
+  dark = "dark",
+}
+
+export const brandColor = "#02acbe";
+
 export const LIGHT_COLORS: ClutchColors = {
   neutral: {
     50: "#F8F8F9",
@@ -175,7 +182,7 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
 };
 
 const clutchColors = (variant: ThemeVariant) => {
-  const colors = variant === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const colors = variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
   return {
     ...colors,
   };
