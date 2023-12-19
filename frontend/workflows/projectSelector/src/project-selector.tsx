@@ -65,7 +65,7 @@ const initialState: State = {
 };
 
 const StyledSelectorContainer = styled("div")(({ theme }) => ({
-  backgroundColor: "#F9FAFE",
+  backgroundColor: theme.palette.primary[50],
   borderRight: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
   boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
   width: "245px",
@@ -96,7 +96,7 @@ const StyledProjectTextField = styled(TextField)({
 const StyledProgressContainer = styled("div")(({ theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
-    backgroundColor: "rgb(194, 200, 242)",
+    backgroundColor: theme.palette.primary[400],
   },
   ".MuiLinearProgress-bar": {
     backgroundColor: theme.palette.primary[600],
@@ -390,7 +390,9 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                   >
                     <UpdateIcon
                       style={{
-                        color: autoRefresh ? theme.palette.primary[600] : "rgba(0, 0, 0, 0.26)",
+                        color: autoRefresh
+                          ? theme.palette.primary[600]
+                          : alpha(theme.palette.common.black, 0.26),
                       }}
                       fontSize="small"
                       onClick={() => {

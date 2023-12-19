@@ -94,10 +94,10 @@ const StyledClearIcon = styled("span")(({ theme }) => ({
     color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiIconButton-root:hover": {
-    backgroundColor: "rgb(245, 246, 253)",
+    backgroundColor: theme.palette.primary[100],
   },
   ".MuiIconButton-root:active": {
-    backgroundColor: "rgba(0,0,0, 0.1)",
+    backgroundColor: alpha(theme.palette.common.black, 0.1),
   },
 }));
 

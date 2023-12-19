@@ -3,6 +3,7 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Link, Popper, Typography } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { alpha } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 interface LinkGroupProps {
@@ -31,18 +32,18 @@ const StyledSubLink = styled.div({
   paddingLeft: "40px",
 });
 
-const StyledMoreVertIcon = styled.span({
+const StyledMoreVertIcon = styled.span(({ theme }) => ({
   ".MuiIconButton-root": {
     padding: "6px",
-    color: "rgba(theme.palette.secondary[900], 0.38)",
+    color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiIconButton-root:hover": {
-    backgroundColor: "rgb(245, 246, 253)",
+    backgroundColor: theme.palette.primary[100],
   },
   ".MuiIconButton-root:active": {
-    backgroundColor: "rgba(0,0,0, 0.1)",
+    backgroundColor: alpha(theme.palette.common.black, 0.1),
   },
-});
+}));
 
 const StyledLinkTitle = styled(Typography)({
   padding: "7px 0px",
