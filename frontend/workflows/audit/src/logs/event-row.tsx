@@ -16,17 +16,17 @@ import FileSaver from "file-saver";
 
 const ENDPOINT = "/v1/audit/getEvents";
 const COLUMN_COUNT = 6;
-const MonospaceText = styled("div")({
+const MonospaceText = styled("div")(({ theme }) => ({
   fontFamily: "monospace",
   padding: "8px",
   border: "1px solid lightgray",
   borderRadius: "8px",
-  background: "#ddd9d9",
+  background: theme.palette.secondary[200],
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "pre",
   maxWidth: "400px",
-});
+}));
 
 interface EventRowAction {
   icon: React.ReactElement;

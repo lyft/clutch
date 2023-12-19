@@ -16,7 +16,7 @@ import { LinearProgress } from "@mui/material";
 const StyledProgressContainer = styled("div")(({ theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
-    backgroundColor: "rgb(194, 200, 242)",
+    backgroundColor: theme.palette.primary[400],
   },
   ".MuiLinearProgress-bar": {
     backgroundColor: theme.palette.primary[600],
