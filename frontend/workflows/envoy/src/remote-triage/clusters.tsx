@@ -36,7 +36,7 @@ const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed }) => {
         <Bar fill={theme.palette.success[200]} width={`${(succeeded / total) * 100}px`} />
       )}
       {failed !== 0 && (
-        <Bar fill={theme.palette.error[600]} width={`${(failed / total) * 100}px`} />
+        <Bar fill={theme.palette.error[300]} width={`${(failed / total) * 100}px`} />
       )}
     </>
   );

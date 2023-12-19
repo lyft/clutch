@@ -49,7 +49,7 @@ export const StatusIcon: React.FC<StatusProps> = ({
       )}
       {variant === "failure" && (
         <>
-          <StyledStatusIcon data-color={theme.palette.error[600]} /> {children}
+          <StyledStatusIcon data-color={theme.palette.error[300]} /> {children}
         </>
       )}
     </Grid>

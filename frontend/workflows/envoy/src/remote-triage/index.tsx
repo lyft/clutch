@@ -89,7 +89,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
     {
       id: "Failing",
       value: failingClusterCount,
-      color: theme.palette.error[600],
+      color: theme.palette.error[300],
     },
   ];
   const dashboardFeaturedSummary = { name: "Clusters", data };
