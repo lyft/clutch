@@ -1,7 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { AccordionRow, StatusIcon, styled, Table, TableRow } from "@clutch-sh/core";
-import { useTheme } from "@mui/material";
+import { AccordionRow, StatusIcon, styled, Table, TableRow, useTheme } from "@clutch-sh/core";
 import _ from "lodash";
 
 const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
@@ -33,7 +32,7 @@ const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed }) => {
   return (
     <>
       {succeeded !== 0 && (
-        <Bar fill={theme.palette.success[200]} width={`${(succeeded / total) * 100}px`} />
+        <Bar fill={theme.palette.success[300]} width={`${(succeeded / total) * 100}px`} />
       )}
       {failed !== 0 && (
         <Bar fill={theme.palette.error[300]} width={`${(failed / total) * 100}px`} />

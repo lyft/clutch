@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
   TextField,
+  useTheme,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -84,7 +85,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
     {
       id: "Running",
       value: healthyClusterCount,
-      color: theme.palette.success[200],
+      color: theme.palette.success[300],
     },
     {
       id: "Failing",

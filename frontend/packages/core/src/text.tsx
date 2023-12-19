@@ -15,10 +15,10 @@ const ContentContainer = styled(Grid)({
 
 const Pre = styled("pre")(({ theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
-  backgroundColor: "rgba(13,16,48,0.12)",
+  backgroundColor: alpha(theme.palette.secondary[900], 0.12),
   borderRadius: "4px",
   fontSize: "16px",
-  color: "#242b8c",
+  color: theme.palette.primary[800],
   padding: "12px 16px",
   flex: 1,
   whiteSpace: "pre-wrap",
@@ -26,6 +26,13 @@ const Pre = styled("pre")(({ theme }) => ({
   flexDirection: "row-reverse",
   display: "flex",
   overflowY: "scroll",
+}));
+
+const StyledFab = styled(Fab)(({ theme }) => ({
+  background: theme.palette.secondary[200],
+  "&:hover": {
+    background: theme.palette.secondary[50],
+  },
 }));
 
 interface CodeProps {
@@ -38,9 +45,9 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
     {showCopyButton && (
       // TODO: Figure out a more permanent fix for the copy button
       <CopyButtonContainer container justifyContent="flex-end">
-        <Fab variant="circular" size="small">
+        <StyledFab variant="circular" size="small">
           <ClipboardButton text={children} />
-        </Fab>
+        </StyledFab>
       </CopyButtonContainer>
     )}
     <ContentContainer justifyContent="flex-start" alignItems="center">
