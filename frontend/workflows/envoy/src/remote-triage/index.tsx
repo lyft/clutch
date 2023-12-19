@@ -14,7 +14,6 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { useTheme } from "@mui/material";
 import FileSaver from "file-saver";
 
 import type { TriageChild, WorkflowProps } from "../index";
