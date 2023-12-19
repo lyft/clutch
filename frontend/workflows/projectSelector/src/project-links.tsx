@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Link, Popper, Typography } from "@clutch-sh/core";
+import { Link, Popper, Typography, useTheme } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { alpha } from "@mui/material";
@@ -12,25 +12,6 @@ interface LinkGroupProps {
 }
 
 const ICON_SIZE = "16px";
-
-const itemHoverStyle = {
-  display: "flex",
-  alignItems: "center",
-  "&:hover": {
-    backgroundColor: "rgba(theme.palette.secondary[900], 0.05)",
-  },
-};
-
-const StyledMenuItem = styled.div({
-  ...itemHoverStyle,
-});
-
-const StyledSubLink = styled.div({
-  ...itemHoverStyle,
-  paddingBottom: "8px",
-  paddingTop: "8px",
-  paddingLeft: "40px",
-});
 
 const StyledMoreVertIcon = styled.span(({ theme }) => ({
   ".MuiIconButton-root": {
@@ -74,6 +55,27 @@ interface QuickLinkGroupProps extends LinkGroupProps {
 }
 
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
+  const theme = useTheme();
+
+  const itemHoverStyle = {
+    display: "flex",
+    alignItems: "center",
+    "&:hover": {
+      backgroundColor: alpha(theme.palette.secondary[900], 0.05),
+    },
+  };
+
+  const StyledMenuItem = styled.div({
+    ...itemHoverStyle,
+  });
+
+  const StyledSubLink = styled.div({
+    ...itemHoverStyle,
+    paddingBottom: "8px",
+    paddingTop: "8px",
+    paddingLeft: "40px",
+  });
+
   const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);
 
   React.useEffect(() => {
