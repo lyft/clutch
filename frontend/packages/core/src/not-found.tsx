@@ -7,10 +7,10 @@ const Container = styled(Grid)`
   minheight: 80vh;
 `;
 
-const IconContainer = styled(Grid)({
-  color: "#02acbe",
+const IconContainer = styled(Grid)(({ theme }) => ({
+  color: theme.palette.brandColor,
   fontSize: "7rem",
-});
+}));
 
 const NotFound: React.FC<{}> = () => (
   <Container
