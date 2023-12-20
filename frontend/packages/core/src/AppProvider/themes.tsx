@@ -4,6 +4,7 @@ import type { Theme as MuiTheme } from "@mui/material/styles";
 import { StylesProvider } from "@mui/styles";
 
 import { ThemeProvider } from "../Theme";
+import { THEME_VARIANTS } from "../Theme/colors";
 import type { ClutchColors } from "../Theme/types";
 
 declare module "@mui/material/styles" {
@@ -16,6 +17,7 @@ declare module "@mui/material/styles" {
   interface Palette {
     contrastColor: string;
     headerGradient: string;
+    brandColor: string;
   }
 }
 
@@ -29,7 +31,7 @@ const Theme: React.FC = ({ children }) => {
   const prefersDarkMode = false;
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider variant={prefersDarkMode ? "dark" : "light"}>
+      <ThemeProvider variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}>
         <CssBaseline />
         <StylesProvider>{children}</StylesProvider>
       </ThemeProvider>

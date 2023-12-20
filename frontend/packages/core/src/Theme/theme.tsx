@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { StylesProvider } from "@mui/styles";
 
-import { clutchColors } from "./colors";
+import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
 
@@ -66,11 +66,11 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
 };
 
 interface ThemeProps {
-  variant?: "light" | "dark";
+  variant?: ThemeVariant;
   children: React.ReactNode;
 }
 
-const ThemeProvider = ({ children, variant = "light" }: ThemeProps) => (
+const ThemeProvider = ({ children, variant = THEME_VARIANTS.light }: ThemeProps) => (
   <StyledEngineProvider injectFirst>
     <MuiThemeProvider theme={createTheme(variant)}>
       <CssBaseline />

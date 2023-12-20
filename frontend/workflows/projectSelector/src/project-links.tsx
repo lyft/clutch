@@ -1,7 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Link, Popper, Typography } from "@clutch-sh/core";
-import styled from "@emotion/styled";
+import { Link, Popper, styled, Typography, useTheme } from "@clutch-sh/core";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { alpha } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -13,26 +12,7 @@ interface LinkGroupProps {
 
 const ICON_SIZE = "16px";
 
-const itemHoverStyle = {
-  display: "flex",
-  alignItems: "center",
-  "&:hover": {
-    backgroundColor: "rgba(theme.palette.secondary[900], 0.05)",
-  },
-};
-
-const StyledMenuItem = styled.div({
-  ...itemHoverStyle,
-});
-
-const StyledSubLink = styled.div({
-  ...itemHoverStyle,
-  paddingBottom: "8px",
-  paddingTop: "8px",
-  paddingLeft: "40px",
-});
-
-const StyledMoreVertIcon = styled.span(({ theme }) => ({
+const StyledMoreVertIcon = styled("span")(({ theme }) => ({
   ".MuiIconButton-root": {
     padding: "6px",
     color: alpha(theme.palette.secondary[900], 0.38),
@@ -49,22 +29,22 @@ const StyledLinkTitle = styled(Typography)({
   padding: "7px 0px",
 });
 
-const StyledLinkBox = styled.div({
+const StyledLinkBox = styled("div")({
   borderRadius: "4px",
   width: "160px",
 });
 
-const StyledMultilinkImage = styled.div({
+const StyledMultilinkImage = styled("div")({
   display: "flex",
   padding: "8px",
 });
 
-const StyledMultilinkHeader = styled.div({
+const StyledMultilinkHeader = styled("div")({
   display: "flex",
   alignItems: "center",
 });
 
-const StyledCenterImgSpan = styled.span({
+const StyledCenterImgSpan = styled("span")({
   display: "flex",
   alignItems: "center",
   padding: "8px",
@@ -74,6 +54,27 @@ interface QuickLinkGroupProps extends LinkGroupProps {
 }
 
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
+  const theme = useTheme();
+
+  const itemHoverStyle = {
+    display: "flex",
+    alignItems: "center",
+    "&:hover": {
+      backgroundColor: alpha(theme.palette.secondary[900], 0.05),
+    },
+  };
+
+  const StyledMenuItem = styled("div")({
+    ...itemHoverStyle,
+  });
+
+  const StyledSubLink = styled("div")({
+    ...itemHoverStyle,
+    paddingBottom: "8px",
+    paddingTop: "8px",
+    paddingLeft: "40px",
+  });
+
   const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);
 
   React.useEffect(() => {
@@ -149,7 +150,7 @@ const ExpandedLinks = ({ linkGroups }: ExpandedLinksProps) => (
   </StyledLinkBox>
 );
 
-const StyledFlexEnd = styled.div({
+const StyledFlexEnd = styled("div")({
   justifyContent: "right",
 });
 
