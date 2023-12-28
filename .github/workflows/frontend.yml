@@ -130,7 +130,7 @@ jobs:
         id: e2e
         run: ./tools/frontend-e2e.sh
       - name: Upload end-to-end artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots
