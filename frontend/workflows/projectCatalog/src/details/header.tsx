@@ -1,6 +1,6 @@
 import React from "react";
-import { Grid, styled, Typography } from "@clutch-sh/core";
-import { alpha, Breadcrumbs, Link, useTheme } from "@mui/material";
+import { Grid, styled, Typography, useTheme } from "@clutch-sh/core";
+import { alpha, Breadcrumbs, Link } from "@mui/material";
 
 interface Route {
   title: string;

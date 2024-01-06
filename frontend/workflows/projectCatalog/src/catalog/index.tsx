@@ -9,11 +9,12 @@ import {
   Tooltip,
   Typography,
   useNavigate,
+  useTheme,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SearchIcon from "@mui/icons-material/Search";
-import { alpha, Box, CircularProgress, useTheme } from "@mui/material";
+import { alpha, Box, CircularProgress } from "@mui/material";
 
 import type { WorkflowProps } from "..";
 
