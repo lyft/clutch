@@ -32,7 +32,8 @@
     "@mui/material": "5.8.5",
     "@mui/lab": "5.0.0-alpha.87",
     "@mui/styles": "5.8.4",
-    "@mui/system": "5.8.5"
+    "@mui/system": "5.8.5",
+    "react-hook-form": "7.25.3"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^2.0.0-beta"
