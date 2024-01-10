@@ -34,7 +34,7 @@ const StyledTab = styled(MuiTab)(({ theme }) => ({
   },
   "&:active": {
     color: alpha(theme.palette.secondary[900], 0.6),
-    backgroundColor: theme.palette.secondary[200],
+    backgroundColor: theme.palette.secondary[300],
   },
   ".MuiTab-wrapper": {
     margin: "auto",
