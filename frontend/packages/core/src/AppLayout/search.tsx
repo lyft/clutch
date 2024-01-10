@@ -103,8 +103,8 @@ const StyledCloseIcon = styled(Icon)(({ theme }) => ({
 // popper containing the search result options
 const Popper = styled(MuiPopper)(({ theme }) => ({
   ".MuiPaper-root": {
-    border: `1px solid ${theme.palette.secondary[700]}`,
-    boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
+    border: `1px solid ${theme.palette.secondary[100]}`,
+    boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
 
     "> .MuiAutocomplete-listbox": {
       "> .MuiAutocomplete-option": {
@@ -112,7 +112,7 @@ const Popper = styled(MuiPopper)(({ theme }) => ({
         padding: "0px",
 
         "&.Mui-focused": {
-          background: theme.palette.secondary[800],
+          background: theme.palette.primary[200],
         },
       },
     },
