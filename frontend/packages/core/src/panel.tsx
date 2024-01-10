@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Accordion as MuiExpansionPanel,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@mui/material";
+import { Accordion as MuiExpansionPanel, AccordionDetails, AccordionSummary } from "@mui/material";
+
+import { Typography } from "./typography";
 
 const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
   width: 100%;
@@ -23,9 +20,9 @@ const Accordion: React.FC<AccordionProps> = ({ heading, summary, expanded, child
   return (
     <FullWidthExpansionPanel defaultExpanded={expanded}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{heading}</Typography>
+        <Typography variant="body2">{heading}</Typography>
         <div style={{ flexGrow: 1 }} />
-        <Typography color="secondary">{summary}</Typography>
+        <Typography variant="body2">{summary}</Typography>
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </FullWidthExpansionPanel>
