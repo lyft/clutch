@@ -26,7 +26,7 @@ const SwitchContainer = styled(MuiSwitch)(({ theme }) => ({
     },
   },
   ".MuiSwitch-track": {
-    backgroundColor: theme.palette.secondary[400],
+    backgroundColor: theme.palette.secondary[500],
     opacity: 1,
   },
   ".Mui-disabled": {
@@ -53,7 +53,7 @@ const SwitchContainer = styled(MuiSwitch)(({ theme }) => ({
     },
   },
   ".Mui-checked + .MuiSwitch-track": {
-    backgroundColor: theme.palette.primary[400],
+    backgroundColor: theme.palette.primary[300],
     opacity: 1,
   },
   ".Mui-checked.Mui-disabled": {
