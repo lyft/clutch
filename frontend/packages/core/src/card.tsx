@@ -285,7 +285,7 @@ const IconAvatar = styled(Avatar)({
 });
 
 const StyledAvatar = styled(IconAvatar)(({ theme }) => ({
-  color: "alpha(theme.palette.secondary[900], 0.38)",
+  color: alpha(theme.palette.secondary[900], 0.38),
   backgroundColor: alpha(theme.palette.secondary[900], 0.12),
 }));
 
