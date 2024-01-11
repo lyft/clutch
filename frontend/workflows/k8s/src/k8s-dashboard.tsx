@@ -186,10 +186,10 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             <Placeholder />
           ) : (
             <Paper>
-              <Tabs variant="fullWidth">
-                {/* <Tab startAdornment={<AppsIcon />} label="Pods">
+              {/* <Tabs variant="fullWidth">
+                <Tab startAdornment={<AppsIcon />} label="Pods">
                   <PodTable />
-                </Tab> */}
+                </Tab>
                 <Tab startAdornment={<CropFreeIcon />} label="Deployments">
                   <DeploymentTable />
                 </Tab>
@@ -199,7 +199,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
                 <Tab startAdornment={<DnsOutlinedIcon />} label="Stateful Sets">
                   <StatefulSetTable />
                 </Tab>
-              </Tabs>
+              </Tabs> */}
             </Paper>
           )}
         </Content>
