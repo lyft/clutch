@@ -177,8 +177,8 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
   return (
     <DataLayoutContext.Provider value={dataLayoutManager}>
       <Container>
-        {/* <K8sDashHeader />
-        <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} /> */}
+        <K8sDashHeader />
+        <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
         <Content>
           {error !== undefined ? (
             <Error subject={error} />
@@ -186,7 +186,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
             <Placeholder />
           ) : (
             <Paper>
-              {/* <Tabs variant="fullWidth">
+              <Tabs variant="fullWidth">
                 <Tab startAdornment={<AppsIcon />} label="Pods">
                   <PodTable />
                 </Tab>
@@ -199,7 +199,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
                 <Tab startAdornment={<DnsOutlinedIcon />} label="Stateful Sets">
                   <StatefulSetTable />
                 </Tab>
-              </Tabs> */}
+              </Tabs>
             </Paper>
           )}
         </Content>

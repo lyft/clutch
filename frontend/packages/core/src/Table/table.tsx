@@ -87,6 +87,7 @@ const StyledTableCell = styled(MuiTableCell)<{
     overflow: "hidden",
     background: "inherit",
     minHeight: "100%",
+    outline: "none",
   }),
   props => ({ theme }) => ({
     borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
