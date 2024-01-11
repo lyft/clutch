@@ -64,7 +64,10 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
       MuiDataGrid: {
         styleOverrides: {
           root: {
-            "&.MuiDataGrid-root .MuiDataGrid-cell:focus": {
+            "& .MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            "& .MuiDataGrid-cell:focus-within": {
               outline: "none",
             },
           },
