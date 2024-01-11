@@ -39,6 +39,9 @@ const InputField: React.FC<TextFieldProps> = styled(TextField)(({ theme }) => ({
     border: `1px solid ${theme.palette.primary[600]}`,
     borderRadius: "4px",
     background: theme.palette.contrastColor,
+    "&.Mui-focused fieldset": {
+      border: "none",
+    },
   },
   // input text color
   ".MuiAutocomplete-input": {
