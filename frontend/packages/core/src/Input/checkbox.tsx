@@ -27,7 +27,7 @@ const StyledCheckbox = styled(MuiCheckbox)(({ theme }) => ({
     background: theme.palette.primary[300],
   },
   "&.Mui-checked": {
-    color: theme.palette.common.white,
+    color: theme.palette.contrastColor,
     "&:hover": {
       background: theme.palette.primary[100],
     },
