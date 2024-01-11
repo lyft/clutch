@@ -187,9 +187,9 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
           ) : (
             <Paper>
               <Tabs variant="fullWidth">
-                <Tab startAdornment={<AppsIcon />} label="Pods">
+                {/* <Tab startAdornment={<AppsIcon />} label="Pods">
                   <PodTable />
-                </Tab>
+                </Tab> */}
                 <Tab startAdornment={<CropFreeIcon />} label="Deployments">
                   <DeploymentTable />
                 </Tab>
