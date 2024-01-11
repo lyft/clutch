@@ -7,6 +7,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
 import { StylesProvider } from "@mui/styles";
+import type {} from "@mui/x-data-grid/themeAugmentation";
 
 import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
