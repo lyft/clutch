@@ -83,7 +83,7 @@ const StyledTableCell = styled(MuiTableCell)<{
     alignItems: "center",
     fontSize: "14px",
     padding: "15px 16px",
-    color: theme.palette.error[900],
+    color: theme.palette.secondary[900],
     overflow: "hidden",
     background: "inherit",
     minHeight: "100%",
