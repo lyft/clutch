@@ -14,7 +14,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
     padding: "16px",
     paddingLeft: "24px",
     paddingBottom: "20px",
-    color: alpha(theme.palette.secondary[900], 0.6),
+    color: alpha(theme.palette.secondary[900], 0.75),
     fontSize: "14px",
     overflow: "auto",
     ".MuiAlert-icon": {
