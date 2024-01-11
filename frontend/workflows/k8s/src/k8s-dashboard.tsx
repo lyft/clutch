@@ -177,8 +177,8 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
   return (
     <DataLayoutContext.Provider value={dataLayoutManager}>
       <Container>
-        <K8sDashHeader />
-        <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
+        {/* <K8sDashHeader />
+        <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} /> */}
         <Content>
           {error !== undefined ? (
             <Error subject={error} />
