@@ -42,15 +42,15 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
   return (
     <StyledCard>
       <Grid container wrap="nowrap">
-        <Grid container item className="showOnHover" direction="row" alignItems="center">
+        <Grid container item direction="row" alignItems="center">
           <Grid item xs={10}>
             <Typography variant="h6" color="secondary">
               {project?.name?.toUpperCase()}
             </Typography>
           </Grid>
-          <Grid container item justifyContent="flex-end" xs={2}>
+          <Grid container item className="showOnHover" justifyContent="flex-end" xs={2}>
             <IconButton size="small" variant="neutral" onClick={remove}>
-              <CloseIcon color="secondary" />
+              <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
