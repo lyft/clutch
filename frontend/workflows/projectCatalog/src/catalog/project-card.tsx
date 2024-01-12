@@ -15,9 +15,15 @@ const StyledCard = styled(Card)(({ theme }) => ({
   ":hover": {
     cursor: "pointer",
     backgroundColor: theme.palette.primary[100],
+    ".showOnHover": {
+      visibility: "visible",
+    },
   },
   ":active": {
     backgroundColor: theme.palette.primary[300],
+  },
+  ".showOnHover": {
+    visibility: "hidden",
   },
 }));
 
@@ -36,7 +42,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
   return (
     <StyledCard>
       <Grid container wrap="nowrap">
-        <Grid container item direction="row" alignItems="center">
+        <Grid container item className="showOnHover" direction="row" alignItems="center">
           <Grid item xs={10}>
             <Typography variant="h6" color="secondary">
               {project?.name?.toUpperCase()}
