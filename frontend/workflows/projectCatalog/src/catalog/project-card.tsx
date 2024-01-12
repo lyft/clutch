@@ -50,7 +50,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
           </Grid>
           <Grid container item className="showOnHover" justifyContent="flex-end" xs={2}>
             <IconButton size="small" variant="neutral" onClick={remove}>
-              <CloseIcon color="secondary" />
+              <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
