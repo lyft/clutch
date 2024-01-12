@@ -43,7 +43,7 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
     grey: color.neutral,
     background: {
       default: color.blue[50],
-      paper: isLightMode ? color.neutral.A100 : "#1c1e3c",
+      paper: isLightMode ? "#fff" : "#1c1e3c",
     },
     text: isLightMode ? lightText : darkText,
     contrastColor: isLightMode ? "#ffffff" : "#000000", // Either black or white depending on theme

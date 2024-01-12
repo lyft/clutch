@@ -61,6 +61,15 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
           },
         },
       },
+      MuiLink: {
+        styleOverrides: {
+          underlineAlways: {
+            "&:not(:hover)": {
+              textDecoration: "none",
+            },
+          },
+        },
+      },
     },
   });
 };
