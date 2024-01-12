@@ -36,7 +36,7 @@ const Paper = styled(MuiPaper)(({ theme }) => ({
 
 const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
   ({ theme }) => ({
-    color: theme.palette.common.white,
+    color: theme.palette.contrastColor,
     marginRight: "8px",
     padding: "12px",
     "&:hover": {

@@ -21,8 +21,11 @@ const SwitchContainer = styled(MuiSwitch)(({ theme }) => ({
       backgroundColor: alpha(theme.palette.secondary[900], 0.15),
     },
     ".MuiSwitch-thumb": {
-      boxShadow: `0px 1px 1px ${alpha(theme.palette.common.black, 0.25)}`,
-      color: theme.palette.common.white,
+      boxShadow: `0px 1px 1px ${alpha(
+        theme.palette.getContrastText(theme.palette.contrastColor),
+        0.25
+      )}`,
+      color: theme.palette.contrastColor,
     },
   },
   ".MuiSwitch-track": {

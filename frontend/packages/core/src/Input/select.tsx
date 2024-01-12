@@ -75,7 +75,7 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
 const StyledSelect = styled(BaseSelect)(({ theme }) => ({
   "--notched-border-width": "1px",
   padding: "0",
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.contrastColor,
   minWidth: "fit-content",
 
   ".MuiOutlinedInput-notchedOutline": {

@@ -30,7 +30,7 @@ const DrawerPanel = styled(MuiDrawer)(({ theme }) => ({
     width: "inherit",
     backgroundColor:
       theme.palette.mode === THEME_VARIANTS.light
-        ? theme.palette.common.white
+        ? theme.palette.contrastColor
         : theme.palette.background.paper,
     boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
     position: "relative",
