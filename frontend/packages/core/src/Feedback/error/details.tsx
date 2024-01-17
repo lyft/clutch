@@ -62,7 +62,7 @@ const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
 );
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.common.white} 0%)`,
+  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.contrastColor} 0%)`,
   padding: "0",
   paddingLeft: "8px",
   borderBottomLeftRadius: "8px",

@@ -18,7 +18,7 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size, theme }
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.45)}`,
   padding: "8px",
   gap: "8px",
-  background: theme.palette.common.white,
+  background: theme.palette.contrastColor,
   ".MuiToggleButton-root": {
     flexDirection: "column",
     justifyContent: "center",
@@ -36,13 +36,13 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size, theme }
     },
     "&.Mui-selected, &.Mui-selected:hover": {
       background: theme.palette.primary[600],
-      color: theme.palette.common.white,
+      color: theme.palette.contrastColor,
     },
     "&.Mui-disabled": {
       background: alpha(theme.palette.secondary[900], 0.03),
       color: alpha(theme.palette.secondary[900], 0.48),
     },
-    background: theme.palette.common.white,
+    background: theme.palette.contrastColor,
     color: theme.palette.secondary[900],
     textTransform: "none",
   },

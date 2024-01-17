@@ -49,7 +49,7 @@ const SelectedIcon = styled("div")(({ theme }) => ({
 const SelectedCenter = styled("div")(({ theme }) => ({
   height: "12px",
   width: "12px",
-  background: theme.palette.common.white,
+  background: theme.palette.contrastColor,
   borderRadius: "100px",
   boxSizing: "border-box",
   margin: "5px 5px",

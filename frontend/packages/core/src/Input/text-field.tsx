@@ -77,7 +77,7 @@ const StyledTextField = styled(BaseTextField)<{
       "--input-border-width": "1px",
       borderRadius: "4px",
       fontSize: "16px",
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: theme.palette.contrastColor,
 
       "&.Mui-error fieldset": {
         borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
@@ -182,7 +182,7 @@ const ResultLabel = styled(Typography)(({ theme }) => ({
 const IconButton = styled(MuiIconButton)(({ theme }) => ({
   borderRadius: "0",
   backgroundColor: theme.palette.primary[600],
-  color: theme.palette.common.white,
+  color: theme.palette.contrastColor,
   borderBottomRightRadius: "3px",
   borderTopRightRadius: "3px",
   "&:hover": {

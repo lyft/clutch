@@ -392,7 +392,7 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       style={{
                         color: autoRefresh
                           ? theme.palette.primary[600]
-                          : alpha(theme.palette.common.black, 0.26),
+                          : alpha(theme.palette.getContrastText(theme.palette.contrastColor), 0.26),
                       }}
                       fontSize="small"
                       onClick={() => {
