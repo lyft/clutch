@@ -6,15 +6,10 @@ import {
   StyledEngineProvider,
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
-import { StylesProvider } from "@mui/styles";
 
 import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
-
-declare module "@mui/styles/defaultTheme" {
-  interface DefaultTheme extends MuiTheme {}
-}
 
 declare module "@emotion/react" {
   export interface Theme extends MuiTheme {}
@@ -83,10 +78,9 @@ const ThemeProvider = ({ children, variant = THEME_VARIANTS.light }: ThemeProps)
   <StyledEngineProvider injectFirst>
     <MuiThemeProvider theme={createTheme(variant)}>
       <CssBaseline />
-      <StylesProvider injectFirst>{children}</StylesProvider>
+      {children}
     </MuiThemeProvider>
   </StyledEngineProvider>
 );
 
-// Note that ThemeProvider can't be used until the Theme component can be replaced.
 export default ThemeProvider;
