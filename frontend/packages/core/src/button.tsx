@@ -16,7 +16,7 @@ import {
 
 import { Tooltip } from "./Feedback/tooltip";
 import type { GridJustification } from "./grid";
-import { styled } from ".";
+import styled from "./styled";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
