@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
 import styled from "@emotion/styled";
-import { Box, Grid as MuiGrid } from "@mui/material";
+import { Box, Grid as MuiGrid, Theme } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
@@ -60,7 +60,7 @@ export default {
   ],
 } as Meta;
 
-const Grid = styled(MuiGrid)(({ theme }) => ({
+const Grid = styled(MuiGrid)(({ theme }: { theme: Theme }) => ({
   height: "64px",
   backgroundColor: theme.palette.primary[900],
 }));

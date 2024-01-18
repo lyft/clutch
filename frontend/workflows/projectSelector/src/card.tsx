@@ -11,9 +11,9 @@ import {
 } from "@clutch-sh/core";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Theme } from "@mui/material";
 
-const StyledProgressContainer = styled("div")(({ theme }) => ({
+const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: theme.palette.primary[400],

@@ -8,6 +8,7 @@ import {
   alpha,
   Button,
   Grid,
+  Theme,
   useControlled,
   useTheme,
 } from "@mui/material";
@@ -21,7 +22,7 @@ import ErrorDetailsDialog from "./dialog";
 
 const ERROR_DETAILS_RENDER_MAX = 4;
 
-const ErrorDetailDivider = styled("div")(({ theme }) => ({
+const ErrorDetailDivider = styled("div")(({ theme }: { theme: Theme }) => ({
   background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${alpha(
     theme.palette.error[600],
     0.4
@@ -40,7 +41,7 @@ const Accordion = styled(MuiAccordion)({
 });
 
 const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
     color: theme.palette.secondary[900],
     fontSize: "14px",
@@ -61,7 +62,7 @@ const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
   })
 );
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }: { theme: Theme }) => ({
   background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.contrastColor} 0%)`,
   padding: "0",
   paddingLeft: "8px",
@@ -71,14 +72,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const ListItem = styled("li")(({ theme }) => ({
+const ListItem = styled("li")(({ theme }: { theme: Theme }) => ({
   "::marker": {
     color: alpha(theme.palette.secondary[900], 0.6),
   },
   padding: "2px 0",
 }));
 
-const ErrorDetailContainer = styled("div")(({ theme }) => ({
+const ErrorDetailContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   width: "100%",
   border: `1px solid ${theme.palette.secondary[200]}`,
   padding: "16px 16px 16px 24px",
@@ -86,13 +87,13 @@ const ErrorDetailContainer = styled("div")(({ theme }) => ({
   borderTop: "unset",
 }));
 
-const ErrorDetailText = styled("div")(({ theme }) => ({
+const ErrorDetailText = styled("div")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.6),
   fontSize: "14px",
   lineHeight: "24px",
 }));
 
-const DialogButton = styled(Button)(({ theme }) => ({
+const DialogButton = styled(Button)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.primary[600],
   fontWeight: 700,
   fontSize: "14px",

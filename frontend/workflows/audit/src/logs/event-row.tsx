@@ -11,12 +11,12 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ShareIcon from "@mui/icons-material/Share";
-import { Stack } from "@mui/material";
+import { Stack, Theme } from "@mui/material";
 import FileSaver from "file-saver";
 
 const ENDPOINT = "/v1/audit/getEvents";
 const COLUMN_COUNT = 6;
-const MonospaceText = styled("div")(({ theme }) => ({
+const MonospaceText = styled("div")(({ theme }: { theme: Theme }) => ({
   fontFamily: "monospace",
   padding: "8px",
   border: "1px solid lightgray",

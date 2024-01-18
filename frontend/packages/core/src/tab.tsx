@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { TabContext, TabList, TabPanel as MuiTabPanel } from "@mui/lab";
-import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@mui/material";
+import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps, Theme } from "@mui/material";
 import { alpha, Tab as MuiTab } from "@mui/material";
 
-const StyledTab = styled(MuiTab)(({ theme }) => ({
+const StyledTab = styled(MuiTab)(({ theme }: { theme: Theme }) => ({
   minWidth: "111px",
   height: "46px",
   padding: "12px 32px",
@@ -41,7 +41,7 @@ const StyledTab = styled(MuiTab)(({ theme }) => ({
   },
 }));
 
-const StyledTabs = styled(TabList)(({ theme }) => ({
+const StyledTabs = styled(TabList)(({ theme }: { theme: Theme }) => ({
   ".MuiTabs-indicator": {
     height: "4px",
     backgroundColor: theme.palette.primary[600],

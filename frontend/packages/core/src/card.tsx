@@ -9,6 +9,7 @@ import {
   CardActionAreaProps,
   Divider,
   Grid,
+  Theme,
   useTheme,
 } from "@mui/material";
 import type { SpacingProps as MuiSpacingProps } from "@mui/system";
@@ -20,7 +21,7 @@ import { Typography, TypographyProps } from "./typography";
 
 // TODO: seperate out the different card parts into various files
 
-const StyledCard = styled(MuiCard)(({ theme }) => ({
+const StyledCard = styled(MuiCard)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
 }));
@@ -31,7 +32,7 @@ export interface CardProps {
 
 const Card = ({ children, ...props }: CardProps) => <StyledCard {...props}>{children}</StyledCard>;
 
-const StyledCardHeaderContainer = styled("div")(({ theme }) => ({
+const StyledCardHeaderContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   background: theme.palette.primary[200],
 }));
 
@@ -60,7 +61,7 @@ const StyledCardHeaderAvatar = styled("div")({
 });
 
 // TODO: make the divider a core component
-const StyledDivider = styled(Divider)(({ theme }) => ({
+const StyledDivider = styled(Divider)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[400],
   height: "24px",
   alignSelf: "center",
@@ -138,7 +139,7 @@ const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardActionArea = styled(BaseCardActionArea)(({ theme }) => ({
+const StyledCardActionArea = styled(BaseCardActionArea)(({ theme }: { theme: Theme }) => ({
   ":hover": {
     backgroundColor: theme.palette.primary[100],
   },
@@ -148,7 +149,7 @@ const StyledCardActionArea = styled(BaseCardActionArea)(({ theme }) => ({
   },
 }));
 
-const StyledExpandButton = styled(IconButton)(({ theme }) => ({
+const StyledExpandButton = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   width: "32px",
   height: "32px",
   color: theme.palette.primary[600],
@@ -246,7 +247,7 @@ const CardContent = ({
   );
 };
 
-const StyledLandingCard = styled(Card)(({ theme }) => ({
+const StyledLandingCard = styled(Card)(({ theme }: { theme: Theme }) => ({
   border: "none",
   height: "214px",
   maxHeight: "100%",
@@ -284,7 +285,7 @@ const IconAvatar = styled(Avatar)({
   marginRight: "8px",
 });
 
-const StyledAvatar = styled(IconAvatar)(({ theme }) => ({
+const StyledAvatar = styled(IconAvatar)(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.38),
   backgroundColor: alpha(theme.palette.secondary[900], 0.12),
 }));

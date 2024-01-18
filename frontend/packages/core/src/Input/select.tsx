@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import type { SelectProps as MuiSelectProps } from "@mui/material";
+import type { SelectProps as MuiSelectProps, Theme } from "@mui/material";
 import {
   alpha,
   FormControl as MuiFormControl,
@@ -16,7 +16,7 @@ import { flatten } from "lodash";
 
 import { Chip } from "../chip";
 
-const StyledFormHelperText = styled(MuiFormHelperText)(({ theme }) => ({
+const StyledFormHelperText = styled(MuiFormHelperText)(({ theme }: { theme: Theme }) => ({
   alignItems: "center",
   display: "flex",
   position: "relative",
@@ -37,7 +37,7 @@ const StyledFormHelperText = styled(MuiFormHelperText)(({ theme }) => ({
   },
 }));
 
-const StyledInputLabel = styled(MuiInputLabel)(({ theme }) => ({
+const StyledInputLabel = styled(MuiInputLabel)(({ theme }: { theme: Theme }) => ({
   "--label-default-color": alpha(theme.palette.secondary[900], 0.6),
 
   color: "var(--label-default-color)",
@@ -72,7 +72,7 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
   />
 );
 
-const StyledSelect = styled(BaseSelect)(({ theme }) => ({
+const StyledSelect = styled(BaseSelect)(({ theme }: { theme: Theme }) => ({
   "--notched-border-width": "1px",
   padding: "0",
   backgroundColor: theme.palette.contrastColor,

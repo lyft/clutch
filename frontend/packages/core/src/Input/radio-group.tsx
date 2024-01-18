@@ -5,11 +5,12 @@ import {
   FormControlLabel,
   FormLabel as MuiFormLabel,
   RadioGroup as MuiRadioGroup,
+  Theme,
 } from "@mui/material";
 
 import Radio from "./radio";
 
-const FormLabel = styled(MuiFormLabel)(({ theme }) => ({
+const FormLabel = styled(MuiFormLabel)(({ theme }: { theme: Theme }) => ({
   "&&": {
     color: theme.palette.secondary[700],
   },

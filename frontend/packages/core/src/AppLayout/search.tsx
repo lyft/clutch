@@ -12,6 +12,7 @@ import {
   Popper as MuiPopper,
   TextField,
   TextFieldProps,
+  Theme,
   Typography,
 } from "@mui/material";
 import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
@@ -27,7 +28,7 @@ import { filterHiddenRoutes, searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const InputField: React.FC<TextFieldProps> = styled(TextField)(({ theme }) => ({
+const InputField: React.FC<TextFieldProps> = styled(TextField)(({ theme }: { theme: Theme }) => ({
   // input field
   maxWidth: "551px",
   minWidth: "551px",
@@ -72,13 +73,13 @@ const ResultGrid = styled(Grid)({
 });
 
 // search's result options
-const ResultLabel = styled(Typography)(({ theme }) => ({
+const ResultLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   fontSize: "14px",
 }));
 
 // main search icon on header
-const SearchIconButton = styled(IconButton)(({ theme }) => ({
+const SearchIconButton = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.contrastColor,
   fontSize: "24px",
   padding: "12px",
@@ -92,19 +93,19 @@ const SearchIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 // search icon in input field
-const StartInputAdornment = styled(MuiInputAdornment)(({ theme }) => ({
+const StartInputAdornment = styled(MuiInputAdornment)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   marginLeft: "8px",
 }));
 
 // closed icon svg
-const StyledCloseIcon = styled(Icon)(({ theme }) => ({
+const StyledCloseIcon = styled(Icon)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   fontSize: "24px",
 }));
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)(({ theme }) => ({
+const Popper = styled(MuiPopper)(({ theme }: { theme: Theme }) => ({
   ".MuiPaper-root": {
     border: `1px solid ${theme.palette.secondary[100]}`,
     boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,

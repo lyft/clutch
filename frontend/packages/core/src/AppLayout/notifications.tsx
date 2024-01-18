@@ -11,9 +11,10 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  Theme,
 } from "@mui/material";
 
-const StyledNotificationsIcon = styled(IconButton)(({ theme }) => ({
+const StyledNotificationsIcon = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.contrastColor,
   marginRight: "8px",
   padding: "12px",
@@ -30,13 +31,13 @@ const Popper = styled(MuiPopper)({
   marginLeft: "12px",
 });
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   width: "242px",
   border: `1px solid ${theme.palette.secondary[100]}`,
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
 }));
 
-const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
+const MenuItem = styled(MuiMenuItem)(({ theme }: { theme: Theme }) => ({
   height: "48px",
   padding: "12px",
   "&:hover": {
@@ -47,7 +48,7 @@ const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   },
 }));
 
-const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+const ListItemText = styled(MuiListItemText)(({ theme }: { theme: Theme }) => ({
   margin: "0px",
   ".MuiTypography-root": {
     color: theme.palette.secondary[900],

@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Theme, Typography } from "@mui/material";
 
 const Container = styled(Grid)`
   minheight: 80vh;
 `;
 
-const IconContainer = styled(Grid)(({ theme }) => ({
+const IconContainer = styled(Grid)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.brandColor,
   fontSize: "7rem",
 }));

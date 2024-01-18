@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import type { Theme } from "@mui/material";
 import { alpha } from "@mui/system";
 
 const HorizontalRuleBase = ({ children, ...props }: HorizontalRuleProps) => (
@@ -18,7 +19,7 @@ export type HorizontalRuleProps = {
   children: React.ReactNode;
 };
 
-const StyledHorizontalRule = styled(HorizontalRuleBase)(({ theme }) => ({
+const StyledHorizontalRule = styled(HorizontalRuleBase)(({ theme }: { theme: Theme }) => ({
   alignItems: "center",
   display: "flex",
   flexDirection: "row",

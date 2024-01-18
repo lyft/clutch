@@ -13,12 +13,13 @@ import {
   MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  Theme,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import * as _ from "lodash";
 
-const UserPhoto = styled(IconButton)(({ theme }) => ({
+const UserPhoto = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   padding: "12px",
   "&:hover": {
     background: theme.palette.primary[600],
@@ -36,13 +37,13 @@ const UserPhoto = styled(IconButton)(({ theme }) => ({
 }));
 
 // header and menu avatar
-const Avatar = styled(MuiAvatar)(({ theme }) => ({
+const Avatar = styled(MuiAvatar)(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.primary[500],
   color: theme.palette.contrastColor,
   fontWeight: 500,
 }));
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   width: "242px",
   border: `1px solid ${theme.palette.secondary[100]}`,
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
@@ -54,7 +55,7 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const MenuList = styled(MuiMenuList)(({ theme }) => ({
+const MenuList = styled(MuiMenuList)(({ theme }: { theme: Theme }) => ({
   padding: "0px",
   borderRadius: "4px",
   ".MuiMenuItem-root": {
@@ -86,7 +87,7 @@ const AvatarListItemIcon = styled(ListItemIcon)({
   },
 });
 
-const AvatarListItemText = styled(MuiListItemText)(({ theme }) => ({
+const AvatarListItemText = styled(MuiListItemText)(({ theme }: { theme: Theme }) => ({
   paddingLeft: "16px",
   margin: "0px",
   ".MuiTypography-root": {
@@ -102,7 +103,7 @@ const MenuItem = styled(MuiMenuItem)({
   padding: "12px",
 });
 
-const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+const ListItemText = styled(MuiListItemText)(({ theme }: { theme: Theme }) => ({
   margin: "0px",
   ".MuiTypography-root": {
     color: theme.palette.secondary[900],
@@ -111,7 +112,7 @@ const ListItemText = styled(MuiListItemText)(({ theme }) => ({
   },
 }));
 
-const Divider = styled(MuiDivider)(({ theme }) => ({
+const Divider = styled(MuiDivider)(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.secondary[100],
 }));
 

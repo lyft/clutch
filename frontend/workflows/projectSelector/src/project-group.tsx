@@ -3,7 +3,7 @@ import { Checkbox, checkFeatureEnabled, styled, Switch } from "@clutch-sh/core";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { alpha } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 import { deriveSwitchStatus, useDispatch, useReducerState } from "./helpers";
@@ -22,7 +22,7 @@ const StyledGroupTitle = styled("span")({
   display: "inline-block",
 });
 
-const StyledCount = styled("span")(({ theme }) => ({
+const StyledCount = styled("span")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.6),
   backgroundColor: alpha(theme.palette.secondary[900], 0.03),
   fontVariantNumeric: "tabular-nums",
@@ -38,7 +38,7 @@ const StyledCount = styled("span")(({ theme }) => ({
 
 // This div used to have `padding: "0 25px 0 8px"` but that made it look weird when we implemented quicklinks
 // because the "only" and "x" buttons are hidden when the popper is expanded and mouse is no longer hovering.
-const StyledMenuItem = styled("div")(({ theme }) => ({
+const StyledMenuItem = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "48px",
   display: "flex",
   alignItems: "center",
@@ -66,14 +66,14 @@ const StyledHeaderColumn = styled("div")((props: { grow?: boolean }) => ({
   flexGrow: props.grow ? 1 : 0,
 }));
 
-const StyledNoProjectsText = styled("div")(({ theme }) => ({
+const StyledNoProjectsText = styled("div")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.38),
   textAlign: "center",
   fontSize: "12px",
   marginBottom: "16px",
 }));
 
-const StyledAllText = styled("div")(({ theme }) => ({
+const StyledAllText = styled("div")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.38),
 }));
 
@@ -88,7 +88,7 @@ const StyledMenuItemName = styled("span")({
   maxWidth: "160px",
 });
 
-const StyledClearIcon = styled("span")(({ theme }) => ({
+const StyledClearIcon = styled("span")(({ theme }: { theme: Theme }) => ({
   ".MuiIconButton-root": {
     padding: "6px",
     color: alpha(theme.palette.secondary[900], 0.38),
@@ -101,7 +101,7 @@ const StyledClearIcon = styled("span")(({ theme }) => ({
   },
 }));
 
-const StyledOnlyButton = styled("button")(({ theme }) => ({
+const StyledOnlyButton = styled("button")(({ theme }: { theme: Theme }) => ({
   border: "none",
   cursor: "pointer",
   borderRadius: "4px",

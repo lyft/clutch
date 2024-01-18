@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import type {
@@ -17,6 +16,7 @@ import {
 
 import { Tooltip } from "./Feedback/tooltip";
 import type { GridJustification } from "./grid";
+import { styled } from ".";
 
 interface ButtonPalette {
   /** A palette of background colors used for the various button states. */
@@ -93,7 +93,7 @@ const StyledButton = styled(MuiButton)<{
   })
 );
 
-const StyledBorderButton = styled(StyledButton)(({ theme }) => ({
+const StyledBorderButton = styled(StyledButton)(({ theme }: { theme: Theme }) => ({
   border: `1px solid ${theme.palette.secondary[900]}`,
   "&.Mui-disabled": {
     borderColor: alpha(theme.palette.secondary[900], 0.1),
@@ -258,7 +258,7 @@ const ButtonGroupContainer = styled(Grid)(
       margin: "12px 8px",
     },
   },
-  props => ({ theme }) =>
+  props => ({ theme }: { theme: Theme }) =>
     props["data-border"] === "bottom"
       ? {
           marginBottom: "12px",
@@ -288,7 +288,7 @@ const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonG
   </ButtonGroupContainer>
 );
 
-const StyledClipboardIconButton = styled(MuiIconButton)(({ theme }) => ({
+const StyledClipboardIconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.getContrastText(theme.palette.contrastColor),
   ":hover": {
     backgroundColor: "transparent",

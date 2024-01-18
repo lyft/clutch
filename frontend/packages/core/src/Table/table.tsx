@@ -4,6 +4,7 @@ import type {
   TableCellProps as MuiTableCellProps,
   TableProps as MuiTableProps,
   TableRowProps as MuiTableRowProps,
+  Theme,
 } from "@mui/material";
 import {
   IconButton,
@@ -22,7 +23,7 @@ import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-const StyledPaper = styled(MuiPaper)(({ theme }) => ({
+const StyledPaper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   border: `1px solid ${theme.palette.secondary[200]}`,
 }));
 
@@ -53,7 +54,7 @@ const StyledTableBody = styled(MuiTableBody)({
   display: "contents",
 });
 
-const StyledTableHeadRow = styled(MuiTableRow)(({ theme }) => ({
+const StyledTableHeadRow = styled(MuiTableRow)(({ theme }: { theme: Theme }) => ({
   display: "contents",
   backgroundColor: theme.palette.primary[300],
 }));
@@ -61,7 +62,7 @@ const StyledTableHeadRow = styled(MuiTableRow)(({ theme }) => ({
 const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     ":nth-of-type(even)": {
       background: theme.palette.secondary[50],
     },
@@ -79,7 +80,7 @@ const StyledTableCell = styled(MuiTableCell)<{
   $responsive?: TableCellProps["responsive"];
   $action?: TableCellProps["action"];
 }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     alignItems: "center",
     fontSize: "14px",
     padding: "15px 16px",
@@ -88,7 +89,7 @@ const StyledTableCell = styled(MuiTableCell)<{
     background: "inherit",
     minHeight: "100%",
   }),
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
     display: props.$responsive ? "flex" : "",
     width: !props.$responsive && props.$action ? "80px" : "",

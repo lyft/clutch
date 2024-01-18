@@ -4,7 +4,7 @@ import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
 import type { Theme } from "@mui/material";
 import { Cell, Pie, PieChart } from "recharts";
 
-const SummaryCardTitle = styled("div")(({ theme }) => ({
+const SummaryCardTitle = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 600,
   fontSize: "14px",
   color: theme.palette.secondary[900],

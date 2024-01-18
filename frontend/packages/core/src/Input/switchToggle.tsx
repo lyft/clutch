@@ -6,10 +6,10 @@
 
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { SwitchProps as MuiSwitchProps } from "@mui/material";
+import type { SwitchProps as MuiSwitchProps, Theme } from "@mui/material";
 import { alpha, Switch as MuiSwitch } from "@mui/material";
 
-const SwitchContainer = styled(MuiSwitch)(({ theme }) => ({
+const SwitchContainer = styled(MuiSwitch)(({ theme }: { theme: Theme }) => ({
   ".MuiSwitch-switchBase": {
     ":hover": {
       backgroundColor: alpha(theme.palette.secondary[900], 0.1),

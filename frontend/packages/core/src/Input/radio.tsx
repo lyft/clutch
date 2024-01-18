@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { RadioProps as MuiRadioProps } from "@mui/material";
+import type { RadioProps as MuiRadioProps, Theme } from "@mui/material";
 import { alpha, Radio as MuiRadio } from "@mui/material";
 
 import styled from "../styled";
@@ -13,7 +13,7 @@ const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
       boxSizing: "border-box",
     },
   },
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     "&:hover > .MuiIconButton-label > div": {
       border: props.checked
         ? `1px solid ${theme.palette.primary[700]}`
@@ -23,21 +23,21 @@ const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
 );
 
 const Icon = styled("div")<{ $disabled?: MuiRadioProps["disabled"] }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     height: "24px",
     width: "24px",
     border: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
     borderRadius: "100px",
     boxSizing: "border-box",
   }),
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     border: props.$disabled
       ? `1px solid ${theme.palette.secondary[200]}`
       : `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
   })
 );
 
-const SelectedIcon = styled("div")(({ theme }) => ({
+const SelectedIcon = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "24px",
   width: "24px",
   background: theme.palette.primary[600],
@@ -46,7 +46,7 @@ const SelectedIcon = styled("div")(({ theme }) => ({
   boxSizing: "border-box",
 }));
 
-const SelectedCenter = styled("div")(({ theme }) => ({
+const SelectedCenter = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "12px",
   width: "12px",
   background: theme.palette.contrastColor,

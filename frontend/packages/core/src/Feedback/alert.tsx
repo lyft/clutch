@@ -4,12 +4,12 @@ import MuiErrorIcon from "@mui/icons-material/Error";
 import MuiInfoIcon from "@mui/icons-material/Info";
 import MuiWarningIcon from "@mui/icons-material/Warning";
 import type { AlertProps as MuiAlertProps } from "@mui/lab";
-import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, alpha, Grid } from "@mui/material";
+import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, alpha, Grid, Theme } from "@mui/material";
 
 import styled from "../styled";
 
 const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     borderRadius: "8px",
     padding: "16px",
     paddingLeft: "24px",
@@ -31,7 +31,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
       },
     },
   }),
-  props => ({ theme }) => {
+  props => ({ theme }: { theme: Theme }) => {
     const backgroundColors = {
       error: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
       info: `linear-gradient(to right, ${theme.palette.primary[600]} 8px, ${theme.palette.primary[200]} 0%)`,
@@ -45,23 +45,23 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
   }
 );
 
-const ErrorIcon = styled(MuiErrorIcon)(({ theme }) => ({
+const ErrorIcon = styled(MuiErrorIcon)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.error[700],
 }));
 
-const InfoIcon = styled(MuiInfoIcon)(({ theme }) => ({
+const InfoIcon = styled(MuiInfoIcon)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.primary[600],
 }));
 
-const SuccessIcon = styled(MuiSuccessIcon)(({ theme }) => ({
+const SuccessIcon = styled(MuiSuccessIcon)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.success[500],
 }));
 
-const WarningIcon = styled(MuiWarningIcon)(({ theme }) => ({
+const WarningIcon = styled(MuiWarningIcon)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.warning[500],
 }));
 
-const AlertTitle = styled(MuiAlertTitle)(({ theme }) => ({
+const AlertTitle = styled(MuiAlertTitle)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   fontWeight: 600,
   fontSize: "16px",

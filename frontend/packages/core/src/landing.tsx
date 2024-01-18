@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { alpha, Grid } from "@mui/material";
+import { alpha, Grid, Theme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { userId } from "./AppLayout/user";
@@ -11,7 +11,7 @@ import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 
-const StyledLanding = styled.div(({ theme }) => ({
+const StyledLanding = styled.div(({ theme }: { theme: Theme }) => ({
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,

@@ -18,7 +18,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-import { alpha, Divider, LinearProgress } from "@mui/material";
+import { alpha, Divider, LinearProgress, Theme } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -64,7 +64,7 @@ const initialState: State = {
   error: undefined,
 };
 
-const StyledSelectorContainer = styled("div")(({ theme }) => ({
+const StyledSelectorContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   backgroundColor: theme.palette.primary[50],
   borderRight: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
   boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
@@ -93,7 +93,7 @@ const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
 
-const StyledProgressContainer = styled("div")(({ theme }) => ({
+const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: theme.palette.primary[400],
