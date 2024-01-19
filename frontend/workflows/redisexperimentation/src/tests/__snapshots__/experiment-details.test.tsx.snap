@@ -118,7 +118,7 @@ exports[`renders correctly 1`] = `
       id="faultType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Fault Type

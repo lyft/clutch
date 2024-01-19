@@ -128,7 +128,7 @@ exports[`renders correctly 1`] = `
       id="faultType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Fault Type
@@ -330,7 +330,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       id="upstreamClusterType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Upstream Cluster Type
@@ -430,7 +430,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       id="faultType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Fault Type
