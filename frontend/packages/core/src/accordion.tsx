@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import type { AccordionProps as MuiAccordionProps } from "@mui/material";
+import type { AccordionProps as MuiAccordionProps, Theme } from "@mui/material";
 import {
   Accordion as MuiAccordion,
   AccordionActions as MuiAccordionActions,
@@ -13,7 +13,7 @@ import {
   useControlled,
 } from "@mui/material";
 
-const StyledAccordion = styled(MuiAccordion)(({ theme }) => ({
+const StyledAccordion = styled(MuiAccordion)(({ theme }: { theme: Theme }) => ({
   borderRadius: "4px",
   boxShadow: "none",
   border: "1px solid transparent",
@@ -59,30 +59,32 @@ const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => 
   );
 };
 
-export const StyledAccordionSummary = styled(AccordionSummaryBase)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary[50],
-  borderRadius: "4px",
-  color: theme.palette.secondary[900],
-  height: "48px",
+export const StyledAccordionSummary = styled(AccordionSummaryBase)(
+  ({ theme }: { theme: Theme }) => ({
+    backgroundColor: theme.palette.secondary[50],
+    borderRadius: "4px",
+    color: theme.palette.secondary[900],
+    height: "48px",
 
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.secondary[900], 0.03),
-  },
+    "&:hover": {
+      backgroundColor: alpha(theme.palette.secondary[900], 0.03),
+    },
 
-  "&:active": {
-    backgroundColor: alpha(theme.palette.secondary[900], 0.12),
-  },
+    "&:active": {
+      backgroundColor: alpha(theme.palette.secondary[900], 0.12),
+    },
 
-  ".MuiAccordionSummary-content": {
-    margin: "12px 0",
-    fontSize: "16px",
-  },
+    ".MuiAccordionSummary-content": {
+      margin: "12px 0",
+      fontSize: "16px",
+    },
 
-  "&.Mui-expanded": {
-    backgroundColor: theme.palette.primary[200],
-    minHeight: "48px",
-  },
-}));
+    "&.Mui-expanded": {
+      backgroundColor: theme.palette.primary[200],
+      minHeight: "48px",
+    },
+  })
+);
 
 const StyledAccordionGroup = styled.div({
   width: "100%",

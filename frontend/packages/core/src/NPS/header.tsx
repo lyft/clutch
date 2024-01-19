@@ -7,6 +7,7 @@ import {
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  Theme,
 } from "@mui/material";
 import { get, sortBy } from "lodash";
 
@@ -28,14 +29,14 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   width: "350px",
   boxShadow: `0px 15px 35px ${alpha(theme.palette.primary[600], 0.2)}`,
   borderRadius: "8px",
 }));
 
 const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     color: theme.palette.contrastColor,
     marginRight: "8px",
     padding: "12px",
@@ -46,7 +47,7 @@ const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
       background: theme.palette.primary[700],
     },
   }),
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     background: props.$open ? theme.palette.primary[600] : "unset",
   })
 );

@@ -2,9 +2,9 @@ import React from "react";
 import styled from "@emotion/styled";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { alpha, Grid } from "@mui/material";
+import { alpha, Grid, Theme } from "@mui/material";
 
-const IconContainer = styled(Grid)(({ theme }) => ({
+const IconContainer = styled(Grid)(({ theme }: { theme: Theme }) => ({
   paddingTop: "4px",
   display: "flex",
   flexDirection: "column",
@@ -18,7 +18,7 @@ const Icon = styled(ThumbUpIcon)({
   marginBottom: "10px",
 });
 
-const TitleContainer = styled(Grid)(({ theme }) => ({
+const TitleContainer = styled(Grid)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.success[600],
   display: "flex",
   alignItems: "center",
@@ -31,7 +31,7 @@ const CheckmarkIcon = styled(CheckCircleIcon)({
   marginRight: "8px",
 });
 
-const SubtitleContainer = styled.div(({ theme }) => ({
+const SubtitleContainer = styled.div(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.6),
   fontSize: "12px",
 }));

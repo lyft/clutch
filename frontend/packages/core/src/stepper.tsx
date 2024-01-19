@@ -8,10 +8,11 @@ import {
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
+  Theme,
   useTheme,
 } from "@mui/material";
 
-const StepContainer = styled.div(({ theme }) => ({
+const StepContainer = styled.div(({ theme }: { theme: Theme }) => ({
   margin: "0px 2px 30px 2px",
   ".MuiStepLabel-label": {
     fontWeight: 500,

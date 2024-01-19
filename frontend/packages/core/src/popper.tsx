@@ -4,6 +4,7 @@ import type {
   ClickAwayListenerProps,
   ListItemProps,
   PopperProps as MuiPopperProps,
+  Theme,
 } from "@mui/material";
 import {
   alpha,
@@ -21,7 +22,7 @@ const StyledPopper = styled(MuiPopper)({
   paddingTop: "16px",
 });
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   minWidth: "fit-content",
   border: `1px solid ${theme.palette.secondary[200]}`,
   boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}`,
@@ -61,7 +62,7 @@ const PopperItemIcon = styled.div({
   width: "24px",
 });
 
-const ListItemText = styled(MuiListItemText)(({ theme }) => ({
+const ListItemText = styled(MuiListItemText)(({ theme }: { theme: Theme }) => ({
   ".MuiTypography-root": {
     color: alpha(theme.palette.secondary[900], 0.6),
     fontWeight: 500,

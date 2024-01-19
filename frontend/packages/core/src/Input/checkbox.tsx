@@ -1,6 +1,6 @@
 import * as React from "react";
 import CheckIcon from "@mui/icons-material/Check";
-import type { CheckboxProps as MuiCheckboxProps } from "@mui/material";
+import type { CheckboxProps as MuiCheckboxProps, Theme } from "@mui/material";
 import {
   alpha,
   Checkbox as MuiCheckbox,
@@ -17,7 +17,7 @@ const FormControl = styled(MuiFormControl)({
   width: "75%",
 });
 
-const StyledCheckbox = styled(MuiCheckbox)(({ theme }) => ({
+const StyledCheckbox = styled(MuiCheckbox)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[400],
   borderRadius: "50%",
   "&:hover": {
@@ -55,7 +55,7 @@ const Icon = styled("div")<StyledIconProps>(
     borderRadius: "2px",
     boxSizing: "border-box",
   },
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     height: props.$size,
     width: props.$size,
     border: props.$disabled
@@ -72,7 +72,7 @@ const SelectedIcon = styled("div")<StyledIconProps>(
       display: "block",
     },
   },
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     height: props.$size,
     width: props.$size,
     background: props.$disabled ? theme.palette.secondary[200] : theme.palette.primary[600],

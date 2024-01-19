@@ -13,6 +13,7 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
+  Theme,
 } from "@mui/material";
 import _ from "lodash";
 import type { BaseSchema } from "yup";
@@ -56,7 +57,7 @@ const TableContainer = styled(MuiTableContainer)<{
   })
 );
 
-const Table = styled(MuiTable)(({ theme }) => ({
+const Table = styled(MuiTable)(({ theme }: { theme: Theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.12)}`,
   borderRadius: "4px",
   borderCollapse: "unset",
@@ -80,7 +81,7 @@ const TableBody = styled(MuiTableBody)({
   },
 });
 
-const TableCell = styled(MuiTableCell)(({ theme }) => ({
+const TableCell = styled(MuiTableCell)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   fontSize: "14px",
   fontWeight: "normal",
@@ -108,7 +109,7 @@ const Grid = styled(MuiGrid)({
   },
 });
 
-const KeyCellContainer = styled(TableCell)(({ theme }) => ({
+const KeyCellContainer = styled(TableCell)(({ theme }: { theme: Theme }) => ({
   width: "45%",
   background: alpha(theme.palette.secondary[900], 0.03),
   fontWeight: 500,

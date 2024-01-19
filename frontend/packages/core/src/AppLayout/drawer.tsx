@@ -7,6 +7,7 @@ import {
   Drawer as MuiDrawer,
   List,
   ListItemButton,
+  Theme,
   Typography,
 } from "@mui/material";
 import _ from "lodash";
@@ -22,7 +23,7 @@ import { THEME_VARIANTS } from "../Theme/colors";
 import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 
 // sidebar
-const DrawerPanel = styled(MuiDrawer)(({ theme }) => ({
+const DrawerPanel = styled(MuiDrawer)(({ theme }: { theme: Theme }) => ({
   width: "100px",
   overflowY: "auto",
   ".MuiDrawer-paper": {
@@ -44,7 +45,7 @@ const GroupList = styled(List)({
 });
 
 const GroupListItem = styled(ListItemButton)<{ icon: number }>(
-  ({ theme }) => ({
+  ({ theme }: { theme: Theme }) => ({
     flexDirection: "column",
     minHeight: "82px",
     padding: "16px 8px 16px 8px",
@@ -78,7 +79,7 @@ const GroupListItem = styled(ListItemButton)<{ icon: number }>(
   })
 );
 
-const GroupHeading = styled(Typography)(({ theme }) => ({
+const GroupHeading = styled(Typography)(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.6),
   fontWeight: 500,
   fontSize: "14px",
@@ -95,7 +96,7 @@ const IconAvatar = styled(MuiAvatar)({
   width: "24px",
 });
 
-const Avatar = styled(IconAvatar)(({ theme }) => ({
+const Avatar = styled(IconAvatar)(({ theme }: { theme: Theme }) => ({
   background: alpha(theme.palette.secondary[900], 0.6),
   color: theme.palette.contrastColor,
   fontSize: "14px",

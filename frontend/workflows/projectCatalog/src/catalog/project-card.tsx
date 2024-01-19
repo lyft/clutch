@@ -3,9 +3,9 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { Card, Grid, IconButton, styled, Typography, useTheme } from "@clutch-sh/core";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { alpha } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(({ theme }: { theme: Theme }) => ({
   display: "flex",
   flexDirection: "column",
   width: "350px",

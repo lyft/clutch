@@ -2,7 +2,7 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Link, Popper, styled, Typography, useTheme } from "@clutch-sh/core";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { alpha } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 
 interface LinkGroupProps {
@@ -12,7 +12,7 @@ interface LinkGroupProps {
 
 const ICON_SIZE = "16px";
 
-const StyledMoreVertIcon = styled("span")(({ theme }) => ({
+const StyledMoreVertIcon = styled("span")(({ theme }: { theme: Theme }) => ({
   ".MuiIconButton-root": {
     padding: "6px",
     color: alpha(theme.palette.secondary[900], 0.38),

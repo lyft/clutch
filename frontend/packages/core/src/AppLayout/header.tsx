@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@mui/material";
+import { AppBar as MuiAppBar, Box, Grid, Theme, Toolbar, Typography } from "@mui/material";
 
 import type { AppConfiguration } from "../AppProvider";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
@@ -45,7 +45,7 @@ interface HeaderProps extends AppConfiguration {
   userInfo?: boolean;
 }
 
-const AppBar = styled(MuiAppBar)(({ theme }) => ({
+const AppBar = styled(MuiAppBar)(({ theme }: { theme: Theme }) => ({
   minWidth: "fit-content",
   background: theme.palette.headerGradient,
   zIndex: 1201,
@@ -55,7 +55,7 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 // Since the AppBar is fixed we need a div to take up its height in order to push other content down.
 const ClearAppBar = styled.div({ height: APP_BAR_HEIGHT });
 
-const Title = styled(Typography)(({ theme }) => ({
+const Title = styled(Typography)(({ theme }: { theme: Theme }) => ({
   margin: "12px 0px 12px 8px",
   fontWeight: "bold",
   fontSize: "30px",

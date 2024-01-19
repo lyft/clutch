@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { Theme } from "@mui/material";
 
 import styled from "../styled";
 
@@ -10,7 +11,7 @@ const NPSContainer = styled("div")<{ $submit: boolean }>(
     margin: "auto",
     borderRadius: "8px",
   },
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     background: props.$submit ? "unset" : theme.palette.primary[50],
   })
 );

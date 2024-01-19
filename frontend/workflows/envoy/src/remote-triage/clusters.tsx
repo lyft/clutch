@@ -1,13 +1,14 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { AccordionRow, StatusIcon, styled, Table, TableRow, useTheme } from "@clutch-sh/core";
+import type { Theme } from "@mui/material";
 import _ from "lodash";
 
 const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
   {
     height: "12px",
   },
-  props => ({ theme }) => ({
+  props => ({ theme }: { theme: Theme }) => ({
     width: props.$width,
     fill: props.$fill,
     strokeWidth: props.$fill === "transparent" ? "1px" : "0",

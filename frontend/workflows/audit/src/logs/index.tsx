@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@clutch-sh/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress, Stack, useMediaQuery } from "@mui/material";
+import { CircularProgress, Stack, Theme, useMediaQuery } from "@mui/material";
 
 import type { AuditLogProps } from "..";
 
@@ -34,7 +34,7 @@ const LoadingContainer = styled("div")({
   width: "40px",
 });
 
-const LoadingSpinner = styled(CircularProgress)(({ theme }) => ({
+const LoadingSpinner = styled(CircularProgress)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.primary[600],
   position: "absolute",
 }));

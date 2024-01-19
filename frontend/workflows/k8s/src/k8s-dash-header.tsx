@@ -1,8 +1,8 @@
 import React from "react";
 import { styled } from "@clutch-sh/core";
-import { alpha } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 
-const Category = styled("div")(({ theme }) => ({
+const Category = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 700,
   fontSize: "12px",
   lineHeight: "16px",
@@ -11,7 +11,7 @@ const Category = styled("div")(({ theme }) => ({
   paddingBottom: "8px",
 }));
 
-const HeaderText = styled("div")(({ theme }) => ({
+const HeaderText = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 700,
   fontSize: "26px",
   lineHeight: "32px",

@@ -1,7 +1,7 @@
 import React from "react";
 import MuiOpenInNewIcon from "@mui/icons-material/OpenInNew";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { alpha, IconButton } from "@mui/material";
+import { alpha, IconButton, Theme } from "@mui/material";
 
 import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
@@ -23,7 +23,7 @@ const ErrorSummaryMessage = styled("div")({
   flex: "1",
 });
 
-const ErrorSummaryLink = styled(Link)(({ theme }) => ({
+const ErrorSummaryLink = styled(Link)(({ theme }: { theme: Theme }) => ({
   fontSize: "14px",
   fontWeight: 400,
   color: alpha(theme.palette.secondary[900], 0.6),

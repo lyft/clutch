@@ -6,6 +6,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
+  Theme,
 } from "@mui/material";
 import {
   alpha,
@@ -48,7 +49,7 @@ const StyledAutocomplete = styled(Autocomplete)({
 
 const StyledTextField = styled(BaseTextField)<{
   $color?: MuiStandardTextFieldProps["color"];
-}>({}, props => ({ theme }) => {
+}>({}, props => ({ theme }: { theme: Theme }) => {
   const TEXT_FIELD_COLOR_MAP = {
     default: alpha(theme.palette.secondary[900], 0.6),
     inputDefault: alpha(theme.palette.secondary[900], 0.38),
@@ -146,7 +147,7 @@ const StyledTextField = styled(BaseTextField)<{
 });
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)(({ theme }) => ({
+const Popper = styled(MuiPopper)(({ theme }: { theme: Theme }) => ({
   ".MuiPaper-root": {
     boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
 
@@ -174,12 +175,12 @@ const ResultGrid = styled(Grid)({
 });
 
 // search's result options
-const ResultLabel = styled(Typography)(({ theme }) => ({
+const ResultLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
   color: theme.palette.secondary[900],
   fontSize: "14px",
 }));
 
-const IconButton = styled(MuiIconButton)(({ theme }) => ({
+const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   borderRadius: "0",
   backgroundColor: theme.palette.primary[600],
   color: theme.palette.contrastColor,

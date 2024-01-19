@@ -6,7 +6,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
-import { alpha } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 
 import type { WorkflowProps } from ".";
 import CronTable from "./crons-table";
@@ -30,7 +30,7 @@ const Content = styled("div")({
   margin: "32px 0",
 });
 
-const PlaceholderTitle = styled("div")(({ theme }) => ({
+const PlaceholderTitle = styled("div")(({ theme }: { theme: Theme }) => ({
   paddingBottom: "16px",
   fontWeight: 700,
   fontSize: "22px",
@@ -38,7 +38,7 @@ const PlaceholderTitle = styled("div")(({ theme }) => ({
   color: theme.palette.secondary[900],
 }));
 
-const PlaceholderText = styled("div")(({ theme }) => ({
+const PlaceholderText = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 400,
   fontSize: "16px",
   lineHeight: "22px",

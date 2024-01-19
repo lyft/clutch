@@ -21,6 +21,7 @@ import {
   Container as MuiContainer,
   Grid,
   Paper as MuiPaper,
+  Theme,
   Typography,
 } from "@mui/material";
 
@@ -65,7 +66,7 @@ const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   })
 );
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
   padding: "32px",
 }));

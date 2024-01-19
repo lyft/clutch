@@ -1,6 +1,6 @@
 import * as React from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import type { DialogProps as MuiDialogProps } from "@mui/material";
+import type { DialogProps as MuiDialogProps, Theme } from "@mui/material";
 import {
   alpha,
   Dialog as MuiDialog,
@@ -13,7 +13,7 @@ import {
 
 import styled from "./styled";
 
-const DialogPaper = styled(Paper)(({ theme }) => ({
+const DialogPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
   border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
   boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}`,
   boxSizing: "border-box",
@@ -22,7 +22,7 @@ const DialogPaper = styled(Paper)(({ theme }) => ({
   maxWidth: "75vw",
 }));
 
-const DialogTitle = styled(MuiDialogTitle)(({ theme }) => ({
+const DialogTitle = styled(MuiDialogTitle)(({ theme }: { theme: Theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   fontSize: "20px",
@@ -35,13 +35,13 @@ const DialogTitleText = styled("div")({
   padding: "14px 0 0 0",
 });
 
-const IconButton = styled(MuiIconButton)(({ theme }) => ({
+const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   height: "12px",
   width: "12px",
   color: theme.palette.secondary[900],
 }));
 
-const DialogContent = styled(MuiDialogContent)(({ theme }) => ({
+const DialogContent = styled(MuiDialogContent)(({ theme }: { theme: Theme }) => ({
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,
@@ -52,7 +52,7 @@ const DialogContent = styled(MuiDialogContent)(({ theme }) => ({
   overflowWrap: "break-word",
 }));
 
-const DialogActions = styled(MuiDialogActions)(({ theme }) => ({
+const DialogActions = styled(MuiDialogActions)(({ theme }: { theme: Theme }) => ({
   borderTop: `1px solid ${alpha(theme.palette.secondary[900], 0.12)}`,
   padding: "0 8px",
   "> *": {
