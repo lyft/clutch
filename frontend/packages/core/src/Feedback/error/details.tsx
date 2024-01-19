@@ -158,7 +158,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                         <>
                           {renderItems.map((wrapped, idx) => {
                             // TODO: This color should be colored according to status code
-                            const color = theme.palette.secondary[600];
+                            const color = theme.palette.error[600];
                             return (
                               // eslint-disable-next-line react/no-array-index-key
                               <ListItem key={`${idx}-${wrapped.message}`}>

@@ -45,7 +45,7 @@ const StyledInputLabel = styled(MuiInputLabel)(({ theme }) => ({
     color: "var(--label-default-color)",
   },
   "&.Mui-error": {
-    color: theme.palette.secondary[600],
+    color: theme.palette.error[600],
   },
 }));
 

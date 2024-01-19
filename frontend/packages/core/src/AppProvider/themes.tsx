@@ -1,7 +1,6 @@
 import React from "react";
-import { CssBaseline, StyledEngineProvider, useTheme as useMuiTheme } from "@mui/material";
+import { useTheme as useMuiTheme } from "@mui/material";
 import type { Theme as MuiTheme } from "@mui/material/styles";
-import { StylesProvider } from "@mui/styles";
 
 import { ThemeProvider } from "../Theme";
 import { THEME_VARIANTS } from "../Theme/colors";
@@ -30,12 +29,9 @@ const Theme: React.FC = ({ children }) => {
     window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; */
   const prefersDarkMode = false;
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}>
-        <CssBaseline />
-        <StylesProvider>{children}</StylesProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <ThemeProvider variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}>
+      {children}
+    </ThemeProvider>
   );
 };
 
