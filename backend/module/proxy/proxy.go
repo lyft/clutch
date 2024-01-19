@@ -117,6 +117,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	if err != nil {
 		m.scope.Tagged(map[string]string{
 			"service": service.Name,
+			"path":    req.Path,
 		}).Counter("request.error").Inc(1)
 		m.logger.Error("proxy request error", zap.Error(err))
 		return nil, err
@@ -124,6 +125,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 
 	m.scope.Tagged(map[string]string{
 		"service":     service.Name,
+		"path":        req.Path,
 		"status_code": fmt.Sprintf("%d", response.StatusCode),
 	}).Counter("request").Inc(1)
 
