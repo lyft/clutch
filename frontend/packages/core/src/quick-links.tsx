@@ -170,10 +170,15 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
 const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
+
+  const filteredLinkGroups = linkGroups.filter(
+    lg => lg.links?.length > 0 && lg.name && lg.imagePath
+  );
+
   // Show only the first five quick links, and put the rest in
   // an overflow popper
-  const firstFive = linkGroups.slice(0, 5);
-  const overflow = linkGroups.slice(5);
+  const firstFive = filteredLinkGroups.slice(0, 5);
+  const overflow = filteredLinkGroups.slice(5);
 
   return (
     <Card>
