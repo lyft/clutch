@@ -96,6 +96,10 @@ export const Tabs = ({ children, value, variant, onChange, ...props }: TabsProps
     }
   };
 
+  React.useEffect(() => {
+    setSelectedIndex((value || 0).toString());
+  }, [value]);
+
   return (
     <div style={{ width: "100%" }}>
       <TabContext value={selectedIndex}>
