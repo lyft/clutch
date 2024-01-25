@@ -9,7 +9,7 @@ const StyledTab = styled(MuiTab)(({ theme }: { theme: Theme }) => ({
   height: "46px",
   padding: "12px 32px",
   color: alpha(theme.palette.secondary[900], 0.6),
-  borderBottom: `3px solid ${theme.palette.secondary[200]}`,
+  borderBottom: `3px solid ${theme.palette.secondary[100]}`,
   fontSize: "14px",
   fontWeight: "bold",
   opacity: "1",
@@ -21,7 +21,7 @@ const StyledTab = styled(MuiTab)(({ theme }: { theme: Theme }) => ({
   },
   "&:hover": {
     color: alpha(theme.palette.secondary[900], 0.6),
-    backgroundColor: theme.palette.secondary[200],
+    backgroundColor: theme.palette.secondary[100],
     outline: "none",
   },
   "&:focus": {
