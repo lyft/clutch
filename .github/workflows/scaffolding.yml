@@ -1,13 +1,10 @@
 name: scaffolding
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
     paths-ignore:
-      - "docs/**"
+      - 'docs/**'
 env:
   GOPATH: ${{ github.workspace }}/go
   GOBIN: ${{ github.workspace }}/go/bin
@@ -24,7 +21,7 @@ jobs:
           go-version: 1.21.x
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: '16.x'
           check-latest: true
       - name: scaffold new app
         run: yes | go run scaffolder.go -m gateway -p ${{ github.sha }} -o ${{ github.repository_owner }}
