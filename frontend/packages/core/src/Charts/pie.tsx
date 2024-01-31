@@ -91,13 +91,20 @@ interface PieChartState {
 }
 
 const DEFAULT_COLORS = [
-  "#3548D4",
-  "#40A05A",
-  "#B09027",
-  "#D87313",
-  "#C2302E",
-  "#0D1030",
-  "#8884D8",
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
 ];
 
 const renderActiveShape = (props, options) => {
