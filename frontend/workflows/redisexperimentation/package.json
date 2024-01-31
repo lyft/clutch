@@ -20,7 +20,7 @@
   "dependencies": {
     "@clutch-sh/core": "^3.0.0-beta",
     "@clutch-sh/data-layout": "^3.0.0-beta",
-    "@clutch-sh/experimentation": "^2.0.0-beta",
+    "@clutch-sh/experimentation": "^3.0.0-beta",
     "@clutch-sh/wizard": "^3.0.0-beta",
     "@hookform/resolvers": "2.8.8",
     "@mui/material": "^5.8.5",
