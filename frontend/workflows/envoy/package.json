@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/envoy",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Clutch Envoy Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -24,8 +24,8 @@
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
     "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@mui/material": "^5.8.5",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.15",

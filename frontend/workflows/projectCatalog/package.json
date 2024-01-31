@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/project-catalog",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Clutch Project Catalog",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -23,9 +23,9 @@
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
     "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
     "@clutch-sh/project-selector": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@emotion/styled": "^11.3.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",

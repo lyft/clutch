@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/wizard",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Wizard Components to drive frontend workflows",
   "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shwizard",
   "license": "Apache-2.0",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "clsx": "^1.1.1",

@@ -512,9 +512,9 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
   "dependencies": {
     // highlight-start
     "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
     // highlight-end
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -630,8 +630,8 @@ There is another new import (`lodash`) added in the code above. Let's also add t
   },
   "dependencies": {
     "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     // highlight-next-line
     "lodash": "^4.17.21",
     "react": "^17.0.2",
