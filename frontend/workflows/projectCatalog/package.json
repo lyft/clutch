@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "@clutch-sh/data-layout": "^2.0.0-beta",
     "@clutch-sh/project-selector": "^2.0.0-beta",
     "@clutch-sh/wizard": "^2.0.0-beta",

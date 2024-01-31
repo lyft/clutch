@@ -17,7 +17,7 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "@clutch-sh/wizard": "^2.0.0-beta",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.8.4",

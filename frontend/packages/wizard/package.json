@@ -25,7 +25,7 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "@clutch-sh/data-layout": "^2.0.0-beta",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",

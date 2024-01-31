@@ -24,7 +24,7 @@
     "lerna": "^4.0.0",
     "@clutch-sh/ec2": "^2.0.0-beta",
     "@{{ .RepoName }}/echo": "^0.0.0",
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "@clutch-sh/tools": "^2.0.0-beta",
     "history": "^5.0.0",
     "react": "^17.0.2",
