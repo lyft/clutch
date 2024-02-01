@@ -127,8 +127,6 @@ export const Accordion = ({
     }
   };
 
-  console.log("Test");
-
   return (
     <StyledAccordion defaultExpanded={defaultExpanded} expanded={expanded} {...props}>
       <StyledAccordionSummary expanded={expanded} collapsible={collapsible} onClick={handleClick}>

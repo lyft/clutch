@@ -11,7 +11,6 @@ make backend-dev-mock &
 until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck; do
     if [ "$BE_STARTUP_COUNT" -ge "$STARTUP_WAIT" ]; then
         echo "Error: could not start backend mock server"
-        echo "Test"
         exit 1
     fi;
     BE_STARTUP_COUNT=$((BE_STARTUP_COUNT+1))
