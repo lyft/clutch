@@ -16,6 +16,7 @@
     "compile:watch": "yarn compile:dev -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "publishBeta": "../../../tools/publish-frontend.sh project-catalog",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
