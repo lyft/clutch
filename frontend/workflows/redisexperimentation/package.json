@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/redis-experimentation",
   "version": "2.0.0-beta",
-  "private": true,
   "description": "Redis Fault Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "resilience@lyft.com",
@@ -13,6 +12,7 @@
     "compile:watch": "yarn compile:dev --watch=forever",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "publishBeta": "../../../tools/publish-frontend.sh redis-experimentation",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"

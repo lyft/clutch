@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/dynamodb",
   "version": "2.0.0-beta",
-  "private": true,
   "description": "Manage Dynamodb resources",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -17,6 +16,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
+    "publishBeta": "../../../tools/publish-frontend.sh dynamodb",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
