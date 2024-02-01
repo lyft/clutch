@@ -32,7 +32,7 @@
     "react-hook-thunk-reducer": "^0.2.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^2.0.0-beta",
+    "@clutch-sh/tools": "^3.0.0-beta",
     "react-test-renderer": "^17.0.2"
   },
   "engines": {

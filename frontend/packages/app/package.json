@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/app",
-  "version": "0.0.0",
+  "version": "3.0.0-beta",
   "private": true,
   "description": "Clutch Application Components",
   "license": "Apache-2.0",
@@ -24,7 +24,7 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^2.0.0-beta",
+    "@clutch-sh/tools": "^3.0.0-beta",
     "esbuild-loader": "^3.0.0"
   },
   "engines": {

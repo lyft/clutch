@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/api",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Clutch API",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
