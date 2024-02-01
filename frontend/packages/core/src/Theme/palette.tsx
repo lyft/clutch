@@ -1,11 +1,14 @@
 import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles";
 import { alpha, TypeText } from "@mui/material/styles";
 
-import { DARK_COLORS, LIGHT_COLORS, STATE_OPACITY } from "./colors";
+import { brandColor, DARK_COLORS, LIGHT_COLORS, THEME_VARIANTS } from "./colors";
 import type { ClutchColors, ThemeVariant } from "./types";
 
 interface PaletteOptions extends MuiPaletteOptions {
   type: ThemeVariant;
+  contrastColor: string;
+  headerGradient: string;
+  brandColor: string;
 }
 
 const lightText: Partial<TypeText> = {
@@ -23,13 +26,14 @@ const darkText: Partial<TypeText> = {
 };
 
 const palette = (variant: ThemeVariant): PaletteOptions => {
-  const isLightMode = variant === "light";
+  const isLightMode = variant === THEME_VARIANTS.light;
   const color = (isLightMode ? LIGHT_COLORS : DARK_COLORS) as ClutchColors;
-  const inverseColor = (isLightMode ? DARK_COLORS : LIGHT_COLORS) as ClutchColors;
 
   // TODO: add all clutch colors to "common colors"
   return {
     type: variant,
+    mode: variant,
+    brandColor,
     primary: color.blue,
     secondary: color.neutral,
     error: color.red,
@@ -38,22 +42,14 @@ const palette = (variant: ThemeVariant): PaletteOptions => {
     success: color.green,
     grey: color.neutral,
     background: {
-      default: inverseColor.neutral[900],
-      // secondary
+      default: color.blue[50],
+      paper: isLightMode ? "#fff" : "#1c1e3c",
     },
     text: isLightMode ? lightText : darkText,
-    action: {
-      active: color.blue[600],
-      activatedOpacity: STATE_OPACITY.pressed,
-      hover: color.blue[600],
-      hoverOpacity: STATE_OPACITY.hover,
-      selected: color.blue[600],
-      selectedOpacity: STATE_OPACITY.selected,
-      focus: color.blue[600],
-      focusOpacity: STATE_OPACITY.focused,
-      disabled: color.neutral[900],
-      disabledOpacity: STATE_OPACITY.disabled,
-    },
+    contrastColor: isLightMode ? "#ffffff" : "#000000", // Either black or white depending on theme
+    headerGradient: isLightMode
+      ? "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)"
+      : "#0D1030",
   };
 };
 

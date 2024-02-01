@@ -1,21 +1,22 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, MetadataTable, Paper, styled } from "@clutch-sh/core";
+import type { Theme } from "@mui/material";
 import { Cell, Pie, PieChart } from "recharts";
 
-const SummaryCardTitle = styled("div")({
+const SummaryCardTitle = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 600,
   fontSize: "14px",
-  color: "#0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
 const SummaryCardBody = styled("div")<{ $color?: string }>(
   {
     fontWeight: "bold",
     fontSize: "20px",
   },
-  props => ({
-    color: props.$color ? props.$color : "#3548D4",
+  props => ({ theme }: { theme: Theme }) => ({
+    color: props.$color ? props.$color : theme.palette.primary[600],
   })
 );
 

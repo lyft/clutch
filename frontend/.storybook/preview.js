@@ -9,7 +9,7 @@ export const decorators = [
   ),
 ];
 
-export const parameters = {  
+export const parameters = {
   backgrounds: {
     default: "clutch",
     values: [
@@ -21,6 +21,6 @@ export const parameters = {
         name: "light",
         value: "#ffffff",
       },
-    ]
-  }
+    ],
+  },
 };

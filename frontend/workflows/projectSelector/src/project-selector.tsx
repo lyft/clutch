@@ -6,18 +6,19 @@ import {
   ClutchError,
   FeatureOn,
   SimpleFeatureFlag,
+  styled,
   TextField,
   Tooltip,
   TooltipContainer,
   Typography,
   userId,
+  useTheme,
   useWorkflowStorageContext,
 } from "@clutch-sh/core";
-import styled from "@emotion/styled";
 import AddIcon from "@mui/icons-material/Add";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import UpdateIcon from "@mui/icons-material/Update";
-import { Divider, LinearProgress } from "@mui/material";
+import { alpha, Divider, LinearProgress, Theme } from "@mui/material";
 import _ from "lodash";
 
 import { useDashUpdater, useRefreshRateState, useRefreshUpdater } from "./dash-hooks";
@@ -63,17 +64,17 @@ const initialState: State = {
   error: undefined,
 };
 
-const StyledSelectorContainer = styled.div({
-  backgroundColor: "#F9FAFE",
-  borderRight: "1px solid rgba(13, 16, 48, 0.1)",
-  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
+const StyledSelectorContainer = styled("div")(({ theme }: { theme: Theme }) => ({
+  backgroundColor: theme.palette.primary[50],
+  borderRight: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
+  boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
   width: "245px",
   overflowY: "auto",
   overflowX: "hidden",
   maxHeight: "100%",
-});
+}));
 
-const StyledWorkflowHeader = styled.div({
+const StyledWorkflowHeader = styled("div")({
   margin: "16px 16px 12px 16px",
   display: "flex",
   alignItems: "center",
@@ -81,7 +82,7 @@ const StyledWorkflowHeader = styled.div({
   height: "24px",
 });
 
-const StyledWorkflowTitle = styled.span({
+const StyledWorkflowTitle = styled("span")({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
@@ -92,18 +93,18 @@ const StyledProjectTextField = styled(TextField)({
   padding: "16px 16px 8px 16px",
 });
 
-const StyledProgressContainer = styled.div({
+const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "4px",
   ".MuiLinearProgress-root": {
-    backgroundColor: "rgb(194, 200, 242)",
+    backgroundColor: theme.palette.primary[400],
   },
   ".MuiLinearProgress-bar": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 // TODO(smonero): decide on styling for this
-const FlexCenterAlignContainer = styled.div({
+const FlexCenterAlignContainer = styled("div")({
   display: "flex",
   alignItems: "center",
 });
@@ -209,9 +210,10 @@ const autoComplete = async (search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
-const Form = styled.form({});
+const Form = styled("form")({});
 
 const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
+  const theme = useTheme();
   // On load, we'll request a list of owned projects and their upstreams and downstreams from the API.
   // The API will contain information about the relationships between projects and upstreams and downstreams.
   // By default, the owned projects will be checked and others will be unchecked.
@@ -363,10 +365,10 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                       },
                     ].map(item => (
                       <TooltipContainer key={item.title}>
-                        <Typography variant="subtitle3" color="#FFFFFF">
+                        <Typography variant="subtitle3" color={theme.palette.contrastColor}>
                           {item.title}
                         </Typography>
-                        <Typography variant="body4" color="#E7E7EA">
+                        <Typography variant="body4" color={theme.palette.secondary[200]}>
                           {item.description}
                         </Typography>
                       </TooltipContainer>
@@ -387,7 +389,11 @@ const ProjectSelector = ({ onError }: ProjectSelectorProps) => {
                     placement="bottom"
                   >
                     <UpdateIcon
-                      style={{ color: autoRefresh ? "#3548D4" : "rgba(0, 0, 0, 0.26)" }}
+                      style={{
+                        color: autoRefresh
+                          ? theme.palette.primary[600]
+                          : alpha(theme.palette.getContrastText(theme.palette.contrastColor), 0.26),
+                      }}
                       fontSize="small"
                       onClick={() => {
                         handleRefreshRateChange();

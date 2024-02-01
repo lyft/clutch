@@ -16,7 +16,14 @@ import {
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@mui/material";
+import {
+  alpha,
+  Container as MuiContainer,
+  Grid,
+  Paper as MuiPaper,
+  Theme,
+  Typography,
+} from "@mui/material";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
@@ -59,10 +66,10 @@ const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   })
 );
 
-const Paper = styled(MuiPaper)({
-  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
+  boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
   padding: "32px",
-});
+}));
 
 const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();

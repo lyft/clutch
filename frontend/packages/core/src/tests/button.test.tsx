@@ -4,6 +4,7 @@ import { render, unmountComponentAtNode } from "react-dom";
 import "@testing-library/jest-dom";
 
 import { Button } from "../button";
+import { ThemeProvider } from "../Theme";
 
 let container: HTMLElement;
 beforeEach(() => {
@@ -19,31 +20,56 @@ afterEach(() => {
 });
 
 test("Primary Button Component", () => {
-  render(<Button text="test" />, container);
+  render(
+    <ThemeProvider>
+      <Button text="test" />
+    </ThemeProvider>,
+    container
+  );
 
   expect(container.innerHTML).toMatchSnapshot();
 });
 
 test("Neutral Button Component", () => {
-  render(<Button variant="neutral" text="test" />, container);
+  render(
+    <ThemeProvider>
+      <Button variant="neutral" text="test" />
+    </ThemeProvider>,
+    container
+  );
 
   expect(container.innerHTML).toMatchSnapshot();
 });
 
 test("Destructive Button Component", () => {
-  render(<Button variant="destructive" text="test" />, container);
+  render(
+    <ThemeProvider>
+      <Button variant="destructive" text="test" />
+    </ThemeProvider>,
+    container
+  );
 
   expect(container.innerHTML).toMatchSnapshot();
 });
 
 test("Small Button Component", () => {
-  render(<Button size="small" text="test" />, container);
+  render(
+    <ThemeProvider>
+      <Button size="small" text="test" />
+    </ThemeProvider>,
+    container
+  );
 
   expect(container.innerHTML).toMatchSnapshot();
 });
 
 test("Large Button Component", () => {
-  render(<Button size="large" text="test" />, container);
+  render(
+    <ThemeProvider>
+      <Button size="large" text="test" />
+    </ThemeProvider>,
+    container
+  );
 
   expect(container.innerHTML).toMatchSnapshot();
 });

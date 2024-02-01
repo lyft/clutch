@@ -1,23 +1,26 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Grid } from "@mui/material";
+import { alpha, Grid, Theme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { userId } from "./AppLayout/user";
 import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
+import { THEME_VARIANTS } from "./Theme/colors";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
 
-const StyledLanding = styled.div({
-  backgroundColor: "#f9f9fe",
+const StyledLanding = styled.div(({ theme }: { theme: Theme }) => ({
   display: "flex",
   flexDirection: "column",
   flexGrow: 1,
   "& .welcome": {
     display: "flex",
-    backgroundColor: "white",
+    backgroundColor:
+      theme.palette.mode === THEME_VARIANTS.light
+        ? theme.palette.contrastColor
+        : theme.palette.background.paper,
     padding: "32px 80px",
   },
 
@@ -33,19 +36,19 @@ const StyledLanding = styled.div({
   "& .welcome .title": {
     fontWeight: "bold",
     fontSize: "22px",
-    color: "#0d1030",
+    color: theme.palette.text.primary[900],
   },
 
   "& .welcome .subtitle": {
     fontSize: "16px",
     fontWeight: "normal",
-    color: "rgba(13, 16, 48, 0.6)",
+    color: alpha(theme.palette.secondary[900], 0.6),
   },
 
   "& .content": {
     padding: "32px 80px",
   },
-});
+}));
 
 const Landing: React.FC<{}> = () => {
   const navigate = useNavigate();

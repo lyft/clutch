@@ -2,8 +2,9 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import ErrorIcon from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import type { SelectProps as MuiSelectProps } from "@mui/material";
+import type { SelectProps as MuiSelectProps, Theme } from "@mui/material";
 import {
+  alpha,
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
   InputLabel as MuiInputLabel,
@@ -15,7 +16,7 @@ import { flatten } from "lodash";
 
 import { Chip } from "../chip";
 
-const StyledFormHelperText = styled(MuiFormHelperText)({
+const StyledFormHelperText = styled(MuiFormHelperText)(({ theme }: { theme: Theme }) => ({
   alignItems: "center",
   display: "flex",
   position: "relative",
@@ -26,7 +27,7 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
   color: "grey",
 
   "&.Mui-error": {
-    color: "#db3615",
+    color: theme.palette.error[600],
   },
 
   svg: {
@@ -34,19 +35,19 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
     width: "16px",
     marginRight: "4px",
   },
-});
+}));
 
-const StyledInputLabel = styled(MuiInputLabel)({
-  "--label-default-color": "rgba(13, 16, 48, 0.6)",
+const StyledInputLabel = styled(MuiInputLabel)(({ theme }: { theme: Theme }) => ({
+  "--label-default-color": alpha(theme.palette.secondary[900], 0.6),
 
   color: "var(--label-default-color)",
   "&.Mui-focused": {
     color: "var(--label-default-color)",
   },
   "&.Mui-error": {
-    color: "#db3615",
+    color: theme.palette.error[600],
   },
-});
+}));
 
 const SelectIcon = (props: any) => (
   <div {...props}>
@@ -71,28 +72,28 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
   />
 );
 
-const StyledSelect = styled(BaseSelect)({
+const StyledSelect = styled(BaseSelect)(({ theme }: { theme: Theme }) => ({
   "--notched-border-width": "1px",
   padding: "0",
-  backgroundColor: "#FFFFFF",
+  backgroundColor: theme.palette.contrastColor,
   minWidth: "fit-content",
 
   ".MuiOutlinedInput-notchedOutline": {
-    borderColor: "rgba(13, 16, 48, 0.38)",
+    borderColor: alpha(theme.palette.secondary[900], 0.38),
     borderWidth: "var(--notched-border-width)",
   },
 
   "&.Mui-focused": {
     "> .MuiSelect-icon > svg": {
-      color: "#0d1030",
+      color: theme.palette.secondary[900],
     },
     "> .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#3458d4",
+      borderColor: theme.palette.primary[600],
       borderWidth: "var(--notched-border-width)",
     },
   },
   "&.Mui-error > .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#db3615",
+    borderColor: theme.palette.error[600],
     borderWidth: "var(--notched-border-width)",
   },
 
@@ -106,17 +107,17 @@ const StyledSelect = styled(BaseSelect)({
     },
 
     "&.Mui-disabled": {
-      backgroundColor: "rgba(13, 16, 48, 0.12)",
+      backgroundColor: alpha(theme.palette.secondary[900], 0.12),
     },
   },
 
   ul: {
     borderRadius: "4px",
-    border: "1px solid rgba(13, 16, 48, 0.1)",
+    border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
   },
 
   ".MuiMenuItem-root": {
-    color: "#0d1030",
+    color: theme.palette.secondary[900],
     height: "48px",
 
     ":first-of-type": {
@@ -124,15 +125,15 @@ const StyledSelect = styled(BaseSelect)({
     },
     ":last-child": {},
     ":hover": {
-      backgroundColor: "#e7e7ea",
+      backgroundColor: theme.palette.secondary[200],
     },
     ":active": {
-      backgroundColor: "#dbdbe0",
+      backgroundColor: theme.palette.secondary[200],
     },
     "&.Mui-selected": {
-      backgroundColor: "rgba(53, 72, 212, 0.1)",
+      backgroundColor: alpha(theme.palette.primary[600], 0.1),
       ":hover": {
-        backgroundColor: "rgba(53, 72, 212, 0.1)",
+        backgroundColor: alpha(theme.palette.primary[600], 0.1),
       },
     },
   },
@@ -140,7 +141,7 @@ const StyledSelect = styled(BaseSelect)({
   "&.MuiMenu-paper": {
     marginTop: "5px",
     border: "none",
-    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
     maxHeight: "25vh",
   },
 
@@ -155,7 +156,7 @@ const StyledSelect = styled(BaseSelect)({
     boxSizing: "border-box",
 
     "> svg": {
-      color: "rgba(13, 16, 48, 0.6)",
+      color: alpha(theme.palette.secondary[900], 0.6),
       position: "absolute",
     },
 
@@ -164,16 +165,16 @@ const StyledSelect = styled(BaseSelect)({
     },
 
     "&.Mui-disabled > svg": {
-      color: "rgba(13, 16, 48, 0.6)",
+      color: alpha(theme.palette.secondary[900], 0.6),
     },
   },
 
   ".MuiListSubheader-root": {
-    color: "#939495",
+    color: theme.palette.secondary[400],
     cursor: "default",
     pointerEvents: "none", // disables the select from closing on clicking the subheader
   },
-});
+}));
 
 interface BaseSelectOptions {
   label: string;

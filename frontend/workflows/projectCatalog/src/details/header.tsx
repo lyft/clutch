@@ -1,6 +1,6 @@
 import React from "react";
-import { Grid, styled, Typography } from "@clutch-sh/core";
-import { Breadcrumbs, Link } from "@mui/material";
+import { Grid, styled, Typography, useTheme } from "@clutch-sh/core";
+import { alpha, Breadcrumbs, Link } from "@mui/material";
 
 interface Route {
   title: string;
@@ -31,6 +31,7 @@ const StyledCrumb = styled(Typography)({
 });
 
 const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
+  const theme = useTheme();
   routes.unshift({ title: "Project Catalog", path: "/catalog" });
 
   let builtRoute = routes[0].path;
@@ -41,7 +42,11 @@ const BreadCrumbs = ({ routes = [] }: BreadCrumbProps) => {
     }
 
     return (
-      <StyledCrumb variant="caption2" color="rgb(13, 16, 48, .48)" key={route.title}>
+      <StyledCrumb
+        variant="caption2"
+        color={alpha(theme.palette.secondary[900], 0.48)}
+        key={route.title}
+      >
         {route.path ? (
           <Link color="inherit" href={builtRoute} underline="hover">
             {route.title}

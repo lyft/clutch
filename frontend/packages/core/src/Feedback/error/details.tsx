@@ -5,9 +5,12 @@ import {
   Accordion as MuiAccordion,
   AccordionDetails as MuiAccordionDetails,
   AccordionSummary as MuiAccordionSummary,
+  alpha,
   Button,
   Grid,
+  Theme,
   useControlled,
+  useTheme,
 } from "@mui/material";
 
 import type { ClutchError } from "../../Network/errors";
@@ -19,11 +22,14 @@ import ErrorDetailsDialog from "./dialog";
 
 const ERROR_DETAILS_RENDER_MAX = 4;
 
-const ErrorDetailDivider = styled("div")({
-  background: "linear-gradient(to right, #DB3615 8px, rgba(219, 54, 21, 0.4) 0%)",
+const ErrorDetailDivider = styled("div")(({ theme }: { theme: Theme }) => ({
+  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${alpha(
+    theme.palette.error[600],
+    0.4
+  )} 0%)`,
   height: "1px",
   width: "100%",
-});
+}));
 
 const Accordion = styled(MuiAccordion)({
   "&.MuiAccordion-root.Mui-expanded": {
@@ -35,9 +41,9 @@ const Accordion = styled(MuiAccordion)({
 });
 
 const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
-  {
-    background: "linear-gradient(to right, #DB3615 8px, #FDE9E7 0%)",
-    color: "#0D1030",
+  ({ theme }: { theme: Theme }) => ({
+    background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.error[100]} 0%)`,
+    color: theme.palette.secondary[900],
     fontSize: "14px",
     fontWeight: 400,
     padding: "12px 16px 12px 24px",
@@ -49,56 +55,57 @@ const AccordionSummary = styled(MuiAccordionSummary)<{ $expanded: boolean }>(
     "&.MuiAccordionSummary-root.Mui-expanded": {
       minHeight: "unset",
     },
-  },
+  }),
   props => ({
     borderBottomLeftRadius: props.$expanded ? "0" : "8px",
     borderBottomRightRadius: props.$expanded ? "0" : "8px",
   })
 );
 
-const AccordionDetails = styled(MuiAccordionDetails)({
-  background: "linear-gradient(to right, #DB3615 8px, #FFFFFF 0%)",
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }: { theme: Theme }) => ({
+  background: `linear-gradient(to right, ${theme.palette.error[600]} 8px, ${theme.palette.contrastColor} 0%)`,
   padding: "0",
   paddingLeft: "8px",
   borderBottomLeftRadius: "8px",
   borderBottomRightRadius: "8px",
   display: "flex",
   flexDirection: "column",
-});
+}));
 
-const ListItem = styled("li")({
+const ListItem = styled("li")(({ theme }: { theme: Theme }) => ({
   "::marker": {
-    color: "rgba(13, 16, 48, 0.6)",
+    color: alpha(theme.palette.secondary[900], 0.6),
   },
   padding: "2px 0",
-});
+}));
 
-const ErrorDetailContainer = styled("div")({
+const ErrorDetailContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   width: "100%",
-  border: "1px solid #E7E7EA",
+  border: `1px solid ${theme.palette.secondary[200]}`,
   padding: "16px 16px 16px 24px",
   borderBottomRightRadius: "8px",
   borderTop: "unset",
-});
+}));
 
-const ErrorDetailText = styled("div")({
-  color: "rgba(13, 16, 48, 0.6)",
+const ErrorDetailText = styled("div")(({ theme }: { theme: Theme }) => ({
+  color: alpha(theme.palette.secondary[900], 0.6),
   fontSize: "14px",
   lineHeight: "24px",
-});
+}));
 
-const DialogButton = styled(Button)({
-  color: "#3548D4",
+const DialogButton = styled(Button)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.primary[600],
   fontWeight: 700,
   fontSize: "14px",
   padding: "9px 32px",
-});
+}));
 
 interface ErrorDetailsProps {
   error: ClutchError;
 }
 
 const ErrorDetails = ({ error }: ErrorDetailsProps) => {
+  const theme = useTheme();
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [expanded, setExpanded] = useControlled({
     controlled: undefined,
@@ -139,7 +146,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
           <ErrorDetailContainer>
             {hasWrappedErrorDetails && (
               <div>
-                <ErrorDetailText style={{ color: "#0D1030" }}>
+                <ErrorDetailText style={{ color: theme.palette.secondary[900] }}>
                   The following errors were encountered:
                 </ErrorDetailText>
                 <ul style={{ paddingLeft: "16px", margin: "4px 0" }}>
@@ -152,7 +159,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                         <>
                           {renderItems.map((wrapped, idx) => {
                             // TODO: This color should be colored according to status code
-                            const color = "#DB3615";
+                            const color = theme.palette.error[600];
                             return (
                               // eslint-disable-next-line react/no-array-index-key
                               <ListItem key={`${idx}-${wrapped.message}`}>

@@ -1,11 +1,13 @@
 import React from "react";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
+  alpha,
   ClickAwayListener,
   Grow as MuiGrow,
   MenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
+  Theme,
 } from "@mui/material";
 import { get, sortBy } from "lodash";
 
@@ -27,26 +29,26 @@ const Popper = styled(MuiPopper)({
   zIndex: 1201,
 });
 
-const Paper = styled(MuiPaper)({
+const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   width: "350px",
-  boxShadow: "0px 15px 35px rgba(53, 72, 212, 0.2)",
+  boxShadow: `0px 15px 35px ${alpha(theme.palette.primary[600], 0.2)}`,
   borderRadius: "8px",
-});
+}));
 
 const StyledFeedbackIcon = styled(IconButton)<{ $open: boolean }>(
-  {
-    color: "#ffffff",
+  ({ theme }: { theme: Theme }) => ({
+    color: theme.palette.contrastColor,
     marginRight: "8px",
     padding: "12px",
     "&:hover": {
-      background: "#2d3db4",
+      background: theme.palette.primary[600],
     },
     "&:active": {
-      background: "#2938a5",
+      background: theme.palette.primary[700],
     },
-  },
-  props => ({
-    background: props.$open ? "#2d3db4" : "unset",
+  }),
+  props => ({ theme }: { theme: Theme }) => ({
+    background: props.$open ? theme.palette.primary[600] : "unset",
   })
 );
 

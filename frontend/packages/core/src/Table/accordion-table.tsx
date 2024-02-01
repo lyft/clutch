@@ -1,21 +1,23 @@
 import * as React from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { IconButton as MuiIconButton, TableRow } from "@mui/material";
+import { IconButton as MuiIconButton, TableRow, Theme } from "@mui/material";
 
 import styled from "../styled";
 
 import type { TableRowProps } from "./table";
 import { TableCell } from "./table";
 
-const IconButton = styled(MuiIconButton)({
+const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   padding: "0",
-  color: "#0D1030",
-});
-
-const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(props => ({
-  color: props?.$disabled ? "#E7E7EA" : "unset",
+  color: theme.palette.secondary[900],
 }));
+
+const ChevronRight = styled(ChevronRightIcon)<{ $disabled: boolean }>(
+  props => ({ theme }: { theme: Theme }) => ({
+    color: props?.$disabled ? theme.palette.secondary[200] : "unset",
+  })
+);
 
 export interface AccordionRowProps {
   columns: React.ReactElement[];

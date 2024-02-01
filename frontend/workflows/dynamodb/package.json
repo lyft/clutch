@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/dynamodb",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "private": true,
   "description": "Manage Dynamodb resources",
   "license": "Apache-2.0",
@@ -22,9 +22,9 @@
   },
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
-    "@clutch-sh/core": "^2.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@emotion/styled": "^11.1.5",
     "@mui/material": "^5.8.5",
     "lodash": "4.17.21",

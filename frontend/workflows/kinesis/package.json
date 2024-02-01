@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/kinesis",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Clutch Kinesis Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -23,9 +23,9 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@emotion/styled": "^11.0.0",
     "@mui/material": "^5.8.5",
     "lodash": "^4.17.21",

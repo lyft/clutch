@@ -11,10 +11,10 @@ exports[`renders correctly 1`] = `
       Cluster Pair
     </h3>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-1"
         id="mui-1-label"
@@ -22,11 +22,11 @@ exports[`renders correctly 1`] = `
         Downstream Cluster
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-1"
           name="downstreamCluster"
           type="text"
@@ -37,7 +37,7 @@ exports[`renders correctly 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Downstream Cluster
@@ -47,10 +47,10 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-2"
         id="mui-2-label"
@@ -58,11 +58,11 @@ exports[`renders correctly 1`] = `
         Upstream Cluster
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-2"
           name="upstreamCluster"
           type="text"
@@ -73,7 +73,7 @@ exports[`renders correctly 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Upstream Cluster
@@ -83,10 +83,10 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-3"
         id="mui-3-label"
@@ -94,11 +94,11 @@ exports[`renders correctly 1`] = `
         Percentage of Requests Served by All Hosts
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-3"
           name="requestsPercentage"
           type="number"
@@ -109,7 +109,7 @@ exports[`renders correctly 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Percentage of Requests Served by All Hosts
@@ -128,19 +128,19 @@ exports[`renders correctly 1`] = `
       id="faultType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-hq3q4z-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Fault Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ltyw4k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
           aria-haspopup="listbox"
           aria-labelledby="faultType-select"
-          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-7atx2b-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
           id="faultType-select"
           role="button"
           tabindex="0"
@@ -154,11 +154,11 @@ exports[`renders correctly 1`] = `
           value="Abort"
         />
         <div
-          class="MuiSelect-icon MuiSelect-iconOutlined css-3qbkez-MuiSelect-icon"
+          class="MuiSelect-icon MuiSelect-iconOutlined css-11bgdin-MuiSelect-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pwosc9-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ exports[`renders correctly 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Fault Type
@@ -183,10 +183,10 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-4"
         id="mui-4-label"
@@ -194,11 +194,11 @@ exports[`renders correctly 1`] = `
         HTTP Status
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-4"
           name="httpStatus"
           type="number"
@@ -209,7 +209,7 @@ exports[`renders correctly 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               HTTP Status
@@ -219,30 +219,24 @@ exports[`renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiGrid-root MuiGrid-container css-1v4e55r-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container css-mgb5sa-MuiGrid-root"
       data-border="top"
     >
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-1ws459s-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ofve1n-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="button"
       >
         Cancel
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </button>
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-1dz42b0-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-61rao6-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="submit"
       >
         Start
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </button>
     </div>
   </form>
@@ -260,10 +254,10 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       Cluster Pair
     </h3>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-5"
         id="mui-5-label"
@@ -271,11 +265,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Downstream Cluster
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-5"
           name="downstreamCluster"
           type="text"
@@ -286,7 +280,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Downstream Cluster
@@ -296,10 +290,10 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-6"
         id="mui-6-label"
@@ -307,11 +301,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Upstream Cluster
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-6"
           name="upstreamCluster"
           type="text"
@@ -322,7 +316,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Upstream Cluster
@@ -336,19 +330,19 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       id="upstreamClusterType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-hq3q4z-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Upstream Cluster Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ltyw4k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
           aria-haspopup="listbox"
           aria-labelledby="upstreamClusterType-select"
-          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-7atx2b-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
           id="upstreamClusterType-select"
           role="button"
           tabindex="0"
@@ -362,11 +356,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           value="internal"
         />
         <div
-          class="MuiSelect-icon MuiSelect-iconOutlined css-3qbkez-MuiSelect-icon"
+          class="MuiSelect-icon MuiSelect-iconOutlined css-11bgdin-MuiSelect-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pwosc9-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -381,7 +375,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Upstream Cluster Type
@@ -391,10 +385,10 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-7"
         id="mui-7-label"
@@ -402,11 +396,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         Percentage of Requests Served by All Hosts
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-7"
           name="requestsPercentage"
           type="number"
@@ -417,7 +411,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Percentage of Requests Served by All Hosts
@@ -436,19 +430,19 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       id="faultType"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-hq3q4z-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
       >
         Fault Type
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ltyw4k-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
       >
         <div
           aria-expanded="false"
           aria-haspopup="listbox"
           aria-labelledby="faultType-select"
-          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-7atx2b-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
           id="faultType-select"
           role="button"
           tabindex="0"
@@ -462,11 +456,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           value="Abort"
         />
         <div
-          class="MuiSelect-icon MuiSelect-iconOutlined css-3qbkez-MuiSelect-icon"
+          class="MuiSelect-icon MuiSelect-iconOutlined css-11bgdin-MuiSelect-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pwosc9-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -481,7 +475,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               Fault Type
@@ -491,10 +485,10 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-c38016-MuiFormControl-root-MuiTextField-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
     >
       <label
-        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
         for="mui-8"
         id="mui-8-label"
@@ -502,11 +496,11 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
         HTTP Status
       </label>
       <div
-        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
-          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
           id="mui-8"
           name="httpStatus"
           type="number"
@@ -517,7 +511,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
           class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            class="css-1in441m"
+            class="css-t08j42"
           >
             <span>
               HTTP Status
@@ -527,30 +521,24 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
       </div>
     </div>
     <div
-      class="MuiGrid-root MuiGrid-container css-1v4e55r-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container css-mgb5sa-MuiGrid-root"
       data-border="top"
     >
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-1ws459s-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-ofve1n-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="button"
       >
         Cancel
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </button>
       <button
-        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-1dz42b0-MuiButtonBase-root-MuiButton-root"
+        class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-61rao6-MuiButtonBase-root-MuiButton-root"
         palette="[object Object]"
         tabindex="0"
         type="submit"
       >
         Start
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </button>
     </div>
   </form>

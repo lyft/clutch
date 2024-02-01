@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { CircularProgress, Grid, Paper } from "@mui/material";
+import { CircularProgress, Grid, Paper, Theme } from "@mui/material";
 
-const LoadingSpinner = styled(CircularProgress)`
-  color: #3548d4;
-  position: absolute;
-`;
+const LoadingSpinner = styled(CircularProgress)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.primary[600],
+  position: "absolute",
+}));
 
 const ContentContainer = styled(Grid)`
   position: relative;

@@ -5,6 +5,7 @@ import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
+  alpha,
   Grid as MuiGrid,
   StandardTextFieldProps,
   Table as MuiTable,
@@ -12,6 +13,7 @@ import {
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
+  Theme,
 } from "@mui/material";
 import _ from "lodash";
 import type { BaseSchema } from "yup";
@@ -55,11 +57,11 @@ const TableContainer = styled(MuiTableContainer)<{
   })
 );
 
-const Table = styled(MuiTable)({
-  border: "1px solid rgba(13, 16, 48, 0.12)",
+const Table = styled(MuiTable)(({ theme }: { theme: Theme }) => ({
+  border: `1px solid ${alpha(theme.palette.secondary[900], 0.12)}`,
   borderRadius: "4px",
   borderCollapse: "unset",
-});
+}));
 
 const TableBody = styled(MuiTableBody)({
   "tr:first-of-type > td:first-of-type": {
@@ -79,13 +81,13 @@ const TableBody = styled(MuiTableBody)({
   },
 });
 
-const TableCell = styled(MuiTableCell)({
-  color: "#0D1030",
+const TableCell = styled(MuiTableCell)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.secondary[900],
   fontSize: "14px",
   fontWeight: "normal",
   height: "48px",
   padding: "8px 16px",
-});
+}));
 
 const Grid = styled(MuiGrid)({
   display: "flex",
@@ -107,11 +109,11 @@ const Grid = styled(MuiGrid)({
   },
 });
 
-const KeyCellContainer = styled(TableCell)({
+const KeyCellContainer = styled(TableCell)(({ theme }: { theme: Theme }) => ({
   width: "45%",
-  background: "rgba(13, 16, 48, 0.03)",
+  background: alpha(theme.palette.secondary[900], 0.03),
   fontWeight: 500,
-});
+}));
 
 interface KeyCellProps {
   data: IdentifiableRowData;

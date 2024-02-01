@@ -4,10 +4,6 @@ html, body, #root, #App {
   min-height: 100vh;
 }
 
-#App {
-  background-color: #f9fafe;
-}
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus,

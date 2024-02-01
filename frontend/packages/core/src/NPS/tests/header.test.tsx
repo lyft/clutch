@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import * as ApplicationContext from "../../Contexts/app-context";
 import contextValues from "../../Contexts/tests/testContext";
+import { ThemeProvider } from "../../Theme";
 import { NPSHeader } from "..";
 
 beforeEach(() => {
@@ -14,7 +15,11 @@ beforeEach(() => {
 });
 
 test("renders correctly", () => {
-  render(<NPSHeader />);
+  render(
+    <ThemeProvider>
+      <NPSHeader />
+    </ThemeProvider>
+  );
 
   expect(screen.getAllByRole("button")).toHaveLength(1);
   expect(screen.getByRole("button")).toHaveAttribute("id", "headerFeedbackIcon");
@@ -22,7 +27,11 @@ test("renders correctly", () => {
 
 test("opens a popper on click of feedback icon", async () => {
   const user = userEvent.setup({ delay: null });
-  render(<NPSHeader />);
+  render(
+    <ThemeProvider>
+      <NPSHeader />
+    </ThemeProvider>
+  );
 
   const feedbackButton = await screen.findByRole("button");
   await user.click(feedbackButton);

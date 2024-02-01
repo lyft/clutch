@@ -9,11 +9,12 @@ import {
   Tooltip,
   Typography,
   useNavigate,
+  useTheme,
 } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, CircularProgress } from "@mui/material";
+import { alpha, Box, CircularProgress } from "@mui/material";
 
 import type { WorkflowProps } from "..";
 
@@ -58,6 +59,7 @@ const autoComplete = async (search: string): Promise<any> => {
 const Form = styled.form({});
 
 const Catalog: React.FC<WorkflowProps> = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
 
@@ -119,14 +121,14 @@ const Catalog: React.FC<WorkflowProps> = () => {
   return (
     <Box style={{ padding: "32px" }}>
       <div style={{ marginBottom: "8px" }}>
-        <Typography variant="caption2" color="rgb(13, 16, 48, .48)">
+        <Typography variant="caption2" color={alpha(theme.palette.secondary[900], 0.48)}>
           Project Catalog&nbsp;/&nbsp;Index
         </Typography>
       </div>
       <div style={{ marginBottom: "32px" }}>
         <Typography variant="h2">Project Catalog</Typography>
         <div style={{ marginTop: "8px" }}>
-          <Typography variant="subtitle3" color="rgb(13, 16, 48, .48)">
+          <Typography variant="subtitle3" color={alpha(theme.palette.secondary[900], 0.48)}>
             A catalog of all projects.
           </Typography>
         </div>

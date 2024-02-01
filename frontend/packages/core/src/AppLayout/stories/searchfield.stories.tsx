@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
 import styled from "@emotion/styled";
-import { Box, Grid as MuiGrid } from "@mui/material";
+import { Box, Grid as MuiGrid, Theme } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
@@ -28,6 +28,7 @@ export default {
                 developer: { name: "Lyft", contactUrl: "mailto:hello@clutch.sh" },
                 displayName: "EC2",
                 group: "AWS",
+                icon: { path: "" },
                 path: "ec2",
                 routes: [
                   {
@@ -59,10 +60,10 @@ export default {
   ],
 } as Meta;
 
-const Grid = styled(MuiGrid)({
+const Grid = styled(MuiGrid)(({ theme }: { theme: Theme }) => ({
   height: "64px",
-  backgroundColor: "#131C5F",
-});
+  backgroundColor: theme.palette.primary[900],
+}));
 
 const Template = () => (
   <Grid container alignItems="center" justifyContent="center">

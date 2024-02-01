@@ -7,6 +7,7 @@ import "@testing-library/jest-dom";
 
 import contextValues from "../../Contexts/tests/testContext";
 import { client } from "../../Network";
+import { ThemeProvider } from "../../Theme";
 import NPSFeedback, { defaults, FEEDBACK_MAX_LENGTH } from "../feedback";
 import { generateFeedbackTypes } from "../header";
 
@@ -53,13 +54,21 @@ describe("api success", () => {
   });
 
   test("renders survey text prompt", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     expect(await screen.findByText(defaultResult.prompt)).toBeVisible();
   });
 
   test("renders emojis to <EmojiRatings />", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     const emojiButtons = await screen.findAllByRole("button");
 
@@ -70,7 +79,11 @@ describe("api success", () => {
 
   test("renders text placeholder", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     await user.click(await screen.findByLabelText(/Great/i));
 
@@ -79,7 +92,11 @@ describe("api success", () => {
 
   test("displays a successful submission alert after submit", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     await user.click(await screen.findByLabelText(/Great/i));
     await user.click(await screen.findByText("Submit"));
@@ -89,7 +106,11 @@ describe("api success", () => {
 
   test("sends feedback upon emoji selection change", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
     spy.mockClear();
     expect(spy).not.toHaveBeenCalled();
 
@@ -117,13 +138,21 @@ describe("api failure", () => {
   });
 
   test("renders default text prompt", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     expect(await screen.findByText(defaults.prompt as string)).toBeVisible();
   });
 
   test("renders default emojis to <EmojiRatings />", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     const emojiButtons = await screen.findAllByRole("button");
 
@@ -138,7 +167,11 @@ describe("api failure", () => {
 
   test("renders default text placeholder", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     await user.click(await screen.findByLabelText(/Great/i));
 
@@ -174,20 +207,32 @@ describe("basic rendering", () => {
   });
 
   test("will not display feedback form or submit unless emoji is selected", () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     expect(screen.getByTestId("feedback-items-container").childElementCount).toBe(2);
   });
 
   test("will display text prompt at top", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     const feedbackItems = await screen.findByTestId("feedback-items-container");
     expect(feedbackItems.childNodes[0].firstChild).toHaveTextContent(defaultResult.prompt);
   });
 
   test("will display <EmojiRatings /> below prompt", async () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     const feedbackItems = await screen.findByTestId("feedback-items-container");
     feedbackItems.childNodes[1].childNodes.forEach(node => {
@@ -197,7 +242,11 @@ describe("basic rendering", () => {
 
   test("displays a text form and submit buttons after selection of emoji", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
     expect(screen.getByTestId("feedback-items-container").childElementCount).toBe(2);
 
     await user.click(await screen.findByLabelText(/Great/i));
@@ -214,7 +263,11 @@ describe("basic rendering", () => {
   test("will update the length on feedback if input is given", async () => {
     const testValue = "Some Feedback Text";
     const user = userEvent.setup();
-    const { container } = render(<NPSFeedback origin="WIZARD" />);
+    const { container } = render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     await user.click(await screen.findByLabelText(/Great/i));
 
@@ -235,7 +288,11 @@ describe("basic rendering", () => {
   test("will display an error on feedback if more input is given than maxLength", async () => {
     const testValue = generateRandomString(FEEDBACK_MAX_LENGTH + 1);
     const user = userEvent.setup();
-    const { container } = render(<NPSFeedback origin="WIZARD" />);
+    const { container } = render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     user.click(await screen.findByLabelText(/Great/i));
 
@@ -259,7 +316,11 @@ describe("basic rendering", () => {
   test("will disable the submit button upon error", async () => {
     const testValue = generateRandomString(FEEDBACK_MAX_LENGTH + 1);
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     user.click(await screen.findByLabelText(/Great/i));
 
@@ -293,14 +354,22 @@ describe("Wizard Origin Rendering", () => {
   });
 
   test("renders correctly", () => {
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     expect(screen.getByTestId("feedback-component")).toBeVisible();
   });
 
   test("styles the submit button correctly", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="WIZARD" />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="WIZARD" />
+      </ThemeProvider>
+    );
 
     user.click(await screen.findByLabelText(/Great/i));
 
@@ -328,14 +397,22 @@ describe("Header Origin Rendering", () => {
   });
 
   test("renders correctly", () => {
-    render(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />
+      </ThemeProvider>
+    );
 
     expect(screen.getByTestId("feedback-component")).toBeVisible();
   });
 
   test("styles the submit button correctly", async () => {
     const user = userEvent.setup();
-    render(<NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />);
+    render(
+      <ThemeProvider>
+        <NPSFeedback origin="HEADER" feedbackTypes={feedbackTypes} />
+      </ThemeProvider>
+    );
 
     user.click(await screen.findByLabelText(/Great/i));
 

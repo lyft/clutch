@@ -160,9 +160,7 @@ const ClutchApp = ({
 
   return (
     <Router>
-      {/* TODO: use the ThemeProvider for proper theming in the future 
-        See https://github.com/lyft/clutch/commit/f6c6706b9ba29c4d4c3e5d0ac0c5d0f038203937 */}
-      <Theme variant="light">
+      <Theme>
         <div id="App">
           <ApplicationContext.Provider value={appContextValue}>
             <UserPreferencesProvider>

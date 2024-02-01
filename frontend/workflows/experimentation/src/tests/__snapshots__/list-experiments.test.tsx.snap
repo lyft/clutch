@@ -19,47 +19,44 @@ exports[`renders correctly 1`] = `
         class="MuiGrid-root css-vj1n65-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-container css-1iow1lh-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-container css-n7th3n-MuiGrid-root"
           data-border="bottom"
         >
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-1dz42b0-MuiButtonBase-root-MuiButton-root"
+            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-61rao6-MuiButtonBase-root-MuiButton-root"
             palette="[object Object]"
             tabindex="0"
             type="button"
           >
             button_1
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
         </div>
         <div
           class="makeStyles-root-1"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 makeStyles-paper-2 css-1ps6pg7-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 makeStyles-paper-2 css-7rsy2y-MuiPaper-root"
           >
             <div
               class="MuiTableContainer-root css-qv4bde-MuiTableContainer-root"
             >
               <table
-                class="MuiTable-root makeStyles-table-3 css-rqglhn-MuiTable-root"
+                class="MuiTable-root makeStyles-table-3 css-lcoyas-MuiTable-root"
               >
                 <thead
                   class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                 >
                   <tr
-                    class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
+                    class="MuiTableRow-root MuiTableRow-head css-1tdc4lx-MuiTableRow-root"
                   >
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-yn1iza-MuiTableCell-root"
                       scope="col"
                     >
                       column 1
                     </th>
                     <th
-                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                      class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-yn1iza-MuiTableCell-root"
                       scope="col"
                     >
                       column 2
@@ -69,7 +66,7 @@ exports[`renders correctly 1`] = `
               </table>
             </div>
             <div
-              class="MuiTablePagination-root css-jtlhu6-MuiTablePagination-root"
+              class="MuiTablePagination-root css-65m9ee-MuiTablePagination-root"
             >
               <div
                 class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar"
@@ -84,14 +81,14 @@ exports[`renders correctly 1`] = `
                   Rows per page:
                 </p>
                 <div
-                  class="MuiInputBase-root MuiInputBase-colorPrimary css-16c50h-MuiInputBase-root-MuiTablePagination-select"
+                  class="MuiInputBase-root MuiInputBase-colorPrimary css-mc49up-MuiInputBase-root-MuiTablePagination-select"
                   variant="standard"
                 >
                   <div
                     aria-expanded="false"
                     aria-haspopup="listbox"
                     aria-labelledby="mui-2 mui-1"
-                    class="MuiTablePagination-select MuiSelect-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
+                    class="MuiTablePagination-select MuiSelect-select MuiSelect-standard MuiInputBase-input css-jok20x-MuiSelect-select-MuiInputBase-input"
                     id="mui-1"
                     role="button"
                     tabindex="0"
@@ -106,7 +103,7 @@ exports[`renders correctly 1`] = `
                   />
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTablePagination-selectIcon MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTablePagination-selectIcon MuiSelect-icon MuiSelect-iconStandard css-3d1nhz-MuiSvgIcon-root-MuiSelect-icon"
                     data-testid="ArrowDropDownIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -126,7 +123,7 @@ exports[`renders correctly 1`] = `
                 >
                   <button
                     aria-label="Go to previous page"
-                    class="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-zylse7-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1slblf2-MuiButtonBase-root-MuiIconButton-root"
                     disabled=""
                     tabindex="-1"
                     title="Go to previous page"
@@ -134,7 +131,7 @@ exports[`renders correctly 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pwosc9-MuiSvgIcon-root"
                       data-testid="KeyboardArrowLeftIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
@@ -146,7 +143,7 @@ exports[`renders correctly 1`] = `
                   </button>
                   <button
                     aria-label="Go to next page"
-                    class="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-zylse7-MuiButtonBase-root-MuiIconButton-root"
+                    class="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1slblf2-MuiButtonBase-root-MuiIconButton-root"
                     disabled=""
                     tabindex="-1"
                     title="Go to next page"
@@ -154,7 +151,7 @@ exports[`renders correctly 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pwosc9-MuiSvgIcon-root"
                       data-testid="KeyboardArrowRightIcon"
                       focusable="false"
                       viewBox="0 0 24 24"

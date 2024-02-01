@@ -4,13 +4,16 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import { Tab, Tabs } from "../tab";
+import { ThemeProvider } from "../Theme";
 
 beforeEach(() => {
   render(
-    <Tabs value={1}>
-      <Tab label="meow" />
-      <Tab label="mix" />
-    </Tabs>
+    <ThemeProvider>
+      <Tabs value={1}>
+        <Tab label="meow" />
+        <Tab label="mix" />
+      </Tabs>
+    </ThemeProvider>
   );
 });
 

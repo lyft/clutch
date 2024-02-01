@@ -6,8 +6,10 @@ import WarningIcon from "@mui/icons-material/Warning";
 import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
+  Theme,
 } from "@mui/material";
 import {
+  alpha,
   Autocomplete,
   Grid,
   IconButton as MuiIconButton,
@@ -45,107 +47,109 @@ const StyledAutocomplete = styled(Autocomplete)({
   },
 });
 
-const TEXT_FIELD_COLOR_MAP = {
-  default: "rgba(13, 16, 48, 0.6)",
-  inputDefault: "rgba(13, 16, 48, 0.38)",
-  inputHover: "#2D3F50",
-  inputFocused: "#3548d4",
-  primary: "#3548D4",
-  secondary: "#D7DAF6",
-  info: "#3548D4",
-  success: "#1E942D",
-  warning: "#FCD34D",
-  error: "#DB3615",
-};
-
 const StyledTextField = styled(BaseTextField)<{
   $color?: MuiStandardTextFieldProps["color"];
-}>({}, props => ({
-  height: "unset",
-  ".MuiInputLabel-root": {
-    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
-    "&.Mui-focused": {
+}>({}, props => ({ theme }: { theme: Theme }) => {
+  const TEXT_FIELD_COLOR_MAP = {
+    default: alpha(theme.palette.secondary[900], 0.6),
+    inputDefault: alpha(theme.palette.secondary[900], 0.38),
+    inputHover: theme.palette.secondary[700],
+    inputFocused: theme.palette.primary[600],
+    primary: theme.palette.primary[600],
+    secondary: theme.palette.primary[300],
+    info: theme.palette.primary[600],
+    success: theme.palette.success[500],
+    warning: theme.palette.warning[300],
+    error: theme.palette.error[600],
+  };
+
+  return {
+    height: "unset",
+    ".MuiInputLabel-root": {
       color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
-    },
-    "&.Mui-error": {
-      color: `${TEXT_FIELD_COLOR_MAP.error}`,
-    },
-  },
-  ".MuiInputBase-root": {
-    "--input-border-width": "1px",
-    borderRadius: "4px",
-    fontSize: "16px",
-    backgroundColor: "#FFFFFF",
-
-    "&.Mui-error fieldset": {
-      borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
-      borderWidth: "var(--input-border-width)",
-    },
-
-    "&:not(.Mui-error)": {
-      "&:not(.Mui-focused):not(:hover) fieldset": {
-        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+      "&.Mui-focused": {
+        color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
       },
-      "&:hover fieldset": {
-        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
+      "&.Mui-error": {
+        color: `${TEXT_FIELD_COLOR_MAP.error}`,
       },
-      "&.Mui-focused fieldset": {
-        borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
+    },
+    ".MuiInputBase-root": {
+      "--input-border-width": "1px",
+      borderRadius: "4px",
+      fontSize: "16px",
+      backgroundColor: theme.palette.contrastColor,
+
+      "&.Mui-error fieldset": {
+        borderColor: `${TEXT_FIELD_COLOR_MAP.error}`,
         borderWidth: "var(--input-border-width)",
       },
-    },
 
-    "&.Mui-disabled fieldset": {
-      backgroundColor: "rgba(13, 16, 48, 0.12)",
-    },
-    "& .MuiInputBase-input": {
-      textOverflow: "ellipsis",
-    },
-    "> .MuiInputBase-input": {
-      "--input-padding": "14px 16px",
-      padding: "var(--input-padding)",
-      height: "20px",
+      "&:not(.Mui-error)": {
+        "&:not(.Mui-focused):not(:hover) fieldset": {
+          borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputDefault}`,
+        },
+        "&:hover fieldset": {
+          borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputHover}`,
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.inputFocused}`,
+          borderWidth: "var(--input-border-width)",
+        },
+      },
 
-      "&.MuiAutocomplete-input": {
+      "&.Mui-disabled fieldset": {
+        backgroundColor: alpha(theme.palette.secondary[900], 0.12),
+      },
+      "& .MuiInputBase-input": {
+        textOverflow: "ellipsis",
+      },
+      "> .MuiInputBase-input": {
+        "--input-padding": "14px 16px",
         padding: "var(--input-padding)",
+        height: "20px",
+
+        "&.MuiAutocomplete-input": {
+          padding: "var(--input-padding)",
+        },
+
+        "::placeholder": {
+          color: `${TEXT_FIELD_COLOR_MAP.inputDefault}`,
+          opacity: 1,
+        },
+      },
+    },
+
+    ".MuiInputBase-adornedEnd": {
+      paddingRight: "unset",
+    },
+
+    ".MuiFormHelperText-root": {
+      alignItems: "center",
+      display: "flex",
+      position: "relative",
+      fontSize: "12px",
+      marginTop: "7px",
+      lineHeight: "16px",
+      marginLeft: "0px",
+      color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
+      "&.Mui-error": {
+        color: `${TEXT_FIELD_COLOR_MAP.error}`,
       },
 
-      "::placeholder": {
-        color: `${TEXT_FIELD_COLOR_MAP.inputDefault}`,
-        opacity: 1,
+      "> svg": {
+        height: "16px",
+        width: "16px",
+        marginRight: "4px",
       },
     },
-  },
-
-  ".MuiInputBase-adornedEnd": {
-    paddingRight: "unset",
-  },
-
-  ".MuiFormHelperText-root": {
-    alignItems: "center",
-    display: "flex",
-    position: "relative",
-    fontSize: "12px",
-    marginTop: "7px",
-    lineHeight: "16px",
-    marginLeft: "0px",
-    color: `${TEXT_FIELD_COLOR_MAP[props.color] || TEXT_FIELD_COLOR_MAP.default}`,
-    "&.Mui-error": {
-      color: `${TEXT_FIELD_COLOR_MAP.error}`,
-    },
-
-    "> svg": {
-      height: "16px",
-      width: "16px",
-      marginRight: "4px",
-    },
-  },
-}));
+  };
+});
 
 // popper containing the search result options
-const Popper = styled(MuiPopper)({
+const Popper = styled(MuiPopper)(({ theme }: { theme: Theme }) => ({
   ".MuiPaper-root": {
-    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
 
     "> .MuiAutocomplete-listbox": {
       "> .MuiAutocomplete-option": {
@@ -153,16 +157,16 @@ const Popper = styled(MuiPopper)({
         padding: "0px",
 
         "&.Mui-focused": {
-          background: "#ebedfb",
+          background: theme.palette.primary[200],
         },
       },
     },
   },
   ".MuiAutocomplete-noOptions": {
     fontSize: "14px",
-    color: "#0d1030",
+    color: theme.palette.secondary[900],
   },
-});
+}));
 
 // search's result options container
 const ResultGrid = styled(Grid)({
@@ -171,24 +175,24 @@ const ResultGrid = styled(Grid)({
 });
 
 // search's result options
-const ResultLabel = styled(Typography)({
-  color: "#0d1030",
+const ResultLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.secondary[900],
   fontSize: "14px",
-});
+}));
 
-const IconButton = styled(MuiIconButton)({
+const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   borderRadius: "0",
-  backgroundColor: "#3548D4",
-  color: "#FFFFFF",
+  backgroundColor: theme.palette.primary[600],
+  color: theme.palette.contrastColor,
   borderBottomRightRadius: "3px",
   borderTopRightRadius: "3px",
   "&:hover": {
-    backgroundColor: "#2D3DB4",
+    backgroundColor: theme.palette.primary[500],
   },
   "&:active": {
-    backgroundColor: "#2938A5",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 interface AutocompleteResultProps {
   id?: string;

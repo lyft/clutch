@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/experimentation",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Clutch Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
-    "@clutch-sh/core": "^2.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
     "@emotion/styled": "^11.0.0",
     "@mui/material": "^5.8.5",
     "@mui/styles": "^5.8.4",

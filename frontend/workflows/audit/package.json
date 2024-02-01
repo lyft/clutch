@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/audit",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": " Clutch Audit Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@clutch-sh/api": "^2.0.0-beta",
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "file-saver": "^2.0.5",

@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 
 import * as appContext from "../../Contexts/app-context";
 import { client } from "../../Network";
+import { ThemeProvider } from "../../Theme";
 import AppLayout from "..";
 
 jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
@@ -20,7 +21,9 @@ jest.spyOn(client, "post").mockReturnValue(
 test("renders correctly", async () => {
   const { asFragment } = render(
     <BrowserRouter>
-      <AppLayout />
+      <ThemeProvider>
+        <AppLayout />
+      </ThemeProvider>
     </BrowserRouter>
   );
 

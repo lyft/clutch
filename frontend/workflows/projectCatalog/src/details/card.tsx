@@ -1,7 +1,7 @@
 import React from "react";
 import type { TypographyProps } from "@clutch-sh/core";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Theme } from "@mui/material";
 
 enum CardType {
   DYNAMIC = "Dynamic",
@@ -50,17 +50,17 @@ const StyledCard = styled(Card)({
   padding: "16px",
 });
 
-const StyledProgressContainer = styled("div")({
+const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   marginBottom: "8px",
   marginTop: "-12px",
   height: "4px",
   ".MuiLinearProgress-root": {
-    backgroundColor: "rgb(194, 200, 242)",
+    backgroundColor: theme.palette.primary[400],
   },
   ".MuiLinearProgress-bar": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 const StyledTitle = styled(Grid)({
   textTransform: "capitalize",

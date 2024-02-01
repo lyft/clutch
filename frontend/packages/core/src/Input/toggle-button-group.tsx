@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import type { ToggleButtonGroupProps as MuiToggleButtonGroupProps } from "@mui/lab";
-import { ToggleButtonGroup as MuiToggleButtonGroup } from "@mui/material";
+import { alpha, ToggleButtonGroup as MuiToggleButtonGroup } from "@mui/material";
 
 export { ToggleButton } from "@mui/material";
 
@@ -14,11 +14,11 @@ export interface ToggleButtonGroupProps
   multiple?: boolean;
 }
 
-const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size }) => ({
-  border: "1px solid rgba(13, 16, 48, 0.45)",
+const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size, theme }) => ({
+  border: `1px solid ${alpha(theme.palette.secondary[900], 0.45)}`,
   padding: "8px",
   gap: "8px",
-  background: "#FFFFFF",
+  background: theme.palette.contrastColor,
   ".MuiToggleButton-root": {
     flexDirection: "column",
     justifyContent: "center",
@@ -29,21 +29,21 @@ const StyledMuiToggleButtonGroup = styled(MuiToggleButtonGroup)(({ size }) => ({
     border: "none",
     width: "100%",
     "&.MuiToggleButton-root:hover:not(.Mui-selected)": {
-      background: "#0D10300D",
+      background: alpha(theme.palette.secondary[900], 0.05),
     },
     "&.MuiToggleButton-root:active:not(.Mui-selected)": {
-      background: "#0D10302E",
+      background: alpha(theme.palette.secondary[900], 0.18),
     },
     "&.Mui-selected, &.Mui-selected:hover": {
-      background: "#3548D4",
-      color: "#FFFFFF",
+      background: theme.palette.primary[600],
+      color: theme.palette.contrastColor,
     },
     "&.Mui-disabled": {
-      background: "rgba(13, 16, 48, 0.03)",
-      color: "rgba(13, 16, 48, 0.48)",
+      background: alpha(theme.palette.secondary[900], 0.03),
+      color: alpha(theme.palette.secondary[900], 0.48),
     },
-    background: "#FFFFFF",
-    color: "#0D1030",
+    background: theme.palette.contrastColor,
+    color: theme.palette.secondary[900],
     textTransform: "none",
   },
 }));

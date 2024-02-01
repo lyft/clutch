@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { RadioProps as MuiRadioProps } from "@mui/material";
-import { Radio as MuiRadio } from "@mui/material";
+import type { RadioProps as MuiRadioProps, Theme } from "@mui/material";
+import { alpha, Radio as MuiRadio } from "@mui/material";
 
 import styled from "../styled";
 
@@ -13,43 +13,47 @@ const StyledRadio = styled(MuiRadio)<{ checked: RadioProps["selected"] }>(
       boxSizing: "border-box",
     },
   },
-  props => ({
+  props => ({ theme }: { theme: Theme }) => ({
     "&:hover > .MuiIconButton-label > div": {
-      border: props.checked ? "1px solid #283CD2" : "1px solid #2E45DC",
+      border: props.checked
+        ? `1px solid ${theme.palette.primary[700]}`
+        : `1px solid ${theme.palette.primary[600]}`,
     },
   })
 );
 
 const Icon = styled("div")<{ $disabled?: MuiRadioProps["disabled"] }>(
-  {
+  ({ theme }: { theme: Theme }) => ({
     height: "24px",
     width: "24px",
-    border: "1px solid rgba(13, 16, 48, 0.38)",
+    border: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
     borderRadius: "100px",
     boxSizing: "border-box",
-  },
-  props => ({
-    border: props.$disabled ? "1px solid #DFE2E4" : "1px solid rgba(13, 16, 48, 0.38)",
+  }),
+  props => ({ theme }: { theme: Theme }) => ({
+    border: props.$disabled
+      ? `1px solid ${theme.palette.secondary[200]}`
+      : `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
   })
 );
 
-const SelectedIcon = styled("div")({
+const SelectedIcon = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "24px",
   width: "24px",
-  background: "#2E45DC",
-  border: "1px solid #283CD2",
+  background: theme.palette.primary[600],
+  border: `1px solid ${theme.palette.primary[700]}`,
   borderRadius: "100px",
   boxSizing: "border-box",
-});
+}));
 
-const SelectedCenter = styled("div")({
+const SelectedCenter = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "12px",
   width: "12px",
-  background: "#FFFFFF",
+  background: theme.palette.contrastColor,
   borderRadius: "100px",
   boxSizing: "border-box",
   margin: "5px 5px",
-});
+}));
 
 export interface RadioProps
   extends Pick<MuiRadioProps, "disabled" | "name" | "onChange" | "required" | "value"> {

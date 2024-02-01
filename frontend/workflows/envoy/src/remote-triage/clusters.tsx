@@ -1,17 +1,18 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { AccordionRow, StatusIcon, styled, Table, TableRow } from "@clutch-sh/core";
+import { AccordionRow, StatusIcon, styled, Table, TableRow, useTheme } from "@clutch-sh/core";
+import type { Theme } from "@mui/material";
 import _ from "lodash";
 
 const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
   {
     height: "12px",
   },
-  props => ({
+  props => ({ theme }: { theme: Theme }) => ({
     width: props.$width,
     fill: props.$fill,
     strokeWidth: props.$fill === "transparent" ? "1px" : "0",
-    stroke: "#C2C8F2",
+    stroke: theme.palette.primary[400],
   })
 );
 
@@ -27,11 +28,16 @@ interface RatioStatusProps {
 }
 
 const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed }) => {
+  const theme = useTheme();
   const total = succeeded + failed;
   return (
     <>
-      {succeeded !== 0 && <Bar fill="#69F0AE" width={`${(succeeded / total) * 100}px`} />}
-      {failed !== 0 && <Bar fill="#FF8A80" width={`${(failed / total) * 100}px`} />}
+      {succeeded !== 0 && (
+        <Bar fill={theme.palette.success[300]} width={`${(succeeded / total) * 100}px`} />
+      )}
+      {failed !== 0 && (
+        <Bar fill={theme.palette.error[300]} width={`${(failed / total) * 100}px`} />
+      )}
     </>
   );
 };

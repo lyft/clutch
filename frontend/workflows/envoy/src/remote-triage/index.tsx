@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
   TextField,
+  useTheme,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -68,6 +69,7 @@ const download = (data, host) => {
 };
 
 const TriageDetails: React.FC<WizardChild> = () => {
+  const theme = useTheme();
   const remoteData = useDataLayout("remoteData");
   const metadata = remoteData.value.nodeMetadata as IClutch.envoytriage.v1.NodeMetadata;
   const { clusters, configDump, listeners, runtime, stats, serverInfo } =
@@ -82,12 +84,12 @@ const TriageDetails: React.FC<WizardChild> = () => {
     {
       id: "Running",
       value: healthyClusterCount,
-      color: "#69F0AE",
+      color: theme.palette.success[300],
     },
     {
       id: "Failing",
       value: failingClusterCount,
-      color: "#FF8A80",
+      color: theme.palette.error[300],
     },
   ];
   const dashboardFeaturedSummary = { name: "Clusters", data };

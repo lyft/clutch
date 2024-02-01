@@ -8,9 +8,10 @@ import {
   Table,
   Typography,
   useSearchParams,
+  useTheme,
 } from "@clutch-sh/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { CircularProgress, Stack, Theme, useMediaQuery } from "@mui/material";
 
 import type { AuditLogProps } from "..";
 
@@ -33,10 +34,10 @@ const LoadingContainer = styled("div")({
   width: "40px",
 });
 
-const LoadingSpinner = styled(CircularProgress)`
-  color: #3548d4;
-  position: absolute;
-`;
+const LoadingSpinner = styled(CircularProgress)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.primary[600],
+  position: "absolute",
+}));
 
 const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloadPrefix }) => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
 
+import { ThemeProvider } from "../../Theme";
 import TimePicker from "../time-picker";
 
 afterEach(() => {
@@ -11,7 +12,11 @@ afterEach(() => {
 
 const onChange = jest.fn();
 test("has padding", () => {
-  const { container } = render(<TimePicker value={new Date()} onChange={onChange} />);
+  const { container } = render(
+    <ThemeProvider>
+      <TimePicker value={new Date()} onChange={onChange} />
+    </ThemeProvider>
+  );
 
   expect(container.querySelectorAll(".MuiInputBase-adornedEnd")).toHaveLength(1);
   expect(container.querySelector(".MuiInputBase-adornedEnd")).toHaveStyle({
@@ -20,7 +25,11 @@ test("has padding", () => {
 });
 
 test("onChange is called when valid value", () => {
-  render(<TimePicker value={new Date()} onChange={onChange} />);
+  render(
+    <ThemeProvider>
+      <TimePicker value={new Date()} onChange={onChange} />
+    </ThemeProvider>
+  );
 
   expect(screen.getByPlaceholderText("hh:mm (a|p)m")).toBeVisible();
   fireEvent.change(screen.getByPlaceholderText("hh:mm (a|p)m"), {
@@ -30,7 +39,11 @@ test("onChange is called when valid value", () => {
 });
 
 test("onChange is not called when invalid value", () => {
-  render(<TimePicker value={new Date()} onChange={onChange} />);
+  render(
+    <ThemeProvider>
+      <TimePicker value={new Date()} onChange={onChange} />
+    </ThemeProvider>
+  );
 
   expect(screen.getByPlaceholderText("hh:mm (a|p)m")).toBeVisible();
   fireEvent.change(screen.getByPlaceholderText("hh:mm (a|p)m"), {
@@ -46,20 +59,32 @@ test("sets passed value correctly", () => {
     minute: "2-digit",
   }).format(date);
   const formattedDate = `${formattedTime}`;
-  render(<TimePicker value={date} onChange={onChange} />);
+  render(
+    <ThemeProvider>
+      <TimePicker value={date} onChange={onChange} />
+    </ThemeProvider>
+  );
 
   expect(screen.getByPlaceholderText("hh:mm (a|p)m")).toHaveValue(formattedDate);
 });
 
 test("displays label correctly", () => {
   const label = "testing";
-  render(<TimePicker value={new Date()} onChange={onChange} label={label} />);
+  render(
+    <ThemeProvider>
+      <TimePicker value={new Date()} onChange={onChange} label={label} />
+    </ThemeProvider>
+  );
 
   expect(screen.getByLabelText(label)).toBeVisible();
 });
 
 test("is disabled", () => {
-  render(<TimePicker value={new Date()} onChange={onChange} disabled />);
+  render(
+    <ThemeProvider>
+      <TimePicker value={new Date()} onChange={onChange} disabled />
+    </ThemeProvider>
+  );
 
   expect(screen.getByPlaceholderText("hh:mm (a|p)m")).toBeDisabled();
 });

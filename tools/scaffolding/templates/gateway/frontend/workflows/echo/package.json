@@ -17,9 +17,9 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@mui/material": "^5.8.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

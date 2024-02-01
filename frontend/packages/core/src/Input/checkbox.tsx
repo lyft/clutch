@@ -1,7 +1,8 @@
 import * as React from "react";
 import CheckIcon from "@mui/icons-material/Check";
-import type { CheckboxProps as MuiCheckboxProps } from "@mui/material";
+import type { CheckboxProps as MuiCheckboxProps, Theme } from "@mui/material";
 import {
+  alpha,
   Checkbox as MuiCheckbox,
   FormControl as MuiFormControl,
   FormControlLabel,
@@ -16,31 +17,31 @@ const FormControl = styled(MuiFormControl)({
   width: "75%",
 });
 
-const StyledCheckbox = styled(MuiCheckbox)({
-  color: "#6e7083",
+const StyledCheckbox = styled(MuiCheckbox)(({ theme }: { theme: Theme }) => ({
+  color: theme.palette.secondary[400],
   borderRadius: "50%",
   "&:hover": {
-    background: "#f5f6fd",
+    background: theme.palette.primary[100],
   },
   "&:active": {
-    background: "#d7daf6",
+    background: theme.palette.primary[300],
   },
   "&.Mui-checked": {
-    color: "#ffffff",
+    color: theme.palette.contrastColor,
     "&:hover": {
-      background: "#f5f6fd",
+      background: theme.palette.primary[100],
     },
     "&:active": {
-      background: "#d7daf6",
+      background: theme.palette.primary[300],
     },
     "&.Mui-disabled": {
-      color: "#e7e7ea",
+      color: theme.palette.secondary[200],
       ".MuiIconButton-label": {
-        color: "rgba(13, 16, 48, 0.38)",
+        color: alpha(theme.palette.secondary[900], 0.38),
       },
     },
   },
-});
+}));
 
 type Size = "20px" | "24px";
 
@@ -54,10 +55,12 @@ const Icon = styled("div")<StyledIconProps>(
     borderRadius: "2px",
     boxSizing: "border-box",
   },
-  props => ({
+  props => ({ theme }: { theme: Theme }) => ({
     height: props.$size,
     width: props.$size,
-    border: props.$disabled ? "1px solid #e7e7ea" : "1px solid #6e7083",
+    border: props.$disabled
+      ? `1px solid ${theme.palette.secondary[200]}`
+      : `1px solid ${theme.palette.secondary[400]}`,
   })
 );
 
@@ -69,10 +72,10 @@ const SelectedIcon = styled("div")<StyledIconProps>(
       display: "block",
     },
   },
-  props => ({
+  props => ({ theme }: { theme: Theme }) => ({
     height: props.$size,
     width: props.$size,
-    background: props.$disabled ? "#e7e7eA" : "#3548d4",
+    background: props.$disabled ? theme.palette.secondary[200] : theme.palette.primary[600],
     ".MuiSvgIcon-root": {
       height: props.$size,
       width: props.$size,

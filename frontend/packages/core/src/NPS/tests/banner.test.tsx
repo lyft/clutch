@@ -4,10 +4,11 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import { ApplicationContext } from "../../Contexts";
-import { HeaderItems } from "../../Contexts/app-context";
-import { Banner, BannerFeedbackProps } from "../banner";
+import { HeaderItem } from "../../Contexts/app-context";
+import { ThemeProvider } from "../../Theme";
+import { Banner, FeedbackBannerProps } from "../banner";
 
-const customRender = ({ ...props }: BannerFeedbackProps) => {
+const customRender = ({ ...props }: FeedbackBannerProps) => {
   let triggeredHeaderData = { NPS: {} };
 
   return render(
@@ -15,7 +16,7 @@ const customRender = ({ ...props }: BannerFeedbackProps) => {
       // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         workflows: [],
-        triggerHeaderItem: (item: HeaderItems, data: unknown) => {
+        triggerHeaderItem: (item: HeaderItem, data: unknown) => {
           triggeredHeaderData = {
             ...triggeredHeaderData,
             [item]: {
@@ -26,7 +27,9 @@ const customRender = ({ ...props }: BannerFeedbackProps) => {
         triggeredHeaderData,
       }}
     >
-      <Banner {...props} />
+      <ThemeProvider>
+        <Banner {...props} />
+      </ThemeProvider>
     </ApplicationContext.Provider>
   );
 };

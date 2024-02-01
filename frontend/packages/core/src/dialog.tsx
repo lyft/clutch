@@ -1,8 +1,8 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import CloseIcon from "@mui/icons-material/Close";
-import type { DialogProps as MuiDialogProps } from "@mui/material";
+import type { DialogProps as MuiDialogProps, Theme } from "@mui/material";
 import {
+  alpha,
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
@@ -11,52 +11,54 @@ import {
   Paper,
 } from "@mui/material";
 
-const DialogPaper = styled(Paper)({
-  border: "1px solid rgba(13, 16, 48, 0.1)",
-  boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+import styled from "./styled";
+
+const DialogPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
+  border: `1px solid ${alpha(theme.palette.secondary[900], 0.1)}`,
+  boxShadow: `0px 10px 24px ${alpha(theme.palette.primary[700], 0.3)}`,
   boxSizing: "border-box",
-  backgroundColor: "#FFFFFF",
+  backgroundColor: theme.palette.contrastColor,
   width: "max-content",
   maxWidth: "75vw",
-});
+}));
 
-const DialogTitle = styled(MuiDialogTitle)({
+const DialogTitle = styled(MuiDialogTitle)(({ theme }: { theme: Theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   fontSize: "20px",
   padding: "12px 12px 0 32px",
   fontWeight: 500,
-  color: "#0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
-const DialogTitleText = styled.div({
+const DialogTitleText = styled("div")({
   padding: "14px 0 0 0",
 });
 
-const IconButton = styled(MuiIconButton)({
+const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   height: "12px",
   width: "12px",
-  color: "#0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
-const DialogContent = styled(MuiDialogContent)({
+const DialogContent = styled(MuiDialogContent)(({ theme }: { theme: Theme }) => ({
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,
-  color: "rgba(13, 16, 48, 0.6)",
+  color: alpha(theme.palette.secondary[900], 0.6),
   "> *": {
     margin: "16px 0 0 0",
   },
   overflowWrap: "break-word",
-});
+}));
 
-const DialogActions = styled(MuiDialogActions)({
-  borderTop: "1px solid rgba(13, 16, 48, 0.12)",
+const DialogActions = styled(MuiDialogActions)(({ theme }: { theme: Theme }) => ({
+  borderTop: `1px solid ${alpha(theme.palette.secondary[900], 0.12)}`,
   padding: "0 8px",
   "> *": {
     margin: "16px 8px 16px 8px",
   },
-});
+}));
 
 export interface DialogContentProps {}
 export interface DialogActionsProps {}

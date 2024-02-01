@@ -19,9 +19,9 @@
   },
   "dependencies": {
     {{- if .IsWizardTemplate}}
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     {{- else}}
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     {{- end}}
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

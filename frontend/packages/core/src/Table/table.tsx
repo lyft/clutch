@@ -4,6 +4,7 @@ import type {
   TableCellProps as MuiTableCellProps,
   TableProps as MuiTableProps,
   TableRowProps as MuiTableRowProps,
+  Theme,
 } from "@mui/material";
 import {
   IconButton,
@@ -22,9 +23,9 @@ import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-const StyledPaper = styled(MuiPaper)({
-  border: "1px solid #E7E7EA",
-});
+const StyledPaper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
+  border: `1px solid ${theme.palette.secondary[200]}`,
+}));
 
 const StyledTable = styled(MuiTable)<{
   $hasActionsColumn?: TableProps["actionsColumn"];
@@ -53,22 +54,22 @@ const StyledTableBody = styled(MuiTableBody)({
   display: "contents",
 });
 
-const StyledTableHeadRow = styled(MuiTableRow)({
+const StyledTableHeadRow = styled(MuiTableRow)(({ theme }: { theme: Theme }) => ({
   display: "contents",
-  backgroundColor: "#D7DAF6",
-});
+  backgroundColor: theme.palette.primary[300],
+}));
 
 const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
-  {
+  ({ theme }: { theme: Theme }) => ({
     ":nth-of-type(even)": {
-      background: "#F8F8F9",
+      background: theme.palette.secondary[50],
     },
     ":hover": {
-      background: "#EBEDFB",
+      background: theme.palette.primary[200],
     },
-  },
+  }),
   props => ({
     display: props.$responsive ? "contents" : "",
   })
@@ -79,17 +80,17 @@ const StyledTableCell = styled(MuiTableCell)<{
   $responsive?: TableCellProps["responsive"];
   $action?: TableCellProps["action"];
 }>(
-  {
+  ({ theme }: { theme: Theme }) => ({
     alignItems: "center",
     fontSize: "14px",
     padding: "15px 16px",
-    color: "#0D1030",
+    color: theme.palette.secondary[900],
     overflow: "hidden",
     background: "inherit",
     minHeight: "100%",
-  },
-  props => ({
-    borderBottom: props?.$border ? "1px solid #E7E7EA" : "0",
+  }),
+  props => ({ theme }: { theme: Theme }) => ({
+    borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
     display: props.$responsive ? "flex" : "",
     width: !props.$responsive && props.$action ? "80px" : "",
   })

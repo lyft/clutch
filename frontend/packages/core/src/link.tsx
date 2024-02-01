@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LinkProps as MuiLinkProps } from "@mui/material";
+import type { LinkProps as MuiLinkProps, Theme } from "@mui/material";
 import { Link as MuiLink } from "@mui/material";
 
 import styled from "./styled";
@@ -9,15 +9,15 @@ type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initia
 const StyledLink = styled(MuiLink)<{
   $textTransform: LinkProps["textTransform"];
 }>(
-  {
+  ({ theme }: { theme: Theme }) => ({
     display: "flex",
     width: "100%",
     maxWidth: "fit-content",
     fontSize: "14px",
-    color: "#3548D4",
+    color: theme.palette.primary[600],
     overflow: "hidden",
     textOverflow: "ellipsis",
-  },
+  }),
   props => ({
     textTransform: props.$textTransform,
   })

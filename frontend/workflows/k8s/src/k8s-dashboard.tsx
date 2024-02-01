@@ -1,12 +1,12 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, ClutchError, Error, Paper, Tab, Tabs } from "@clutch-sh/core";
+import { client, ClutchError, Error, Paper, styled, Tab, Tabs } from "@clutch-sh/core";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import styled from "@emotion/styled";
 import AppsIcon from "@mui/icons-material/Apps";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
+import { alpha, Theme } from "@mui/material";
 
 import type { WorkflowProps } from ".";
 import CronTable from "./crons-table";
@@ -16,7 +16,7 @@ import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
 import StatefulSetTable from "./stateful-sets-table";
 
-const Container = styled.div({
+const Container = styled("div")({
   flex: 1,
   margin: "32px",
   display: "flex",
@@ -26,24 +26,24 @@ const Container = styled.div({
   },
 });
 
-const Content = styled.div({
+const Content = styled("div")({
   margin: "32px 0",
 });
 
-const PlaceholderTitle = styled.div({
+const PlaceholderTitle = styled("div")(({ theme }: { theme: Theme }) => ({
   paddingBottom: "16px",
   fontWeight: 700,
   fontSize: "22px",
   lineHeight: "28px",
-  color: "0D1030",
-});
+  color: theme.palette.secondary[900],
+}));
 
-const PlaceholderText = styled.div({
+const PlaceholderText = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 400,
   fontSize: "16px",
   lineHeight: "22px",
-  color: "rgba(13, 16, 48, 0.6)",
-});
+  color: alpha(theme.palette.secondary[900], 0.6),
+}));
 
 const Placeholder = () => (
   <Paper>

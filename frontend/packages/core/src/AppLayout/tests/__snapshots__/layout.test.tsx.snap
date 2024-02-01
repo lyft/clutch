@@ -7,7 +7,7 @@ exports[`renders correctly 1`] = `
     data-testid="app-layout-component"
   >
     <header
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-1cs5fsk-MuiPaper-root-MuiAppBar-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-rxou4a-MuiPaper-root-MuiAppBar-root"
     >
       <div
         class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
@@ -70,7 +70,7 @@ exports[`renders correctly 1`] = `
           </svg>
         </a>
         <p
-          class="MuiTypography-root MuiTypography-body1 css-q411e7-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 css-15ggzfv-MuiTypography-root"
         >
           clutch
         </p>
@@ -82,18 +82,15 @@ exports[`renders correctly 1`] = `
           />
           <button
             aria-haspopup="true"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ntencb-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-e7bpln-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
           >
             <div
-              class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-15egigo-MuiAvatar-root"
+              class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1tmmvfw-MuiAvatar-root"
             >
               AN
             </div>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
         </div>
       </div>

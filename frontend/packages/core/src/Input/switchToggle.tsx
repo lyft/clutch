@@ -6,66 +6,69 @@
 
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { SwitchProps as MuiSwitchProps } from "@mui/material";
-import { Switch as MuiSwitch } from "@mui/material";
+import type { SwitchProps as MuiSwitchProps, Theme } from "@mui/material";
+import { alpha, Switch as MuiSwitch } from "@mui/material";
 
-const SwitchContainer = styled(MuiSwitch)({
+const SwitchContainer = styled(MuiSwitch)(({ theme }: { theme: Theme }) => ({
   ".MuiSwitch-switchBase": {
     ":hover": {
-      backgroundColor: "rgba(13, 16, 48, 0.1)",
+      backgroundColor: alpha(theme.palette.secondary[900], 0.1),
     },
     ":focus": {
-      backgroundColor: "rgba(13, 16, 48, 0.12)",
+      backgroundColor: alpha(theme.palette.secondary[900], 0.12),
     },
     ":active": {
-      backgroundColor: "rgba(13, 16, 48, 0.15)",
+      backgroundColor: alpha(theme.palette.secondary[900], 0.15),
     },
     ".MuiSwitch-thumb": {
-      boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)",
-      color: "#FFFFFF",
+      boxShadow: `0px 1px 1px ${alpha(
+        theme.palette.getContrastText(theme.palette.contrastColor),
+        0.25
+      )}`,
+      color: theme.palette.contrastColor,
     },
   },
   ".MuiSwitch-track": {
-    backgroundColor: "#6E7083",
+    backgroundColor: theme.palette.secondary[500],
     opacity: 1,
   },
   ".Mui-disabled": {
     ".MuiSwitch-thumb": {
-      color: "rgba(248, 248, 249, 1)",
+      color: theme.palette.secondary[50],
     },
   },
   ".Mui-disabled + .MuiSwitch-track": {
-    backgroundColor: "#E7E7EA",
+    backgroundColor: theme.palette.secondary[200],
     opacity: 1,
   },
   ".Mui-checked": {
     ":hover": {
-      backgroundColor: "rgba(53, 72, 212, 0.05)",
+      backgroundColor: alpha(theme.palette.primary[600], 0.05),
     },
     ":focus": {
-      backgroundColor: "rgba(53, 72, 212, 0.1)",
+      backgroundColor: alpha(theme.palette.primary[600], 0.1),
     },
     ":active": {
-      backgroundColor: "rgba(53, 72, 212, 0.2)",
+      backgroundColor: alpha(theme.palette.primary[600], 0.2),
     },
     ".MuiSwitch-thumb": {
-      color: "#3548D4",
+      color: theme.palette.primary[600],
     },
   },
   ".Mui-checked + .MuiSwitch-track": {
-    backgroundColor: "#C2C8F2",
+    backgroundColor: theme.palette.primary[300],
     opacity: 1,
   },
   ".Mui-checked.Mui-disabled": {
     ".MuiSwitch-thumb": {
-      color: "#E7E7EA",
+      color: theme.palette.secondary[200],
     },
   },
   ".Mui-checked.Mui-disabled + .MuiSwitch-track": {
-    backgroundColor: "#A3A4B0",
+    backgroundColor: theme.palette.secondary[400],
     opacity: 1,
   },
-});
+}));
 
 export interface SwitchProps extends Pick<MuiSwitchProps, "checked" | "disabled" | "onChange"> {}
 

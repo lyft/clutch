@@ -1,5 +1,12 @@
 import type { ClutchColors, ComponentState, ThemeVariant } from "./types";
 
+export enum THEME_VARIANTS {
+  light = "light",
+  dark = "dark",
+}
+
+export const brandColor = "#02acbe";
+
 export const LIGHT_COLORS: ClutchColors = {
   neutral: {
     50: "#F8F8F9",
@@ -12,10 +19,10 @@ export const LIGHT_COLORS: ClutchColors = {
     700: "#3D4059",
     800: "#252845",
     900: "#0D1030",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#0D1030",
+    A200: "#0D1030",
+    A400: "#0D1030",
+    A700: "#0D1030",
   },
   blue: {
     50: "#F9F9FE",
@@ -28,10 +35,10 @@ export const LIGHT_COLORS: ClutchColors = {
     700: "#1629B9",
     800: "#0A1CA6",
     900: "#011082",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#011082",
+    A200: "#011082",
+    A400: "#011082",
+    A700: "#011082",
   },
   green: {
     50: "#E5FCE8",
@@ -44,10 +51,10 @@ export const LIGHT_COLORS: ClutchColors = {
     700: "#106E1D",
     800: "#086515",
     900: "#02590E",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#02590E",
+    A200: "#02590E",
+    A400: "#02590E",
+    A700: "#02590E",
   },
   amber: {
     50: "#FFFBEB",
@@ -60,10 +67,10 @@ export const LIGHT_COLORS: ClutchColors = {
     700: "#B45309",
     800: "#92400E",
     900: "#78350F",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#78350F",
+    A200: "#78350F",
+    A400: "#78350F",
+    A700: "#78350F",
   },
   red: {
     50: "#FFF4F3",
@@ -76,10 +83,10 @@ export const LIGHT_COLORS: ClutchColors = {
     700: "#A1301C",
     800: "#792111",
     900: "#571608",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#571608",
+    A200: "#571608",
+    A400: "#571608",
+    A700: "#571608",
   },
 };
 
@@ -111,10 +118,10 @@ export const DARK_COLORS: ClutchColors = {
     700: "#8CC4F8",
     800: "#C2E1FE",
     900: "#DCECFB",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#DCECFB",
+    A200: "#DCECFB",
+    A400: "#DCECFB",
+    A700: "#DCECFB",
   },
   green: {
     50: "#002C05",
@@ -127,10 +134,10 @@ export const DARK_COLORS: ClutchColors = {
     700: "#9CD29E",
     800: "#C3E4C4",
     900: "#E6F4E7",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#E6F4E7",
+    A200: "#E6F4E7",
+    A400: "#E6F4E7",
+    A700: "#E6F4E7",
   },
   amber: {
     50: "#352215",
@@ -143,10 +150,10 @@ export const DARK_COLORS: ClutchColors = {
     700: "#EFC67F",
     800: "#F6DCB1",
     900: "#FBF1E0",
-    A100: "#FFFFFF",
-    A200: "#FFFFFF",
-    A400: "#FFFFFF",
-    A700: "#FFFFFF",
+    A100: "#FBF1E0",
+    A200: "#FBF1E0",
+    A400: "#FBF1E0",
+    A700: "#FBF1E0",
   },
   red: {
     50: "#501306",
@@ -175,11 +182,8 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
 };
 
 const clutchColors = (variant: ThemeVariant) => {
-  const colors = variant === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const colors = variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
   return {
-    typography: {},
-    stroke: {},
-    background: {},
     ...colors,
   };
 };

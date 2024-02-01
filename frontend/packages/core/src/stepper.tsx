@@ -3,24 +3,27 @@ import styled from "@emotion/styled";
 import MuiCheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import {
+  alpha,
   Step as MuiStep,
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
+  Theme,
+  useTheme,
 } from "@mui/material";
 
-const StepContainer = styled.div({
+const StepContainer = styled.div(({ theme }: { theme: Theme }) => ({
   margin: "0px 2px 30px 2px",
   ".MuiStepLabel-label": {
     fontWeight: 500,
     fontSize: "14px",
-    color: "rgba(13, 16, 48, 0.38)",
+    color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiStepLabel-label.Mui-active": {
-    color: "#0d1030",
+    color: theme.palette.secondary[900],
   },
   ".MuiStepLabel-label.Mui-completed": {
-    color: "rgba(13, 16, 48, 0.38)",
+    color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiStepper-root": {
     background: "transparent",
@@ -67,18 +70,18 @@ const StepContainer = styled.div({
   ".MuiStepConnector-line": {
     height: "5px",
     border: 0,
-    backgroundColor: "#E7E7EA",
+    backgroundColor: theme.palette.secondary[200],
     borderRadius: "4px",
   },
 
   ".Mui-active .MuiStepConnector-line": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
 
   ".Mui-completed .MuiStepConnector-line": {
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 const Circle = styled.div((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
@@ -115,30 +118,30 @@ export interface StepIconProps {
   variant: StepIconVariant;
 }
 
-const stepIconVariants = {
-  active: {
-    background: "#FFFFFF",
-    border: "1px solid #3548D4",
-    font: "#3548D4",
-  },
-  pending: {
-    background: "#E7E7EA",
-    border: "#E7E7EA",
-    font: "rgba(13, 16, 48, 0.38)",
-  },
-  success: {
-    background: "#3548D4",
-    border: "#3548D4",
-    font: "#FFFFFF",
-  },
-  failed: {
-    background: "#DB3615",
-    border: "#DB3615",
-    font: "#FFFFFF",
-  },
-};
-
 const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
+  const theme = useTheme();
+  const stepIconVariants = {
+    active: {
+      background: theme.palette.contrastColor,
+      border: `1px solid ${theme.palette.primary[600]}`,
+      font: theme.palette.primary[600],
+    },
+    pending: {
+      background: theme.palette.secondary[200],
+      border: theme.palette.secondary[200],
+      font: alpha(theme.palette.secondary[900], 0.38),
+    },
+    success: {
+      background: theme.palette.primary[600],
+      border: theme.palette.primary[600],
+      font: theme.palette.contrastColor,
+    },
+    failed: {
+      background: theme.palette.error[600],
+      border: theme.palette.error[600],
+      font: theme.palette.contrastColor,
+    },
+  };
   const color = stepIconVariants[variant || "pending"];
   let Icon = <>{index}</>;
   if (variant === "success") {

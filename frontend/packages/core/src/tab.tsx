@@ -1,52 +1,52 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { TabContext, TabList, TabPanel as MuiTabPanel } from "@mui/lab";
-import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@mui/material";
-import { Tab as MuiTab } from "@mui/material";
+import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps, Theme } from "@mui/material";
+import { alpha, Tab as MuiTab } from "@mui/material";
 
-const StyledTab = styled(MuiTab)({
+const StyledTab = styled(MuiTab)(({ theme }: { theme: Theme }) => ({
   minWidth: "111px",
   height: "46px",
   padding: "12px 32px",
-  color: "rgba(13, 16, 48, 0.6)",
-  borderBottom: "3px solid #E7E7EA",
+  color: alpha(theme.palette.secondary[900], 0.6),
+  borderBottom: `3px solid ${theme.palette.secondary[100]}`,
   fontSize: "14px",
   fontWeight: "bold",
   opacity: "1",
   textTransform: "none",
   "&.Mui-selected": {
     backgroundColor: "unset",
-    color: "#3548D4",
+    color: theme.palette.primary[600],
     border: "0",
   },
   "&:hover": {
-    color: "rgba(13, 16, 48, 0.6)",
-    backgroundColor: "#E7E7EA",
+    color: alpha(theme.palette.secondary[900], 0.6),
+    backgroundColor: theme.palette.secondary[100],
     outline: "none",
   },
   "&:focus": {
-    color: "#3548D4",
-    backgroundColor: "#EBEDFB",
+    color: theme.palette.primary[600],
+    backgroundColor: theme.palette.primary[200],
   },
   "&:focus-within": {
-    color: "#3548D4",
-    backgroundColor: "#EBEDFB",
+    color: theme.palette.primary[600],
+    backgroundColor: theme.palette.primary[200],
   },
   "&:active": {
-    color: "rgba(13, 16, 48, 0.6)",
-    backgroundColor: "#DBDBE0",
+    color: alpha(theme.palette.secondary[900], 0.6),
+    backgroundColor: theme.palette.secondary[300],
   },
   ".MuiTab-wrapper": {
     margin: "auto",
   },
-});
+}));
 
-const StyledTabs = styled(TabList)({
+const StyledTabs = styled(TabList)(({ theme }: { theme: Theme }) => ({
   ".MuiTabs-indicator": {
     height: "4px",
-    backgroundColor: "#3548D4",
+    backgroundColor: theme.palette.primary[600],
   },
-});
+}));
 
 export interface TabProps extends Pick<MuiTabProps, "label" | "value" | "onClick"> {
   children?: React.ReactNode;
