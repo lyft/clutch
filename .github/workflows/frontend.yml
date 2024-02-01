@@ -25,7 +25,7 @@ jobs:
         run: ./tools/install-yarn.sh
       - name: node_modules cache
         id: node-modules-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -35,7 +35,7 @@ jobs:
           steps.node-modules-cache.outputs.cache-hit == 'true' &&
           github.ref != 'refs/heads/main'
         id: build-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/dist
@@ -61,7 +61,7 @@ jobs:
         run: ./tools/install-yarn.sh
       - name: node_modules cache
         id: node-modules-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -91,7 +91,7 @@ jobs:
         run: ./tools/install-yarn.sh
       - name: cypress cache
         id: cypress-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/Cypress
@@ -99,13 +99,13 @@ jobs:
       - name: node_modules cache
         id: node-modules-cache
         if: steps.cypress-cache.outputs.cache-hit == 'true'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
@@ -113,7 +113,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-mod-
       - name: go build cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/go-build
@@ -149,7 +149,7 @@ jobs:
         run: ./tools/install-yarn.sh
       - name: node_modules cache
         id: node-modules-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -177,7 +177,7 @@ jobs:
         run: ./tools/install-yarn.sh
       - name: node_modules cache
         id: node-modules-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
