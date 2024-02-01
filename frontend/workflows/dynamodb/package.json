@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/dynamodb",
   "version": "3.0.0-beta",
-  "private": true,
   "description": "Manage Dynamodb resources",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",

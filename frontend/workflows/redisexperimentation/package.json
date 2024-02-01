@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/redis-experimentation",
   "version": "3.0.0-beta",
-  "private": true,
   "description": "Redis Fault Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "resilience@lyft.com",
