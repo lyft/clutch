@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/server-experimentation",
   "version": "3.0.0-beta",
-  "private": true,
   "description": "Clutch Server Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -13,6 +12,7 @@
     "compile:watch": "yarn compile:dev --watch=forever",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "publishBeta": "../../../tools/publish-frontend.sh server-experimentation",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
