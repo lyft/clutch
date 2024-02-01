@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/data-layout",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "description": "Data Layout manager for clutch",
   "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shdata-layout",
   "license": "Apache-2.0",
@@ -25,7 +25,7 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
     "lodash": "^4.17.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

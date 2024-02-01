@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/redis-experimentation",
-  "version": "2.0.0-beta",
+  "version": "3.0.0-beta",
   "private": true,
   "description": "Redis Fault Experimentation Workflows",
   "license": "Apache-2.0",
@@ -18,10 +18,10 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^2.0.0-beta",
-    "@clutch-sh/data-layout": "^2.0.0-beta",
-    "@clutch-sh/experimentation": "^2.0.0-beta",
-    "@clutch-sh/wizard": "^2.0.0-beta",
+    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/experimentation": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^3.0.0-beta",
     "@hookform/resolvers": "2.8.8",
     "@mui/material": "^5.8.5",
     "history": "^5.0.0",
