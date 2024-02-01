@@ -4,8 +4,11 @@ on:
     branches:
       - main
   pull_request:
+<<<<<<< Updated upstream
     branches:
       - main
+=======
+>>>>>>> Stashed changes
     paths:
       - "frontend/**"
       - .github/workflows/frontend.yml
