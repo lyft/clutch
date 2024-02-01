@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/app",
-  "version": "3.0.0-beta",
+  "version": "0.0.0",
   "private": true,
   "description": "Clutch Application Components",
   "license": "Apache-2.0",
