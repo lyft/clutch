@@ -1,7 +1,10 @@
 import * as React from "react";
-import styled from "@emotion/styled";
 import MuiCheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import type {
+  Orientation as StepperOrientation,
+  StepperProps as MuiStepperProps,
+} from "@mui/material";
 import {
   alpha,
   Step as MuiStep,
@@ -12,78 +15,91 @@ import {
   useTheme,
 } from "@mui/material";
 
-const StepContainer = styled.div(({ theme }: { theme: Theme }) => ({
-  margin: "0px 2px 30px 2px",
-  ".MuiStepLabel-label": {
-    fontWeight: 500,
-    fontSize: "14px",
-    color: alpha(theme.palette.secondary[900], 0.38),
-  },
-  ".MuiStepLabel-label.Mui-active": {
-    color: theme.palette.secondary[900],
-  },
-  ".MuiStepLabel-label.Mui-completed": {
-    color: alpha(theme.palette.secondary[900], 0.38),
-  },
-  ".MuiStepper-root": {
-    background: "transparent",
-    padding: "0",
-  },
-  ".MuiGrid-container": {
-    padding: "16px 0",
-  },
-  ".MuiStepLabel-labelContainer": {
-    width: "unset",
-  },
-  ".MuiStepConnector-alternativeLabel": {
-    top: "10px",
-    right: "calc(50% + 8px)",
-    left: "calc(-50% + 8px)",
-    zIndex: 10,
-  },
-  ".MuiStepLabel-iconContainer": {
-    zIndex: 20,
-  },
-  ".MuiStep-root": {
-    padding: "0",
-  },
-  ".MuiStep-root:first-of-type": {
-    ".MuiStepLabel-root": {
-      alignItems: "flex-start",
+import styled from "./styled";
+
+const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
+  {
+    ".MuiStepper-root": {
+      background: "transparent",
+      padding: "0",
     },
-  },
-  ".MuiStep-root:nth-of-type(2)": {
+    ".MuiGrid-container": {
+      padding: "16px 0",
+    },
+    ".MuiStepLabel-labelContainer": {
+      width: "unset",
+    },
     ".MuiStepConnector-alternativeLabel": {
-      left: "calc(-100%)",
+      top: "10px",
+      right: "calc(50% + 8px)",
+      left: "calc(-50% + 8px)",
+      zIndex: 10,
+    },
+    ".MuiStepLabel-iconContainer": {
+      zIndex: 20,
+    },
+    ".MuiStep-root": {
+      padding: "0",
+    },
+    ".MuiStep-root:nth-of-type(2)": {
+      ".MuiStepConnector-alternativeLabel": {
+        left: "calc(-100%)",
+      },
+    },
+    ".MuiStep-root:last-of-type": {
+      ".MuiStepConnector-alternativeLabel": {
+        right: "0px",
+      },
     },
   },
-  ".MuiStep-root:last-of-type": {
-    ".MuiStepLabel-root": {
-      alignItems: "flex-end",
+  props => ({ theme }: { theme: Theme }) => ({
+    ".MuiStepLabel-label": {
+      fontWeight: 500,
+      fontSize: "14px",
+      color: alpha(theme.palette.secondary[900], 0.38),
     },
-
-    ".MuiStepConnector-alternativeLabel": {
-      right: "0px",
+    ".MuiStepLabel-label.Mui-active": {
+      color: theme.palette.secondary[900],
     },
-  },
+    ".MuiStepLabel-label.Mui-completed": {
+      color: alpha(theme.palette.secondary[900], 0.38),
+    },
+    ".Mui-active .MuiStepConnector-line": {
+      backgroundColor: theme.palette.primary[600],
+    },
+    ".Mui-completed .MuiStepConnector-line": {
+      backgroundColor: theme.palette.primary[600],
+    },
+    ...(props.$orientation === "horizontal"
+      ? {
+          margin: "0px 2px 30px 2px",
+          ".MuiStep-root:first-of-type": {
+            ".MuiStepLabel-root": {
+              alignItems: "flex-start",
+            },
+          },
+          ".MuiStep-root:last-of-type": {
+            ".MuiStepLabel-root": {
+              alignItems: "flex-end",
+            },
+          },
+          ".MuiStepConnector-line": {
+            height: "5px",
+            border: 0,
+            backgroundColor: theme.palette.secondary[200],
+            borderRadius: "4px",
+          },
+        }
+      : {
+          margin: "0px 2px 8px 2px",
+          ".MuiStepConnector-line": {
+            borderColor: theme.palette.secondary[300],
+          },
+        }),
+  })
+);
 
-  ".MuiStepConnector-line": {
-    height: "5px",
-    border: 0,
-    backgroundColor: theme.palette.secondary[200],
-    borderRadius: "4px",
-  },
-
-  ".Mui-active .MuiStepConnector-line": {
-    backgroundColor: theme.palette.primary[600],
-  },
-
-  ".Mui-completed .MuiStepConnector-line": {
-    backgroundColor: theme.palette.primary[600],
-  },
-}));
-
-const Circle = styled.div((props: { background: string; border: string }) => ({
+const Circle = styled("div")((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
   border: props.border,
   boxSizing: "border-box",
@@ -93,7 +109,7 @@ const Circle = styled.div((props: { background: string; border: string }) => ({
   top: "24px",
 }));
 
-const DefaultIcon = styled.div((props: { font: string }) => ({
+const DefaultIcon = styled("div")((props: { font: string }) => ({
   height: "100%",
   width: "100%",
   color: props.font,
@@ -166,14 +182,19 @@ export interface StepProps {
 
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
-export interface StepperProps {
+export interface StepperProps extends Pick<MuiStepperProps, "orientation"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
 }
 
-const Stepper = ({ activeStep, children }: StepperProps) => (
-  <StepContainer>
-    <MuiStepper activeStep={activeStep} connector={<MuiStepConnector />} alternativeLabel>
+const Stepper = ({ activeStep, orientation = "horizontal", children }: StepperProps) => (
+  <StepContainer $orientation={orientation}>
+    <MuiStepper
+      activeStep={activeStep}
+      connector={<MuiStepConnector />}
+      alternativeLabel={orientation === "horizontal"}
+      orientation={orientation}
+    >
       {React.Children.map(children, (step: any, idx: number) => {
         const stepProps = {
           index: idx + 1,
