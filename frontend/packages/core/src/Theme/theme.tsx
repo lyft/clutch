@@ -9,26 +9,10 @@ import {
 
 import { clutchChartColors, clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
-import type { ClutchColors, ThemeVariant } from "./types";
+import type { ThemeVariant } from "./types";
 
 declare module "@emotion/react" {
   export interface Theme extends MuiTheme {}
-}
-
-declare module "@mui/material/styles" {
-  interface Theme {
-    colors: ClutchColors;
-    chartColors: string[];
-  }
-  interface ThemeOptions {
-    colors?: ClutchColors;
-    chartColors: string[];
-  }
-  interface Palette {
-    contrastColor: string;
-    headerGradient: string;
-    brandColor: string;
-  }
 }
 
 // Create a Material UI theme is propagated to all children.
