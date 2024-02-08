@@ -10,6 +10,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { useTheme } from "../AppProvider/themes";
+
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
 import type { CustomTooltipProps, LinearTimelineData, LinearTimelineStylingProps } from "./types";
 
@@ -46,6 +48,8 @@ const LinearTimeline = ({
   tooltipFormatterFunc = null,
   stylingProps = {},
 }: LinearTimelineProps) => {
+  const theme = useTheme();
+
   const combinedData = Object.keys(data).reduce((acc, lane) => {
     return [...acc, ...data[lane].points];
   }, []);
@@ -102,8 +106,8 @@ const LinearTimeline = ({
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
         <CartesianGrid
-          fill={stylingProps?.gridBackgroundColor ?? "black"}
-          stroke={stylingProps?.gridStroke ?? "white"}
+          fill={stylingProps?.gridBackgroundColor ?? theme.palette.common.black}
+          stroke={stylingProps?.gridStroke ?? theme.palette.common.white}
         />
         <XAxis
           dataKey={xAxisDataKey}
