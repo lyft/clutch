@@ -4,21 +4,6 @@ import type { Theme as MuiTheme } from "@mui/material/styles";
 
 import { ThemeProvider } from "../Theme";
 import { THEME_VARIANTS } from "../Theme/colors";
-import type { ClutchColors } from "../Theme/types";
-
-declare module "@mui/material/styles" {
-  interface Theme {
-    colors: ClutchColors;
-  }
-  interface ThemeOptions {
-    colors?: ClutchColors;
-  }
-  interface Palette {
-    contrastColor: string;
-    headerGradient: string;
-    brandColor: string;
-  }
-}
 
 const useTheme = () => useMuiTheme() as MuiTheme;
 

@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { ThemeContext } from "@emotion/react";
 import {
   Cell,
   Label,
@@ -89,23 +90,6 @@ export interface PieChartProps {
 interface PieChartState {
   activeIndex?: number;
 }
-
-const DEFAULT_COLORS = [
-  "#651FFF",
-  "#FF4081",
-  "#0091EA",
-  "#00695C",
-  "#9E9D24",
-  "#880E4F",
-  "#01579B",
-  "#F4511E",
-  "#009688",
-  "#C2185B",
-  "#1A237E",
-  "#7C4DFF",
-  "#88451D",
-  "#AA00FF",
-];
 
 const renderActiveShape = (props, options) => {
   const RADIAN = Math.PI / 180;
@@ -219,6 +203,8 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       tooltip,
     } = this.props;
 
+    const { chartColors } = this.context;
+
     const chartOptions = {
       activeTooltip: typeof activeTooltip === "boolean" ? activeTooltip : true,
       activeTooltipOptions: typeof activeTooltip !== "boolean" ? { ...activeTooltip } : {},
@@ -270,7 +256,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       >
         <Pie
           data={data}
-          fill={DEFAULT_COLORS[0]}
+          fill={chartColors[0]}
           dataKey="value"
           onMouseEnter={this.onPieEnter}
           {...chartOptions.dimensions}
@@ -280,7 +266,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
             <Cell
               // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
-              fill={entry.color ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length]}
+              fill={entry.color ?? chartColors[index % chartColors.length]}
             />
           ))}
           {centerLabel && <Label content={<CenterLabel options={centerLabel} />} />}
@@ -300,5 +286,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
     );
   }
 }
+
+PieChart.contextType = ThemeContext;
 
 export { PieChart };

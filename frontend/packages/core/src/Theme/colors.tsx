@@ -173,6 +173,23 @@ export const DARK_COLORS: ClutchColors = {
   },
 };
 
+export const clutchChartColors: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
 export const STATE_OPACITY: { [key in ComponentState]: number } = {
   hover: 0.5,
   focused: 0.1,

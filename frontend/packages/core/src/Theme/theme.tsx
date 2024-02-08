@@ -7,18 +7,35 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
 
-import { clutchColors, THEME_VARIANTS } from "./colors";
+import { clutchChartColors, clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
-import type { ThemeVariant } from "./types";
+import type { ClutchColors, ThemeVariant } from "./types";
 
 declare module "@emotion/react" {
   export interface Theme extends MuiTheme {}
+}
+
+declare module "@mui/material/styles" {
+  interface Theme {
+    colors: ClutchColors;
+    chartColors: string[];
+  }
+  interface ThemeOptions {
+    colors?: ClutchColors;
+    chartColors: string[];
+  }
+  interface Palette {
+    contrastColor: string;
+    headerGradient: string;
+    brandColor: string;
+  }
 }
 
 // Create a Material UI theme is propagated to all children.
 const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
     colors: clutchColors(variant),
+    chartColors: clutchChartColors,
     palette: palette(variant),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
