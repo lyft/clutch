@@ -24,10 +24,10 @@ const useTheme = () => useMuiTheme() as MuiTheme;
 
 const Theme: React.FC = ({ children }) => {
   // Uncomment to use dark mode
-  /* // Detect system color mode
+  // Detect system color mode
   const prefersDarkMode =
-    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; */
-  const prefersDarkMode = false;
+    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
   return (
     <ThemeProvider variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}>
       {children}
