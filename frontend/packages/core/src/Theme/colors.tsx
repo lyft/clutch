@@ -7,6 +7,40 @@ export enum THEME_VARIANTS {
 
 export const brandColor = "#02acbe";
 
+const LIGHT_CHART_COLORS: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
+const DARK_CHART_COLORS: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
 export const LIGHT_COLORS: ClutchColors = {
   neutral: {
     50: "#F8F8F9",
@@ -87,6 +121,9 @@ export const LIGHT_COLORS: ClutchColors = {
     A200: "#571608",
     A400: "#571608",
     A700: "#571608",
+  },
+  charts: {
+    common: LIGHT_CHART_COLORS,
   },
 };
 
@@ -171,41 +208,10 @@ export const DARK_COLORS: ClutchColors = {
     A400: "#FFFFFF",
     A700: "#FFFFFF",
   },
+  charts: {
+    common: DARK_CHART_COLORS,
+  },
 };
-
-const LIGHT_CHART_COLORS: string[] = [
-  "#651FFF",
-  "#FF4081",
-  "#0091EA",
-  "#00695C",
-  "#9E9D24",
-  "#880E4F",
-  "#01579B",
-  "#F4511E",
-  "#009688",
-  "#C2185B",
-  "#1A237E",
-  "#7C4DFF",
-  "#88451D",
-  "#AA00FF",
-];
-
-const DARK_CHART_COLORS: string[] = [
-  "#651FFF",
-  "#FF4081",
-  "#0091EA",
-  "#00695C",
-  "#9E9D24",
-  "#880E4F",
-  "#01579B",
-  "#F4511E",
-  "#009688",
-  "#C2185B",
-  "#1A237E",
-  "#7C4DFF",
-  "#88451D",
-  "#AA00FF",
-];
 
 export const STATE_OPACITY: { [key in ComponentState]: number } = {
   hover: 0.5,
@@ -215,18 +221,7 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
   disabled: 0.5,
 };
 
-const clutchChartColors = (variant: ThemeVariant) => {
-  return {
-    common: variant === THEME_VARIANTS.light ? LIGHT_CHART_COLORS : DARK_CHART_COLORS,
-  }
-}
-
-const clutchColors = (variant: ThemeVariant) => {
-  const colors = variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
-  return {
-    ...colors,
-    charts: clutchChartColors(variant),
-  };
-};
+const clutchColors = (variant: ThemeVariant) =>
+  variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
 
 export { clutchColors };

@@ -7,7 +7,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
 
-import { clutchChartColors, clutchColors, THEME_VARIANTS } from "./colors";
+import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
 
