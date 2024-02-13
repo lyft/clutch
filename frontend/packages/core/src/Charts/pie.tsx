@@ -214,7 +214,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       tooltip,
     } = this.props;
 
-    const { chartColors } = this.context;
+    const { colors } = this.context;
 
     const chartOptions = {
       activeTooltip: typeof activeTooltip === "boolean" ? activeTooltip : true,
@@ -267,7 +267,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       >
         <Pie
           data={data}
-          fill={chartColors[0]}
+          fill={colors.charts.common[0]}
           dataKey="value"
           onMouseEnter={this.onPieEnter}
           {...chartOptions.dimensions}
@@ -277,7 +277,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
             <Cell
               // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
-              fill={entry.color ?? chartColors[index % chartColors.length]}
+              fill={entry.color ?? colors.charts.common[index % colors.charts.common.length]}
             />
           ))}
           {centerLabel && <Label content={<CenterLabel options={centerLabel} />} />}

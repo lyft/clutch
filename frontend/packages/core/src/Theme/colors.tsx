@@ -173,7 +173,24 @@ export const DARK_COLORS: ClutchColors = {
   },
 };
 
-export const clutchChartColors: string[] = [
+const LIGHT_CHART_COLORS: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
+const DARK_CHART_COLORS: string[] = [
   "#651FFF",
   "#FF4081",
   "#0091EA",
@@ -198,10 +215,17 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
   disabled: 0.5,
 };
 
+const clutchChartColors = (variant: ThemeVariant) => {
+  return {
+    common: variant === THEME_VARIANTS.light ? LIGHT_CHART_COLORS : DARK_CHART_COLORS,
+  }
+}
+
 const clutchColors = (variant: ThemeVariant) => {
   const colors = variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
   return {
     ...colors,
+    charts: clutchChartColors(variant),
   };
 };
 

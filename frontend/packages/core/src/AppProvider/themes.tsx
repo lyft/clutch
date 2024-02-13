@@ -9,11 +9,9 @@ import type { ClutchColors } from "../Theme/types";
 declare module "@mui/material/styles" {
   interface Theme {
     colors: ClutchColors;
-    chartColors: string[];
   }
   interface ThemeOptions {
     colors?: ClutchColors;
-    chartColors: string[];
   }
   interface Palette {
     contrastColor: string;

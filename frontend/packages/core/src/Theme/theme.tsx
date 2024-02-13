@@ -19,7 +19,6 @@ declare module "@emotion/react" {
 const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
     colors: clutchColors(variant),
-    chartColors: clutchChartColors,
     palette: palette(variant),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
