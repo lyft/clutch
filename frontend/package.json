@@ -90,7 +90,7 @@
     "webpack-dev-server": "3.11.1"
   },
   "engines": {
-    "node": ">=16.0.0 <17",
+    "node": "<19",
     "yarn": "^1.22.11"
   }
 }
