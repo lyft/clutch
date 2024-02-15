@@ -1,6 +1,8 @@
 import React from "react";
+import { alpha } from "@mui/system";
 import type { Meta } from "@storybook/react";
 
+import { useTheme } from "../../AppProvider/themes";
 import styled from "../../styled";
 import { dateTimeFormatter, isoTimeFormatter } from "../helpers";
 import TimeseriesChart from "../timeseries";
@@ -17,6 +19,7 @@ const ChartContainer = styled("div")({
 });
 
 export const SingleDataLine = () => {
+  const theme = useTheme();
   const mockDataSingleLine = [
     {
       lineName: "line1",
@@ -53,7 +56,7 @@ export const SingleDataLine = () => {
   const mockLines = [
     {
       dataKey: "value",
-      color: "red",
+      color: theme.colors.red[500],
       animationDuration: 0,
     },
   ];
@@ -94,6 +97,7 @@ export const SingleDataLine = () => {
 };
 
 export const MultiLine = () => {
+  const theme = useTheme();
   const mockDataMultiLine = [
     {
       lineName: "line1",
@@ -130,12 +134,12 @@ export const MultiLine = () => {
   const mockMultipleLines = [
     {
       dataKey: "value",
-      color: "red",
+      color: theme.colors.red[500],
       animationDuration: 0,
     },
     {
       dataKey: "value2",
-      color: "blue",
+      color: theme.colors.blue[500],
     },
   ];
 
@@ -160,6 +164,7 @@ export const MultiLine = () => {
  * other options.
  */
 export const ReferenceLinesAndThingsDisabled = () => {
+  const theme = useTheme();
   const mockData = [
     {
       lineName: "line1",
@@ -181,7 +186,7 @@ export const ReferenceLinesAndThingsDisabled = () => {
   const mockLines = [
     {
       dataKey: "value",
-      color: "purple",
+      color: theme.colors.charts.common.data[0],
       animationDuration: 2000,
     },
   ];
@@ -191,13 +196,13 @@ export const ReferenceLinesAndThingsDisabled = () => {
       axis: "x",
       coordinate: 1546300850000,
       label: "ref line 1",
-      color: "green",
+      color: theme.colors.green[500],
     },
     {
       axis: "y",
       coordinate: 17,
       label: "ref line 2",
-      color: "red",
+      color: theme.colors.red[500],
     },
   ];
 
@@ -212,7 +217,7 @@ export const ReferenceLinesAndThingsDisabled = () => {
         drawDots={false}
         legend={false}
         grid={false}
-        tickFormatterFunc={null}
+        tickFormatterFunc={v => `${v}`}
         xDomainSpread={null}
       />
     </ChartContainer>
@@ -220,6 +225,7 @@ export const ReferenceLinesAndThingsDisabled = () => {
 };
 
 export const StyledChart = () => {
+  const theme = useTheme();
   const mockDataSingleLine = [
     {
       lineName: "line1",
@@ -256,7 +262,7 @@ export const StyledChart = () => {
   const mockLines = [
     {
       dataKey: "value",
-      color: "red",
+      color: theme.colors.red[500],
       animationDuration: 0,
     },
   ];
@@ -272,10 +278,10 @@ export const StyledChart = () => {
         yDomainSpread={0.3}
         regularIntervalTicks
         stylingProps={{
-          gridBackgroundColor: "pink",
-          gridStroke: "blue",
-          xAxisStroke: "green",
-          yAxisStroke: "orange",
+          gridBackgroundColor: alpha(theme.colors.red[600], 0.4),
+          gridStroke: theme.colors.blue[700],
+          xAxisStroke: theme.colors.green[500],
+          yAxisStroke: theme.colors.amber[500],
         }}
       />
     </ChartContainer>
