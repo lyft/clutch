@@ -2,15 +2,15 @@ name: frontend
 on:
   push:
     branches:
-      - main
+    - main
   pull_request:
     branches:
-      - main
+    - main
     paths:
-      - "frontend/**"
-      - .github/workflows/frontend.yml
-      - Makefile
-      - tools/frontend-e2e.sh
+    - 'frontend/**'
+    - .github/workflows/frontend.yml
+    - Makefile
+    - tools/frontend-e2e.sh
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
@@ -55,7 +55,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
@@ -85,7 +85,7 @@ jobs:
           go-version: 1.21.x
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
@@ -143,7 +143,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
@@ -170,9 +170,9 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: '18.x'
           check-latest: true
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: node_modules cache
@@ -189,3 +189,4 @@ jobs:
         run: yarn --cwd frontend publishBeta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
