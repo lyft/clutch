@@ -90,8 +90,11 @@ const LinearTimeline = ({
       return (
         <div
           style={{
-            backgroundColor: stylingProps?.tooltipBackgroundColor,
-            color: stylingProps?.tooltipTextColor,
+            backgroundColor:
+              stylingProps?.tooltipBackgroundColor ||
+              theme.colors.charts.linearTimeline.tooltipBackgroundColor,
+            color:
+              stylingProps?.tooltipTextColor || theme.colors.charts.linearTimeline.tooltipTextColor,
           }}
         >
           {localTimeFormatter(payload[0].value)}
@@ -106,8 +109,11 @@ const LinearTimeline = ({
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
         <CartesianGrid
-          fill={stylingProps?.gridBackgroundColor ?? theme.palette.common.black}
-          stroke={stylingProps?.gridStroke ?? theme.palette.common.white}
+          fill={
+            stylingProps?.gridBackgroundColor ??
+            theme.colors.charts.linearTimeline.gridBackgroundColor
+          }
+          stroke={stylingProps?.gridStroke ?? theme.colors.charts.linearTimeline.gridStroke}
         />
         <XAxis
           dataKey={xAxisDataKey}

@@ -21,6 +21,13 @@ export interface ChartColors {
   pie: {
     label: string;
   };
+  linearTimeline: {
+    xAxisStroke: string;
+    tooltipBackgroundColor: string;
+    tooltipTextColor: string;
+    gridBackgroundColor: string;
+    gridStroke: string;
+  };
 }
 
 export interface ClutchColors {

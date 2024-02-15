@@ -129,6 +129,13 @@ export const LIGHT_COLORS: ClutchColors = {
     pie: {
       label: "#0D1030",
     },
+    linearTimeline: {
+      xAxisStroke: "#000",
+      tooltipBackgroundColor: "#FFF",
+      tooltipTextColor: "#000",
+      gridBackgroundColor: "#000",
+      gridStroke: "#FFF",
+    },
   },
 };
 
@@ -219,6 +226,13 @@ export const DARK_COLORS: ClutchColors = {
     },
     pie: {
       label: "#0D1030",
+    },
+    linearTimeline: {
+      xAxisStroke: "#FFF",
+      tooltipBackgroundColor: "#FFF",
+      tooltipTextColor: "#000",
+      gridBackgroundColor: "#FFF",
+      gridStroke: "#000",
     },
   },
 };
