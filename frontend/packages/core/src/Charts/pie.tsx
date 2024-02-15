@@ -95,11 +95,11 @@ interface PieChartState {
 }
 
 const ChartLabelPrimary = styled("text")(({ theme }: { theme: Theme }) => ({
-  fill: theme.palette.secondary[700],
+  fill: theme.colors.charts.pie.label,
 }));
 
 const ChartLabelSecondary = styled("text")(({ theme }: { theme: Theme }) => ({
-  fill: theme.palette.secondary[500],
+  fill: theme.colors.charts.pie.label,
 }));
 
 const renderActiveShape = (props, options) => {
@@ -267,7 +267,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       >
         <Pie
           data={data}
-          fill={colors.charts.common[0]}
+          fill={colors.charts.common.data[0]}
           dataKey="value"
           onMouseEnter={this.onPieEnter}
           {...chartOptions.dimensions}
@@ -277,7 +277,9 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
             <Cell
               // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
-              fill={entry.color ?? colors.charts.common[index % colors.charts.common.length]}
+              fill={
+                entry.color ?? colors.charts.common.data[index % colors.charts.common.data.length]
+              }
             />
           ))}
           {centerLabel && <Label content={<CenterLabel options={centerLabel} />} />}

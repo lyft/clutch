@@ -123,7 +123,12 @@ export const LIGHT_COLORS: ClutchColors = {
     A700: "#571608",
   },
   charts: {
-    common: LIGHT_CHART_COLORS,
+    common: {
+      data: LIGHT_CHART_COLORS,
+    },
+    pie: {
+      label: "#0D1030",
+    },
   },
 };
 
@@ -209,7 +214,12 @@ export const DARK_COLORS: ClutchColors = {
     A700: "#FFFFFF",
   },
   charts: {
-    common: DARK_CHART_COLORS,
+    common: {
+      data: DARK_CHART_COLORS,
+    },
+    pie: {
+      label: "#0D1030",
+    },
   },
 };
 

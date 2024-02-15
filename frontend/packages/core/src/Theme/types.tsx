@@ -15,7 +15,12 @@ export interface StrokeColor {
 }
 
 export interface ChartColors {
-  common: string[];
+  common: {
+    data: string[];
+  };
+  pie: {
+    label: string;
+  };
 }
 
 export interface ClutchColors {
