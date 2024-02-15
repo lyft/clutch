@@ -127,7 +127,8 @@ export const LIGHT_COLORS: ClutchColors = {
       data: LIGHT_CHART_COLORS,
     },
     pie: {
-      label: "#0D1030",
+      labelPrimary: "#0D1030",
+      labelSecondary: "#868798",
     },
     linearTimeline: {
       xAxisStroke: "#000",
@@ -225,7 +226,8 @@ export const DARK_COLORS: ClutchColors = {
       data: DARK_CHART_COLORS,
     },
     pie: {
-      label: "#0D1030",
+      labelPrimary: "#0D1030",
+      labelSecondary: "#8D8E9E",
     },
     linearTimeline: {
       xAxisStroke: "#FFF",

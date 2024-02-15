@@ -19,7 +19,8 @@ export interface ChartColors {
     data: string[];
   };
   pie: {
-    label: string;
+    labelPrimary: string;
+    labelSecondary: string;
   };
   linearTimeline: {
     xAxisStroke: string;
