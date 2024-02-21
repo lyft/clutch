@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import type { PaperProps as MuiPaperProps, Theme } from "@mui/material";
 import { alpha, Paper as MuiPaper } from "@mui/material";
 
-export interface PaperProps extends Pick<MuiPaperProps, "children" | "className"> {}
+export interface PaperProps extends Pick<MuiPaperProps, "children"> {}
 
 const StyledPaper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 4px 6px ${alpha(theme.palette.primary[600], 0.2)}`,
