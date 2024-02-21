@@ -212,11 +212,7 @@ const Wizard = ({
   };
 
   return (
-    <Container
-      $width={orientation === "vertical" ? "full" : width}
-      maxWidth={false}
-      className={className}
-    >
+    <Container $width={width} maxWidth={false} className={className}>
       <MaxHeightGrid container alignItems="stretch" spacing={2}>
         {heading && (
           <Header item $orientation={orientation}>
