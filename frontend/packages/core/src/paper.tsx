@@ -14,8 +14,8 @@ const StyledPaper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   minHeight: "inherit",
 }));
 
-const Paper = ({ children, className }: PaperProps) => (
-  <StyledPaper className={className}>{children}</StyledPaper>
+const Paper = ({ children, ...props }: PaperProps) => (
+  <StyledPaper {...props}>{children}</StyledPaper>
 );
 
 export default Paper;
