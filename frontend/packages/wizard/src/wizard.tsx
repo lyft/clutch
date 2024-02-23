@@ -5,6 +5,7 @@ import {
   FeatureOn,
   Grid,
   NPSWizard,
+  Paper,
   SimpleFeatureFlag,
   Step,
   Stepper,
@@ -18,13 +19,18 @@ import {
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import type { StepperProps as MuiStepperProps } from "@mui/material";
-import { alpha, Container as MuiContainer, Paper as MuiPaper, Theme } from "@mui/material";
+import type {
+  ContainerProps as MuiContainerProps,
+  StepperProps as MuiStepperProps,
+} from "@mui/material";
+import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
 
-interface WizardProps extends Pick<ContainerProps, "width">, Pick<MuiStepperProps, "orientation"> {
+interface WizardProps
+  extends Pick<ContainerProps, "width" | "className">,
+    Pick<MuiStepperProps, "orientation"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
   heading?: string;
@@ -42,7 +48,7 @@ interface WizardStepData {
   [index: string]: any;
 }
 
-interface ContainerProps {
+interface ContainerProps extends Pick<MuiContainerProps, "className"> {
   width?: "default" | "full";
 }
 
@@ -58,7 +64,6 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
     padding: "32px",
-    maxWidth: "unset",
     height: "100%",
   },
   props => ({
@@ -88,7 +93,7 @@ const StyledStepContainer = styled(Grid)({
   marginTop: "-16px",
 });
 
-const Paper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
+const StyledPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
   padding: "32px",
 }));
@@ -99,6 +104,7 @@ const Wizard = ({
   dataLayout,
   orientation = "horizontal",
   children,
+  className,
 }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
@@ -206,7 +212,7 @@ const Wizard = ({
   };
 
   return (
-    <Container $width={orientation === "vertical" ? "full" : width}>
+    <Container $width={width} maxWidth={false} className={className}>
       <MaxHeightGrid container alignItems="stretch" spacing={2}>
         {heading && (
           <Header item $orientation={orientation}>
@@ -230,7 +236,7 @@ const Wizard = ({
             </Stepper>
           </StepperContainer>
           <StyledStepContainer item xs={12}>
-            <Paper elevation={0}>{steps[state.activeStep]}</Paper>
+            <StyledPaper elevation={0}>{steps[state.activeStep]}</StyledPaper>
           </StyledStepContainer>
         </MaxHeightGrid>
       </MaxHeightGrid>
