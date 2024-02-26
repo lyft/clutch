@@ -7,6 +7,40 @@ export enum THEME_VARIANTS {
 
 export const brandColor = "#02acbe";
 
+const LIGHT_CHART_COLORS: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
+const DARK_CHART_COLORS: string[] = [
+  "#651FFF",
+  "#FF4081",
+  "#0091EA",
+  "#00695C",
+  "#9E9D24",
+  "#880E4F",
+  "#01579B",
+  "#F4511E",
+  "#009688",
+  "#C2185B",
+  "#1A237E",
+  "#7C4DFF",
+  "#88451D",
+  "#AA00FF",
+];
+
 export const LIGHT_COLORS: ClutchColors = {
   neutral: {
     50: "#F8F8F9",
@@ -87,6 +121,22 @@ export const LIGHT_COLORS: ClutchColors = {
     A200: "#571608",
     A400: "#571608",
     A700: "#571608",
+  },
+  charts: {
+    common: {
+      data: LIGHT_CHART_COLORS,
+    },
+    pie: {
+      labelPrimary: "#0D1030",
+      labelSecondary: "#868798",
+    },
+    linearTimeline: {
+      xAxisStroke: "#000",
+      tooltipBackgroundColor: "#FFF",
+      tooltipTextColor: "#000",
+      gridBackgroundColor: "#000",
+      gridStroke: "#FFF",
+    },
   },
 };
 
@@ -171,6 +221,22 @@ export const DARK_COLORS: ClutchColors = {
     A400: "#FFFFFF",
     A700: "#FFFFFF",
   },
+  charts: {
+    common: {
+      data: DARK_CHART_COLORS,
+    },
+    pie: {
+      labelPrimary: "#0D1030",
+      labelSecondary: "#8D8E9E",
+    },
+    linearTimeline: {
+      xAxisStroke: "#FFF",
+      tooltipBackgroundColor: "#FFF",
+      tooltipTextColor: "#000",
+      gridBackgroundColor: "#FFF",
+      gridStroke: "#000",
+    },
+  },
 };
 
 export const STATE_OPACITY: { [key in ComponentState]: number } = {
@@ -181,11 +247,7 @@ export const STATE_OPACITY: { [key in ComponentState]: number } = {
   disabled: 0.5,
 };
 
-const clutchColors = (variant: ThemeVariant) => {
-  const colors = variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
-  return {
-    ...colors,
-  };
-};
+const clutchColors = (variant: ThemeVariant) =>
+  variant === THEME_VARIANTS.light ? LIGHT_COLORS : DARK_COLORS;
 
 export { clutchColors };
