@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Badge, BadgeProps } from "@mui/material";
 
 import { IconButton } from "./button";
 import { Card } from "./card";
@@ -128,6 +129,10 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 
 interface LinkGroup extends IClutch.core.project.v1.ILinkGroup {
   links?: QLink[];
+  badge?: {
+    color: BadgeProps["color"];
+    content: string;
+  };
 }
 
 export interface QuickLinksProps {
@@ -146,21 +151,34 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
       {(slicedLinkGroups || []).map(linkGroup => {
         if (linkGroup.links?.length === 1) {
           return (
-            <QuickLink
+            <Badge
               key={`quicklink-${linkGroup.name}`}
-              link={linkGroup.links[0]}
-              linkGroupName={linkGroup.name ?? ""}
-              linkGroupImage={linkGroup.imagePath ?? ""}
-            />
+              badgeContent={linkGroup.badge?.content ?? null}
+              color={linkGroup.badge?.color ?? "default"}
+              overlap="circular"
+            >
+              <QuickLink
+                link={linkGroup.links[0]}
+                linkGroupName={linkGroup.name ?? ""}
+                linkGroupImage={linkGroup.imagePath ?? ""}
+              />
+            </Badge>
           );
         }
         return (
-          <QuickLinkGroup
+          <Badge
             key={`quicklink-${linkGroup.name}`}
-            linkGroupName={linkGroup.name ?? ""}
-            linkGroupImage={linkGroup.imagePath ?? ""}
-            links={linkGroup?.links ?? []}
-          />
+            badgeContent={linkGroup.badge?.content ?? null}
+            color={linkGroup.badge?.color ?? "default"}
+            overlap="circular"
+          >
+            <QuickLinkGroup
+              key={`quicklink-${linkGroup.name}`}
+              linkGroupName={linkGroup.name ?? " "}
+              linkGroupImage={linkGroup.imagePath ?? ""}
+              links={linkGroup?.links ?? []}
+            />
+          </Badge>
         );
       })}
     </>
