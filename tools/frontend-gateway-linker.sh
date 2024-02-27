@@ -38,11 +38,7 @@ DEST_DIR="${EXTERNAL_ROOT}/frontend"
 
 # ensure consistent yarn/pnpm versioning
 cd "${REPO_ROOT}"
-
-if ! command -v yarn *> /dev/null; then
-  echo "Installing yarn..."
-  tools/install-yarn.sh
-fi
+tools/install-yarn.sh
 
 if ! command -v pnpm *> /dev/null; then
   echo "Installing pnpm..."
@@ -68,11 +64,7 @@ done
 
 # Ensure yarn/pnpm in destination directory
 cd "${EXTERNAL_ROOT}"
-
-if ! command -v yarn *> /dev/null; then
-  echo "Installing yarn..."
-  "${REPO_ROOT}"/tools/install-yarn.sh
-fi
+"${REPO_ROOT}"/tools/install-yarn.sh
 
 if ! command -v pnpm *> /dev/null; then
   echo "Installing pnpm..."
