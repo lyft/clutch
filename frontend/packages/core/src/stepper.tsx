@@ -64,12 +64,6 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
     ".MuiStepLabel-label.Mui-completed": {
       color: alpha(theme.palette.secondary[900], 0.38),
     },
-    ".Mui-active .MuiStepConnector-line": {
-      backgroundColor: theme.palette.primary[600],
-    },
-    ".Mui-completed .MuiStepConnector-line": {
-      backgroundColor: theme.palette.primary[600],
-    },
     ...(props.$orientation === "horizontal"
       ? {
           margin: "0px 2px 30px 2px",
@@ -89,11 +83,23 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
             backgroundColor: theme.palette.secondary[200],
             borderRadius: "4px",
           },
+          ".Mui-active .MuiStepConnector-line": {
+            backgroundColor: theme.palette.primary[600],
+          },
+          ".Mui-completed .MuiStepConnector-line": {
+            backgroundColor: theme.palette.primary[600],
+          },
         }
       : {
           margin: "0px 2px 8px 2px",
           ".MuiStepConnector-line": {
             borderColor: theme.palette.secondary[300],
+          },
+          ".Mui-active .MuiStepConnector-line": {
+            borderColor: theme.palette.primary[600],
+          },
+          ".Mui-completed .MuiStepConnector-line": {
+            borderColor: theme.palette.primary[600],
           },
         }),
   })
