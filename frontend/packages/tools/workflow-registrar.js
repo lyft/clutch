@@ -3,6 +3,7 @@ const fs = require("fs");
 
 const srcDir = process.argv[2];
 const configFile = process.argv[3] || "clutch.config.js";
+const manager = process.argv[4] || "yarn";
 
 const config = require(`${srcDir}/${configFile}`); // eslint-disable-line import/no-dynamic-require
 const rootFrontendDir = `${srcDir}/..`;
@@ -42,24 +43,45 @@ const discoverWorkflows = () => {
       WORKFLOW_MODULE_PATH,
       ` * Run the @clutch-sh/tools registerWorkflows target instead\n*/\n`
     );
-    const packagePattern = Object.keys(config).join("|");
-    childProcess.exec(
-      `yarn list --json --depth=0 --pattern '${packagePattern}'`,
-      {
-        cwd: rootFrontendDir,
-      },
-      (err, stdout) => {
-        if (err) {
-          throw err;
+
+    const packageKeys = Object.keys(config);
+    if (manager === "yarn") {
+      childProcess.exec(
+        `yarn list --json --depth=0 --pattern '${packageKeys.join("|")}'`,
+        {
+          cwd: rootFrontendDir,
+        },
+        (err, stdout) => {
+          if (err) {
+            throw err;
+          }
+          const modules = {};
+          JSON.parse(stdout).data.trees.forEach(p => {
+            const packageName = `@${p.name.split("@")[1]}`;
+            modules[packageName] = addImport(packageName);
+          });
+          return resolve(modules);
         }
-        const modules = {};
-        JSON.parse(stdout).data.trees.forEach(p => {
-          const packageName = `@${p.name.split("@")[1]}`;
-          modules[packageName] = addImport(packageName);
-        });
-        return resolve(modules);
-      }
-    );
+      );
+    } else {
+      childProcess.exec(
+        `pnpm list --json --depth=0 --filter ${packageKeys.join(" --filter ")}`,
+        {
+          cwd: rootFrontendDir,
+        },
+        (err, stdout) => {
+          if (err) {
+            throw err;
+          }
+          const modules = {};
+          JSON.parse(stdout).forEach(p => {
+            const packageName = `@${p.name.split("@")[1]}`;
+            modules[packageName] = addImport(packageName);
+          });
+          return resolve(modules);
+        }
+      );
+    }
   });
 };
 
