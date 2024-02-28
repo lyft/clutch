@@ -22,11 +22,8 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "^4.0.0-beta",
-    "@clutch-sh/core": "^4.0.0-beta",
-    "@clutch-sh/data-layout": "^4.0.0-beta",
-    "@clutch-sh/project-selector": "^4.0.0-beta",
-    "@clutch-sh/wizard": "^4.0.0-beta",
+    "@clutch-sh/api": "workspace:^",
+    "@clutch-sh/core": "workspace:^",
     "@emotion/styled": "^11.3.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
@@ -42,7 +39,7 @@
     "react-router-dom": "6.0.0-beta.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^4.0.0-beta"
+    "@clutch-sh/tools": "workspace:^"
   },
   "engines": {
     "node": "<19",

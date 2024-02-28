@@ -59,6 +59,7 @@
     "typescript": "^4.2.3"
   },
   "engines": {
-    "node": "<19"
+    "node": "<19",
+    "yarn": "^4.1.0"
   }
 }

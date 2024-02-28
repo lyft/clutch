@@ -18,8 +18,7 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^4.0.0-beta",
-    "@clutch-sh/wizard": "^4.0.0-beta",
+    "@clutch-sh/core": "workspace:^",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
@@ -29,7 +28,7 @@
     "react-hook-form": "^7.25.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^4.0.0-beta"
+    "@clutch-sh/tools": "workspace:^"
   },
   "engines": {
     "node": "<19"
