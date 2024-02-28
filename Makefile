@@ -78,7 +78,7 @@ backend-config-validation:
 
 .PHONY: yarn-install # Install frontend dependencies.
 yarn-install: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile
+	$(YARN) --cwd frontend install --immutable
 
 .PHONY: backend-integration-test
 backend-integration-test:
@@ -118,11 +118,11 @@ frontend-verify: yarn-ensure
 
 .PHONY: docs # Build all doc assets.
 docs: docs-generate yarn-ensure
-	$(YARN) --cwd docs/_website install --frozen-lockfile && $(YARN) --cwd docs/_website build
+	$(YARN) --cwd docs/_website install --immutable && $(YARN) --cwd docs/_website build
 
 .PHONY: docs-dev # Start the docs server in development mode.
 docs-dev: docs-generate yarn-ensure
-	$(YARN) --cwd docs/_website install --frozen-lockfile && BROWSER=none $(YARN) --cwd docs/_website start
+	$(YARN) --cwd docs/_website install --immutable && BROWSER=none $(YARN) --cwd docs/_website start
 
 .PHONY: docs-generate # Generate the documentation content.
 docs-generate:

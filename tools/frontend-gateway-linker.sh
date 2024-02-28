@@ -24,7 +24,7 @@ LINKED_PACKAGES=(
 )
 
 EXTERNAL_ROOT="${1}"
-YARN="${EXTERNAL_ROOT}/build/bin/yarn.sh"
+YARN=yarn
 
 DEST_DIR="${EXTERNAL_ROOT}/frontend"
 
@@ -38,30 +38,30 @@ action="${2:-build}"
 ln -sf "${REPO_ROOT}" "${DEST_DIR}"
 
 cd "${REPO_ROOT}/frontend"
-"${YARN}" --frozen-lockfile install
+"${YARN}" install --immutable
 
 # Link deps from core repo.
-cd node_modules
-NODE_MODULES_DIR=$(pwd)
-for package in "${LINKED_PACKAGES[@]}"; do
-  cd "${package}"
-  "${YARN}" link
-  cd "${NODE_MODULES_DIR}"
-done
+# cd node_modules
+# NODE_MODULES_DIR=$(pwd)
+# for package in "${LINKED_PACKAGES[@]}"; do
+#   cd "${package}"
+#   "${YARN}" link
+#   cd "${NODE_MODULES_DIR}"
+# done
 
 # Ensure yarn in destination directory
 cd "${EXTERNAL_ROOT}"
 "${REPO_ROOT}"/tools/install-yarn.sh
 
-# Use linked deps in consuming repo.
+# # Use linked deps in consuming repo.
 cd "${DEST_DIR}"
-for package in "${LINKED_PACKAGES[@]}"; do
-  "${YARN}" link "${package}"
-done
+# for package in "${LINKED_PACKAGES[@]}"; do
+#   "${YARN}" link "${package}"
+# done
 
 if [[ -f "yarn.lock" ]]; then
   echo "Found lockfile..."
-  "${YARN}" install --frozen-lockfile
+  "${YARN}" install --immutable
 else
   echo "No lockfile. Generating one..."
   "${YARN}" install

@@ -24,9 +24,6 @@
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
-  "resolutions": {
-    "@mui/base": "5.0.0-alpha.86"
-  },
   "dependencies": {
     "@bugsnag/js": "^7.21.0",
     "@bugsnag/plugin-react": "^7.19.0",
@@ -71,6 +68,7 @@
     "@clutch-sh/tools": "^3.0.0-beta"
   },
   "engines": {
-    "node": "<19"
+    "node": "<19",
+    "yarn": "^4.1.0"
   }
 }
