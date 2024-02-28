@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/project-selector",
-  "version": "3.0.0-beta",
+  "version": "4.0.0-beta",
   "description": " Filter your projects",
   "license": "Apache-2.0",
   "author": "hello@example.com",
@@ -18,8 +18,8 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/wizard": "^3.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@clutch-sh/wizard": "^4.0.0-beta",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
@@ -29,7 +29,7 @@
     "react-hook-form": "^7.25.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^3.0.0-beta"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
     "node": "<19"

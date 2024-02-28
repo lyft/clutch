@@ -6,5 +6,5 @@
     "packages/*",
     "workflows/*"
   ],
-  "version": "3.0.0-beta"
+  "version": "4.0.0-beta"
 }

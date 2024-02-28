@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/audit",
-  "version": "3.0.0-beta",
+  "version": "4.0.0-beta",
   "description": " Clutch Audit Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -19,8 +19,8 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "^3.0.0-beta",
-    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/api": "^4.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "file-saver": "^2.0.5",
@@ -30,7 +30,7 @@
     "react-json-view": "^1.21.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^3.0.0-beta"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
     "node": "<19",
