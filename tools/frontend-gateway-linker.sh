@@ -38,30 +38,32 @@ action="${2:-build}"
 ln -sf "${REPO_ROOT}" "${DEST_DIR}"
 
 cd "${REPO_ROOT}/frontend"
-"${YARN}" install --immutable
-
-# Link deps from core repo.
-# cd node_modules
-# NODE_MODULES_DIR=$(pwd)
-# for package in "${LINKED_PACKAGES[@]}"; do
-#   cd "${package}"
-#   "${YARN}" link
-#   cd "${NODE_MODULES_DIR}"
-# done
+{
+  "${YARN}" install --immutable
+} || {
+  echo "${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes."
+  exit 1
+}
 
 # Ensure yarn in destination directory
 cd "${EXTERNAL_ROOT}"
 "${REPO_ROOT}"/tools/install-yarn.sh
 
-# # Use linked deps in consuming repo.
+# Use linked deps in consuming repo.
 cd "${DEST_DIR}"
-# for package in "${LINKED_PACKAGES[@]}"; do
-#   "${YARN}" link "${package}"
-# done
+echo "Updating resolutions..."
+for package in "${LINKED_PACKAGES[@]}"; do
+  npm pkg set resolutions.${package}="portal:./clutch/frontend/node_modules/${package}"
+done
 
 if [[ -f "yarn.lock" ]]; then
   echo "Found lockfile..."
-  "${YARN}" install --immutable
+  {
+    "${YARN}" install --immutable
+  } || {
+    echo "${DEST_DIR}/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes."
+    exit 1
+  }
 else
   echo "No lockfile. Generating one..."
   "${YARN}" install
