@@ -75,3 +75,23 @@ WithGrouping.args = {
     },
   ],
 };
+
+export const WithChips = Template.bind({});
+WithChips.args = {
+  label: "My Label",
+  selectOptions: [
+    {
+      label: "Option 1",
+    },
+    {
+      label: "Option 2",
+    },
+    {
+      label: "Option 3",
+    },
+    {
+      label: "Option 4",
+    },
+  ],
+  chipDisplay: true,
+};

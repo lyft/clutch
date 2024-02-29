@@ -27,7 +27,7 @@ exports[`renders correctly 1`] = `
             Cluster Pair
           </h3>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -63,7 +63,7 @@ exports[`renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -99,7 +99,7 @@ exports[`renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -144,13 +144,13 @@ exports[`renders correctly 1`] = `
             id="faultType"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
             >
               Fault Type
             </label>
             <div
-              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -199,7 +199,7 @@ exports[`renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -289,7 +289,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             Cluster Pair
           </h3>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -325,7 +325,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -365,13 +365,13 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             id="upstreamClusterType"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
             >
               Upstream Cluster Type
             </label>
             <div
-              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -420,7 +420,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
@@ -465,13 +465,13 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             id="faultType"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1g3qii-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
             >
               Fault Type
             </label>
             <div
-              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-y8yi4s-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -520,7 +520,7 @@ exports[`renders correctly with upstream cluster type selection enabled 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-14umvlt-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
