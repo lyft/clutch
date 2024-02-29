@@ -3,156 +3,172 @@
 exports[`renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthLg css-qvkihn-MuiContainer-root"
+    class="MuiContainer-root css-1ylvkhp-MuiContainer-root"
   >
     <div
-      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-g39oug-MuiGrid-root"
-      style="display: inline;"
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-jaq6nv-MuiGrid-root"
     >
       <div
-        class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-spacing-xs-2 MuiGrid-direction-xs-column MuiGrid-wrap-xs-nowrap css-lvrko9-MuiGrid-root"
       >
         <div
-          class="css-1ox5uwj"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-omj7fc-MuiGrid-root"
         >
           <div
-            class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
+            class="css-146xe7x"
           >
             <div
-              class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
-            >
-              <span
-                class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
-              >
-                <span
-                  class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
-                >
-                  <div
-                    class="css-1t41j0i"
-                  >
-                    <div
-                      class="css-h5bkmw"
-                    >
-                      1
-                    </div>
-                  </div>
-                </span>
-                <span
-                  class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
-                >
-                  <span
-                    class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
-                  >
-                    Lookup
-                  </span>
-                </span>
-              </span>
-            </div>
-            <div
-              class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
+              class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
             >
               <div
-                class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-zpcwqm-MuiStepConnector-root"
+                class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
               >
                 <span
-                  class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-w01xna-MuiStepConnector-line"
-                />
-              </div>
-              <span
-                class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
-              >
-                <span
-                  class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
-                >
-                  <div
-                    class="css-yqpyq0"
-                  >
-                    <div
-                      class="css-1c0nvhn"
-                    >
-                      2
-                    </div>
-                  </div>
-                </span>
-                <span
-                  class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                  class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
-                    Modify
+                    <div
+                      background="#ffffff"
+                      border="1px solid #3548D4"
+                      class="css-1t41j0i"
+                    >
+                      <div
+                        class="css-h5bkmw"
+                        font="#3548D4"
+                      >
+                        1
+                      </div>
+                    </div>
+                  </span>
+                  <span
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                  >
+                    <span
+                      class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    >
+                      Lookup
+                    </span>
                   </span>
                 </span>
-              </span>
-            </div>
-            <div
-              class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
-            >
+              </div>
               <div
-                class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-zpcwqm-MuiStepConnector-root"
+                class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
               >
-                <span
-                  class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-w01xna-MuiStepConnector-line"
-                />
-              </div>
-              <span
-                class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
-              >
-                <span
-                  class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
-                >
-                  <div
-                    class="css-yqpyq0"
-                  >
-                    <div
-                      class="css-1c0nvhn"
-                    >
-                      3
-                    </div>
-                  </div>
-                </span>
-                <span
-                  class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                <div
+                  class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-zpcwqm-MuiStepConnector-root"
                 >
                   <span
-                    class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-w01xna-MuiStepConnector-line"
+                  />
+                </div>
+                <span
+                  class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
+                >
+                  <span
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
-                    Confirmation
+                    <div
+                      background="#DBDBE0"
+                      border="#DBDBE0"
+                      class="css-yqpyq0"
+                    >
+                      <div
+                        class="css-1c0nvhn"
+                        font="rgba(13, 16, 48, 0.38)"
+                      >
+                        2
+                      </div>
+                    </div>
+                  </span>
+                  <span
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                  >
+                    <span
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    >
+                      Modify
+                    </span>
                   </span>
                 </span>
-              </span>
+              </div>
+              <div
+                class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
+              >
+                <div
+                  class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-zpcwqm-MuiStepConnector-root"
+                >
+                  <span
+                    class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-w01xna-MuiStepConnector-line"
+                  />
+                </div>
+                <span
+                  class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
+                >
+                  <span
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                  >
+                    <div
+                      background="#DBDBE0"
+                      border="#DBDBE0"
+                      class="css-yqpyq0"
+                    >
+                      <div
+                        class="css-1c0nvhn"
+                        font="rgba(13, 16, 48, 0.38)"
+                      >
+                        3
+                      </div>
+                    </div>
+                  </span>
+                  <span
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                  >
+                    <span
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    >
+                      Confirmation
+                    </span>
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-1kkx6az-MuiPaper-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1lwj3w1-MuiGrid-root"
         >
           <div
-            class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-55fo0g-MuiPaper-root"
           >
-            <span
-              class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-vzjh3v-MuiCircularProgress-root"
-              role="progressbar"
-              style="width: 40px; height: 40px;"
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
             >
-              <svg
-                class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
-                viewBox="22 22 44 44"
+              <span
+                class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-vzjh3v-MuiCircularProgress-root"
+                role="progressbar"
+                style="width: 40px; height: 40px;"
               >
-                <circle
-                  class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
-                  cx="44"
-                  cy="44"
-                  fill="none"
-                  r="20.2"
-                  stroke-width="3.6"
-                />
-              </svg>
-            </span>
+                <svg
+                  class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+                  viewBox="22 22 44 44"
+                >
+                  <circle
+                    class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+                    cx="44"
+                    cy="44"
+                    fill="none"
+                    r="20.2"
+                    stroke-width="3.6"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-container css-1lym95h-MuiGrid-root"
+            />
           </div>
-          <div
-            class="MuiGrid-root MuiGrid-container css-1lym95h-MuiGrid-root"
-          />
         </div>
       </div>
     </div>
