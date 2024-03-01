@@ -30,6 +30,8 @@ export interface ChipProps
    */
   variant: typeof CHIP_VARIANTS[number];
   filled?: boolean;
+  onDelete?: (e: any) => void;
+  deleteIcon?: any;
 }
 
 const StyledChip = styled(MuiChip)<{
@@ -97,8 +99,22 @@ const StyledChip = styled(MuiChip)<{
   }
 );
 
-const Chip = ({ variant, filled = false, size = "medium", ...props }: ChipProps) => (
-  <StyledChip $variant={variant} $filled={filled} size={size} {...props} />
+const Chip = ({
+  variant,
+  filled = false,
+  size = "medium",
+  onDelete,
+  deleteIcon,
+  ...props
+}: ChipProps) => (
+  <StyledChip
+    $variant={variant}
+    $filled={filled}
+    size={size}
+    onDelete={onDelete}
+    deleteIcon={deleteIcon}
+    {...props}
+  />
 );
 
 export { Chip, CHIP_VARIANTS };
