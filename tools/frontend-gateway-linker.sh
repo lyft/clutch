@@ -2,8 +2,9 @@
 set -euo pipefail
 
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+
 # Packages should be added to this list if there can only be one of them present when using Clutch as a submodule.
-LINKED_PACKAGES=(
+LINKED_PORTAL_PACKAGES=(
   "esbuild"
   "react"
   "react-dom"
@@ -20,13 +21,22 @@ LINKED_PACKAGES=(
   "@types/node"
   "@types/react"
   "@types/react-dom"
+)
+
+LINKED_FILE_PACKAGES=(
   "typescript"
+)
+
+COMBINED_PACKAGES=(
+  "${LINKED_PORTAL_PACKAGES[@]}"
+  "${LINKED_FILE_PACKAGES[@]}"
 )
 
 EXTERNAL_ROOT="${1}"
 YARN=yarn
 
 DEST_DIR="${EXTERNAL_ROOT}/frontend"
+YALC_STORE_FOLDER="${DEST_DIR}/.yalc"
 
 # ensure consistent yarn versioning
 cd "${REPO_ROOT}"
@@ -45,15 +55,30 @@ cd "${REPO_ROOT}/frontend"
   exit 1
 }
 
+# Link deps from core repo.
+cd node_modules
+NODE_MODULES_DIR=$(pwd)
+for package in "${COMBINED_PACKAGES[@]}"; do
+  cd "${package}"
+  yalc publish --no-scripts --push --store-folder="${YALC_STORE_FOLDER}" --quiet
+  cd "${NODE_MODULES_DIR}"
+done
+
 # Ensure yarn in destination directory
 cd "${EXTERNAL_ROOT}"
 "${REPO_ROOT}"/tools/install-yarn.sh
 
-# Use linked deps in consuming repo.
+# # Use linked deps in consuming repo.
 cd "${DEST_DIR}"
-echo "Updating resolutions..."
-for package in "${LINKED_PACKAGES[@]}"; do
-  npm pkg set resolutions.${package}="portal:./clutch/frontend/node_modules/${package}"
+echo "Linking & Setting resolutions..."
+for package in "${LINKED_PORTAL_PACKAGES[@]}"; do
+  yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
+  npm pkg set resolutions.${package}="portal:.yalc/${package}"
+done
+
+for package in "${LINKED_FILE_PACKAGES[@]}"; do
+  yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
+  npm pkg set resolutions.${package}="file:.yalc/${package}"
 done
 
 if [[ -f "yarn.lock" ]]; then

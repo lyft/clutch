@@ -12,15 +12,16 @@
     "noImplicitReturns": true,
     "outDir": "dist",
     "paths": {
-      "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"],
+      "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"]
     },
     "preserveConstEnums": true,
+    "preserveSymlinks": true,
     "target": "ES2018",
     "types": ["jest", "node", "long"],
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "isolatedModules": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
@@ -29,5 +30,5 @@
     "**/*.test.js*",
     "**/*.test.ts*",
     "**/dist/*"
-  ],
+  ]
 }
