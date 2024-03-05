@@ -8,7 +8,7 @@ DOCS_DEPLOY_GIT_USER ?= git
 
 VERSION := 0.0.0
 
-YARN:=./build/bin/yarn.sh
+YARN:=yarn
 PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: help # Print this help message.

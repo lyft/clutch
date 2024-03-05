@@ -6,12 +6,12 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "buildDev": "node devBuild.mjs",
+    "buildDev": "yarn node devBuild.mjs",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
-    "registerWorkflows": "node workflow-registrar.js",
-    "uploadSourcemaps": "node upload-sourcemaps.js"
+    "registerWorkflows": "yarn node workflow-registrar.js",
+    "uploadSourcemaps": "yarn node upload-sourcemaps.js"
   },
   "dependencies": {
     "@babel/cli": "^7.7.5",
