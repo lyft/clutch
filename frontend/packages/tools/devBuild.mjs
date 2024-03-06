@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
+import byteSize from "byte-size";
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
-import byteSize from "byte-size";
 
 const args = process.argv.slice(2);
 const fileDetailsLimit = 20;
@@ -40,17 +41,19 @@ const sizeOutputPlugin = {
           };
         })
         .sort((a, b) => !b.name.includes(".map") - !a.name.includes(".map") || b.size - a.size);
+
       console.log("");
-      files.slice(0, 20).forEach(f => {
-        let outputLog = `\t${f.name.toString().padEnd(50)}${byteSize(f.size)}`;
-        console.log(outputLog);
-      });
-      if (files.length > fileDetailsLimit) {
-        console.log(`\t... and ${files.length - fileDetailsLimit} more output files...\n`);
-      } else {
-        console.log("");
-      }
+      files
+        .slice(0, 20)
+        .forEach(f => console.log(`\t${f.name.toString().padEnd(50)}${byteSize(f.size)}`));
+
+      console.log(
+        files.length > fileDetailsLimit
+          ? `\t... and ${files.length - fileDetailsLimit} more output files...\n`
+          : ""
+      );
       const timerEnd = process.hrtime.bigint() - timerStart;
+      // eslint-disable-next-line no-undef
       console.log(`\t⚡ Done in ${timerEnd / BigInt(1000000)}ms`);
     });
   },
@@ -62,8 +65,6 @@ const options = {
   target: "es2019",
   sourcemap: true,
   preserveSymlinks: true,
-  plugins: [sizeOutputPlugin],
-  metafile: true,
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 
@@ -71,5 +72,5 @@ if (args.includes("-w") || args.includes("--watch")) {
   const ctx = await esbuild.context(options);
   await ctx.watch();
 } else {
-  await esbuild.build(options);
+  await esbuild.build({ ...options, metafile: true, plugins: [sizeOutputPlugin] });
 }
