@@ -1,8 +1,10 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
+import byteSize from "byte-size";
 
 const args = process.argv.slice(2);
+const fileDetailsLimit = 20;
 
 const getAllFiles = (dirPath, arrayOfFiles) => {
   const files = fs.readdirSync(dirPath);
@@ -22,11 +24,46 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
   return tmpArrayOfFiles;
 };
 
+const sizeOutputPlugin = {
+  name: "sizeOutputPlugin",
+  setup(build) {
+    let timerStart;
+    build.onStart(() => {
+      timerStart = process.hrtime.bigint();
+    });
+    build.onEnd(result => {
+      const files = Object.keys(result.metafile.outputs)
+        .map(k => {
+          return {
+            name: k.substring(k.search("dist/"), k.length),
+            size: result.metafile.outputs[k].bytes,
+          };
+        })
+        .sort((a, b) => !b.name.includes(".map") - !a.name.includes(".map") || b.size - a.size);
+      console.log("");
+      files.slice(0, 20).forEach(f => {
+        let outputLog = `\t${f.name.toString().padEnd(50)}${byteSize(f.size)}`;
+        console.log(outputLog);
+      });
+      if (files.length > fileDetailsLimit) {
+        console.log(`\t... and ${files.length - fileDetailsLimit} more output files...\n`);
+      } else {
+        console.log("");
+      }
+      const timerEnd = process.hrtime.bigint() - timerStart;
+      console.log(`\t⚡ Done in ${timerEnd / BigInt(1000000)}ms`);
+    });
+  },
+};
+
 const options = {
   entryPoints: getAllFiles(`${process.argv[2]}/src`),
   outdir: `${process.argv[2]}/dist/`,
   target: "es2019",
   sourcemap: true,
+  preserveSymlinks: true,
+  plugins: [sizeOutputPlugin],
+  metafile: true,
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 

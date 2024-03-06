@@ -61,5 +61,9 @@
   "engines": {
     "node": "<19",
     "yarn": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/byte-size": "^8",
+    "byte-size": "^8.1.1"
   }
 }

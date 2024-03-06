@@ -2130,6 +2130,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.16.0"
     "@babel/preset-typescript": "npm:^7.16.0"
     "@bugsnag/source-maps": "npm:^2.3.1"
+    "@types/byte-size": "npm:^8"
     "@types/enzyme": "npm:^3.10.8"
     "@types/jest": "npm:^29.0.0"
     "@types/mocha": "npm:^10.0.0"
@@ -2141,6 +2142,7 @@ __metadata:
     "@wojtekmaj/enzyme-adapter-react-17": "npm:^0.6.1"
     babel-jest: "npm:^27.4.2"
     babel-plugin-module-resolver: "npm:^4.0.0"
+    byte-size: "npm:^8.1.1"
     cypress: "npm:9.7.0"
     dotenv: "npm:^16.3.1"
     enzyme: "npm:^3.11.0"
@@ -6726,6 +6728,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/byte-size@npm:^8":
+  version: 8.1.2
+  resolution: "@types/byte-size@npm:8.1.2"
+  checksum: 10c0/2a251414d925e02a4b36629c2ea0519efb5006baa82241ae85fdfebb65f43d3679c486e247ff6b82e4fbbac556b9d55adf7c0f254e16d6b1d972ffb96d47b8f2
+  languageName: node
+  linkType: hard
+
 "@types/cheerio@npm:*":
   version: 0.22.22
   resolution: "@types/cheerio@npm:0.22.22"
@@ -9563,6 +9572,13 @@ __metadata:
   version: 7.0.0
   resolution: "byte-size@npm:7.0.0"
   checksum: 10c0/5420787f0c50b7bdaef49222a4a0b198b9a102ef287f9045312bcdc545b1514962234aae9147f9bb3ff4c72ac879c26b47638c0e85d3d923b0e7cd7a77b6189f
+  languageName: node
+  linkType: hard
+
+"byte-size@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "byte-size@npm:8.1.1"
+  checksum: 10c0/83170a16820fde48ebaef93bf6b2e86c5f72041f76e44eba1f3c738cceb699aeadf11088198944d5d7c6f970b465ab1e3dddc2e60bfb49a74374f3447a8db5b9
   languageName: node
   linkType: hard
 
