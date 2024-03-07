@@ -27,7 +27,7 @@
   "dependencies": {
     "@bugsnag/js": "^7.21.0",
     "@bugsnag/plugin-react": "^7.19.0",
-    "@clutch-sh/api": "^4.0.0-beta",
+    "@clutch-sh/api": "workspace:^",
     "@date-io/core": "^1.3.6",
     "@emotion/jest": "^11.0.0",
     "@emotion/react": "^11.8.1",
@@ -64,7 +64,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^4.0.0-beta"
+    "@clutch-sh/tools": "workspace:^"
   },
   "engines": {
     "node": "<19",

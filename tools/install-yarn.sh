@@ -10,6 +10,3 @@ fi
 echo "Installing yarn@${YARN_VERSION} with corepack"
 corepack enable
 corepack prepare yarn@${YARN_VERSION} --activate
-
-echo "Install yalc globally"
-npm install -g yalc
