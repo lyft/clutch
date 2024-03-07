@@ -29,6 +29,9 @@ const sizeOutputPlugin = {
   name: "sizeOutputPlugin",
   setup(build) {
     let timerStart;
+    build.onResolve({ filter: /^typescript$/ }, args => {
+      console.log("ONRESOLVE", args);
+    });
     build.onStart(() => {
       timerStart = process.hrtime.bigint();
     });

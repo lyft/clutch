@@ -74,7 +74,6 @@
     "@typescript-eslint/parser": "^5.5.0",
     "babel-loader": "^8.2.3",
     "eslint": "^8.3.0",
-    "lerna": "^4.0.0",
     "license-checker": "^25.0.1",
     "material-table": "^2.0.3",
     "prettier": "^2.2.1",
