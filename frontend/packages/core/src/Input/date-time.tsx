@@ -19,7 +19,7 @@ const PaddedTextField = styled(TextField)({
 });
 
 export interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
+  extends Pick<MuiDateTimePickerProps<Dayjs>, "disabled" | "value" | "onChange" | "label"> {}
 
 const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>

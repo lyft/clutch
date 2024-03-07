@@ -19,10 +19,10 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "workspace:^",
-    "@clutch-sh/core": "workspace:^",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.5",
+    "@clutch-sh/api": "^4.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.0",
     "file-saver": "^2.0.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -30,7 +30,7 @@
     "react-json-view": "^1.21.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
     "node": "<19",

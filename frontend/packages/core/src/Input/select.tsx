@@ -11,6 +11,7 @@ import {
   ListSubheader,
   MenuItem,
   Select as MuiSelect,
+  useTheme,
 } from "@mui/material";
 import { flatten } from "lodash";
 
@@ -250,6 +251,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" |
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
+  variant?: MuiSelectProps["variant"];
 }
 
 const Select = ({
@@ -262,7 +264,9 @@ const Select = ({
   options,
   onChange,
   value,
+  variant = "outlined",
 }: SelectProps) => {
+  const theme = useTheme();
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
   const defaultOptions = calculateDefaultOptions(
@@ -308,6 +312,8 @@ const Select = ({
           value={value ?? (flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label)}
           onChange={updateSelectedOption}
           label={label}
+          variant={variant}
+          theme={theme}
         >
           {options?.map(option => renderSelectItems(option))}
         </StyledSelect>
@@ -330,6 +336,7 @@ export interface MultiSelectProps extends Pick<MuiSelectProps, "disabled" | "err
   selectOptions: SelectOption[];
   chipDisplay?: boolean;
   onChange?: (values: Array<string>) => void;
+  variant?: MuiSelectProps["variant"];
 }
 
 const MultiSelect = ({
@@ -342,7 +349,9 @@ const MultiSelect = ({
   selectOptions,
   chipDisplay = false,
   onChange,
+  variant = "outlined",
 }: MultiSelectProps) => {
+  const theme = useTheme();
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(selectOptions);
 
@@ -383,6 +392,8 @@ const MultiSelect = ({
           value={selectedValues()}
           onChange={updateSelectedOptions}
           label={label}
+          variant={variant}
+          theme={theme}
           {...(chipDisplay && {
             renderValue: (selected: string[]) => (
               <div style={{ display: "flex", gap: "4px" }}>

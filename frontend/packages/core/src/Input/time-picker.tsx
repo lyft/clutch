@@ -20,7 +20,7 @@ const PaddedTextField = styled(TextField)({
 
 export interface TimePickerProps
   extends Pick<
-    MuiTimePickerProps,
+    MuiTimePickerProps<Dayjs>,
     "disabled" | "value" | "onChange" | "label" | "PaperProps" | "PopperProps"
   > {}
 

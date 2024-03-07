@@ -18,13 +18,13 @@
     "test:e2e": "cypress run"
   },
   "dependencies": {
-    "@clutch-sh/core": "workspace:^",
+    "@clutch-sh/core": "^4.0.0-beta",
     "react": "^17.0.2",
     "react-app-rewired": "^2.1.8",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^",
+    "@clutch-sh/tools": "^4.0.0-beta",
     "esbuild-loader": "^3.0.0"
   },
   "engines": {

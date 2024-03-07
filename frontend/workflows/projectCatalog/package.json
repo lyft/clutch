@@ -22,16 +22,16 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "workspace:^",
-    "@clutch-sh/core": "workspace:^",
-    "@emotion/styled": "^11.3.0",
+    "@clutch-sh/api": "^4.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@emotion/styled": "11.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -39,7 +39,7 @@
     "react-router-dom": "6.0.0-beta.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
     "node": "<19",
