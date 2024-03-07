@@ -58,11 +58,11 @@ cd "${REPO_ROOT}/frontend"
 # Link deps from core repo.
 cd node_modules
 NODE_MODULES_DIR=$(pwd)
-for package in "${COMBINED_PACKAGES[@]}"; do
-  cd "${package}"
-  yalc publish --no-scripts --push --store-folder="${YALC_STORE_FOLDER}" --quiet
-  cd "${NODE_MODULES_DIR}"
-done
+# for package in "${COMBINED_PACKAGES[@]}"; do
+#   cd "${package}"
+#   yalc publish --no-scripts --push --store-folder="${YALC_STORE_FOLDER}" --quiet
+#   cd "${NODE_MODULES_DIR}"
+# done
 
 # Ensure yarn in destination directory
 cd "${EXTERNAL_ROOT}"
@@ -72,13 +72,13 @@ cd "${EXTERNAL_ROOT}"
 cd "${DEST_DIR}"
 echo "Linking & Setting resolutions..."
 for package in "${LINKED_PORTAL_PACKAGES[@]}"; do
-  yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
-  npm pkg set resolutions.${package}="portal:.yalc/${package}"
+  # yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
+  npm pkg set resolutions.${package}="portal:clutch/frontend/node_modules/${package}"
 done
 
 for package in "${LINKED_FILE_PACKAGES[@]}"; do
-  yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
-  npm pkg set resolutions.${package}="file:.yalc/${package}"
+  # yalc link "${package}" --pure --store-folder="${YALC_STORE_FOLDER}" --quiet
+  npm pkg set resolutions.${package}="file:clutch/frontend/node_modules/${package}"
 done
 
 if [[ -f "yarn.lock" ]]; then
