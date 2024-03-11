@@ -11,5 +11,11 @@
   },
   "dependencies": {
     "protobufjs": "6.11.3"
-  }
+  },
+  "engines": {
+    "node": "<19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1",
+  "stableVersion": "3.0.0-beta"
 }
