@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/clutch",
-  "version": "0.1.0",
+  "version": "4.0.0-beta",
   "private": true,
   "description": "Interface to handle ad-hoc infrastructure modifications",
   "keywords": [
@@ -38,8 +38,8 @@
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "yarn compile && yarn workspaces foreach --all -i run publishBeta --no-bail",
     "start": "yarn clean && yarn compile:watch & sleep 5 && DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true yarn workspace @clutch-sh/app run start | cat",
-    "storybook": "rm -rf node_modules/.cache/storybook/ && start-storybook --disable-telemetry -p 6006 -h localhost",
-    "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 build-storybook --no-dll -o netlify/storybook-static",
+    "storybook": "rm -rf node_modules/.cache/storybook/ && storybook dev --disable-telemetry -p 6006 -h localhost",
+    "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 storybook build -o netlify/storybook-static",
     "test": "yarn workspaces foreach --all -i run test --stream --no-bail --",
     "test:coverage": "yarn workspaces foreach --all -i run test:coverage --stream --no-bail --",
     "test:e2e": "yarn workspaces foreach --all -i run test:e2e",
@@ -65,14 +65,15 @@
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.11.0",
     "@mui/styles": "^5.11.0",
-    "@storybook/addon-a11y": "^6.5.0",
-    "@storybook/addon-actions": "^6.5.0",
-    "@storybook/addon-essentials": "^6.5.0",
-    "@storybook/addon-links": "^6.5.0",
-    "@storybook/node-logger": "^6.5.0",
+    "@storybook/addon-a11y": "^7.6.0",
+    "@storybook/addon-actions": "^7.6.0",
+    "@storybook/addon-essentials": "^7.6.0",
+    "@storybook/addon-links": "^7.6.0",
+    "@storybook/node-logger": "^7.6.0",
     "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^6.5.0",
-    "@storybook/theming": "^6.5.0",
+    "@storybook/react": "^7.6.0",
+    "@storybook/react-webpack5": "^7.6.0",
+    "@storybook/theming": "^7.6.0",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^29.0.0",
     "@types/mocha": "^10.0.0",
@@ -96,6 +97,7 @@
     "react-timeago": "^7.0.0",
     "recharts": "^2.1.9",
     "sort-package-json": "^1.48.1",
+    "storybook": "^7.6.0",
     "typescript": "^4.2.3",
     "webpack": "4.46.0",
     "webpack-dev-server": "3.11.1"
@@ -104,5 +106,6 @@
     "node": "<19",
     "yarn": "^4.1.0"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "stableVersion": "0.1.0"
 }
