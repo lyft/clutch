@@ -23,7 +23,7 @@
     "@clutch-sh/data-layout": "workspace:^",
     "@clutch-sh/experimentation": "workspace:^",
     "@clutch-sh/wizard": "workspace:^",
-    "@emotion/styled": "11.6.0",
+    "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "2.8.8",
     "@mui/material": "^5.11.0",
     "react": "^17.0.2",

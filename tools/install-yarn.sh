@@ -1,6 +1,6 @@
 #!/bin/bash
 
-YARN_VERSION="4.1.0"
+YARN_VERSION="4.1.1"
 
 if ! command -v corepack *> /dev/null; then
   echo "Corepack must be installed, please upgrade your node version to >18"

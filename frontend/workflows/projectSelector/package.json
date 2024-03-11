@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@clutch-sh/core": "workspace:^",
-    "@emotion/styled": "11.6.0",
+    "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.0",
     "lodash": "^4.17.21",

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import byteSize from "byte-size";
+// import byteSize from "byte-size";
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
@@ -25,42 +25,41 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
   return tmpArrayOfFiles;
 };
 
-const sizeOutputPlugin = {
-  name: "sizeOutputPlugin",
-  setup(build) {
-    let timerStart;
-    build.onResolve({ filter: /^typescript$/ }, args => {
-      console.log("ONRESOLVE", args);
-    });
-    build.onStart(() => {
-      timerStart = process.hrtime.bigint();
-    });
-    build.onEnd(result => {
-      const files = Object.keys(result.metafile.outputs)
-        .map(k => {
-          return {
-            name: k.substring(k.search("dist/"), k.length),
-            size: result.metafile.outputs[k].bytes,
-          };
-        })
-        .sort((a, b) => !b.name.includes(".map") - !a.name.includes(".map") || b.size - a.size);
+// const sizeOutputPlugin = {
+//   name: "sizeOutputPlugin",
+//   setup(build) {
+//     let timerStart;
+//     build.onStart(() => {
+//       timerStart = process.hrtime.bigint();
+//     });
+//     build.onEnd(result => {
+//       if (result?.metafile?.outputs !== undefined) {
+//         const files = Object.keys(result?.metafile?.outputs ?? {})
+//           .map(k => {
+//             return {
+//               name: k.substring(k.search("dist/"), k.length),
+//               size: result.metafile.outputs[k].bytes,
+//             };
+//           })
+//           .sort((a, b) => !b.name.includes(".map") - !a.name.includes(".map") || b.size - a.size);
 
-      console.log("");
-      files
-        .slice(0, 20)
-        .forEach(f => console.log(`\t${f.name.toString().padEnd(50)}${byteSize(f.size)}`));
+//         console.log("");
+//         files
+//           .slice(0, 20)
+//           .forEach(f => console.log(`\t${f.name.toString().padEnd(50)}${byteSize(f.size)}`));
 
-      console.log(
-        files.length > fileDetailsLimit
-          ? `\t... and ${files.length - fileDetailsLimit} more output files...\n`
-          : ""
-      );
-      const timerEnd = process.hrtime.bigint() - timerStart;
-      // eslint-disable-next-line no-undef
-      console.log(`\t⚡ Done in ${timerEnd / BigInt(1000000)}ms`);
-    });
-  },
-};
+//         console.log(
+//           files.length > fileDetailsLimit
+//             ? `\t... and ${files.length - fileDetailsLimit} more output files...\n`
+//             : ""
+//         );
+//         const timerEnd = process.hrtime.bigint() - timerStart;
+//         // eslint-disable-next-line no-undef
+//         console.log(`\t⚡ Done in ${timerEnd / BigInt(1000000)}ms`);
+//       }
+//     });
+//   },
+// };
 
 const options = {
   entryPoints: getAllFiles(`${process.argv[2]}/src`),
@@ -72,8 +71,8 @@ const options = {
 };
 
 if (args.includes("-w") || args.includes("--watch")) {
-  const ctx = await esbuild.context(options);
+  const ctx = await esbuild.context({ ...options, logLevel: "info" });
   await ctx.watch();
 } else {
-  await esbuild.build({ ...options, metafile: true, plugins: [sizeOutputPlugin] });
+  await esbuild.build({ ...options, metafile: true });
 }

@@ -22,7 +22,7 @@
     "@clutch-sh/api": "workspace:^",
     "@clutch-sh/core": "workspace:^",
     "@clutch-sh/data-layout": "workspace:^",
-    "@emotion/styled": "11.6.0",
+    "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.11.0",
     "@mui/styles": "^5.11.0",
     "history": "^5.0.0",
