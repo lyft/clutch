@@ -7,7 +7,8 @@
   "author": "clutch@lyft.com",
   "scripts": {
     "buildDev": "yarn node devBuild.mjs",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "packageLint": "eslint ",
+    "lint": "yarn run packageLint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "yarn node workflow-registrar.js",
@@ -53,15 +54,11 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.0.0",
-    "prettier": "^2.2.1",
+    "prettier": "~2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5.0.1",
     "typescript": "^4.2.3"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
   },
   "engines": {
     "node": "<19",

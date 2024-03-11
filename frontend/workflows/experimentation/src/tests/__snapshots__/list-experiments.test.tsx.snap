@@ -23,7 +23,7 @@ exports[`renders correctly 1`] = `
           data-border="bottom"
         >
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButtonBase-root css-61rao6-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
             palette="[object Object]"
             tabindex="0"
             type="button"
@@ -76,34 +76,35 @@ exports[`renders correctly 1`] = `
                 />
                 <p
                   class="MuiTablePagination-selectLabel css-pdct74-MuiTablePagination-selectLabel"
-                  id="mui-2"
+                  id="mui-3"
                 >
                   Rows per page:
                 </p>
                 <div
-                  class="MuiInputBase-root MuiInputBase-colorPrimary css-mc49up-MuiInputBase-root-MuiTablePagination-select"
-                  variant="standard"
+                  class="MuiInputBase-root MuiInputBase-colorPrimary MuiTablePagination-input css-mc49up-MuiInputBase-root-MuiTablePagination-select"
                 >
                   <div
+                    aria-controls="mui-1"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="mui-2 mui-1"
-                    class="MuiTablePagination-select MuiSelect-select MuiSelect-standard MuiInputBase-input css-jok20x-MuiSelect-select-MuiInputBase-input"
-                    id="mui-1"
-                    role="button"
+                    aria-labelledby="mui-3 mui-2"
+                    class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-1z07az7-MuiSelect-select-MuiInputBase-input"
+                    id="mui-2"
+                    role="combobox"
                     tabindex="0"
                   >
                     25
                   </div>
                   <input
                     aria-hidden="true"
+                    aria-invalid="false"
                     class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                     tabindex="-1"
                     value="25"
                   />
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTablePagination-selectIcon MuiSelect-icon MuiSelect-iconStandard css-3d1nhz-MuiSvgIcon-root-MuiSelect-icon"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-3d1nhz-MuiSvgIcon-root-MuiSelect-icon"
                     data-testid="ArrowDropDownIcon"
                     focusable="false"
                     viewBox="0 0 24 24"

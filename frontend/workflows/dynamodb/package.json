@@ -13,7 +13,7 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "yarn workspace @clutch-sh/tools run packageLint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
     "publishBeta": "../../../tools/publish-frontend.sh dynamodb",
@@ -30,14 +30,12 @@
     "lodash": "4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "typescript": "^4.2.3",
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@clutch-sh/tools": "workspace:^",
+    "jest": "^27.0.0"
   },
   "engines": {
     "node": "<19",

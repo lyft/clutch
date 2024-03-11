@@ -16,11 +16,11 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "yarn workspace @clutch-sh/tools run packageLint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
     "publishBeta": "../../../tools/publish-frontend.sh core",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
@@ -31,6 +31,7 @@
     "@date-io/core": "^1.3.6",
     "@emotion/jest": "^11.0.0",
     "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
     "@hookform/devtools": "^4.0.2",
     "@hookform/resolvers": "2.8.8",
     "@mui/icons-material": "^5.11.0",
@@ -60,15 +61,13 @@
     "react-timeago": "^7.0.0",
     "recharts": "^2.1.9",
     "superstruct": "~0.15.0",
+    "typescript": "^4.2.3",
     "uuid": "^8.3.2",
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@clutch-sh/tools": "workspace:^",
+    "jest": "^27.0.0"
   },
   "engines": {
     "node": "<19",

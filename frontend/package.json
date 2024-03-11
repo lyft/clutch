@@ -31,21 +31,21 @@
     "compile": "yarn workspaces foreach -Ai run compile",
     "compile:dev": "yarn workspaces foreach -Ai run compile:dev",
     "compile:watch": "yarn workspaces foreach -Aip -j unlimited run compile:watch",
-    "lint": "yarn workspaces foreach --all -i run lint --no-bail",
-    "lint:fix": "yarn workspaces foreach --all -i run lint:fix --no-bail",
+    "lint": "yarn workspaces foreach -Ai run lint",
+    "lint:fix": "yarn workspaces foreach -Ai run lint:fix",
     "lint:packages": "sort-package-json package.json packages/**/package.json --check",
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
-    "publishBeta": "yarn compile && yarn workspaces foreach --all -i run publishBeta --no-bail",
+    "publishBeta": "yarn compile && yarn workspaces foreach -Ai run publishBeta",
     "start": "yarn clean && yarn compile:watch & sleep 5 && DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true yarn workspace @clutch-sh/app run start | cat",
     "storybook": "rm -rf node_modules/.cache/storybook/ && storybook dev --disable-telemetry -p 6006 -h localhost",
     "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 storybook build -o netlify/storybook-static",
-    "test": "yarn workspaces foreach --all -i run test --stream --no-bail --",
-    "test:coverage": "yarn workspaces foreach --all -i run test:coverage --stream --no-bail --",
-    "test:e2e": "yarn workspaces foreach --all -i run test:e2e",
+    "test": "yarn workspaces foreach -Ai run test",
+    "test:coverage": "yarn workspaces foreach -Ai run test:coverage",
+    "test:e2e": "yarn workspaces foreach -Ai run test:e2e",
     "test:licenses": "yarn node license-linter.js",
     "test:update": "yarn test:coverage -u",
-    "test:watch": "yarn workspaces foreach --all -ip run test:watch"
+    "test:watch": "yarn workspaces foreach -Aip run test:watch"
   },
   "browserslist": {
     "production": [
@@ -70,11 +70,13 @@
     "@storybook/theming": "^7.6.0",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
+    "jest": "^27.0.0",
     "license-checker": "^25.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sort-package-json": "^1.48.1",
-    "storybook": "^7.6.0"
+    "storybook": "^7.6.0",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": "<19",
