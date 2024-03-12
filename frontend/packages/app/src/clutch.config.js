@@ -24,7 +24,8 @@ module.exports = {
         notes: [
           {
             severity: "info",
-            text: "The autoscaling group may take several minutes to bring additional instances online.",
+            text:
+              "The autoscaling group may take several minutes to bring additional instances online.",
           },
         ],
       },
