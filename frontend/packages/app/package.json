@@ -9,11 +9,11 @@
     "build": "yarn register-workflows && react-app-rewired build",
     "clean": "rm -rf build",
     "eject": "react-scripts eject",
-    "lint": "yarn register-workflows && eslint --ext .js,.jsx .",
+    "lint": "yarn register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
-    "start": "yarn register-workflows && GENERATE_SOURCEMAP=false react-app-rewired start",
-    "test": "yarn register-workflows && jest --passWithNoTests",
+    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $INIT_CWD/src",
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "test": "yarn register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
   },
@@ -23,10 +23,7 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",
-    "@types/eslint": "^8",
-    "esbuild-loader": "^3.0.0",
-    "eslint": "^8.3.0",
-    "jest": "^27.0.0"
+    "esbuild-loader": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^17.0.2",

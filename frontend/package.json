@@ -21,15 +21,14 @@
   "author": "clutch@lyft.com",
   "workspaces": [
     "api",
-    "packages/*",
-    "workflows/*"
+    "{packages,workflows}/*"
   ],
   "scripts": {
     "build": "yarn compile && yarn workspace @clutch-sh/app build",
-    "build:dev": "yarn compile:dev && yarn workspace @clutch-sh/app register-workflows",
+    "build:dev": "yarn compile:dev && yarn run register-workflows",
     "clean": "yarn workspaces foreach -Ai run clean",
     "compile": "yarn workspaces foreach -Ai run compile",
-    "compile:dev": "yarn workspaces foreach -Ai run compile:dev",
+    "compile:dev": "yarn workspaces foreach -Ap -j unlimited run compile:dev",
     "compile:watch": "yarn workspaces foreach -Aip -j unlimited run compile:watch",
     "lint": "yarn workspaces foreach -Ai run lint",
     "lint:fix": "yarn workspaces foreach -Ai run lint:fix",
@@ -37,7 +36,10 @@
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "yarn compile && yarn workspaces foreach -Ai run publishBeta",
-    "start": "yarn clean && yarn compile:watch & sleep 5 && DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true yarn workspace @clutch-sh/app run start | cat",
+    "register-workflows": "yarn workspace @clutch-sh/app run register-workflows",
+    "buildWatch": "WORKSPACES=\"$(yarn workspaces list --no-private --json)\" yarn workspace @clutch-sh/tools run buildWatch compile:watch buildStart",
+    "buildStart": "DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true yarn workspace @clutch-sh/app run start | cat",
+    "start": "yarn run clean && yarn run register-workflows && yarn run buildWatch",
     "storybook": "rm -rf node_modules/.cache/storybook/ && storybook dev --disable-telemetry -p 6006 -h localhost",
     "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 storybook build -o netlify/storybook-static",
     "test": "yarn workspaces foreach -Ai run test",
@@ -68,6 +70,7 @@
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react-webpack5": "^7.6.0",
     "@storybook/theming": "^7.6.0",
+    "jest": "^27.0.0",
     "license-checker": "^25.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

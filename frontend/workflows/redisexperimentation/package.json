@@ -10,10 +10,10 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh redis-experimentation",
-    "test": "jest --passWithNoTests",
+    "test": "yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
@@ -29,10 +29,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^",
-    "@types/eslint": "^8",
-    "eslint": "^8.3.0",
-    "jest": "^27.0.0"
+    "@clutch-sh/tools": "workspace:^"
   },
   "peerDependencies": {
     "@mui/material": "^5.11.0",

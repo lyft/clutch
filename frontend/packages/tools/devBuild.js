@@ -67,6 +67,7 @@ const options = {
   target: "es2019",
   sourcemap: true,
   preserveSymlinks: true,
+  color: true,
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 

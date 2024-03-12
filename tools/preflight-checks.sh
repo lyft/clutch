@@ -80,11 +80,11 @@ frontend() {
     fi
   fi
 
-  if ! command -v "${BUILD_ROOT}/bin/yarn.sh" &> /dev/null; then
+  if ! command -v yarn -v &> /dev/null; then
     echo "yarn is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
-    current_version=$("${BUILD_ROOT}/bin/yarn.sh" --version)
+    current_version=$(yarn --version)
     if ! is_version_ok $MIN_YARN_VERSION "$current_version"; then
       echo "yarn version must be >= $MIN_YARN_VERSION, current version $current_version"
       did_checks_pass=false

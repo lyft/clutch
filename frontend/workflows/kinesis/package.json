@@ -15,10 +15,10 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh kinesis",
-    "test": "jest --passWithNoTests",
+    "test": "yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
@@ -31,10 +31,7 @@
     "react-is": "^17.0.2"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^",
-    "@types/eslint": "^8",
-    "eslint": "^8.3.0",
-    "jest": "^27.0.0"
+    "@clutch-sh/tools": "workspace:^"
   },
   "peerDependencies": {
     "@emotion/styled": "^11.8.1",

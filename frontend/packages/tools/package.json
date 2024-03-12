@@ -6,6 +6,9 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
+    "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
+    "package:test": "cd $INIT_CWD && run -T jest --passWithNoTests",
+    "buildWatch": "yarn node buildWatch.js",
     "buildDev": "yarn node devBuild.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
@@ -37,10 +40,12 @@
     "babel-jest": "^27.4.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "byte-size": "^8.1.1",
+    "chalk": "^4",
     "cypress": "9.7.0",
     "dotenv": "^16.3.1",
     "enzyme": "^3.11.0",
     "esbuild": "^0.18.0",
+    "eslint": "^8.3.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-cypress": "^2.10.3",
@@ -51,15 +56,13 @@
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "jest": "^27.0.0",
     "prettier": "~2.2.1",
     "react-scripts": "^5.0.1"
   },
   "peerDependencies": {
-    "eslint": "^8.3.0",
-    "jest": "^27.0.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "typescript": "^4.2.3"
+    "react-dom": "^17.0.2"
   },
   "engines": {
     "node": "<19",
@@ -68,6 +71,7 @@
   "packageManager": "yarn@4.1.1",
   "stableVersion": "3.0.0-beta",
   "devDependencies": {
-    "@types/byte-size": "^8"
+    "@types/byte-size": "^8",
+    "@types/eslint": "^8"
   }
 }

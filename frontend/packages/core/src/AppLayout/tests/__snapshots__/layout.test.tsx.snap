@@ -87,7 +87,7 @@ exports[`renders correctly 1`] = `
             type="button"
           >
             <div
-              class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-ccynmo-MuiAvatar-root"
+              class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1tmmvfw-MuiAvatar-root"
             >
               AN
             </div>
