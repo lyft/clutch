@@ -1,4 +1,5 @@
 import React from "react";
+import { Home as HomeIcon, OpenInNew as OpenInNewIcon } from "@mui/icons-material";
 import { Meta, Story } from "@storybook/react";
 
 import QuickLinksCard, { QuickLinksProps } from "../quick-links";
@@ -139,6 +140,23 @@ const withBadges = [
   },
 ];
 
+const withIcons = [
+  {
+    links: [
+      {
+        ...linkGroups[0].links[0],
+        icon: HomeIcon,
+      },
+      {
+        ...linkGroups[0].links[1],
+        icon: OpenInNewIcon,
+      },
+    ],
+    name: "Group 1",
+    imagePath,
+  },
+];
+
 export const Default = Template.bind({});
 Default.args = {
   linkGroups,
@@ -152,4 +170,9 @@ TooManyGroups.args = {
 export const WithBadges = Template.bind({});
 WithBadges.args = {
   linkGroups: withBadges,
+};
+
+export const WithIcons = Template.bind({});
+WithIcons.args = {
+  linkGroups: withIcons,
 };
