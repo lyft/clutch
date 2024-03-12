@@ -10,16 +10,12 @@
     "publishBeta": "../../tools/publish-frontend.sh api"
   },
   "dependencies": {
-    "protobufjs": "6.11.3",
-    "typescript": "^4.2.3"
+    "protobufjs": "6.11.3"
   },
   "engines": {
     "node": "<19",
     "yarn": "^4.1.1"
   },
   "packageManager": "yarn@4.1.1",
-  "stableVersion": "3.0.0-beta",
-  "devDependencies": {
-    "jest": "^27.0.0"
-  }
+  "stableVersion": "3.0.0-beta"
 }

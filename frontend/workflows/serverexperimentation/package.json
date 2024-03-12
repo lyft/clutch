@@ -10,7 +10,7 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "yarn workspace @clutch-sh/tools run packageLint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh server-experimentation",
     "test": "jest --passWithNoTests",
@@ -23,18 +23,22 @@
     "@clutch-sh/data-layout": "workspace:^",
     "@clutch-sh/experimentation": "workspace:^",
     "@clutch-sh/wizard": "workspace:^",
-    "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "2.8.8",
-    "@mui/material": "^5.11.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "react-hook-form": "^7.25.3",
-    "typescript": "^4.2.3",
     "yup": "^0.32.8"
   },
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",
+    "@types/eslint": "^8",
+    "eslint": "^8.3.0",
     "jest": "^27.0.0"
+  },
+  "peerDependencies": {
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.11.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": "<19",

@@ -3,32 +3,10 @@ set -euo pipefail
 
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 
-# Packages should be added to this list if there can only be one of them present when using Clutch as a submodule.
-LINKED_PORTAL_PACKAGES=(
-  "esbuild"
-  "react"
-  "react-dom"
-  "react-router"
-  "react-router-dom"
-  "recharts"
-  "@emotion/react"
-  "@emotion/styled"
-  "@mui/styles"
-  "@mui/material"
-  "@types/enzyme"
-  "@types/jest"
-  "@types/mocha"
-  "@types/node"
-  "@types/react"
-  "@types/react-dom"
-  "typescript"
-)
-
 EXTERNAL_ROOT="${1}"
 YARN=yarn
 
 DEST_DIR="${EXTERNAL_ROOT}/frontend"
-YALC_STORE_FOLDER="${DEST_DIR}/.yalc"
 
 # ensure consistent yarn versioning
 cd "${REPO_ROOT}"
@@ -41,7 +19,6 @@ ln -sf "${REPO_ROOT}" "${DEST_DIR}"
 
 cd "${REPO_ROOT}/frontend"
 {
-  echo "RUNNING INSTALL IN ${REPO_ROOT}/frontend"
   "${YARN}" install --immutable
 } || {
   echo "${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes."
@@ -50,10 +27,6 @@ cd "${REPO_ROOT}/frontend"
 
 # # Use linked deps in consuming repo.
 cd "${DEST_DIR}"
-echo "Linking & Setting resolutions..."
-for package in "${LINKED_PORTAL_PACKAGES[@]}"; do
-  npm pkg set resolutions.${package}="portal:clutch/frontend/node_modules/${package}"
-done
 
 if [[ -f "yarn.lock" ]]; then
   echo "Found lockfile..."

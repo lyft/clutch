@@ -14,7 +14,7 @@
     "compile": "tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
-    "lint": "yarn workspace @clutch-sh/tools run packageLint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh project-catalog",
     "test": "jest --passWithNoTests",
@@ -24,24 +24,28 @@
   "dependencies": {
     "@clutch-sh/api": "workspace:^",
     "@clutch-sh/core": "workspace:^",
-    "@emotion/styled": "^11.8.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.0",
     "lodash": "^4.17.21",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.25.3",
-    "react-router-dom": "6.0.0-beta.0",
-    "typescript": "^4.2.3"
+    "react-hook-form": "^7.25.3"
   },
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",
+    "@types/eslint": "^8",
+    "eslint": "^8.3.0",
     "jest": "^27.0.0"
+  },
+  "peerDependencies": {
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "6.0.0-beta.0",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": "<19",

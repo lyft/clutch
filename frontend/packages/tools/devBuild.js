@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import byteSize from "byte-size";
-import esbuild from "esbuild";
-import fs from "fs";
-import path from "path";
+const byteSize = require("byte-size");
+const esbuild = require("esbuild");
+const fs = require("fs");
+const path = require("path");
 
 const args = process.argv.slice(2);
 const fileDetailsLimit = 20;
@@ -70,9 +70,11 @@ const options = {
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 
-if (args.includes("-w") || args.includes("--watch")) {
-  const ctx = await esbuild.context({ ...options, logLevel: "info" });
-  await ctx.watch();
-} else {
-  await esbuild.build({ ...options, metafile: true, plugins: [sizeOutputPlugin] });
-}
+(async () => {
+  if (args.includes("-w") || args.includes("--watch")) {
+    const ctx = await esbuild.context({ ...options, logLevel: "info" });
+    await ctx.watch();
+  } else {
+    await esbuild.build({ ...options, metafile: true, plugins: [sizeOutputPlugin] });
+  }
+})();

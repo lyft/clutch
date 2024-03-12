@@ -2670,7 +2670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.19.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.3, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.19.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.20.6
   resolution: "@babel/runtime@npm:7.20.6"
   dependencies:
@@ -2679,7 +2679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.9":
+"@babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.8.3":
   version: 7.24.0
   resolution: "@babel/runtime@npm:7.24.0"
   dependencies:
@@ -2864,9 +2864,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@clutch-sh/api@workspace:api"
   dependencies:
-    jest: "npm:^27.0.0"
     protobufjs: "npm:6.11.3"
-    typescript: "npm:^4.2.3"
   languageName: unknown
   linkType: soft
 
@@ -2876,12 +2874,15 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
+    "@types/eslint": "npm:^8"
     esbuild-loader: "npm:^3.0.0"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
     react-app-rewired: "npm:^2.1.8"
-    react-dom: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -2892,15 +2893,18 @@ __metadata:
     "@clutch-sh/api": "workspace:^"
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     file-saver: "npm:^2.0.5"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-is: "npm:^17.0.2"
     react-json-view: "npm:^1.21.3"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -2916,8 +2920,10 @@ __metadata:
     "@storybook/preset-typescript": "npm:^3.0.0"
     "@storybook/react-webpack5": "npm:^7.6.0"
     "@storybook/theming": "npm:^7.6.0"
+    "@types/eslint": "npm:^8"
     "@types/react": "npm:^17.0.5"
     "@types/react-dom": "npm:^17.0.3"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     license-checker: "npm:^25.0.1"
     react: "npm:^17.0.2"
@@ -2947,21 +2953,21 @@ __metadata:
     "@mui/material": "npm:^5.11.0"
     "@mui/styles": "npm:^5.11.0"
     "@mui/system": "npm:^5.11.0"
-    "@mui/x-date-pickers": "npm:^5.0.20"
+    "@mui/x-date-pickers": "npm:~5.0.5"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@testing-library/react": "npm:^12.0.0"
     "@testing-library/react-hooks": "npm:^8.0.1"
     "@testing-library/user-event": "npm:^14.4.3"
+    "@types/eslint": "npm:^8"
     axios: "npm:^0.21.1"
     dayjs: "npm:^1.11.6"
+    eslint: "npm:^8.3.0"
     history: "npm:^5.0.0"
     jest: "npm:^27.0.0"
     js-cookie: "npm:^3.0.0"
     jwt-decode: "npm:^3.0.0"
     lodash: "npm:^4.17.15"
     material-table: "npm:^2.0.3"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
     react-router: "npm:6.0.0-beta.0"
@@ -2970,9 +2976,21 @@ __metadata:
     react-timeago: "npm:^7.0.0"
     recharts: "npm:^2.1.9"
     superstruct: "npm:~0.15.0"
-    typescript: "npm:^4.2.3"
     uuid: "npm:^8.3.2"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/react": ^11.8.1
+    "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.11.0
+    "@mui/lab": ^5.0.0-alpha.150
+    "@mui/material": ^5.11.0
+    "@mui/styles": ^5.11.0
+    "@mui/system": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-router: 6.0.0-beta.0
+    react-router-dom: 6.0.0-beta.0
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -2982,13 +3000,16 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:^4.17.15"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-thunk-reducer: "npm:^0.2.1"
     react-test-renderer: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3001,14 +3022,17 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:4.17.21"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3020,13 +3044,17 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3039,16 +3067,20 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     file-saver: "npm:^2.0.5"
     jest: "npm:^27.0.0"
     lodash: "npm:^4.17.15"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-is: "npm:^17.0.2"
     recharts: "npm:^2.1.9"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3060,16 +3092,19 @@ __metadata:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
-    "@mui/material": "npm:^5.11.0"
-    "@mui/styles": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     history: "npm:^5.0.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    "@mui/styles": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3082,18 +3117,21 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
     "@hookform/resolvers": "npm:2.8.8"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:4.17.21"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
     react-timeago: "npm:^7.0.0"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3105,15 +3143,18 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:^4.17.21"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3124,21 +3165,24 @@ __metadata:
     "@clutch-sh/api": "workspace:^"
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
     "@fortawesome/fontawesome-svg-core": "npm:^6.1.1"
     "@fortawesome/free-brands-svg-icons": "npm:^6.1.1"
     "@fortawesome/free-regular-svg-icons": "npm:^6.1.1"
     "@fortawesome/free-solid-svg-icons": "npm:^6.1.1"
     "@fortawesome/react-fontawesome": "npm:^0.1.18"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:^4.17.21"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
-    react-router-dom: "npm:6.0.0-beta.0"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-router-dom: 6.0.0-beta.0
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3148,15 +3192,18 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     lodash: "npm:^4.17.21"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3170,15 +3217,18 @@ __metadata:
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
     "@hookform/resolvers": "npm:2.8.8"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     history: "npm:^5.0.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3192,15 +3242,18 @@ __metadata:
     "@clutch-sh/experimentation": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
     "@hookform/resolvers": "npm:2.8.8"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3212,17 +3265,20 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    "@emotion/styled": "npm:^11.8.1"
     "@hookform/resolvers": "npm:2.8.8"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
     yup: "npm:^0.32.8"
+  peerDependencies:
+    "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3258,7 +3314,6 @@ __metadata:
     dotenv: "npm:^16.3.1"
     enzyme: "npm:^3.11.0"
     esbuild: "npm:^0.18.0"
-    eslint: "npm:^8.3.0"
     eslint-config-airbnb: "npm:^19.0.0"
     eslint-config-prettier: "npm:^8.2.0"
     eslint-plugin-cypress: "npm:^2.10.3"
@@ -3269,12 +3324,14 @@ __metadata:
     eslint-plugin-react: "npm:^7.27.0"
     eslint-plugin-react-hooks: "npm:^4.3.0"
     eslint-plugin-simple-import-sort: "npm:^7.0.0"
-    jest: "npm:^27.0.0"
     prettier: "npm:~2.2.1"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-scripts: "npm:^5.0.1"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    eslint: ^8.3.0
+    jest: ^27.0.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -3285,14 +3342,17 @@ __metadata:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    "@mui/icons-material": "npm:^5.11.0"
-    "@mui/material": "npm:^5.11.0"
+    "@types/eslint": "npm:^8"
     clsx: "npm:^1.1.1"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
-    react: "npm:^17.0.2"
-    react-dom: "npm:^17.0.2"
     react-is: "npm:^17.0.2"
-    typescript: "npm:^4.2.3"
+  peerDependencies:
+    "@mui/icons-material": ^5.11.0
+    "@mui/material": ^5.11.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    typescript: ^4.2.3
   languageName: unknown
   linkType: soft
 
@@ -5093,9 +5153,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^5.0.20":
-  version: 5.0.20
-  resolution: "@mui/x-date-pickers@npm:5.0.20"
+"@mui/x-date-pickers@npm:~5.0.5":
+  version: 5.0.8
+  resolution: "@mui/x-date-pickers@npm:5.0.8"
   dependencies:
     "@babel/runtime": "npm:^7.18.9"
     "@date-io/core": "npm:^2.15.0"
@@ -5133,7 +5193,7 @@ __metadata:
       optional: true
     moment:
       optional: true
-  checksum: 10c0/50534dcf567281b4066b600abfc9c2dc083c07d077a53a91a37a48dc6dcdba86a67607570d1bc4e4ae7e374ede5a30a9cc2a4c5787d4d172818a742134a0c50f
+  checksum: 10c0/512afb33fef9860dd8138d80058886aa77a87f2f238d14798dbaf1abc5af299e4740f742d3bd83acfa1c993fddd588f6ae4068429d499dea1b639c825ef9457d
   languageName: node
   linkType: hard
 
@@ -7527,6 +7587,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/eslint@npm:^8":
+  version: 8.56.5
+  resolution: "@types/eslint@npm:8.56.5"
+  dependencies:
+    "@types/estree": "npm:*"
+    "@types/json-schema": "npm:*"
+  checksum: 10c0/1d5d70ea107c63adfaf63020f85859c404f90c21ada2a655376b8e76109df354643797e30c7afc3b2de84797d9f5ce9f03f53a5d29a186706a44afd90f76597c
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:*, @types/estree@npm:^0.0.51":
   version: 0.0.51
   resolution: "@types/estree@npm:0.0.51"
@@ -7713,9 +7783,9 @@ __metadata:
   linkType: hard
 
 "@types/long@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@types/long@npm:4.0.1"
-  checksum: 10c0/5ce2ecb4d14d29f0f25eff2e2fdb4e5d2ad2a7613094722bc06514d4aaeaa60fc4819465a438aa8e7f987c2649f50da18755d87ac30e5241a127251ad06b2c80
+  version: 4.0.2
+  resolution: "@types/long@npm:4.0.2"
+  checksum: 10c0/42ec66ade1f72ff9d143c5a519a65efc7c1c77be7b1ac5455c530ae9acd87baba065542f8847522af2e3ace2cc999f3ad464ef86e6b7352eece34daf88f8c924
   languageName: node
   linkType: hard
 
@@ -7764,12 +7834,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^18.0.0":
+"@types/node@npm:*, @types/node@npm:^18.0.0":
   version: 18.19.15
   resolution: "@types/node@npm:18.19.15"
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/442e40cbbb75f17c4dbccf0a1a19ffd4b1b6b8cbbcf52ed754c3d3a3992fd1effbe48b9d45b9aae9ac9cebc8717927348b02e009b0a2c0b06b1f813e3b2896e6
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:>=13.7.0":
+  version: 20.11.26
+  resolution: "@types/node@npm:20.11.26"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/2df81e4f109588c4c490f2c7d616a06d2b3b9298f217468134b80711af810c9a6017a59beb3e6b1c596eb9b6c5a39d33403b99179acb89006badfbc55f2468bb
   languageName: node
   linkType: hard
 
@@ -7905,7 +7984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^17, @types/react@npm:^17.0.5":
+"@types/react@npm:*, @types/react@npm:^17, @types/react@npm:^17.0.5, @types/react@npm:>=16":
   version: 17.0.50
   resolution: "@types/react@npm:17.0.50"
   dependencies:
@@ -7913,17 +7992,6 @@ __metadata:
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/2e7cf61b7319b6398c62a29922255ce335c98bfbb55bda7c3aa386f4c2693d894d26eba9f7111f3ae86be79491d471a2ee89bf54f0445177ff70d1c30ab39382
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:>=16":
-  version: 18.2.64
-  resolution: "@types/react@npm:18.2.64"
-  dependencies:
-    "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/ab3ba9597990d08ffd419a5ad28fd22393c7a9a241ae455fb1d5d193d209471aa1909fa7ad016fd8d161eab6d0babba77b013b56a5170bedf78833085b9ee424
   languageName: node
   linkType: hard
 
