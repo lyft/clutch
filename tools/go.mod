@@ -1,3 +1,3 @@
 module github.com/lyft/clutch/tools
 
-go 1.21
+go 1.22
