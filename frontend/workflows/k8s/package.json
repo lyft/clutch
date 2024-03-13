@@ -27,7 +27,7 @@
     "@clutch-sh/data-layout": "workspace:^",
     "@clutch-sh/wizard": "workspace:^",
     "@hookform/resolvers": "2.8.8",
-    "lodash": "4.17.21",
+    "lodash": "^4.17.0",
     "react-hook-form": "^7.25.3",
     "react-timeago": "^7.0.0",
     "yup": "^0.32.8"
@@ -44,7 +44,7 @@
     "typescript": "^4.2.3"
   },
   "engines": {
-    "node": "<19",
+    "node": ">=18 <19",
     "yarn": "^4.1.1"
   },
   "packageManager": "yarn@4.1.1",

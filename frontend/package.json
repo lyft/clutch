@@ -80,7 +80,7 @@
     "typescript": "^4.2.3"
   },
   "engines": {
-    "node": "<19",
+    "node": ">=18 <19",
     "yarn": "^4.1.1"
   },
   "resolutions": {
@@ -109,5 +109,11 @@
     "typescript": "4.2.3"
   },
   "packageManager": "yarn@4.1.1",
-  "stableVersion": "3.0.0-beta"
+  "stableVersion": "3.0.0-beta",
+  "dependencies": {
+    "jest": "^27.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.2.3"
+  }
 }

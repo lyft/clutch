@@ -1938,7 +1938,7 @@ __metadata:
     history: "npm:^5.0.0"
     js-cookie: "npm:^3.0.0"
     jwt-decode: "npm:^3.0.0"
-    lodash: "npm:^4.17.15"
+    lodash: "npm:^4.17.0"
     material-table: "npm:^2.0.3"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
@@ -1963,7 +1963,7 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    lodash: "npm:^4.17.15"
+    lodash: "npm:^4.17.0"
     react-hook-thunk-reducer: "npm:^0.2.1"
     react-test-renderer: "npm:^17.0.2"
   peerDependencies:
@@ -1982,7 +1982,7 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    lodash: "npm:4.17.21"
+    lodash: "npm:^4.17.0"
     yup: "npm:^0.32.8"
   peerDependencies:
     "@emotion/styled": ^11.8.1
@@ -2022,7 +2022,7 @@ __metadata:
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
     file-saver: "npm:^2.0.5"
-    lodash: "npm:^4.17.15"
+    lodash: "npm:^4.17.0"
     react-is: "npm:^17.0.2"
     recharts: "npm:^2.1.9"
     yup: "npm:^0.32.8"
@@ -2066,7 +2066,7 @@ __metadata:
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
     "@hookform/resolvers": "npm:2.8.8"
-    lodash: "npm:4.17.21"
+    lodash: "npm:^4.17.0"
     react-hook-form: "npm:^7.25.3"
     react-timeago: "npm:^7.0.0"
     yup: "npm:^0.32.8"
@@ -2088,7 +2088,7 @@ __metadata:
     "@clutch-sh/data-layout": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
     "@clutch-sh/wizard": "workspace:^"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.17.0"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
   peerDependencies:
@@ -2112,7 +2112,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": "npm:^6.1.1"
     "@fortawesome/free-solid-svg-icons": "npm:^6.1.1"
     "@fortawesome/react-fontawesome": "npm:^0.1.18"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.17.0"
     react-hook-form: "npm:^7.25.3"
   peerDependencies:
     "@emotion/styled": ^11.8.1
@@ -2131,7 +2131,7 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.17.0"
     react-hook-form: "npm:^7.25.3"
   peerDependencies:
     "@emotion/styled": ^11.8.1
@@ -15216,7 +15216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.15.0, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0":
+"lodash@npm:^4.15.0, lodash@npm:^4.17.0, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c

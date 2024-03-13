@@ -27,7 +27,7 @@
     "@clutch-sh/data-layout": "workspace:^",
     "@clutch-sh/wizard": "workspace:^",
     "file-saver": "^2.0.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.0",
     "react-is": "^17.0.2",
     "recharts": "^2.1.9",
     "yup": "^0.32.8"
@@ -43,7 +43,7 @@
     "typescript": "^4.2.3"
   },
   "engines": {
-    "node": "<19",
+    "node": ">=18 <19",
     "yarn": "^4.1.1"
   },
   "packageManager": "yarn@4.1.1",
