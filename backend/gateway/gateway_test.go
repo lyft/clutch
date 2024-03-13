@@ -106,7 +106,7 @@ func TestGetStatsReporterConfiguration(t *testing.T) {
 		{
 			cfg: &gatewayv1.Config{Gateway: &gatewayv1.GatewayOptions{
 				Stats: &gatewayv1.Stats{
-					Reporter: &gatewayv1.Stats_PrometheusReporter_{PrometheusReporter: &gatewayv1.Stats_PrometheusReporter{HandlerPath: "foo"}},
+					Reporter: &gatewayv1.Stats_PrometheusReporter_{PrometheusReporter: &gatewayv1.Stats_PrometheusReporter{HandlerPath: "foo.com/path"}},
 				},
 			}},
 			prefix:             "clutch",
