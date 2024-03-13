@@ -30,7 +30,9 @@ const StyledButton = styled("button")({
 });
 
 const StyledPopperItem = styled(PopperItem)({
-  height: "auto !important",
+  "&&&": {
+    height: "auto",
+  },
   "& span.MuiTypography-root": {
     padding: "0",
   },
