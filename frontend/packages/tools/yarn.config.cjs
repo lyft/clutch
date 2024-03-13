@@ -1,0 +1,61 @@
+/* eslint-disable no-restricted-syntax */
+const workspaceRegex = /^((\.|api)|((packages|workflows)\/.*))$/;
+
+const enforcedPackages = {
+  "@emotion/react": "^11.0.0",
+  "@emotion/styled": "^11.0.0",
+  "@mui/icons-material": "^5.8.4",
+  "@mui/lab": "^5.0.0-alpha.87",
+  "@mui/material": "^5.8.5",
+  "@mui/styles": "^5.8.4",
+  "@mui/system": "^5.8.4",
+  "@types/react-dom": "^17.0.3",
+  "@types/react": "^17.0.5",
+  "react-dom": "^17.0.2",
+  "react-router-dom": "^6.0.0-beta.0",
+  "react-router": "^6.0.0-beta.0",
+  esbuild: "^0.18.0",
+  eslint: "^8.3.0",
+  jest: "^27.0.0",
+  lodash: "^4.17.0",
+  react: "^17.0.2",
+  typescript: "^4.2.3",
+};
+
+const enforceWorkspaceEngines = workspace => {
+  workspace.set("engines.node", ">=18 <19");
+};
+
+const enforceDependencies = dep => {
+  if (enforcedPackages[dep.ident]) {
+    dep.update(enforcedPackages[dep.ident]);
+  }
+};
+
+const workspaceEnforcers = [enforceWorkspaceEngines];
+const dependencyEnforcers = [enforceDependencies];
+
+const constraintFn = (Yarn, workspace) => {
+  workspaceEnforcers.forEach(enforcer => enforcer(workspace));
+
+  for (const dep of Yarn.dependencies()) {
+    dependencyEnforcers.forEach(enforcer => enforcer(dep));
+  }
+};
+
+module.exports = {
+  constraintFn,
+  dependencyEnforcers,
+  enforceDependencies,
+  enforcedPackages,
+  enforceWorkspaceEngines,
+  workspaceEnforcers,
+  workspaceRegex,
+  async constraints({ Yarn }) {
+    for (const workspace of Yarn.workspaces()) {
+      if (workspaceRegex.test(workspace.cwd.trim())) {
+        constraintFn(Yarn, workspace);
+      }
+    }
+  },
+};
