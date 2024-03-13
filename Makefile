@@ -93,7 +93,7 @@ frontend-dev-build: yarn-install
 	$(YARN) --cwd frontend build:dev
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: yarn-install
+frontend-dev: setup-git-hooks yarn-install
 	$(YARN) --cwd frontend start
 
 .PHONY: frontend-lint # Lint the frontend code.
@@ -188,6 +188,10 @@ preflight-checks-frontend:
 .PHONY: preflight-checks-backend
 preflight-checks-backend:
 	@tools/preflight-checks.sh backend
+
+.PHONY: setup-git-hooks
+setup-git-hooks:
+	@tools/setup-git-hooks.sh
 
 .PHONY: preflight-checks
 preflight-checks:

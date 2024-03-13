@@ -1,4 +1,5 @@
-/* eslint-disable no-restricted-syntax */
+const { defineConfig } = require("@yarnpkg/types");
+
 const workspaceRegex = /^((\.|api)|((packages|workflows)\/.*))$/;
 
 const enforcedPackages = {
@@ -26,36 +27,33 @@ const enforceWorkspaceEngines = workspace => {
   workspace.set("engines.node", ">=18 <19");
 };
 
-const enforceDependencies = dep => {
-  if (enforcedPackages[dep.ident]) {
-    dep.update(enforcedPackages[dep.ident]);
-  }
+const enforceDependencies = workspace => {
+  workspace.pkg.dependencies.forEach(dep => {
+    if (enforcedPackages[dep.ident]) {
+      workspace.set(`dependencies.${dep.ident}`, enforcedPackages[dep.ident]);
+    }
+  });
 };
 
 const workspaceEnforcers = [enforceWorkspaceEngines];
 const dependencyEnforcers = [enforceDependencies];
 
-const constraintFn = (Yarn, workspace) => {
+const constraintFn = workspace => {
   workspaceEnforcers.forEach(enforcer => enforcer(workspace));
-
-  for (const dep of Yarn.dependencies()) {
-    dependencyEnforcers.forEach(enforcer => enforcer(dep));
-  }
+  dependencyEnforcers.forEach(enforcer => enforcer(workspace));
 };
 
-module.exports = {
+module.exports = defineConfig({
   constraintFn,
   dependencyEnforcers,
-  enforceDependencies,
   enforcedPackages,
-  enforceWorkspaceEngines,
   workspaceEnforcers,
   workspaceRegex,
   async constraints({ Yarn }) {
-    for (const workspace of Yarn.workspaces()) {
+    Yarn.workspaces().forEach(workspace => {
       if (workspaceRegex.test(workspace.cwd.trim())) {
-        constraintFn(Yarn, workspace);
+        constraintFn(workspace);
       }
-    }
+    });
   },
-};
+});

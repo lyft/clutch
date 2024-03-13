@@ -2,9 +2,10 @@ const childProcess = require("child_process");
 const path = require("path");
 const chalk = require("chalk");
 
-const { WORKSPACES, PROJECT_CWD } = process.env;
+const { WORKSPACES } = process.env;
 const buildCmd = process.argv[2];
 const startCmd = process.argv[3];
+const PROJECT_CWD = process.argv[4];
 
 if (!WORKSPACES && !WORKSPACES.length) {
   throw new Error("WORKSPACES environment variable is required");
@@ -14,6 +15,9 @@ if (!buildCmd && !buildCmd.length) {
 }
 if (!startCmd && !startCmd.length) {
   throw new Error("startCmd argument is required - example 'start'");
+}
+if (!PROJECT_CWD && !PROJECT_CWD.length) {
+  throw new Error("PROJECT_CWD argument is required - example '$INIT_CWD'");
 }
 
 /* eslint-disable no-console */

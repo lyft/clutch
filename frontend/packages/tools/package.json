@@ -8,6 +8,8 @@
   "scripts": {
     "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
     "package:test": "cd $INIT_CWD && run -T jest --passWithNoTests",
+    "constraints:check": "cd $INIT_CWD && yarn constraints",
+    "constraints:fix": "yarn run constraints:check --fix",
     "buildWatch": "yarn node buildWatch.js",
     "buildDev": "yarn node devBuild.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
@@ -37,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "@yarnpkg/types": "^4.0.0",
     "babel-jest": "^27.4.2",
     "babel-plugin-module-resolver": "^4.0.0",
     "byte-size": "^8.1.1",
