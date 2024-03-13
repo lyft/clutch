@@ -45,27 +45,30 @@ const parsedWorkspaces = WORKSPACES.split("\n").map(workspace => ({
 }));
 
 Promise.all(
-  parsedWorkspaces.map(workspace => {
-    return new Promise(resolve => {
-      const child = childProcess.spawn("yarn", ["run", buildCmd], {
-        cwd: path.join(PROJECT_CWD, workspace.location),
-      });
+  parsedWorkspaces
+    .filter(({ location }) => location !== ".")
+    .map(workspace => {
+      return new Promise(resolve => {
+        const child = childProcess.spawn("yarn", ["run", buildCmd], {
+          cwd: path.join(PROJECT_CWD, workspace.location),
+        });
 
-      child.stdout.on("data", data => {
-        if (!data.includes(`Couldn't find a script named "${buildCmd}".`)) {
+        child.stdout.on("data", data => {
+          if (!data.includes(`Couldn't find a script named "${buildCmd}".`)) {
+            log(`[${workspace.name}]: ${data.toString().trim()}`, workspace.color);
+          }
+          resolve();
+        });
+
+        child.stderr.on("data", data => {
           log(`[${workspace.name}]: ${data.toString().trim()}`, workspace.color);
-        }
-        resolve();
+          resolve();
+        });
       });
-
-      child.stderr.on("data", data => {
-        log(`[${workspace.name}]: ${data.toString().trim()}`, workspace.color);
-        resolve();
-      });
-    });
-  })
+    })
 ).then(() => {
   log("\nStarting Server...\n");
+
   const child = childProcess.spawn("yarn", ["run", startCmd], { cwd: PROJECT_CWD });
 
   child.stdout.on("data", data => {
