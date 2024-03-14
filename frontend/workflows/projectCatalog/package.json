@@ -11,7 +11,7 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "tsc -b",
+    "compile": "yarn run -T tsc -b",
     "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
     "compile:watch": "yarn compile:dev -w",
     "lint": "yarn run package:lint",
