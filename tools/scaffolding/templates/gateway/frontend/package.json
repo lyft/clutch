@@ -4,35 +4,37 @@
   "version": "0.0.0",
   "scripts": {
     "build": "yarn compile && yarn register-workflows && react-scripts build",
+    "buildStart": "DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false FORCE_COLOR=true react-app-rewired start | cat",
+    "buildWatch": "WORKSPACES=\"$(yarn workspaces list --json)\" npm explore @clutch-sh/tools -- yarn run buildWatch compile:watch buildStart $INIT_CWD",
     "clean": "rm -rf build",
-    "compile": "lerna run compile --parallel",
-    "compile:watch": "lerna run compile:watch --parallel",
+    "compile:dev": "yarn workspaces foreach -Ai run compile:dev",
+    "compile:watch": "yarn workspaces foreach -Aip -j unlimited run compile:watch",
+    "compile": "yarn workspaces foreach -Ai run compile",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "yarn run lint --fix",
-    "register-workflows": "npm explore @clutch-sh/tools -- yarn registerWorkflows $PWD/src",
-    "start": "yarn clean && yarn compile:watch & yarn register-workflows && FORCE_COLOR=true react-scripts start | cat",
-    "test": "lerna run test --stream --no-bail",
-    "test:coverage": "lerna run test:coverage --stream --no-bail",
-    "test:watch": "lerna run test:watch --parallel",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix && yarn run lint --fix",
+    "lint": "yarn register-workflows && eslint --ext .js,.jsx,.ts,.tsx src && yarn workspaces foreach -Ap -j unlimited --include 'workflows/*' run lint",
+    "register-workflows": "npm explore @clutch-sh/tools -- yarn run registerWorkflows $INIT_CWD/src clutch-dev.config.js",
+    "start": "yarn run clean && yarn run register-workflows && yarn run buildWatch",
+    "test:coverage": "yarn workspaces foreach -Ap -j unlimited --include 'workflows/*' run test:coverage",
+    "test:watch": "yarn workspaces foreach -Aip -j unlimited --include 'workflows/*' run test:watch",
+    "test": "yarn workspaces foreach -Ap -j unlimited --include 'workflows/*' run test",
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
     "protobufjs": "6.11.3"
   },
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "@clutch-sh/ec2": "^3.0.0-beta",
+    "@clutch-sh/ec2": "^4.0.0-beta",
     "@{{ .RepoName }}/echo": "^0.0.0",
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/tools": "^2.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@clutch-sh/tools": "^4.0.0-beta",
     "history": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5.0.1"
   },
   "resolutions": {
-    "@types/react": "^17.0.2",
+    "@types/react": "17.0.50",
     "react-hook-form": "7.25.3"
   },
   "workspaces": [
@@ -52,7 +54,8 @@
     ]
   },
   "engines": {
-    "node": "<19",
-    "yarn": "^4.1.0"
-  }
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1"
 }
