@@ -7,7 +7,7 @@ did_checks_pass=true
 # Minimum versions
 MIN_GO_VERSION="1.17"
 MIN_NODE_VERSION="18.0.0"
-MIN_YARN_VERSION="4.1.0"
+MIN_YARN_VERSION="4.1.1"
 
 SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 REPO_ROOT="${SCRIPT_ROOT}"
@@ -80,11 +80,11 @@ frontend() {
     fi
   fi
 
-  if ! command -v yarn -v &> /dev/null; then
+  if ! command -v "${BUILD_ROOT}/bin/yarn.sh" &> /dev/null; then
     echo "yarn is not installed or cannot be found in the current PATH, this is a required dependency."
     did_checks_pass=false
   else
-    current_version=$(yarn --version)
+    current_version=$("${BUILD_ROOT}/bin/yarn.sh" --version)
     if ! is_version_ok $MIN_YARN_VERSION "$current_version"; then
       echo "yarn version must be >= $MIN_YARN_VERSION, current version $current_version"
       did_checks_pass=false
