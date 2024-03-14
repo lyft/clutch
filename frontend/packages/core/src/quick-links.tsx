@@ -1,7 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Badge, BadgeProps } from "@mui/material";
+import { Badge, BadgeProps, SvgIcon } from "@mui/material";
 
 import { IconButton } from "./button";
 import { Card } from "./card";
@@ -29,8 +29,16 @@ const StyledButton = styled("button")({
   display: "flex",
 });
 
-const StyledSpan = styled("span")({
-  whiteSpace: "nowrap",
+const StyledPopperItem = styled(PopperItem)({
+  "&&&": {
+    height: "auto",
+  },
+  "& span.MuiTypography-root": {
+    padding: "0",
+  },
+  "& a.MuiTypography-root": {
+    padding: "4px 16px",
+  },
 });
 
 interface LinkGroupProps {
@@ -40,6 +48,7 @@ interface LinkGroupProps {
 
 interface QLink extends IClutch.core.project.v1.ILink {
   trackingId?: string;
+  icon?: React.ElementType;
 }
 
 interface QuickLinkProps extends LinkGroupProps {
@@ -84,13 +93,13 @@ const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
   ) : null;
 
 interface QuickLinkGroupProps extends LinkGroupProps {
-  links: IClutch.core.project.v1.ILink[];
+  links: QLink[];
 }
 // Have a popper in the case of multiple links per group
 const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroupProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
-  const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);
+  const [validLinks, setValidLinks] = React.useState<QLink[]>([]);
 
   React.useEffect(() => {
     if (links) {
@@ -110,17 +119,18 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
         placement="bottom-end"
       >
         {validLinks.map(link => (
-          <PopperItem key={link.name}>
+          <StyledPopperItem key={link.name}>
             {link?.url && (
               <Link href={link.url}>
-                <StyledSpan>
-                  <Typography color="inherit" variant="body4">
+                <Grid container alignItems="center" gap={1}>
+                  {link?.icon && <SvgIcon component={link.icon} fontSize="small" />}
+                  <Typography color="inherit" variant="body4" noWrap>
                     {link.name}
                   </Typography>
-                </StyledSpan>
+                </Grid>
               </Link>
             )}
-          </PopperItem>
+          </StyledPopperItem>
         ))}
       </Popper>
     </QuickLinkContainer>
