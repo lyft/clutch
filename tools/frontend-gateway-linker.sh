@@ -46,7 +46,10 @@ cd "${REPO_ROOT}/frontend"
   exit 1
 }
 
-# Use linked deps in consuming repo.
+
+cd "${EXTERNAL_ROOT}"
+"${REPO_ROOT}"/tools/install-yarn.sh
+
 cd "${DEST_DIR}"
 
 if [[ -f "yarn.lock" ]]; then
