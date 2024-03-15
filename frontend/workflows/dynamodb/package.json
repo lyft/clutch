@@ -15,8 +15,8 @@
     "compile:watch": "yarn compile:dev -w",
     "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "test": "yarn run package:test",
     "publishBeta": "../../../tools/publish-frontend.sh dynamodb",
+    "test": "yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },

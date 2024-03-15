@@ -4,12 +4,10 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "references": [
-    {"path": "../../packages/core"},
-    {"path": "../../packages/data-layout"},
-    {"path": "../../packages/wizard"},
+    { "path": "../../packages/core" },
+    { "path": "../../packages/data-layout" },
+    { "path": "../../packages/wizard" }
   ]
 }

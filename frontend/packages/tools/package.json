@@ -6,14 +6,14 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
-    "package:test": "cd $INIT_CWD && run -T jest --passWithNoTests",
+    "buildDev": "yarn node devBuild.js",
+    "buildWatch": "yarn node buildWatch.js",
     "constraints:check": "cd $INIT_CWD && yarn constraints",
     "constraints:fix": "yarn run constraints:check --fix",
-    "buildWatch": "yarn node buildWatch.js",
-    "buildDev": "yarn node devBuild.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
+    "package:test": "cd $INIT_CWD && run -T jest --passWithNoTests",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "yarn node workflow-registrar.js",
     "uploadSourcemaps": "yarn node upload-sourcemaps.js"
@@ -63,6 +63,10 @@
     "prettier": "~2.2.1",
     "react-scripts": "^5.0.1"
   },
+  "devDependencies": {
+    "@types/byte-size": "^8",
+    "@types/eslint": "^8"
+  },
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -72,9 +76,5 @@
     "yarn": "^4.1.1"
   },
   "packageManager": "yarn@4.1.1",
-  "stableVersion": "3.0.0-beta",
-  "devDependencies": {
-    "@types/byte-size": "^8",
-    "@types/eslint": "^8"
-  }
+  "stableVersion": "3.0.0-beta"
 }

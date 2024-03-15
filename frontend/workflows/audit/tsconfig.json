@@ -4,11 +4,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": [
-    "src/**/*",
-  ],
-  "references": [
-    {"path": "../../api"},
-    {"path": "../../packages/core"},
-  ]
+  "include": ["src/**/*"],
+  "references": [{ "path": "../../api" }, { "path": "../../packages/core" }]
 }
