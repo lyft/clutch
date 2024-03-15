@@ -36,7 +36,7 @@
     "lint:fix": "yarn run lint --fix",
     "lint:packages": "sort-package-json package.json api/package.json {packages,workflows}/*/package.json --check",
     "lint:packages:fix": "sort-package-json package.json api/package.json {packages,workflows}/*/package.json",
-    "nuke": "yarn dlx npkill",
+    "nuke": "PROJECT_CWD=$PWD npm run --silent node_modules:nuke --workspace=@clutch-sh/tools",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "yarn compile && yarn workspaces foreach -Ai run publishBeta",
     "register-workflows": "yarn workspace @clutch-sh/app run register-workflows",
