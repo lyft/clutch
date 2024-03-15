@@ -71,6 +71,7 @@
     "@mui/material": "5.8.5",
     "@mui/styles": "5.8.4",
     "@mui/system": "5.8.5",
+    "@mui/x-date-pickers": "5.0.5",
     "@types/enzyme": "3.10.8",
     "@types/jest": "29.1.2",
     "@types/mocha": "10.0.0",

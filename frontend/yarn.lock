@@ -2487,7 +2487,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@date-io/date-fns@npm:^2.11.0, @date-io/date-fns@npm:^2.15.0":
+"@date-io/date-fns@npm:^2.15.0":
   version: 2.17.0
   resolution: "@date-io/date-fns@npm:2.17.0"
   dependencies:
@@ -2501,7 +2501,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@date-io/dayjs@npm:^2.11.0, @date-io/dayjs@npm:^2.15.0":
+"@date-io/dayjs@npm:^2.15.0":
   version: 2.17.0
   resolution: "@date-io/dayjs@npm:2.17.0"
   dependencies:
@@ -2515,7 +2515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@date-io/luxon@npm:^2.11.1, @date-io/luxon@npm:^2.15.0":
+"@date-io/luxon@npm:^2.15.0":
   version: 2.17.0
   resolution: "@date-io/luxon@npm:2.17.0"
   dependencies:
@@ -2529,7 +2529,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@date-io/moment@npm:^2.11.0, @date-io/moment@npm:^2.15.0":
+"@date-io/moment@npm:^2.15.0":
   version: 2.17.0
   resolution: "@date-io/moment@npm:2.17.0"
   dependencies:
@@ -3705,7 +3705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^5.10.3, @mui/utils@npm:^5.15.12, @mui/utils@npm:^5.6.0, @mui/utils@npm:^5.8.4":
+"@mui/utils@npm:^5.10.3, @mui/utils@npm:^5.15.12, @mui/utils@npm:^5.8.4":
   version: 5.15.12
   resolution: "@mui/utils@npm:5.15.12"
   dependencies:
@@ -3723,44 +3723,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:5.0.0-alpha.1":
-  version: 5.0.0-alpha.1
-  resolution: "@mui/x-date-pickers@npm:5.0.0-alpha.1"
-  dependencies:
-    "@date-io/date-fns": "npm:^2.11.0"
-    "@date-io/dayjs": "npm:^2.11.0"
-    "@date-io/luxon": "npm:^2.11.1"
-    "@date-io/moment": "npm:^2.11.0"
-    "@mui/utils": "npm:^5.6.0"
-    clsx: "npm:^1.1.1"
-    prop-types: "npm:^15.7.2"
-    react-transition-group: "npm:^4.4.2"
-    rifm: "npm:^0.12.1"
-  peerDependencies:
-    "@mui/material": ^5.2.3
-    "@mui/system": ^5.2.3
-    date-fns: ^2.25.0
-    dayjs: ^1.10.7
-    luxon: ^1.28.0 || ^2.0.0
-    moment: ^2.29.1
-    react: ^17.0.2 || ^18.0.0
-    react-dom: ^17.0.2 || ^18.0.0
-  peerDependenciesMeta:
-    date-fns:
-      optional: true
-    dayjs:
-      optional: true
-    luxon:
-      optional: true
-    moment:
-      optional: true
-  checksum: 10c0/647b00bf82a1b2555c9933bb804ebe67da4974c5ccfe6701ff038ad918b45e4d2e6e3ce26cbf20417a2a225d0832ad3612ba64ebeaf65be2a0e54b0f57d9c944
-  languageName: node
-  linkType: hard
-
-"@mui/x-date-pickers@npm:~5.0.5":
-  version: 5.0.20
-  resolution: "@mui/x-date-pickers@npm:5.0.20"
+"@mui/x-date-pickers@npm:5.0.5":
+  version: 5.0.5
+  resolution: "@mui/x-date-pickers@npm:5.0.5"
   dependencies:
     "@babel/runtime": "npm:^7.18.9"
     "@date-io/core": "npm:^2.15.0"
@@ -3798,7 +3763,7 @@ __metadata:
       optional: true
     moment:
       optional: true
-  checksum: 10c0/50534dcf567281b4066b600abfc9c2dc083c07d077a53a91a37a48dc6dcdba86a67607570d1bc4e4ae7e374ede5a30a9cc2a4c5787d4d172818a742134a0c50f
+  checksum: 10c0/7f8e5417baa4ee4b0b23f89a18fee4f6590d07f69e7b5b77879b3cb23f25e9322909cddedb6594298a3335775682d9702db53d7e1f72a672fc2b069e7d389156
   languageName: node
   linkType: hard
 
