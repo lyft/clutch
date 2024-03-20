@@ -3,6 +3,7 @@ const byteSize = require("byte-size");
 const esbuild = require("esbuild");
 const fs = require("fs");
 const path = require("path");
+const { replaceTscAliasPaths } = require("tsc-alias");
 
 const args = process.argv.slice(2);
 const fileDetailsLimit = 20;
@@ -23,6 +24,15 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
   });
 
   return tmpArrayOfFiles;
+};
+
+const tscAliasPlugin = {
+  name: "tscAlias",
+  setup(build) {
+    build.onEnd(() => {
+      replaceTscAliasPaths({ configFile: `${process.argv[2]}/tsconfig.json` });
+    });
+  },
 };
 
 const sizeOutputPlugin = {
@@ -68,6 +78,7 @@ const options = {
   sourcemap: true,
   preserveSymlinks: true,
   color: true,
+  plugins: [tscAliasPlugin],
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 
@@ -76,6 +87,10 @@ const options = {
     const ctx = await esbuild.context({ ...options, logLevel: "info" });
     await ctx.watch();
   } else {
-    await esbuild.build({ ...options, metafile: true, plugins: [sizeOutputPlugin] });
+    await esbuild.build({
+      ...options,
+      metafile: true,
+      plugins: [...options.plugins, sizeOutputPlugin],
+    });
   }
 })();

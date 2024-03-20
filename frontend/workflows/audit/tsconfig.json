@@ -2,7 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@logs": ["logs"]
+    }
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../../api" }, { "path": "../../packages/core" }]
