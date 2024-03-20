@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "dist",
     "paths": {
       "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"]
     }

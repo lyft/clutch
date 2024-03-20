@@ -25,7 +25,7 @@ exports[`renders correctly 1`] = `
             class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-cfe8rz-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
               for="mui-1"
               id="mui-1-label"
@@ -48,7 +48,7 @@ exports[`renders correctly 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-1d4dnmt"
+                  class="css-t08j42"
                 >
                   <span>
                     Downstream Cluster
@@ -61,7 +61,7 @@ exports[`renders correctly 1`] = `
             class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-cfe8rz-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
               for="mui-2"
               id="mui-2-label"
@@ -84,7 +84,7 @@ exports[`renders correctly 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-1d4dnmt"
+                  class="css-t08j42"
                 >
                   <span>
                     Upstream Redis Cluster
@@ -97,7 +97,7 @@ exports[`renders correctly 1`] = `
             class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-cfe8rz-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
               for="mui-3"
               id="mui-3-label"
@@ -120,7 +120,7 @@ exports[`renders correctly 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-1d4dnmt"
+                  class="css-t08j42"
                 >
                   <span>
                     Percent
@@ -134,7 +134,7 @@ exports[`renders correctly 1`] = `
             id="faultType"
           >
             <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-393v6u-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled css-re9ma3-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
             >
               Fault Type
@@ -143,20 +143,18 @@ exports[`renders correctly 1`] = `
               class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-mzhcmf-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
             >
               <div
-                aria-controls="mui-4"
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-labelledby="faultType-select"
-                class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-8tdc0n-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-7atx2b-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
                 id="faultType-select"
-                role="combobox"
+                role="button"
                 tabindex="0"
               >
                 Error
               </div>
               <input
                 aria-hidden="true"
-                aria-invalid="false"
                 class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
                 tabindex="-1"
                 value="Error"
@@ -181,7 +179,7 @@ exports[`renders correctly 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-1d4dnmt"
+                  class="css-t08j42"
                 >
                   <span>
                     Fault Type
@@ -195,7 +193,7 @@ exports[`renders correctly 1`] = `
             data-border="top"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation css-ofve1n-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation css-ofve1n-MuiButtonBase-root-MuiButton-root"
               palette="[object Object]"
               tabindex="0"
               type="button"
@@ -203,7 +201,7 @@ exports[`renders correctly 1`] = `
               Cancel
             </button>
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
               palette="[object Object]"
               tabindex="0"
               type="submit"

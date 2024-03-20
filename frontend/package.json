@@ -43,11 +43,11 @@
     "start": "yarn run clean && yarn run register-workflows && yarn run buildWatch",
     "storybook": "rm -rf node_modules/.cache/storybook/ && storybook dev --disable-telemetry -p 6006 -h localhost",
     "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 storybook build -o netlify/storybook-static",
-    "test": "yarn workspaces foreach -Ap -j unlimited  run test",
-    "test:coverage": "yarn workspaces foreach -Ap -j unlimited  run test:coverage",
-    "test:e2e": "yarn workspaces foreach -Ap -j unlimited  run test:e2e",
+    "test": "yarn workspaces foreach -Ap -j unlimited run test",
+    "test:coverage": "yarn workspaces foreach -Ap -j unlimited run test:coverage",
+    "test:e2e": "yarn workspaces foreach -Ap -j unlimited run test:e2e",
     "test:licenses": "yarn node license-linter.js",
-    "test:update": "yarn test:coverage -u",
+    "test:update": "yarn run test -u",
     "test:watch": "yarn workspaces foreach -Aip -j unlimited run test:watch"
   },
   "browserslist": {

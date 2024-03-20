@@ -27,7 +27,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
                     <div
                       background="#ffffff"
@@ -43,10 +43,10 @@ exports[`renders correctly 1`] = `
                     </div>
                   </span>
                   <span
-                    class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1v54gbj-MuiStepLabel-labelContainer"
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
                   >
                     <span
-                      class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12enr9s-MuiStepLabel-label"
+                      class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
                       Lookup
                     </span>
@@ -67,7 +67,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
                     <div
                       background="#DBDBE0"
@@ -83,10 +83,10 @@ exports[`renders correctly 1`] = `
                     </div>
                   </span>
                   <span
-                    class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1v54gbj-MuiStepLabel-labelContainer"
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
                   >
                     <span
-                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12enr9s-MuiStepLabel-label"
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
                       Modify
                     </span>
@@ -107,7 +107,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
                     <div
                       background="#DBDBE0"
@@ -123,10 +123,10 @@ exports[`renders correctly 1`] = `
                     </div>
                   </span>
                   <span
-                    class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1v54gbj-MuiStepLabel-labelContainer"
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
                   >
                     <span
-                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12enr9s-MuiStepLabel-label"
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
                       Result
                     </span>

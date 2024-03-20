@@ -27,7 +27,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
                     <div
                       background="#ffffff"
@@ -43,10 +43,10 @@ exports[`renders correctly 1`] = `
                     </div>
                   </span>
                   <span
-                    class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1v54gbj-MuiStepLabel-labelContainer"
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
                   >
                     <span
-                      class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12enr9s-MuiStepLabel-label"
+                      class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
                       Lookup
                     </span>
@@ -67,7 +67,7 @@ exports[`renders correctly 1`] = `
                   class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
                 >
                   <span
-                    class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
                   >
                     <div
                       background="#DBDBE0"
@@ -83,10 +83,10 @@ exports[`renders correctly 1`] = `
                     </div>
                   </span>
                   <span
-                    class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1v54gbj-MuiStepLabel-labelContainer"
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
                   >
                     <span
-                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12enr9s-MuiStepLabel-label"
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
                       Details
                     </span>
@@ -109,7 +109,7 @@ exports[`renders correctly 1`] = `
                 class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
               >
                 <label
-                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined css-cfe8rz-MuiFormLabel-root-MuiInputLabel-root"
+                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
                   data-shrink="true"
                   for="mui-1"
                   id="mui-1-label"
@@ -132,7 +132,7 @@ exports[`renders correctly 1`] = `
                     class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
                   >
                     <legend
-                      class="css-1d4dnmt"
+                      class="css-t08j42"
                     >
                       <span>
                         IP Address
@@ -146,7 +146,7 @@ exports[`renders correctly 1`] = `
                 data-border="top"
               >
                 <button
-                  class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
+                  class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
                   palette="[object Object]"
                   tabindex="0"
                   type="button"

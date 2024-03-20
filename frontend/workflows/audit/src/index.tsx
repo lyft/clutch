@@ -1,7 +1,7 @@
 import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
 import AuditEvent from "./audit-event";
-import AuditLog from "@logs";
+import AuditLog from "./logs";
 
 export interface AuditLogProps extends BaseWorkflowProps {
   detailsPathPrefix?: string;

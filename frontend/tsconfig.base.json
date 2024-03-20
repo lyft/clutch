@@ -13,7 +13,6 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noImplicitReturns": true,
-    "outDir": "dist",
     "preserveConstEnums": true,
     "preserveSymlinks": true,
     "skipLibCheck": true,

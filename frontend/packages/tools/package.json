@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "buildDev": "echo \"This command is deprecated, please use 'yarn package:compile:dev' instead.\" && exit 1",
+    "buildDev": "echo \"This command is deprecated, please use 'yarn run package:compile:dev' instead.\" && exit 1",
     "constraints:check": "cd $INIT_CWD && yarn constraints",
     "constraints:fix": "yarn run constraints:check --fix",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
