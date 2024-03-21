@@ -251,6 +251,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" |
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
+  noDefault?: boolean;
 }
 
 const Select = ({
@@ -263,6 +264,7 @@ const Select = ({
   options,
   onChange,
   value,
+  noDefault,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
@@ -276,7 +278,7 @@ const Select = ({
   );
 
   React.useEffect(() => {
-    if (flatOptions.length !== 0) {
+    if (flatOptions.length !== 0 && !noDefault) {
       onChange && onChange(flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label);
     }
   }, []);
