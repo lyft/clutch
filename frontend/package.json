@@ -27,7 +27,7 @@
     "build": "yarn compile && yarn workspace @clutch-sh/app build",
     "build:dev": "yarn compile:dev && yarn run register-workflows",
     "buildStart": "DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true yarn workspace @clutch-sh/app run start | cat",
-    "buildWatch": "WORKSPACES=\"$(yarn workspaces list --no-private --json)\" yarn workspace @clutch-sh/tools run buildWatch compile:watch buildStart $INIT_CWD",
+    "buildWatch": "WORKSPACES=\"$(yarn workspaces list --no-private --json)\" yarn run workspace:compile:watch compile:watch buildStart $INIT_CWD",
     "clean": "yarn workspaces foreach -Aip -j unlimited run clean",
     "compile": "yarn clean && yarn workspaces foreach -Ai run compile",
     "compile:dev": "yarn workspaces foreach -Ai run compile:dev",
