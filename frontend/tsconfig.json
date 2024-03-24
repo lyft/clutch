@@ -5,13 +5,5 @@
     "paths": {
       "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"]
     }
-  },
-  "exclude": [
-    "node_modules",
-    "**/*.stories.ts*",
-    "**/*.stories.js*",
-    "**/*.test.js*",
-    "**/*.test.ts*",
-    "**/dist/*"
-  ]
+  }
 }

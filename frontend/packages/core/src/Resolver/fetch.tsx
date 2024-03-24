@@ -1,6 +1,6 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import * as $pbclutch from "@clutch-sh/api";
-import type { ClutchError } from "@clutch-sh/core";
+import type { ClutchError } from "../Network/errors";
 import _ from "lodash";
 
 import { client } from "../Network";
