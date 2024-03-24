@@ -33,11 +33,16 @@ interface WizardProps
     Pick<MuiStepperProps, "orientation"> {
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
-  heading?: string;
+  heading?: string | React.ReactElement;
 }
 
 export interface WizardChild {
   name: string;
+  showNPS?: boolean;
+  confirm?: {
+    startOver: boolean;
+    startOverText?: string;
+  };
 }
 
 interface WizardChildren extends JSX.Element {
@@ -145,10 +150,12 @@ const Wizard = ({
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
-      onBack: (params: { toOrigin: boolean }) => {
+      onBack: ({ toOrigin, keepSearch = false }: { toOrigin: boolean; keepSearch?: boolean }) => {
         setGlobalWarnings([]);
-        setSearchParams({});
-        if (params?.toOrigin && origin) {
+        if (!keepSearch) {
+          setSearchParams({});
+        }
+        if (toOrigin && origin) {
           navigate(origin);
         } else {
           dispatch(WizardAction.BACK);
@@ -166,6 +173,15 @@ const Wizard = ({
   const steps = filteredChildren.map((child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
     const hasError = wizardStepData[child.type.name]?.hasError;
+    const {
+      props: {
+        showNPS = true,
+        confirm = {
+          startOver: true,
+          startOverText: "Start Over",
+        },
+      },
+    } = child;
 
     return (
       <>
@@ -180,15 +196,17 @@ const Wizard = ({
         <Grid container justifyContent="center">
           {((state.activeStep === lastStepIndex && !isLoading) || hasError) && (
             <>
-              <SimpleFeatureFlag feature="npsWizard">
-                <FeatureOn>
-                  <NPSWizard />
-                </FeatureOn>
-              </SimpleFeatureFlag>
-              {(isMultistep || hasError) && (
+              {showNPS && (
+                <SimpleFeatureFlag feature="npsWizard">
+                  <FeatureOn>
+                    <NPSWizard />
+                  </FeatureOn>
+                </SimpleFeatureFlag>
+              )}
+              {(isMultistep || hasError) && confirm.startOver && (
                 <ButtonGroup>
                   <Button
-                    text="Start Over"
+                    text={confirm.startOverText ?? "Start Over"}
                     onClick={() => {
                       dataLayoutManager.reset();
                       setSearchParams({});
@@ -216,7 +234,11 @@ const Wizard = ({
       <MaxHeightGrid container alignItems="stretch" spacing={2}>
         {heading && (
           <Header item $orientation={orientation}>
-            <Typography variant="h2">{heading}</Typography>
+            {React.isValidElement(heading) ? (
+              heading
+            ) : (
+              <Typography variant="h2">{heading}</Typography>
+            )}
           </Header>
         )}
         <MaxHeightGrid
