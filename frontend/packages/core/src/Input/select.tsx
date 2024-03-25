@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import CancelIcon from "@mui/icons-material/Cancel";
 import ErrorIcon from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import type { SelectProps as MuiSelectProps, Theme } from "@mui/material";
@@ -250,6 +251,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error" |
   name: string;
   options: SelectOption[];
   onChange?: (value: string) => void;
+  noDefault?: boolean;
 }
 
 const Select = ({
@@ -262,6 +264,7 @@ const Select = ({
   options,
   onChange,
   value,
+  noDefault,
 }: SelectProps) => {
   // Flattens all options and sub grouped options for easier retrieval
   const flatOptions: BaseSelectOptions[] = flattenBaseSelectOptions(options);
@@ -275,7 +278,7 @@ const Select = ({
   );
 
   React.useEffect(() => {
-    if (flatOptions.length !== 0) {
+    if (flatOptions.length !== 0 && !noDefault) {
       onChange && onChange(flatOptions[selectedIdx]?.value || flatOptions[selectedIdx].label);
     }
   }, []);
@@ -369,6 +372,12 @@ const MultiSelect = ({
     setSelectedOptions(value.map(val => findIndex(val)));
   };
 
+  const onDeleteChip = value => () => {
+    const findIndex = val => flatOptions.findIndex(opt => opt.value === val || opt.label === val);
+    const updatedOptions = selectedOptions.filter(option => option !== findIndex(value));
+    setSelectedOptions(updatedOptions);
+  };
+
   if (flatOptions.length === 0) {
     return null;
   }
@@ -387,7 +396,14 @@ const MultiSelect = ({
             renderValue: (selected: string[]) => (
               <div style={{ display: "flex", gap: "4px" }}>
                 {selected.sort().map(value => (
-                  <Chip variant="neutral" label={value} key={value} size="small" />
+                  <Chip
+                    variant="neutral"
+                    label={value}
+                    key={value}
+                    size="small"
+                    onDelete={onDeleteChip(value)}
+                    deleteIcon={<CancelIcon onMouseDown={event => event.stopPropagation()} />}
+                  />
                 ))}
               </div>
             ),
