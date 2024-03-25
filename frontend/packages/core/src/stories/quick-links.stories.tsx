@@ -127,14 +127,14 @@ const withBadges = [
   {
     ...linkGroups[0],
     badge: {
-      color: "error",
+      color: "warning",
       content: "1",
     },
   },
   {
     ...linkGroups[1],
     badge: {
-      color: "success",
+      color: "error",
       content: " ",
     },
   },
