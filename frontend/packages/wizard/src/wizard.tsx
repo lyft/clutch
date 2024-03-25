@@ -31,7 +31,10 @@ import type { WizardStepProps } from "./step";
 interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
     Pick<MuiStepperProps, "orientation"> {
-  children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
+  children:
+    | React.ReactNode
+    | React.ReactElement<WizardStepProps>
+    | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
   heading?: string | React.ReactElement;
 }
