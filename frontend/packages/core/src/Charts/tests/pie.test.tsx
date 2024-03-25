@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
 
+import { ThemeProvider } from "../../Theme";
 import { PieChart } from "../pie";
 import type { PieChartData } from "../types";
 
@@ -28,7 +29,12 @@ jest.mock("recharts", () => {
   };
 });
 
-const setup = props => render(<PieChart data={mockData} {...props} />);
+const setup = props =>
+  render(
+    <ThemeProvider>
+      <PieChart data={mockData} {...props} />
+    </ThemeProvider>
+  );
 
 test("renders correctly", () => {
   const { container } = setup({});

@@ -1,4 +1,6 @@
 import React, { PureComponent } from "react";
+import { ThemeContext } from "@emotion/react";
+import type { Theme } from "@mui/material";
 import {
   Cell,
   Label,
@@ -9,6 +11,8 @@ import {
   Sector,
   Tooltip,
 } from "recharts";
+
+import styled from "../styled";
 
 import type { PieChartData } from "./types";
 
@@ -90,22 +94,13 @@ interface PieChartState {
   activeIndex?: number;
 }
 
-const DEFAULT_COLORS = [
-  "#651FFF",
-  "#FF4081",
-  "#0091EA",
-  "#00695C",
-  "#9E9D24",
-  "#880E4F",
-  "#01579B",
-  "#F4511E",
-  "#009688",
-  "#C2185B",
-  "#1A237E",
-  "#7C4DFF",
-  "#88451D",
-  "#AA00FF",
-];
+const ChartLabelPrimary = styled("text")(({ theme }: { theme: Theme }) => ({
+  fill: theme.colors.charts.pie.labelPrimary,
+}));
+
+const ChartLabelSecondary = styled("text")(({ theme }: { theme: Theme }) => ({
+  fill: theme.colors.charts.pie.labelSecondary,
+}));
 
 const renderActiveShape = (props, options) => {
   const RADIAN = Math.PI / 180;
@@ -161,12 +156,12 @@ const renderActiveShape = (props, options) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
+      <ChartLabelPrimary x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor}>
         {payload.name}
-      </text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+      </ChartLabelPrimary>
+      <ChartLabelSecondary x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor}>
         {`${value} (${(percent * 100).toFixed(2)}%)`}
-      </text>
+      </ChartLabelSecondary>
     </g>
   );
 };
@@ -219,6 +214,8 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       tooltip,
     } = this.props;
 
+    const { colors } = this.context;
+
     const chartOptions = {
       activeTooltip: typeof activeTooltip === "boolean" ? activeTooltip : true,
       activeTooltipOptions: typeof activeTooltip !== "boolean" ? { ...activeTooltip } : {},
@@ -270,7 +267,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
       >
         <Pie
           data={data}
-          fill={DEFAULT_COLORS[0]}
+          fill={colors.charts.common.data[0]}
           dataKey="value"
           onMouseEnter={this.onPieEnter}
           {...chartOptions.dimensions}
@@ -280,7 +277,9 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
             <Cell
               // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
-              fill={entry.color ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length]}
+              fill={
+                entry.color ?? colors.charts.common.data[index % colors.charts.common.data.length]
+              }
             />
           ))}
           {centerLabel && <Label content={<CenterLabel options={centerLabel} />} />}
@@ -300,5 +299,7 @@ class PieChart extends PureComponent<PieChartProps, PieChartState> {
     );
   }
 }
+
+PieChart.contextType = ThemeContext;
 
 export { PieChart };

@@ -90,6 +90,8 @@ const AvatarListItemIcon = styled(ListItemIcon)({
 const AvatarListItemText = styled(MuiListItemText)(({ theme }: { theme: Theme }) => ({
   paddingLeft: "16px",
   margin: "0px",
+  wordBreak: "break-all",
+  textWrap: "wrap",
   ".MuiTypography-root": {
     color: alpha(theme.palette.secondary[900], 0.9),
     fontSize: "14px",
