@@ -41,6 +41,18 @@ const StyledPopperItem = styled(PopperItem)({
   },
 });
 
+const StyledBadge = styled(Badge)({
+  ".MuiBadge-anchorOriginTopRightCircular": {
+    top: "23%",
+    right: "23%",
+  },
+  ".MuiBadge-dot": {
+    height: "10px",
+    minWidth: "10px",
+    borderRadius: "50%",
+  },
+});
+
 interface LinkGroupProps {
   linkGroupName: string;
   linkGroupImage: string;
@@ -76,6 +88,18 @@ const QuickLinkContainer = ({ keyProp, name, children }: QuickLinkContainerProps
     </StyledQLGrid>
   );
 };
+
+const QuickLinkWrapper = ({ linkGroup, children }) => (
+  <StyledBadge
+    key={`quicklink-${linkGroup.name}`}
+    badgeContent={linkGroup.badge?.content ?? null}
+    color={linkGroup.badge?.color ?? "default"}
+    overlap="circular"
+    variant={linkGroup.badge?.content.trim() ? "standard" : "dot"}
+  >
+    {children}
+  </StyledBadge>
+);
 
 // If only a single link, then no popper is necessary
 const QuickLink = ({ link, linkGroupName, linkGroupImage }: QuickLinkProps) =>
@@ -159,36 +183,23 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
   return (
     <>
       {(slicedLinkGroups || []).map(linkGroup => {
-        if (linkGroup.links?.length === 1) {
-          return (
-            <Badge
-              key={`quicklink-${linkGroup.name}`}
-              badgeContent={linkGroup.badge?.content ?? null}
-              color={linkGroup.badge?.color ?? "default"}
-              overlap="circular"
-            >
+        return (
+          <QuickLinkWrapper linkGroup={linkGroup}>
+            {linkGroup.links?.length === 1 ? (
               <QuickLink
                 link={linkGroup.links[0]}
                 linkGroupName={linkGroup.name ?? ""}
                 linkGroupImage={linkGroup.imagePath ?? ""}
               />
-            </Badge>
-          );
-        }
-        return (
-          <Badge
-            key={`quicklink-${linkGroup.name}`}
-            badgeContent={linkGroup.badge?.content ?? null}
-            color={linkGroup.badge?.color ?? "default"}
-            overlap="circular"
-          >
-            <QuickLinkGroup
-              key={`quicklink-${linkGroup.name}`}
-              linkGroupName={linkGroup.name ?? " "}
-              linkGroupImage={linkGroup.imagePath ?? ""}
-              links={linkGroup?.links ?? []}
-            />
-          </Badge>
+            ) : (
+              <QuickLinkGroup
+                key={`quicklink-${linkGroup.name}`}
+                linkGroupName={linkGroup.name ?? " "}
+                linkGroupImage={linkGroup.imagePath ?? ""}
+                links={linkGroup?.links ?? []}
+              />
+            )}
+          </QuickLinkWrapper>
         );
       })}
     </>
