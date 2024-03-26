@@ -27,6 +27,7 @@ const ChipsRow = ({ chips = [] }: { chips: ProjectInfoChip[] }) => (
       if (!urlTarget) {
         const externalRoute = url && url.startsWith("http");
 
+        // eslint-disable-next-line no-param-reassign
         urlTarget = externalRoute ? "_blank" : "_self";
       }
 
