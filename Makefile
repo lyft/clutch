@@ -31,7 +31,7 @@ api-lint-fix:
 	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api" -lf
 
 .PHONY: api-verify # Verify API proto changes include generate frontend and backend assets.
-api-verify:
+api-verify: yarn-ensure
 	find backend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
 	find frontend/api/src -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
 	rm backend/internal/test/pb/*.go

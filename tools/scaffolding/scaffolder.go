@@ -227,15 +227,15 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
 	yarn := determineYarnPath()
-	log.Println("cd", tmpFolder, "&&", yarn, "--frozen-lockfile &&", yarn, "tsc && ", yarn, "compile")
+	log.Println("cd", tmpFolder, "&&", yarn, "--immutable &&", yarn, "tsc && ", yarn, "compile")
 	if err := os.Chdir(tmpFolder); err != nil {
 		log.Fatal(err)
 	}
 
-	installCmd := exec.Command(yarn, "--frozen-lockfile")
+	installCmd := exec.Command(yarn, "--immutable")
 	if out, err := installCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
-		log.Fatal("`yarn --frozen-lockfile` returned the above error")
+		log.Fatal("`yarn --immutable` returned the above error")
 	}
 
 	compileTypesCmd := exec.Command(yarn, "tsc")
