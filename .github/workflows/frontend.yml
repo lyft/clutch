@@ -76,6 +76,9 @@ jobs:
         run: make frontend-lint
       - name: Frontend Verify
         run: make frontend-verify
+      - name: Frontend Constraints
+        run: yarn constraints
+        working-directory: ./frontend
       - name: Frontend Test Licenses
         run: yarn run test:licenses
         working-directory: ./frontend
