@@ -184,9 +184,10 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
     <>
       {(slicedLinkGroups || []).map(linkGroup => {
         return (
-          <QuickLinkWrapper linkGroup={linkGroup}>
+          <QuickLinkWrapper linkGroup={linkGroup} key={linkGroup.name}>
             {linkGroup.links?.length === 1 ? (
               <QuickLink
+                key={`quicklink-${linkGroup.name}`}
                 link={linkGroup.links[0]}
                 linkGroupName={linkGroup.name ?? ""}
                 linkGroupImage={linkGroup.imagePath ?? ""}
