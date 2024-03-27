@@ -43,4 +43,4 @@ fi
 
 #Link script to yarn config
 cd "${ROOT_DEST_DIR}" || exit
-yarn config set yarnPath "${YARN_VERSION_FILE}"
+"${WRAPPER_DEST_FILE}" config set yarnPath "${YARN_VERSION_FILE}"
