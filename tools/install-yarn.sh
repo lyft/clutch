@@ -29,5 +29,5 @@ if [[ ! -f "${WRAPPER_DEST_FILE}" || $(< "${WRAPPER_DEST_FILE}") != $(printf "%b
 fi
 
 #Link script to yarn config
-cd "${ROOT_DEST_DIR}"
+cd "${ROOT_DEST_DIR}" || exit
 yarn config set yarnPath "${YARN_VERSION_FILE}"

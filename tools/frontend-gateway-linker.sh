@@ -73,12 +73,12 @@ for package in "${LINKED_PACKAGES[@]}"; do
   SUB=$(echo "${package}" | cut -d "/" -f 2)
 
   if [[ "${BASE}" != "${SUB}" ]]; then
-    rm -rf "${BASE}/${SUB}"
+    rm -rf "${BASE:?}/${SUB}"
     ln -s -f -F "../${ROOT_NODE_MODULES_DIR}/${BASE}/${SUB}" "${BASE}/${SUB}"
     if [ -d "${BASE}/${SUB}/bin" ]; then
       cd "${NODE_MODULES_DIR}/.bin"
       for binary in "${BASE}/${SUB}/bin"/*; do
-        ln -s -f "../${BASE}/${SUB}/bin/$(basename "${binary}")"
+        ln -s -f "../${BASE}/${SUB}/bin/$(basename "${binary}")" .
       done
       cd "${NODE_MODULES_DIR}"
     fi
@@ -88,7 +88,7 @@ for package in "${LINKED_PACKAGES[@]}"; do
     if [ -d "${BASE}/bin" ]; then
       cd "${NODE_MODULES_DIR}/.bin"
       for binary in "${BASE}/bin"/*; do
-        ln -s -f "../${BASE}/bin/$(basename "${binary}")"
+        ln -s -f "../${BASE}/bin/$(basename "${binary}")" .
       done
       cd "${NODE_MODULES_DIR}"
     fi
