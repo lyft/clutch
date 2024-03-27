@@ -23,7 +23,7 @@ jobs:
           node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ../../tools/install-yarn.sh CWD
+        run: ../../tools/install-yarn.sh CWD bin=bin
       - name: node_modules cache
         id: node-modules-cache
         uses: actions/cache@v4
@@ -33,6 +33,6 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
+        run: ./bin/yarn.sh install --immutable
       - name: lint
-        run: yarn run lint
+        run: ./bin/yarn.sh run lint

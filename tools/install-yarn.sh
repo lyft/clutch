@@ -15,10 +15,15 @@ elif [[ ! -d "${ROOT_DEST_DIR}" ]]; then
   exit 1
 fi
 
+if [[ $ARGS = *'bin='* ]]; then
+  echo "bin arg detected. Utilizing specified directory for wrapper script."
+  BIN_DIR=$(echo $ARGS | sed 's/.*bin\=//' | cut -d ' ' -f1)
+fi
+
 DEST_DIR="${ROOT_DEST_DIR}/.yarn/releases"
 DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.js"
 YARN_VERSION_FILE=".yarn/releases/yarn-${YARN_VERSION}.js"
-WRAPPER_DEST_DIR="${PWD}/build/bin/"
+WRAPPER_DEST_DIR="${ROOT_DIR}/${BIN_DIR:-"build/bin"}"
 WRAPPER_DEST_FILE="${WRAPPER_DEST_DIR}/yarn.sh"
 
 if [[ ! -f "${DEST_FILE}" ]]; then
