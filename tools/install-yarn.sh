@@ -17,7 +17,7 @@ fi
 
 if [[ $ARGS = *'bin='* ]]; then
   echo "bin arg detected. Utilizing specified directory for wrapper script."
-  BIN_DIR=$(echo $ARGS | sed 's/.*bin\=//' | cut -d ' ' -f1)
+  BIN_DIR=$(echo "${ARGS}" | sed 's/.*bin\=//' | cut -d ' ' -f1)
 fi
 
 DEST_DIR="${ROOT_DEST_DIR}/.yarn/releases"
