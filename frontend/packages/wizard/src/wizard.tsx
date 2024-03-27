@@ -153,12 +153,12 @@ const Wizard = ({
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
-      onBack: ({ toOrigin, keepSearch = false }: { toOrigin: boolean; keepSearch?: boolean }) => {
+      onBack: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
         setGlobalWarnings([]);
-        if (!keepSearch) {
+        if (!params?.keepSearch) {
           setSearchParams({});
         }
-        if (toOrigin && origin) {
+        if (params?.toOrigin && origin) {
           navigate(origin);
         } else {
           dispatch(WizardAction.BACK);
