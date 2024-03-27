@@ -31,8 +31,8 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: ./bin/yarn.sh install --immutable
+        run: yarn install --immutable
         working-directory: ./docs/_website
       - name: lint
-        run: ./bin/yarn.sh run lint
+        run: yarn run lint
         working-directory: ./docs/_website
