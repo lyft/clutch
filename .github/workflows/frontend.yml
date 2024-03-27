@@ -2,15 +2,17 @@ name: frontend
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
     paths:
-    - 'frontend/**'
-    - .github/workflows/frontend.yml
-    - Makefile
-    - tools/frontend-e2e.sh
+      - "frontend/**"
+      - .github/workflows/frontend.yml
+      - Makefile
+      - tools/frontend-e2e.sh
+env:
+  FRONTEND: ${{ github.workspace }}/src/github.com/${{ github.repository }}/frontend
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,10 +21,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ./tools/install-yarn.sh
+        run: make yarn-ensure
       - name: node_modules cache
         id: node-modules-cache
         uses: actions/cache@v4
@@ -45,9 +47,9 @@ jobs:
           key: ${{ runner.os }}-fe-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: build
-        run: yarn --cwd frontend build
+        run: make frontend
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -55,10 +57,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ./tools/install-yarn.sh
+        run: make yarn-ensure
       - name: node_modules cache
         id: node-modules-cache
         uses: actions/cache@v4
@@ -68,12 +70,17 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
-        run: yarn --cwd frontend compile:dev
-      - run: make frontend-lint
-      - run: make frontend-verify
-      - run: yarn --cwd frontend test:licenses
+        run: yarn run compile:dev
+        working-directory: ${{ env.FRONTEND }}
+      - name: Frontend Lint
+        run: make frontend-lint
+      - name: Frontend Verify
+        run: make frontend-verify
+      - name: Frontend Test Licenses
+        run: yarn run test:licenses
+        working-directory: ${{ env.FRONTEND }}
   test-e2e:
     name: test e2e
     runs-on: ubuntu-latest
@@ -85,10 +92,10 @@ jobs:
           go-version: 1.22.x
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ./tools/install-yarn.sh
+        run: make yarn-ensure
       - name: cypress cache
         id: cypress-cache
         uses: actions/cache@v4
@@ -123,9 +130,10 @@ jobs:
             ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
-        run: yarn --cwd frontend compile:dev
+        run: yarn run compile:dev
+        working-directory: ${{ env.FRONTEND }}
       - name: Test [e2e]
         id: e2e
         run: ./tools/frontend-e2e.sh
@@ -143,10 +151,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ./tools/install-yarn.sh
+        run: make yarn-ensure
       - name: node_modules cache
         id: node-modules-cache
         uses: actions/cache@v4
@@ -156,11 +164,13 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: Compile packages
-        run: yarn --cwd frontend compile:dev
+        run: yarn run compile:dev
+        working-directory: ${{ env.FRONTEND }}
       - name: Test [unit]
-        run: yarn --cwd frontend test:coverage
+        run: yarn run test:coverage
+        working-directory: ${{ env.FRONTEND }}
   publish:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -170,11 +180,11 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
           check-latest: true
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
       - name: Enforce consistent Yarn version
-        run: ./tools/install-yarn.sh
+        run: make yarn-ensure
       - name: node_modules cache
         id: node-modules-cache
         uses: actions/cache@v4
@@ -184,9 +194,9 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: make yarn-install
       - name: publish
-        run: yarn --cwd frontend publishBeta
+        run: yarn run publishBeta
+        working-directory: ${{ env.FRONTEND }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
