@@ -22,8 +22,8 @@
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "yarn node workflow-registrar.js",
     "uploadSourcemaps": "yarn node upload-sourcemaps.js",
-    "workspace:registerWorkflows": "yarn run registerWorkflows",
-    "workspace:compile:watch": "yarn node buildWatch.js"
+    "workspace:compile:watch": "yarn node buildWatch.js",
+    "workspace:registerWorkflows": "yarn run registerWorkflows"
   },
   "dependencies": {
     "@babel/cli": "^7.7.5",

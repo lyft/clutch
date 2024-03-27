@@ -11,6 +11,8 @@ on:
       - .github/workflows/frontend.yml
       - Makefile
       - tools/frontend-e2e.sh
+env:
+  FRONTEND_DIR: ./frontend
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -71,17 +73,17 @@ jobs:
         run: make yarn-install
       - name: Compile packages
         run: yarn run compile:dev
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
       - name: Frontend Lint
         run: make frontend-lint
       - name: Frontend Verify
         run: make frontend-verify
       - name: Frontend Constraints
         run: yarn constraints
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
       - name: Frontend Test Licenses
         run: yarn run test:licenses
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
   test-e2e:
     name: test e2e
     runs-on: ubuntu-latest
@@ -134,7 +136,7 @@ jobs:
         run: make yarn-install
       - name: Compile packages
         run: yarn run compile:dev
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
       - name: Test [e2e]
         id: e2e
         run: ./tools/frontend-e2e.sh
@@ -168,10 +170,10 @@ jobs:
         run: make yarn-install
       - name: Compile packages
         run: yarn run compile:dev
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
       - name: Test [unit]
         run: yarn run test:coverage
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
   publish:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -198,6 +200,6 @@ jobs:
         run: make yarn-install
       - name: publish
         run: yarn run publishBeta
-        working-directory: ./frontend
+        working-directory: ${{ env.FRONTEND_DIR }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

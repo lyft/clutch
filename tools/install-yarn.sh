@@ -3,26 +3,23 @@
 YARN_VERSION="4.1.1"
 ROOT_DIR="$PWD"
 ROOT_DEST_DIR="${ROOT_DIR}/frontend"
+
+ARGS="$*"
+
+if [[ $ARGS = *'CWD'* ]]; then
+  echo "CWD arg detected. Utilizing working directory for install."
+
+  ROOT_DEST_DIR="${ROOT_DIR}"
+elif [[ ! -d "${ROOT_DEST_DIR}" ]]; then
+  echo "Could not find frontend directory. Ensure you're running this script from the root of your project."
+  exit 1
+fi
+
 DEST_DIR="${ROOT_DEST_DIR}/.yarn/releases"
 DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.js"
 YARN_VERSION_FILE=".yarn/releases/yarn-${YARN_VERSION}.js"
 WRAPPER_DEST_DIR="${PWD}/build/bin/"
 WRAPPER_DEST_FILE="${WRAPPER_DEST_DIR}/yarn.sh"
-
-ARGS="$@"
-
-if [[ $ARGS = *'corepack'* ]]; then
-  echo "Corepack arg detected. Utilizing corepack for install."
-
-  cd "${ROOT_DIR}" || exit
-  corepack prepare "yarn@${YARN_VERSION}" --activate
-  exit 0
-fi
-
-if [[ ! -d "${ROOT_DEST_DIR}" ]]; then
-  echo "Could not find frontend directory. Ensure you're running this script from the root of your project."
-  exit 1
-fi
 
 if [[ ! -f "${DEST_FILE}" ]]; then
   echo "Downloading yarn v${YARN_VERSION} to build environment..."
