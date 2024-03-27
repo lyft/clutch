@@ -9,8 +9,8 @@
   "scripts": {
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "tsc -b",
-    "compile:dev": "yarn workspace @clutch-sh/tools buildDev $INIT_CWD",
-    "compile:watch": "yarn compile:dev -w",
+    "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
+    "compile:watch": "yarn compile:dev --watch=forever",
     "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "test": "yarn run package:test",
@@ -18,10 +18,9 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
+    "@clutch-sh/core": "^4.0.0-beta",
     {{- if .IsWizardTemplate}}
-    "@clutch-sh/wizard": "workspace:^",
-    {{- else}}
-    "@clutch-sh/core": "workspace:^",
+    "@clutch-sh/wizard": "^4.0.0-beta",
     {{- end}}
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -36,10 +35,11 @@
     "react-hook-form": "7.25.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "workspace:^"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
     "node": ">=18 <19",
     "yarn": "^4.1.1"
   },
+  "packageManager": "yarn@4.1.1"
 }
