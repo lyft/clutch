@@ -1,0 +1,44 @@
+#!/bin/sh
+
+ROOT_DIR=$(pwd)
+FRONTEND_DIR="${ROOT_DIR}/frontend"
+
+if [[ $(git status -s frontend) ]]; then
+  # Run frontend checks
+  echo "Running frontend checks...\n"
+  cd "${ROOT_DIR}/frontend"
+
+  echo "\nLinting frontend packages...\n"
+  {
+    yarn lint:packages
+  } || {
+    echo "\n${FRONTEND_DIR} package lint checks failed, please run \"yarn lint:packages:fix\" and commit the changes."
+    exit 1
+  }
+
+  echo "\nTesting constraints...\n"
+  {
+    yarn constraints
+  } || {
+    echo "\n${FRONTEND_DIR} constraints check failed, please run \"yarn constraints --fix\" and commit the changes."
+    exit 1
+  }
+
+  echo "\nLinting frontend code...\n"
+  {
+    yarn lint
+  } || {
+    echo "\n${FRONTEND_DIR} lint checks failed, please run \"yarn lint:fix\" and commit the changes."
+    exit 1
+  }
+
+  echo "\nRunning frontend tests...\n"
+  {
+    yarn test:coverage
+  } || {
+    echo "\n${FRONTEND_DIR} tests failed, please fix the issues and commit the changes."
+    exit 1
+  }
+fi
+
+exit 0

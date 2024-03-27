@@ -78,7 +78,7 @@ backend-config-validation:
 
 .PHONY: yarn-install # Install frontend dependencies.
 yarn-install: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile
+	$(YARN) --cwd frontend install --immutable
 
 .PHONY: backend-integration-test
 backend-integration-test:
@@ -93,7 +93,7 @@ frontend-dev-build: yarn-install
 	$(YARN) --cwd frontend build:dev
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: yarn-install
+frontend-dev: setup-git-hooks yarn-install
 	$(YARN) --cwd frontend start
 
 .PHONY: frontend-lint # Lint the frontend code.
@@ -118,11 +118,11 @@ frontend-verify: yarn-ensure
 
 .PHONY: docs # Build all doc assets.
 docs: docs-generate yarn-ensure
-	$(YARN) --cwd docs/_website install --frozen-lockfile && $(YARN) --cwd docs/_website build
+	$(YARN) --cwd docs/_website install --immutable && $(YARN) --cwd docs/_website build
 
 .PHONY: docs-dev # Start the docs server in development mode.
 docs-dev: docs-generate yarn-ensure
-	$(YARN) --cwd docs/_website install --frozen-lockfile && BROWSER=none $(YARN) --cwd docs/_website start
+	$(YARN) --cwd docs/_website install --immutable && BROWSER=none $(YARN) --cwd docs/_website start
 
 .PHONY: docs-generate # Generate the documentation content.
 docs-generate:
@@ -188,6 +188,10 @@ preflight-checks-frontend:
 .PHONY: preflight-checks-backend
 preflight-checks-backend:
 	@tools/preflight-checks.sh backend
+
+.PHONY: setup-git-hooks
+setup-git-hooks:
+	@tools/setup-git-hooks.sh
 
 .PHONY: preflight-checks
 preflight-checks:

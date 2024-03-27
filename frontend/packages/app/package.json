@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/app",
-  "version": "0.0.0",
+  "version": "4.0.0-beta",
   "private": true,
   "description": "Clutch Application Components",
   "license": "Apache-2.0",
@@ -9,26 +9,32 @@
     "build": "yarn register-workflows && react-app-rewired build",
     "clean": "rm -rf build",
     "eject": "react-scripts eject",
-    "lint": "yarn register-workflows && eslint --ext .js,.jsx .",
+    "lint": "yarn register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
-    "start": "yarn register-workflows && GENERATE_SOURCEMAP=false react-app-rewired start",
-    "test": "yarn register-workflows && jest --passWithNoTests",
+    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $INIT_CWD/src",
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "test": "yarn register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
   },
   "dependencies": {
-    "@clutch-sh/core": "^3.0.0-beta",
-    "react": "^17.0.2",
-    "react-app-rewired": "^2.1.8",
-    "react-dom": "^17.0.2"
+    "@clutch-sh/core": "workspace:^",
+    "react-app-rewired": "^2.1.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^3.0.0-beta",
+    "@clutch-sh/tools": "workspace:^",
     "esbuild-loader": "^3.0.0"
   },
-  "engines": {
-    "node": "<19"
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.2.3"
   },
-  "proxy": "http://localhost:8080"
+  "engines": {
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1",
+  "proxy": "http://localhost:8080",
+  "stableVersion": "3.0.0-beta"
 }

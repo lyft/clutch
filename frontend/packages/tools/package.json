@@ -1,17 +1,28 @@
 {
   "name": "@clutch-sh/tools",
-  "version": "3.0.0-beta",
+  "version": "4.0.0-beta",
   "description": "Tools for testing and building clutch components",
   "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shtools",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "buildDev": "node devBuild.mjs",
+    "buildDev": "echo \"This command is deprecated, please use 'yarn run package:compile:dev' instead.\" && exit 1",
+    "constraints:check": "cd $INIT_CWD && yarn constraints",
+    "constraints:fix": "yarn run constraints:check --fix",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
+    "node_modules:find": "find $PROJECT_CWD -name 'node_modules' -type d -prune -print",
+    "node_modules:nuke": "echo \"Deleting below 'node_modules' folders...\" && npm run --silent node_modules:find | xargs du -chs && echo '' && npm run --silent node_modules:find -- -exec rm -rf '{}' \\;",
+    "package:clean": "cd $INIT_CWD && rm -rf dist tsconfig.tsbuildinfo",
+    "package:compile": "cd $INIT_CWD && run -T tsc -b && run -T tsc-alias",
+    "package:compile:dev": "yarn node devBuild.js $INIT_CWD",
+    "package:compile:watch": "yarn node devBuild.js $INIT_CWD -w",
+    "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
+    "package:test": "cd $INIT_CWD && run -T jest --passWithNoTests",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
-    "registerWorkflows": "node workflow-registrar.js",
-    "uploadSourcemaps": "node upload-sourcemaps.js"
+    "registerWorkflows": "yarn node workflow-registrar.js",
+    "uploadSourcemaps": "yarn node upload-sourcemaps.js",
+    "workspace:compile:watch": "yarn node buildWatch.js"
   },
   "dependencies": {
     "@babel/cli": "^7.7.5",
@@ -34,8 +45,11 @@
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "@yarnpkg/types": "^4.0.0",
     "babel-jest": "^27.4.2",
     "babel-plugin-module-resolver": "^4.0.0",
+    "byte-size": "^8.1.1",
+    "chalk": "^4",
     "cypress": "9.7.0",
     "dotenv": "^16.3.1",
     "enzyme": "^3.11.0",
@@ -43,6 +57,7 @@
     "eslint": "^8.3.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-prettier": "^8.2.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-import": "^2.25.0",
     "eslint-plugin-jest": "^26.0.0",
@@ -52,13 +67,22 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.0.0",
-    "prettier": "^2.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "prettier": "~2.2.1",
     "react-scripts": "^5.0.1",
-    "typescript": "^4.2.3"
+    "tsc-alias": "^1.8.8"
+  },
+  "devDependencies": {
+    "@types/byte-size": "^8",
+    "@types/eslint": "^8"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "engines": {
-    "node": "<19"
-  }
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1",
+  "stableVersion": "3.0.0-beta"
 }

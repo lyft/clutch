@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "composite": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "incremental": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "preserveConstEnums": true,
+    "preserveSymlinks": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "target": "ES2018",
+    "types": ["jest", "node", "long"]
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.stories.ts*",
+    "**/*.stories.js*",
+    "**/*.test.js*",
+    "**/*.test.ts*",
+    "**/dist/*"
+  ]
+}

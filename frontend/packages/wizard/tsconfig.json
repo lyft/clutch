@@ -1,15 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./src"
   },
-  "include": [
-    "src/**/*",
-  ],
-  "references": [
-    {"path": "../core"},
-    {"path": "../data-layout"},
-  ]
+  "include": ["src/**/*"],
+  "references": [{ "path": "../core" }, { "path": "../data-layout" }]
 }
