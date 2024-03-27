@@ -11,8 +11,8 @@
     "eject": "react-scripts eject",
     "lint": "yarn register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $INIT_CWD/src",
-    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "register-workflows": "yarn run workspace:registerWorkflows $INIT_CWD/src",
+    "start": "DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false react-app-rewired start",
     "test": "yarn register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",
+    "cypress": "9.7.0",
     "esbuild-loader": "^3.0.0"
   },
   "peerDependencies": {

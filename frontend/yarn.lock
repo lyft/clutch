@@ -1858,6 +1858,7 @@ __metadata:
   dependencies:
     "@clutch-sh/core": "workspace:^"
     "@clutch-sh/tools": "workspace:^"
+    cypress: "npm:9.7.0"
     esbuild-loader: "npm:^3.0.0"
     react-app-rewired: "npm:^2.1.8"
   peerDependencies:
@@ -2241,7 +2242,6 @@ __metadata:
     babel-plugin-module-resolver: "npm:^4.0.0"
     byte-size: "npm:^8.1.1"
     chalk: "npm:^4"
-    cypress: "npm:9.7.0"
     dotenv: "npm:^16.3.1"
     enzyme: "npm:^3.11.0"
     esbuild: "npm:^0.18.0"

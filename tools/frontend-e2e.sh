@@ -17,7 +17,8 @@ until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck;
     sleep 1
 done
 
-yarn --cwd frontend workspace @clutch-sh/app start &
+cd frontend || exit
+yarn workspace @clutch-sh/app run start &
 until curl --output /dev/null --silent --head --fail http://localhost:3000; do
     if [ "$FE_STARTUP_COUNT" -ge "$STARTUP_WAIT" ]; then
         echo "Error: could not start frontend dev server"
@@ -28,5 +29,5 @@ until curl --output /dev/null --silent --head --fail http://localhost:3000; do
 done
 
 (
-  yarn --cwd frontend test:e2e
+  yarn run test:e2e
 )

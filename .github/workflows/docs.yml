@@ -20,7 +20,7 @@ jobs:
           node-version: "18.x"
           check-latest: true
       - name: Enforce consistent Yarn version
-        run: ../../tools/install-yarn.sh bin
+        run: ../../tools/install-yarn.sh corepack
         working-directory: ./docs/_website
       - name: node_modules cache
         id: node-modules-cache

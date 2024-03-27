@@ -22,6 +22,7 @@
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "yarn node workflow-registrar.js",
     "uploadSourcemaps": "yarn node upload-sourcemaps.js",
+    "workspace:registerWorkflows": "yarn run registerWorkflows",
     "workspace:compile:watch": "yarn node buildWatch.js"
   },
   "dependencies": {
@@ -50,7 +51,6 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "byte-size": "^8.1.1",
     "chalk": "^4",
-    "cypress": "9.7.0",
     "dotenv": "^16.3.1",
     "enzyme": "^3.11.0",
     "esbuild": "^0.18.0",
