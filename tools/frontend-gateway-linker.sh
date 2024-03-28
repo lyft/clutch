@@ -45,7 +45,7 @@ if [[ -f "yarn.lock" ]]; then
   {
     "${YARN}" install --immutable
   } || {
-    echo -e "\n${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes.\n"
+    echo -e "\n${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the given directory and commit the changes.\n"
     exit 1
   }
 else
@@ -64,7 +64,7 @@ if [[ -f "yarn.lock" ]]; then
   {
     "${YARN}" install --immutable
   } || {
-    echo -e "\n${DEST_DIR}/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes.\n"
+    echo -e "\n${DEST_DIR}/yarn.lock would be modified by install. Please run yarn install in the given directory and commit the changes.\n"
     exit 1
   }
 else
