@@ -42,9 +42,9 @@ const discoverWorkflows = () => {
       WORKFLOW_MODULE_PATH,
       ` * Run the @clutch-sh/tools registerWorkflows target instead\n*/\n`
     );
-    const packagePattern = Object.keys(config).join("|");
+    const packagePattern = Object.keys(config);
     childProcess.exec(
-      `yarn list --json --depth=0 --pattern '${packagePattern}'`,
+      `yarn workspaces list --json`,
       {
         cwd: rootFrontendDir,
       },
@@ -52,11 +52,19 @@ const discoverWorkflows = () => {
         if (err) {
           throw err;
         }
+
         const modules = {};
-        JSON.parse(stdout).data.trees.forEach(p => {
-          const packageName = `@${p.name.split("@")[1]}`;
-          modules[packageName] = addImport(packageName);
-        });
+
+        (stdout || "")
+          .split("\n")
+          .filter(item => item.length)
+          .map(item => (JSON.parse(item) || {})?.name)
+          .filter(name => packagePattern.includes(name))
+          .forEach(p => {
+            const packageName = `@${p.split("@")[1]}`;
+            modules[packageName] = addImport(packageName);
+          });
+
         return resolve(modules);
       }
     );

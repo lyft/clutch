@@ -11,24 +11,23 @@
     "compile": "tsc -b",
     "compile:dev": "esbuild --target=es2019 --outdir=dist --sourcemap src/*.tsx",
     "compile:watch": "yarn compile:dev --watch=forever",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "test": "jest --passWithNoTests",
+    "test": "yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
+    "@clutch-sh/core": "^4.0.0-beta",
     {{- if .IsWizardTemplate}}
-    "@clutch-sh/wizard": "^3.0.0-beta",
-    {{- else}}
-    "@clutch-sh/core": "^3.0.0-beta",
+    "@clutch-sh/wizard": "^4.0.0-beta",
     {{- end}}
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2"
   },
   "resolutions": {
-    "@types/react": "^17.0.2",
+    "@types/react": "17.0.50",
     "@mui/material": "5.8.5",
     "@mui/lab": "5.0.0-alpha.87",
     "@mui/styles": "5.8.4",
@@ -36,10 +35,11 @@
     "react-hook-form": "7.25.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^2.0.0-beta"
+    "@clutch-sh/tools": "^4.0.0-beta"
   },
   "engines": {
-    "node": ">=16.0.0 <17",
-    "yarn": "^1.22.5"
-  }
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1"
 }

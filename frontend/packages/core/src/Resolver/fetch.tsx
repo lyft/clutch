@@ -1,9 +1,9 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 import * as $pbclutch from "@clutch-sh/api";
-import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import { client } from "../Network";
+import type { ClutchError } from "../Network/errors";
 
 const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
   const response = await client.post("/v1/resolver/getObjectSchemas", {

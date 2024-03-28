@@ -3,7 +3,7 @@
   ignore = "cd .. && git diff-tree --no-commit-id --name-only --quiet -r $COMMIT_REF -- '*.ts*' '*.js' 'yarn.lock' 'package.json' '**/netlify.toml' '*.html'"
 
 [build.environment]
-  NODE_VERSION = "16.15.0"
+  NODE_VERSION = "18.19.0"
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.

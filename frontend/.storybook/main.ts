@@ -1,4 +1,6 @@
-module.exports = {
+import { StorybookConfig } from "@storybook/react-webpack5";
+
+const config: StorybookConfig = {
   stories: ["../packages/**/*.stories.@(tsx|jsx)"],
   typescript: {
     reactDocgen: "react-docgen-typescript",
@@ -8,6 +10,27 @@ module.exports = {
         esModuleInterop: false,
       },
     },
+  },
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: { fastRefresh: true },
+  },
+  webpackFinal: async (config, { configType }) => {
+    config?.module?.rules?.push({
+      test: /\.(ts|tsx)$/,
+      use: [
+        {
+          loader: require.resolve("esbuild-loader"),
+          options: {
+            target: "esnext",
+          },
+        },
+      ],
+    });
+
+    config?.resolve?.extensions?.push(".ts", ".tsx");
+
+    return config;
   },
   babel: async (options) => ({
     ...options,
@@ -24,3 +47,5 @@ module.exports = {
     "@storybook/addon-a11y",
   ],
 };
+
+export default config;

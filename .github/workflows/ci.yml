@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.x'
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh

@@ -224,20 +224,50 @@ func generateAPI(args *args, tmpFolder, dest string) {
 }
 
 func generateFrontend(args *args, tmpFolder, dest string) {
+	yarnInstallVersion := args.YarnPin
+	if len(yarnInstallVersion) == 0 {
+		yarnInstallVersion = "4.1.1"
+	}
+
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
 	yarn := determineYarnPath()
-	log.Println("cd", tmpFolder, "&&", yarn, "--frozen-lockfile &&", yarn, "tsc && ", yarn, "compile")
+	log.Println("cd", tmpFolder, "&&", yarn, "install &&", yarn, "tsc && ", yarn, "compile")
 	if err := os.Chdir(tmpFolder); err != nil {
 		log.Fatal(err)
 	}
 
-	installCmd := exec.Command(yarn, "--frozen-lockfile")
+	installCmd := exec.Command(yarn, "install")
 	if out, err := installCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
-		log.Fatal("`yarn --frozen-lockfile` returned the above error")
+		log.Println("`yarn install` returned the above error")
+
+		yarnVersionCmd := exec.Command(yarn, "--version")
+		if out, err := yarnVersionCmd.CombinedOutput(); err != nil {
+			fmt.Println(string(out))
+			log.Fatal("`yarn --version` returned the above error")
+		} else if strings.TrimRight(string(out), "\n") != yarnInstallVersion {
+			log.Println("Yarn version is not equal to", yarnInstallVersion)
+			corepack := promptOrDefault("Would you like to attempt installation of Yarn via corepack?", "Y/n")
+			if !strings.HasPrefix(strings.ToLower(corepack), "y") {
+				log.Fatal("Corepack installation not granted, exiting")
+			} else {
+				corepackCmd := exec.Command("corepack", "enable")
+				if out, err := corepackCmd.CombinedOutput(); err != nil {
+					fmt.Println(string(out))
+					log.Fatal("`corepack enable` returned the above error. Please make sure you are on Node > 18")
+				}
+
+				corepackPrepareCmd := exec.Command("corepack", "prepare", "yarn@"+yarnInstallVersion, "--activate")
+				if out, err := corepackPrepareCmd.CombinedOutput(); err != nil {
+					fmt.Println(string(out))
+					log.Fatal("`corepack prepare", "yarn@"+yarnInstallVersion, "--activate` returned the above error. Please correct the error and attempt again.")
+				}
+			}
+		}
 	}
 
+	fmt.Println("Running yarn tsc in", tmpFolder, "with yarn path", yarn)
 	compileTypesCmd := exec.Command(yarn, "tsc")
 	if out, err := compileTypesCmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
@@ -256,9 +286,10 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 }
 
 type args struct {
-	Mode  string
-	GoPin string
-	Org   string
+	Mode    string
+	GoPin   string
+	Org     string
+	YarnPin string
 }
 
 func parseArgs() *args {
@@ -266,6 +297,7 @@ func parseArgs() *args {
 	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
 	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
 	flag.StringVar(&f.Org, "o", "lyft", "overrides the github organization (for use in fork testing)")
+	flag.StringVar(&f.YarnPin, "y", "4.1.1", "version of yarn to use")
 	flag.Parse()
 	return f
 }

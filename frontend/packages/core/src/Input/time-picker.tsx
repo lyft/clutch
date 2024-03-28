@@ -1,5 +1,5 @@
 import React from "react";
-import type { TimePickerProps as MuiTimePickerProps } from "@mui/lab";
+import type { TimePickerProps as MuiTimePickerProps } from "@mui/x-date-pickers";
 import { TimePicker as MuiTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -20,7 +20,7 @@ const PaddedTextField = styled(TextField)({
 
 export interface TimePickerProps
   extends Pick<
-    MuiTimePickerProps,
+    MuiTimePickerProps<Date, Date>,
     "disabled" | "value" | "onChange" | "label" | "PaperProps" | "PopperProps"
   > {}
 

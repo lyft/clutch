@@ -24,3 +24,10 @@ export const parameters = {
     ],
   },
 };
+
+const preview = {
+  decorators,
+  parameters,
+};
+
+export default preview;

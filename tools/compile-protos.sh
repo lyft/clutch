@@ -14,7 +14,7 @@ PROTO_ZIP_RELEASE_MD5_OSX=b97730ce009f781d895e816549bfc663
 
 # https://github.com/protobufjs/protobuf.js/releases
 # NOTE: should match frontend/package.json
-PROTOBUFJS_RELEASE=6.11.2
+PROTOBUFJS_RELEASE=6.11.3
 
 # https://github.com/angular/clang-format/releases
 ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
@@ -238,7 +238,8 @@ install_protobufjs() {
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
     "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" init --yes
-    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" config set nodeLinker node-modules
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add "protobufjs@${PROTOBUFJS_RELEASE}"
   fi
 }
 

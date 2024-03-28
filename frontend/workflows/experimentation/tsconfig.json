@@ -1,17 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "references": [
-    {"path": "../../api"},
-    {"path": "../../packages/core"},
-    {"path": "../../packages/data-layout"},
-    {"path": "../../packages/wizard"},
+    { "path": "../../api" },
+    { "path": "../../packages/core" },
+    { "path": "../../packages/data-layout" }
   ]
 }

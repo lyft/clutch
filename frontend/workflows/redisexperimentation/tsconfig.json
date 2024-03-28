@@ -1,19 +1,14 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "incremental": true,
-    "noEmit": false
+    "rootDir": "./src"
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "references": [
-    {"path": "../experimentation"},
-    {"path": "../../packages/core"},
-    {"path": "../../packages/data-layout"},
-    {"path": "../../packages/wizard"},
+    { "path": "../experimentation" },
+    { "path": "../../packages/core" },
+    { "path": "../../packages/data-layout" },
+    { "path": "../../packages/wizard" }
   ]
 }
