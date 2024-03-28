@@ -12,7 +12,7 @@
     "lint": "yarn register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "yarn run workspace:registerWorkflows $INIT_CWD/src",
-    "start": "DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false react-app-rewired start",
+    "start": "yarn register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false react-app-rewired start",
     "test": "yarn register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
