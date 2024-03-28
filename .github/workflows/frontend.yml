@@ -172,7 +172,7 @@ jobs:
         run: echo "My yarn version is $(yarn --version)"
         working-directory: ${{ env.FRONTEND_DIR }}
       - name: Test FN2
-        run: echo "My jest version is $(npm ls jest)"
+        run: echo "My jest version is $(npm ls @testing-library/jest-dom)"
         working-directory: ${{ env.FRONTEND_DIR }}
       - name: Compile packages
         run: yarn run compile:dev
