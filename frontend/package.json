@@ -38,7 +38,7 @@
     "lint:packages:fix": "sort-package-json package.json api/package.json {packages,workflows}/*/package.json",
     "nuke": "PROJECT_CWD=$PWD npm run --silent node_modules:nuke --workspace=@clutch-sh/tools",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
-    "publishBeta": "yarn compile && yarn workspaces foreach -Ai run publishBeta",
+    "publishBeta": "yarn compile && yarn workspaces foreach --no-private -Ai run publishBeta",
     "register-workflows": "yarn workspace @clutch-sh/app run register-workflows",
     "start": "yarn run clean && yarn run register-workflows && yarn run buildWatch",
     "storybook": "rm -rf node_modules/.cache/storybook/ && storybook dev --disable-telemetry -p 6006 -h localhost",
