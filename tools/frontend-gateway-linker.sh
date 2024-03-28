@@ -40,12 +40,18 @@ shift 2
 ln -sf "${REPO_ROOT}" "${DEST_DIR}"
 
 cd "${REPO_ROOT}/frontend"
-{
-  "${YARN}" install --immutable
-} || {
-  echo "${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes."
-  exit 1
-}
+if [[ -f "yarn.lock" ]]; then
+  echo -e "\nFound lockfile in ${REPO_ROOT}/frontend, running install...\n"
+  {
+    "${YARN}" install --immutable
+  } || {
+    echo -e "\n${REPO_ROOT}/frontend/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes.\n"
+    exit 1
+  }
+else
+  echo -e "\nNo lockfile found in ${REPO_ROOT}/frontend - Generating one...\n"
+  "${YARN}" install
+fi
 
 
 cd "${EXTERNAL_ROOT}"
@@ -54,22 +60,24 @@ cd "${EXTERNAL_ROOT}"
 cd "${DEST_DIR}"
 
 if [[ -f "yarn.lock" ]]; then
-  echo "Found lockfile..."
+  echo -e "\nFound lockfile in ${DEST_DIR}, running install...\n"
   {
     "${YARN}" install --immutable
   } || {
-    echo "${DEST_DIR}/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes."
+    echo -e "\n${DEST_DIR}/yarn.lock would be modified by install. Please run yarn install in the frontend directory and commit the changes.\n"
     exit 1
   }
 else
-  echo "No lockfile. Generating one..."
+  echo -e "\nNo lockfile found in ${DEST_DIR} - Generating one...\n"
   "${YARN}" install
 fi
 
 ROOT_NODE_MODULES_DIR="../clutch/frontend/node_modules"
 cd "${DEST_DIR}/node_modules"
 NODE_MODULES_DIR=$(pwd)
+echo -e "\nLinking packages...\n"
 for package in "${LINKED_PACKAGES[@]}"; do
+  echo "${package}: Linking..."
   BASE=$(echo "${package}" | cut -d "/" -f 1)
   SUB=$(echo "${package}" | cut -d "/" -f 2)
 
@@ -96,4 +104,9 @@ for package in "${LINKED_PACKAGES[@]}"; do
   fi
 done
 
-"${YARN}" "${action}" "${@}"
+if [[ "${action}" != "install" ]]; then
+  echo -e "\nRunning yarn ${action} ${@}...\n"
+  "${YARN}" "${action}" "${@}"
+else 
+  echo -e "\nCompleted install and linking!"
+fi
