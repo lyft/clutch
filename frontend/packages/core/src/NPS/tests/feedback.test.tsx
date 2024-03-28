@@ -97,10 +97,14 @@ describe("api success", () => {
         <NPSFeedback origin="WIZARD" />
       </ThemeProvider>
     );
+    spy.mockClear();
+    expect(spy).not.toHaveBeenCalled();
 
     await user.click(await screen.findByLabelText(/Great/i));
+    await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
     await user.click(await screen.findByText("Submit"));
 
+    await waitFor(() => expect(spy).toHaveBeenCalledTimes(2));
     expect(await screen.findByText("Thank you for your feedback!")).toBeVisible();
   });
 
@@ -115,12 +119,11 @@ describe("api success", () => {
     expect(spy).not.toHaveBeenCalled();
 
     await user.click(await screen.findByLabelText(/Great/i));
-    await user.click(await screen.findByText("Submit"));
+    await waitFor(() => expect(spy).toHaveBeenCalled());
+    await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
 
-    await waitFor(() => {
-      expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledTimes(1);
-    });
+    await user.click(await screen.findByText("Submit"));
+    await waitFor(() => expect(spy).toHaveBeenCalledTimes(2));
   });
 });
 

@@ -155,14 +155,16 @@ const NPSFeedback = ({
 
   // Will debounce feedback requests to the server in case of multiple quick changes to selected
   const sendFeedback = React.useCallback(
-    debounce((formData: IClutch.feedback.v1.ISubmitFeedbackRequest) => {
-      client
-        .post("/v1/feedback/submitFeedback", { userId: userId(), ...formData })
-        .catch((err: ClutchError) => {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        });
-    }, debounceTimer),
+    debounce(
+      (formData: IClutch.feedback.v1.ISubmitFeedbackRequest) =>
+        client
+          .post("/v1/feedback/submitFeedback", { userId: userId(), ...formData })
+          .catch((err: ClutchError) => {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }),
+      debounceTimer
+    ),
     []
   );
 

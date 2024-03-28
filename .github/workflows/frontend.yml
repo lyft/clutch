@@ -168,12 +168,6 @@ jobs:
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: make yarn-install
-      - name: Test FN
-        run: echo "My yarn version is $(yarn --version)"
-        working-directory: ${{ env.FRONTEND_DIR }}
-      - name: Test FN2
-        run: echo "My jest version is $(npm ls @testing-library/jest-dom)"
-        working-directory: ${{ env.FRONTEND_DIR }}
       - name: Compile packages
         run: yarn run compile:dev
         working-directory: ${{ env.FRONTEND_DIR }}
