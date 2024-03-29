@@ -105,7 +105,7 @@ for package in "${LINKED_PACKAGES[@]}"; do
 done
 
 if [[ "${action}" != "install" ]]; then
-  echo -e "\nRunning yarn ${action} ${@}...\n"
+  echo -e "\nRunning yarn ${action} $*...\n"
   "${YARN}" "${action}" "${@}"
 else 
   echo -e "\nCompleted install and linking!"
