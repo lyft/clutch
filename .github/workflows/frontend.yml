@@ -1,4 +1,4 @@
-name: frontend
+name: Frontend
 on:
   push:
     branches:
@@ -13,11 +13,12 @@ env:
   FRONTEND_DIR: ./frontend
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           check-latest: true
@@ -49,11 +50,12 @@ jobs:
       - name: build
         run: make frontend
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           check-latest: true
@@ -83,15 +85,15 @@ jobs:
         run: yarn run test:licenses
         working-directory: ${{ env.FRONTEND_DIR }}
   test-e2e:
-    name: test e2e
+    name: Test [e2e]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
         id: setup-go
         with:
           go-version: 1.22.x
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           check-latest: true
@@ -139,18 +141,18 @@ jobs:
         id: e2e
         run: ./tools/frontend-e2e.sh
       - name: Upload end-to-end artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots
           path: ./frontend/packages/app/cypress/screenshots
   test-unit:
-    name: test unit
+    name: Test [unit]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           check-latest: true
@@ -177,9 +179,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: [build, lint, test-unit, test-e2e]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "18.x"
           check-latest: true
