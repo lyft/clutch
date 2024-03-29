@@ -2,7 +2,7 @@ import React from "react";
 
 export interface ContextProps {
   displayWarnings: (warnings: string[]) => void;
-  onBack: (params?: { toOrigin?: boolean }) => void;
+  onBack: (params?: { toOrigin?: boolean; keepSearch?: boolean }) => void;
   onSubmit: () => void;
   setOnSubmit: (f: (...args: any[]) => void) => void;
   setIsLoading: (isLoading: boolean) => void;
