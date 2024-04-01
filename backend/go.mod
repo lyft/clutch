@@ -15,7 +15,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kinesis v1.17.14
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.36.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.21.5
-	github.com/aws/smithy-go v1.14.2
+	github.com/aws/smithy-go v1.20.2
 	github.com/bradleyfalzon/ghinstallation/v2 v2.7.0
 	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
