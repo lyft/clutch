@@ -25,7 +25,7 @@ LINKED_PACKAGES=(
 )
 
 EXTERNAL_ROOT="${1}"
-YARN=yarn
+YARN="${EXTERNAL_ROOT}/build/bin/yarn.sh"
 
 DEST_DIR="${EXTERNAL_ROOT}/frontend"
 
