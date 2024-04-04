@@ -36,6 +36,7 @@ tools/install-yarn.sh
 # default to build, can pass in start as second argument if dev is desired
 action="${2:-build}"
 shift 2
+addtlArgs="${@:-}"
 
 ln -sf "${REPO_ROOT}" "${DEST_DIR}"
 
@@ -106,7 +107,7 @@ done
 
 if [[ "${action}" != "install" ]]; then
   echo -e "\nRunning yarn ${action} $*...\n"
-  "${YARN}" "${action}" "${@}"
+  "${YARN}" "${action}" "${addtlArgs}"
 else 
   echo -e "\nCompleted install and linking!"
 fi
