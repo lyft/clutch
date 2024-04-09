@@ -71,7 +71,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 
 	lwPod := cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything())
 	podInformer := NewLightweightInformer(
-		lwPod,
+		&lwPod,
 		&corev1.Pod{},
 		informerHandlers,
 		false,
@@ -80,7 +80,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 
 	lwDeployment := cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything())
 	deploymentInformer := NewLightweightInformer(
-		lwDeployment,
+		&lwDeployment,
 		&appsv1.Deployment{},
 		informerHandlers,
 		true,
@@ -89,7 +89,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 
 	lwHPA := cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything())
 	hpaInformer := NewLightweightInformer(
-		lwHPA,
+		&lwHPA,
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerHandlers,
 		true,
@@ -98,7 +98,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 
 	lwNode := cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "nodes", corev1.NamespaceAll, fields.Everything())
 	nodeInformer := NewLightweightInformer(
-		lwNode,
+		&lwNode,
 		&corev1.Node{},
 		informerHandlers,
 		true,
@@ -119,7 +119,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 //
 // Notably we intentionally run these in serial, not only can this cause memory pressure but
 // also being mindful of the kubernetes api servers to reduce burst load.
-func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDeployments, lwHPA *cache.ListWatch, lwNode *cache.ListWatch, ttl time.Duration) {
+func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDeployments, lwHPA cache.ListWatch, lwNode cache.ListWatch, ttl time.Duration) {
 	// Refresh the cache here at half the time it takes for the cache to expire
 	// eg: 2 hour TTL would result in refreshing this cache every 1 hour
 	ticker := time.NewTicker(ttl / 2)
