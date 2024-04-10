@@ -65,6 +65,7 @@ const registeredWorkflows = async (
   configuration: UserConfiguration,
   filters: { (workflows: Workflow[]): Promise<Workflow[]> }[] = []
 ): Promise<Workflow[]> => {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async resolve => {
     let validWorkflows = Object.keys(workflows || [])
       .map((workflowId: string) => {
@@ -87,7 +88,13 @@ const registeredWorkflows = async (
       })
       .filter(workflow => workflow !== null);
     try {
-      await Promise.all(filters.map(f => f(validWorkflows).then(w => (validWorkflows = w))));
+      await Promise.all(
+        filters.map(f =>
+          f(validWorkflows).then(w => {
+            validWorkflows = w;
+          })
+        )
+      );
     } catch (e) {
       /* eslint-disable-next-line no-console */
       console.warn("Error applying filters to workflows", e);
