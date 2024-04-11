@@ -65,32 +65,42 @@ const registeredWorkflows = async (
   configuration: UserConfiguration,
   filters: { (workflows: Workflow[]): Promise<Workflow[]> }[] = []
 ): Promise<Workflow[]> => {
-  let validWorkflows = Object.keys(workflows || [])
-    .map((workflowId: string) => {
-      const workflow = workflows[workflowId]();
-      const icon = configuration?.[workflowId]?.icon || { path: "" };
-      try {
-        return {
-          ...workflow,
-          icon,
-          routes: workflowRoutes(workflowId, workflow, configuration),
-        };
-      } catch {
-        // n.b. if the routes aren't configured properly we drop the workflow
-        /* eslint-disable-next-line no-console */
-        console.warn(
-          `Skipping registration of ${workflowId || "unknown"} workflow due to invalid config`
-        );
-        return null;
-      }
-    })
-    .filter(workflow => workflow !== null);
-  filters.forEach(f => {
-    f(validWorkflows).then(w => {
-      validWorkflows = w;
-    });
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async resolve => {
+    let validWorkflows = Object.keys(workflows || [])
+      .map((workflowId: string) => {
+        const workflow = workflows[workflowId]();
+        const icon = configuration?.[workflowId]?.icon || { path: "" };
+        try {
+          return {
+            ...workflow,
+            icon,
+            routes: workflowRoutes(workflowId, workflow, configuration),
+          };
+        } catch {
+          // n.b. if the routes aren't configured properly we drop the workflow
+          /* eslint-disable-next-line no-console */
+          console.warn(
+            `Skipping registration of ${workflowId || "unknown"} workflow due to invalid config`
+          );
+          return null;
+        }
+      })
+      .filter(workflow => workflow !== null);
+    try {
+      await Promise.all(
+        filters.map(f =>
+          f(validWorkflows).then(w => {
+            validWorkflows = w;
+          })
+        )
+      );
+    } catch (e) {
+      /* eslint-disable-next-line no-console */
+      console.warn("Error applying filters to workflows", e);
+    }
+    resolve(validWorkflows);
   });
-  return validWorkflows;
 };
 
 export { registeredWorkflows, workflowRoutes };
