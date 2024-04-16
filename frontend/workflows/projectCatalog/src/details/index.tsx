@@ -14,10 +14,10 @@ import {
   Tooltip,
   Typography,
 } from "@clutch-sh/core";
+import CodeOffIcon from "@mui/icons-material/CodeOff";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { capitalize, isEmpty } from "lodash";
-import CodeOffIcon from "@mui/icons-material/CodeOff";
 
 import type { CatalogDetailsChild, ProjectConfigLink, ProjectDetailsWorkflowProps } from "..";
 

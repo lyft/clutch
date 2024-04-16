@@ -22,12 +22,16 @@ const fetchProjectInfo = (
 
       if (_.isEmpty(projectResults) && allowDisabled && partialFailures) {
         // Will add disabled projects to the list of projects to display if requested
-        let failuresMap = partialFailures
+        const failuresMap = partialFailures
           .map(p => {
             if ((_.get(p, "message", "") ?? "").includes("disabled")) {
-              const project = _.get(p, "details.[0]");
-              _.set(project, ["data", "description"], `${project.name} is disabled.`);
-              return project;
+              const disabledProject = _.get(p, "details.[0]");
+              _.set(
+                disabledProject,
+                ["data", "description"],
+                `${disabledProject.name} is disabled.`
+              );
+              return disabledProject;
             }
             return null;
           })
