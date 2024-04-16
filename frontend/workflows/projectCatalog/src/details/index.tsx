@@ -109,7 +109,7 @@ const QuickLinksAndSettingsBtn = ({ linkGroups, configLinks = [] }: QuickLinksAn
           >
             {links.map(link => (
               <StyledPopperItem key={link.title}>
-                <Link href={link.path}>
+                <Link href={link.path} target="_self">
                   <Grid container gap={0.5}>
                     {link.icon && <Grid item>{link.icon}</Grid>}
                     <Grid item>
