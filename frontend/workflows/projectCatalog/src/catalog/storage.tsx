@@ -45,15 +45,32 @@ const fetchProjects = (
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
   onError: (e: ClutchError) => void,
   retry: number,
-  includeOwned: boolean = true
+  includeOwned: boolean = true,
+  allowDisabled: boolean = false
 ) => {
   client
     .post("/v1/project/getProjects", projectRequest(includeOwned))
     .then(resp => {
-      const { results } = resp.data as IClutch.project.v1.GetProjectsResponse;
-      const selectedProjects = Object.values(results)
+      const { results, partialFailures } = resp.data as IClutch.project.v1.GetProjectsResponse;
+      let selectedProjects = Object.values(results)
         .filter(r => r?.from?.selected)
         .map(r => r.project);
+
+      if (allowDisabled && partialFailures) {
+        // Will add disabled projects to the list of projects to display if requested
+        selectedProjects = selectedProjects.concat(
+          partialFailures
+            .map(p => {
+              if ((_.get(p, "message", "") ?? "").includes("disabled")) {
+                const project = _.get(p, "details.[0]");
+                _.set(project, ["data", "description"], `${project.name} is disabled.`);
+                return project;
+              }
+              return null;
+            })
+            .filter(Boolean)
+        );
+      }
 
       let projectStorage = {};
       if (!Object.keys(loadProjects()).length) {
@@ -97,19 +114,21 @@ const fetchProjects = (
 const getProjects = (
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
   onError: (e: ClutchError) => void,
-  includeOwned: boolean = false
+  includeOwned: boolean = false,
+  allowDisabled: boolean = false
 ) => {
   // retry count is set to the number of projects in storage since potentially
   // all projects are invalid.
   const retryCount = Object.keys(loadProjects()).length;
-  fetchProjects(onSuccess, onError, retryCount, includeOwned);
+  fetchProjects(onSuccess, onError, retryCount, includeOwned, allowDisabled);
 };
 
 /** Add a project to local storage. */
 const addProject = (
   project: string,
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
-  onError: (e: ClutchError) => void
+  onError: (e: ClutchError) => void,
+  allowDisabled: boolean = false
 ) => {
   const storedProjects = loadProjects();
   const updatedProjects = {
@@ -117,23 +136,29 @@ const addProject = (
     [project]: Date.now().toString(),
   };
   writeProjects(updatedProjects);
-  getProjects(onSuccess, e => {
-    writeProjects(storedProjects);
-    onError(e);
-  });
+  getProjects(
+    onSuccess,
+    e => {
+      writeProjects(storedProjects);
+      onError(e);
+    },
+    false,
+    allowDisabled
+  );
 };
 
 const removeProject = (
   project: string,
   onSuccess: (pjts: IClutch.core.project.v1.IProject[]) => void,
-  onError: (e: ClutchError) => void
+  onError: (e: ClutchError) => void,
+  allowDisabled: boolean = false
 ) => {
   const storedProjects = loadProjects();
   if (storedProjects?.[project] !== undefined) {
     delete storedProjects[project];
     writeProjects(storedProjects);
   }
-  getProjects(onSuccess, onError, false);
+  getProjects(onSuccess, onError, false, allowDisabled);
 };
 
 const clearProjects = () => {

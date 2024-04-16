@@ -58,7 +58,7 @@ const autoComplete = async (search: string): Promise<any> => {
 
 const Form = styled.form({});
 
-const Catalog: React.FC<WorkflowProps> = () => {
+const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(catalogReducer, initialState);
@@ -74,7 +74,8 @@ const Catalog: React.FC<WorkflowProps> = () => {
     getProjects(
       projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
       setError,
-      !hasState()
+      !hasState(),
+      allowDisabled
     );
   }, []);
 
@@ -96,7 +97,8 @@ const Catalog: React.FC<WorkflowProps> = () => {
       e => {
         dispatch({ type: "SEARCH_END" });
         setError(e);
-      }
+      },
+      allowDisabled
     );
   };
 
@@ -104,7 +106,8 @@ const Catalog: React.FC<WorkflowProps> = () => {
     removeProject(
       project.name,
       projects => dispatch({ type: "REMOVE_PROJECT", payload: { projects } }),
-      setError
+      setError,
+      allowDisabled
     );
   };
 
@@ -122,7 +125,7 @@ const Catalog: React.FC<WorkflowProps> = () => {
     <Box style={{ padding: "32px" }}>
       <div style={{ marginBottom: "8px" }}>
         <Typography variant="caption2" color={alpha(theme.palette.secondary[900], 0.48)}>
-          Project Catalog&nbsp;/&nbsp;Index
+          Project Catalog
         </Typography>
       </div>
       <div style={{ marginBottom: "32px" }}>
@@ -167,7 +170,8 @@ const Catalog: React.FC<WorkflowProps> = () => {
               getProjects(
                 projects => dispatch({ type: "HYDRATE_END", payload: { result: projects } }),
                 setError,
-                true
+                true,
+                allowDisabled
               );
             }}
           >

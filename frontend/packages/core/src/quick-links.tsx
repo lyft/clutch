@@ -58,7 +58,7 @@ interface LinkGroupProps {
   linkGroupImage: string;
 }
 
-interface QLink extends IClutch.core.project.v1.ILink {
+export interface QLink extends IClutch.core.project.v1.ILink {
   trackingId?: string;
   icon?: React.ElementType;
 }
@@ -161,7 +161,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   );
 };
 
-interface LinkGroup extends IClutch.core.project.v1.ILinkGroup {
+export interface LinkGroup extends IClutch.core.project.v1.ILinkGroup {
   links?: QLink[];
   badge?: {
     color: BadgeProps["color"];
