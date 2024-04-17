@@ -101,7 +101,7 @@ const Config: React.FC<ProjectDetailsConfigWorkflowProps> = ({ children, default
           <ProjectHeader
             title={`${projectInfo?.name ?? projectId} Configuration`}
             routes={[
-              { title: "Details", path: `${projectId}` },
+              { title: projectId, path: `${projectId}` },
               { title: "Configuration" },
               { title: configType || defaultRoute },
             ]}

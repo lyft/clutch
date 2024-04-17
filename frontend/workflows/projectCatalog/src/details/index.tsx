@@ -1,28 +1,36 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
-  FeatureOn,
+  checkFeatureEnabled,
   Grid,
   IconButton,
+  Link,
+  Popper,
+  PopperItem,
+  QuickLinkGroup,
   QuickLinksCard,
-  SimpleFeatureFlag,
   styled,
   Tooltip,
+  Typography,
 } from "@clutch-sh/core";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CodeOffIcon from "@mui/icons-material/CodeOff";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { capitalize, isEmpty } from "lodash";
 
-import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "..";
+import type { CatalogDetailsChild, ProjectConfigLink, ProjectDetailsWorkflowProps } from "..";
 
 import { CardType, DynamicCard, MetaCard } from "./card";
 import { ProjectDetailsContext } from "./context";
 import ProjectHeader from "./header";
 import { fetchProjectInfo } from "./helpers";
 import ProjectInfoCard from "./info";
+
+interface QuickLinksAndSettingsProps {
+  linkGroups: QuickLinkGroup[];
+  configLinks?: ProjectConfigLink[];
+}
 
 const StyledContainer = styled(Grid)({
   padding: "16px",
@@ -32,16 +40,45 @@ const StyledHeadingContainer = styled(Grid)({
   marginBottom: "24px",
 });
 
+const StyledPopperItem = styled(PopperItem)({
+  "&&&": {
+    height: "auto",
+  },
+  "& span.MuiTypography-root": {
+    padding: "0",
+  },
+  "& a.MuiTypography-root": {
+    padding: "4px 16px",
+  },
+});
+
 const DisabledItem = ({ name }: { name: string }) => (
   <Grid item>
     <Tooltip title={`${capitalize(name)} is disabled`}>
-      <FontAwesomeIcon icon={faLock} size="lg" />
+      <CodeOffIcon />
     </Tooltip>
   </Grid>
 );
 
-const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
-  const navigate = useNavigate();
+const QuickLinksAndSettingsBtn = ({ linkGroups, configLinks = [] }: QuickLinksAndSettingsProps) => {
+  const { projectId } = useParams();
+  const anchorRef = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+  const [links, setLinks] = React.useState<ProjectConfigLink[]>(configLinks);
+
+  React.useEffect(() => {
+    const projectConfigFlag = checkFeatureEnabled({ feature: "projectCatalogSettings" });
+    if (projectConfigFlag) {
+      setLinks([
+        {
+          title: "Project Configuration",
+          path: `/catalog/${projectId}/config`,
+          icon: <SettingsIcon fontSize="small" />,
+        },
+        ...links,
+      ]);
+    }
+  }, []);
 
   return (
     <Grid
@@ -59,20 +96,44 @@ const QuickLinksAndSettingsBtn = ({ linkGroups }) => {
           <QuickLinksCard linkGroups={linkGroups} />
         </Grid>
       )}
-      <SimpleFeatureFlag feature="projectCatalogSettings">
-        <FeatureOn>
-          <Grid item>
-            <IconButton onClick={() => navigate("config")} size="medium">
-              <SettingsIcon />
-            </IconButton>
-          </Grid>
-        </FeatureOn>
-      </SimpleFeatureFlag>
+      {links && links.length > 0 && (
+        <Grid item>
+          <IconButton ref={anchorRef} onClick={() => setOpen(o => !o)} size="medium">
+            <SettingsIcon />
+          </IconButton>
+          <Popper
+            open={open}
+            anchorRef={anchorRef}
+            onClickAway={() => setOpen(false)}
+            placement="bottom-end"
+          >
+            {links.map(link => (
+              <StyledPopperItem key={link.title}>
+                <Link href={link.path} target="_self">
+                  <Grid container gap={0.5}>
+                    {link.icon && <Grid item>{link.icon}</Grid>}
+                    <Grid item>
+                      <Typography variant="body2" color="inherit">
+                        {link.title}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Link>
+              </StyledPopperItem>
+            ))}
+          </Popper>
+        </Grid>
+      )}
     </Grid>
   );
 };
 
-const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => {
+const Details: React.FC<ProjectDetailsWorkflowProps> = ({
+  children,
+  chips,
+  allowDisabled,
+  configLinks = [],
+}) => {
   const { projectId } = useParams();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
@@ -141,13 +202,16 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
               {/* Static Header */}
               <ProjectHeader
                 title={projectId}
-                routes={[{ title: "Details" }]}
+                routes={[{ title: projectId }]}
                 description={projectInfo?.data?.description as string}
               />
             </StyledHeadingContainer>
             {projectInfo && (
               <Grid container item xs={12} sm={12} md={5} lg={4} xl={3} spacing={2}>
-                <QuickLinksAndSettingsBtn linkGroups={projectInfo.linkGroups || []} />
+                <QuickLinksAndSettingsBtn
+                  linkGroups={(projectInfo.linkGroups as QuickLinkGroup[]) || []}
+                  configLinks={configLinks ?? []}
+                />
               </Grid>
             )}
           </Grid>
@@ -158,7 +222,7 @@ const Details: React.FC<ProjectDetailsWorkflowProps> = ({ children, chips }) => 
                 <MetaCard
                   title={getOwner(projectInfo?.owners ?? []) || projectId}
                   titleIcon={<GroupIcon />}
-                  fetchDataFn={() => fetchProjectInfo(projectId)}
+                  fetchDataFn={() => fetchProjectInfo(projectId, allowDisabled)}
                   onSuccess={(data: unknown) =>
                     setProjectInfo(data as IClutch.core.project.v1.IProject)
                   }
