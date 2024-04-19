@@ -44,7 +44,8 @@ export interface WizardChild {
   showNPS?: boolean;
   confirm?: {
     startOver: boolean;
-    startOverText?: string;
+    text?: string;
+    action?: () => void;
   };
 }
 
@@ -181,7 +182,7 @@ const Wizard = ({
         showNPS = true,
         confirm = {
           startOver: true,
-          startOverText: "Start Over",
+          text: "Start Over",
         },
       },
     } = child;
@@ -206,21 +207,30 @@ const Wizard = ({
                   </FeatureOn>
                 </SimpleFeatureFlag>
               )}
-              {(isMultistep || hasError) && confirm.startOver && (
-                <ButtonGroup>
-                  <Button
-                    text={confirm.startOverText ?? "Start Over"}
-                    onClick={() => {
-                      dataLayoutManager.reset();
-                      setSearchParams({});
-                      dispatch(WizardAction.RESET);
-                      if (origin) {
-                        navigate(origin);
-                      }
-                    }}
-                  />
-                </ButtonGroup>
-              )}
+              <ButtonGroup>
+                {(isMultistep || hasError) && confirm.startOver && (
+                    <Button
+                      text={confirm.text ?? "Start Over"}
+                      onClick={() => {
+                        dataLayoutManager.reset();
+                        setSearchParams({});
+                        dispatch(WizardAction.RESET);
+                        confirm.action && confirm.action();
+                        if (origin) {
+                          navigate(origin);
+                        }
+                      }}
+                    />
+                )}
+                {
+                  !confirm.startOver && confirm.action && (
+                    <Button
+                      text={confirm.text ?? "Finish process"}
+                      onClick={confirm.action}
+                    />
+                  )
+                }
+              </ButtonGroup>
             </>
           )}
         </Grid>
