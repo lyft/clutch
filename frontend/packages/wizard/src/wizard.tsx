@@ -208,28 +208,25 @@ const Wizard = ({
                 </SimpleFeatureFlag>
               )}
               <ButtonGroup>
-                {(isMultistep || hasError) && confirm.startOver && (
-                    <Button
-                      text={confirm.text ?? "Start Over"}
-                      onClick={() => {
-                        dataLayoutManager.reset();
-                        setSearchParams({});
-                        dispatch(WizardAction.RESET);
-                        confirm.action && confirm.action();
-                        if (origin) {
-                          navigate(origin);
-                        }
-                      }}
-                    />
-                )}
-                {
-                  !confirm.startOver && confirm.action && (
-                    <Button
-                      text={confirm.text ?? "Finish process"}
-                      onClick={confirm.action}
-                    />
-                  )
-                }
+              {(isMultistep || hasError) && confirm.startOver && (
+                  <Button
+                    text={confirm.text ?? "Start Over"}
+                    onClick={() => {
+                      dataLayoutManager.reset();
+                      setSearchParams({});
+                      dispatch(WizardAction.RESET);
+                      confirm.action && confirm.action();
+                      if (origin) {
+                        navigate(origin);
+                      }
+                    }}
+                  />
+              )}
+              {
+                !confirm.startOver && confirm.action && (
+                  <Button text={confirm.text ?? "Finish process"} onClick={confirm.action}/>
+                )
+              }
               </ButtonGroup>
             </>
           )}
