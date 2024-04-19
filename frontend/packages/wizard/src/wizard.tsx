@@ -208,7 +208,7 @@ const Wizard = ({
                 </SimpleFeatureFlag>
               )}
               <ButtonGroup>
-              {(isMultistep || hasError) && confirm.startOver && (
+                {(isMultistep || hasError) && confirm.startOver && (
                   <Button
                     text={confirm.text ?? "Start Over"}
                     onClick={() => {
@@ -221,12 +221,10 @@ const Wizard = ({
                       }
                     }}
                   />
-              )}
-              {
-                !confirm.startOver && confirm.action && (
-                  <Button text={confirm.text ?? "Finish process"} onClick={confirm.action}/>
-                )
-              }
+                )}
+                {!confirm.startOver && confirm.action && (
+                  <Button text={confirm.text ?? "Finish process"} onClick={confirm.action} />
+                )}
               </ButtonGroup>
             </>
           )}
