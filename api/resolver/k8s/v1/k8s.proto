@@ -4,8 +4,6 @@ package clutch.resolver.k8s.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/resolver/k8s/v1;k8sv1";
 
-import "google/protobuf/descriptor.proto";
-
 import "resolver/v1/annotations.proto";
 
 message PodID {

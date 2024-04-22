@@ -296,8 +296,8 @@ install_protoc() {
   export PROTOC_BIN="${GOBIN}/protoc-v${PROTOC_RELEASE}"
   export PROTOC_INCLUDE_DIR="${GOBIN}/protoc-v${PROTOC_RELEASE}-include"
 
+  go install github.com/bufbuild/buf/cmd/protoc-gen-buf-lint@v1.30.0
   go install \
-    github.com/bufbuild/buf/cmd/protoc-gen-buf-lint \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     github.com/envoyproxy/protoc-gen-validate \
