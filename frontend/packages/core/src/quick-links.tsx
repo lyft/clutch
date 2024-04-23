@@ -71,14 +71,28 @@ interface QuickLinkContainerProps {
   keyProp: string | null | undefined;
   name: string;
   children: React.ReactNode;
+  popperOpen?: boolean;
 }
 
 const ICON_SIZE = "32px";
 
-const QuickLinkContainer = ({ keyProp, name, children }: QuickLinkContainerProps) => {
+const QuickLinkContainer = ({ keyProp, name, children, popperOpen }: QuickLinkContainerProps) => {
+  const [tooltipOpen, setTooltipOpen] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (popperOpen) {
+      setTooltipOpen(false);
+    }
+  }, [popperOpen]);
+
   const container = (
-    <Tooltip title={name}>
-      <TooltipContainer>{children}</TooltipContainer>
+    <Tooltip title={name} open={tooltipOpen}>
+      <TooltipContainer
+        onMouseEnter={() => !popperOpen && setTooltipOpen(true)}
+        onMouseLeave={() => !popperOpen && setTooltipOpen(false)}
+      >
+        {children}
+      </TooltipContainer>
     </Tooltip>
   );
 
@@ -132,7 +146,7 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
   }, [links]);
 
   return (
-    <QuickLinkContainer keyProp={linkGroupName} name={linkGroupName}>
+    <QuickLinkContainer keyProp={linkGroupName} name={linkGroupName} popperOpen={open}>
       <StyledButton type="button" ref={anchorRef} onClick={() => setOpen(true)}>
         <img width={ICON_SIZE} height={ICON_SIZE} src={linkGroupImage} alt={linkGroupName} />
       </StyledButton>
@@ -171,6 +185,7 @@ export interface LinkGroup extends IClutch.core.project.v1.ILinkGroup {
 
 export interface QuickLinksProps {
   linkGroups: LinkGroup[];
+  maxLinks?: number;
 }
 
 // TODO(smonero): Wasn't sure if I should make an interface for this or just reuse
@@ -207,7 +222,7 @@ const SlicedLinkGroup = ({ slicedLinkGroups }: SlicedLinkGroupProps) => {
   );
 };
 
-const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
+const QuickLinksCard = ({ linkGroups, maxLinks = 5 }: QuickLinksProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
 
@@ -217,8 +232,8 @@ const QuickLinksCard = ({ linkGroups }: QuickLinksProps) => {
 
   // Show only the first five quick links, and put the rest in
   // an overflow popper
-  const firstFive = filteredLinkGroups.slice(0, 5);
-  const overflow = filteredLinkGroups.slice(5);
+  const firstFive = filteredLinkGroups.slice(0, maxLinks);
+  const overflow = filteredLinkGroups.slice(maxLinks);
 
   return (
     <Card>

@@ -30,7 +30,7 @@ const StyledTooltip = styled(BaseTooltip)(
 );
 
 export interface TooltipProps
-  extends Pick<MuiTooltipProps, "disableInteractive" | "placement" | "arrow"> {
+  extends Pick<MuiTooltipProps, "disableInteractive" | "placement" | "arrow" | "open"> {
   // tooltip reference element (i.e. icon)
   children: React.ReactElement;
   // material ui default is 300px

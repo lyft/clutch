@@ -17,6 +17,8 @@ import (
 	"unicode/utf8"
 
 	"google.golang.org/protobuf/types/known/anypb"
+
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 )
 
 // ensure the imports are used
@@ -33,6 +35,8 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
 	_ = sort.Sort
+
+	_ = sourcecontrolv1.Visibility(0)
 )
 
 // Validate checks the field values on Config with the rules defined in the

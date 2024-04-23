@@ -29,14 +29,14 @@ const MessengerRow = ({ projectData }: { projectData: IClutch.core.project.v1.IP
     }
   }, [projectData]);
 
-  return (
+  return link ? (
     <Grid container item spacing={1}>
       <Grid item>
         <FontAwesomeIcon icon={icon} size="lg" />
       </Grid>
       <Grid item>{text && <LinkText text={text} link={link} />}</Grid>
     </Grid>
-  );
+  ) : null;
 };
 
 export default MessengerRow;

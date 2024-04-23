@@ -9,6 +9,16 @@ import Details from "./details";
 
 type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
+interface ProjectCatalogProps {
+  allowDisabled?: boolean;
+}
+
+export interface ProjectConfigLink {
+  title: string;
+  path: string;
+  icon?: React.ReactElement;
+}
+
 export interface ProjectConfigProps {
   title: string;
   path: string;
@@ -19,14 +29,15 @@ type CatalogDetailsChild = React.ReactElement<DetailCard>;
 
 export type ProjectConfigPage = React.ReactElement<ProjectConfigProps>;
 
-export interface WorkflowProps extends BaseWorkflowProps {}
+export interface WorkflowProps extends BaseWorkflowProps, ProjectCatalogProps {}
 
-export interface ProjectDetailsWorkflowProps extends WorkflowProps {
+export interface ProjectDetailsWorkflowProps extends WorkflowProps, ProjectCatalogProps {
   children?: CatalogDetailsChild | CatalogDetailsChild[];
   chips?: ProjectInfoChip[];
+  configLinks?: ProjectConfigLink[];
 }
 
-export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps {
+export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps, ProjectCatalogProps {
   children?: ProjectConfigPage | ProjectConfigPage[];
   defaultRoute?: string;
 }
