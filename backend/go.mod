@@ -28,7 +28,7 @@ require (
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/gobwas/glob v0.2.3
 	github.com/gogo/status v1.1.1
-	github.com/golang-migrate/migrate/v4 v4.16.2
+	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-github/v54 v54.0.0
 	github.com/google/uuid v1.6.0
@@ -37,7 +37,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0
 	github.com/jhump/protoreflect v1.15.2
 	github.com/joho/godotenv v1.5.1
-	github.com/lib/pq v1.10.8
+	github.com/lib/pq v1.10.9
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/shurcooL/githubv4 v0.0.0-20230704064427-599ae7bbf278
 	github.com/shurcooL/graphql v0.0.0-20230722043721-ed46e5a46466
