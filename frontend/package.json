@@ -33,6 +33,7 @@
     "compile:dev": "yarn workspaces foreach -Ai run compile:dev",
     "compile:watch": "yarn workspaces foreach -Aip -j unlimited run compile:watch",
     "lint": "yarn workspaces foreach -Ap -j unlimited run lint",
+    "lint:files": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn run lint --fix",
     "lint:packages": "sort-package-json package.json api/package.json {packages,workflows}/*/package.json --check",
     "lint:packages:fix": "sort-package-json package.json api/package.json {packages,workflows}/*/package.json",
