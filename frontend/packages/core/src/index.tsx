@@ -63,7 +63,11 @@ export { useTheme } from "./AppProvider/themes";
 
 export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";
 
-export type { QLink as QuickLink, LinkGroup as QuickLinkGroup } from "./quick-links";
+export type {
+  QLink as QuickLink,
+  LinkGroup as QuickLinkGroup,
+  QuickLinksProps,
+} from "./quick-links";
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
 export type { CardHeaderSummaryProps } from "./card";

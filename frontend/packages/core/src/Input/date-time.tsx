@@ -1,5 +1,5 @@
 import React from "react";
-import type { DateTimePickerProps as MuiDateTimePickerProps } from "@mui/lab";
+import type { DateTimePickerProps as MuiDateTimePickerProps } from "@mui/x-date-pickers";
 import { DateTimePicker as MuiDateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -19,7 +19,7 @@ const PaddedTextField = styled(TextField)({
 });
 
 export interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps, "disabled" | "value" | "onChange" | "label"> {}
+  extends Pick<MuiDateTimePickerProps<Date, Date>, "disabled" | "value" | "onChange" | "label"> {}
 
 const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>

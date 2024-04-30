@@ -8,7 +8,7 @@
     "clean": "rm -rf dist",
     "compile": "esbuild --target=es2019 --outdir=dist src/*.jsx",
     "compile:dev": "yarn compile --sourcemap",
-    "compile:watch": "yarn run compile:dev --watch",
+    "compile:watch": "yarn run compile:dev --watch=forever",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "test": "jest --passWithNoTests",
@@ -17,9 +17,9 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^3.0.0-beta",
-    "@clutch-sh/wizard": "^3.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@clutch-sh/data-layout": "^4.0.0-beta",
+    "@clutch-sh/wizard": "^4.0.0-beta",
     "@mui/material": "^5.8.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -29,9 +29,14 @@
     "react-hook-form": "7.25.3"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^2.0.0-beta"
+    "@clutch-sh/tools": "^4.0.0-beta",
+    "esbuild": "^0.18.0",
+    "eslint": "^8.3.0",
+    "jest": "^27.0.0"
   },
   "engines": {
-    "node": ">=16.0.0 <17"
-  }
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1"
 }

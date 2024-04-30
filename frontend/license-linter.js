@@ -5,6 +5,7 @@ const allowLicenses = [
   "Apache-1.1",
   "Apache-2.0",
   "Artistic-2.0",
+  "BlueOak-1.0.0",
   "BSD",
   "BSL-1.0",
   "bzip2-1.0.5",
