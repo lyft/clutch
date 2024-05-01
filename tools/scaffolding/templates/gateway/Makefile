@@ -43,7 +43,7 @@ yarn-install: yarn-ensure
 ifneq ("$(wildcard frontend/yarn.lock)","")
 	$(YARN) --cwd frontend install --immutable
 else
-	$(YARN) --cwd frontend install
+	$(YARN) --cwd frontend install --no-immutable
 endif 
 
 .PHONY: yarn-ensure
