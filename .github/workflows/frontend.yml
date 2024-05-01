@@ -178,6 +178,7 @@ jobs:
         working-directory: ${{ env.FRONTEND_DIR }}
   publish:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     needs: [build, lint, test-unit, test-e2e]
     steps:
       - uses: actions/checkout@v4
