@@ -205,8 +205,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: publish
-        run: yarn npm whoami
+        run: yarn run publishBeta
         working-directory: ${{ env.FRONTEND_DIR }}
-      # - name: publish
-      #   run: yarn run publishBeta
-      #   working-directory: ${{ env.FRONTEND_DIR }}
