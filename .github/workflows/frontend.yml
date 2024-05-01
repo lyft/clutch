@@ -200,8 +200,11 @@ jobs:
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: make yarn-install
-      - name: publish
-        run: yarn run publishBeta
+      - name: Set Publish Auth
+        run: yarn config set npmAuthToken $NODE_AUTH_TOKEN
         working-directory: ${{ env.FRONTEND_DIR }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: publish
+        run: yarn run publishBeta
+        working-directory: ${{ env.FRONTEND_DIR }}
