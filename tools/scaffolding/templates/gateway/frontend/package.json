@@ -5,34 +5,33 @@
   "scripts": {
     "build": "yarn compile && yarn register-workflows && react-scripts build",
     "clean": "rm -rf build",
-    "compile": "lerna run compile --parallel",
-    "compile:watch": "lerna run compile:watch --parallel",
+    "compile": "yarn workspaces foreach -Ai run compile",
+    "compile:watch": "yarn workspaces foreach -Aip -j unlimited run compile:watch",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "npm explore @clutch-sh/tools -- yarn registerWorkflows $PWD/src",
-    "start": "yarn clean && yarn compile:watch & yarn register-workflows && FORCE_COLOR=true react-scripts start | cat",
-    "test": "lerna run test --stream --no-bail",
-    "test:coverage": "lerna run test:coverage --stream --no-bail",
-    "test:watch": "lerna run test:watch --parallel",
+    "start": "yarn clean && yarn compile:watch & yarn register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true FORCE_COLOR=true react-scripts start | cat",
+    "test": "yarn workspaces foreach -Ap -j unlimited run test --silent",
+    "test:coverage": "yarn workspaces foreach -Ap -j unlimited run test:coverage --silent",
+    "test:watch": "yarn workspaces foreach -Aip -j unlimited run test:watch",
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
     "protobufjs": "6.11.3"
   },
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "@clutch-sh/ec2": "^3.0.0-beta",
+    "@clutch-sh/ec2": "^4.0.0-beta",
     "@{{ .RepoName }}/echo": "^0.0.0",
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/tools": "^2.0.0-beta",
+    "@clutch-sh/core": "^4.0.0-beta",
+    "@clutch-sh/tools": "^4.0.0-beta",
     "history": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5.0.1"
   },
   "resolutions": {
-    "@types/react": "^17.0.2",
+    "@types/react": "17.0.50",
     "react-hook-form": "7.25.3"
   },
   "workspaces": [
@@ -52,7 +51,8 @@
     ]
   },
   "engines": {
-    "node": ">=16.0.0 <17",
-    "yarn": "^1.22.11"
-  }
+    "node": ">=18 <19",
+    "yarn": "^4.1.1"
+  },
+  "packageManager": "yarn@4.1.1"
 }

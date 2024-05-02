@@ -1,5 +1,5 @@
-import WizardStep from "./step";
-import Wizard from "./wizard";
+export { default as WizardStep } from "./step";
+export { default as Wizard } from "./wizard";
 
-export type { WizardChild } from "./wizard";
-export { Wizard, WizardStep };
+export type { WizardChild, WizardProps } from "./wizard";
+export type { WizardStepProps } from "./step";

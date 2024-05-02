@@ -28,7 +28,7 @@ import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
 
-interface WizardProps
+export interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
     Pick<MuiStepperProps, "orientation"> {
   children:

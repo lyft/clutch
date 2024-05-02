@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="3.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')"
+VERSION="4.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')"
 PACKAGE=$1
 
 if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
@@ -8,4 +8,5 @@ if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
   exit 0
 fi
 
-yarn publish --new-version="${VERSION}" --access public --no-git-tag-version
+yarn version "${VERSION}"
+yarn npm publish --access public
