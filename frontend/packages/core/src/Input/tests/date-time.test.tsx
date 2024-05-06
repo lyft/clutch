@@ -38,6 +38,20 @@ test("onChange is called when valid value", () => {
   expect(onChange).toHaveBeenCalled();
 });
 
+test("onChange is called when value is empty", () => {
+  render(
+    <ThemeProvider>
+      <DateTimePicker value={new Date()} onChange={onChange} />
+    </ThemeProvider>
+  );
+
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
+  fireEvent.change(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m"), {
+    target: { value: "" },
+  });
+  expect(onChange).toHaveBeenCalled();
+});
+
 test("onChange is not called when invalid value", () => {
   render(
     <ThemeProvider>

@@ -26,8 +26,9 @@ const DateTimePicker = ({ onChange, ...props }: DateTimePickerProps) => (
     <MuiDateTimePicker
       renderInput={inputProps => <PaddedTextField {...inputProps} />}
       onChange={(value: Dayjs | null) => {
-        if (value && value.isValid()) {
-          onChange(value.toDate());
+        if (!value || value.isValid()) {
+          const dateValue = value ? value.toDate() : null;
+          onChange(dateValue);
         }
       }}
       {...props}
