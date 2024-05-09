@@ -41,7 +41,7 @@ test("onChange is called when valid value", () => {
 test("onChange is called when value is empty", () => {
   render(
     <ThemeProvider>
-      <DateTimePicker value={new Date()} onChange={onChange} />
+      <DateTimePicker value={new Date()} onChange={onChange} allowEmpty />
     </ThemeProvider>
   );
 
@@ -62,6 +62,20 @@ test("onChange is not called when invalid value", () => {
   expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
   fireEvent.change(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m"), {
     target: { value: "invalid" },
+  });
+  expect(onChange).not.toHaveBeenCalled();
+});
+
+test("onChange is not called when value is empty and empty flag is false", () => {
+  render(
+    <ThemeProvider>
+      <DateTimePicker value={new Date()} onChange={onChange} allowEmpty={false} />
+    </ThemeProvider>
+  );
+
+  expect(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m")).toBeVisible();
+  fireEvent.change(screen.getByPlaceholderText("mm/dd/yyyy hh:mm (a|p)m"), {
+    target: { value: "" },
   });
   expect(onChange).not.toHaveBeenCalled();
 });
