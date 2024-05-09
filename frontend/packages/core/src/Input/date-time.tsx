@@ -20,7 +20,7 @@ const PaddedTextField = styled(TextField)({
 
 export interface DateTimePickerProps
   extends Pick<MuiDateTimePickerProps<Date, Date>, "disabled" | "value" | "onChange" | "label"> {
-  allowEmpty: boolean;
+  allowEmpty?: boolean;
 }
 
 const DateTimePicker = ({ onChange, allowEmpty = false, ...props }: DateTimePickerProps) => (
