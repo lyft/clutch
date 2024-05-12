@@ -212,6 +212,7 @@ type DirectClient interface {
 	IAM() *iam.Client
 	Kinesis() *kinesis.Client
 	S3() *s3.Client
+	S3Control() *s3control.Client
 	STS() *sts.Client
 }
 
@@ -266,6 +267,8 @@ func (r *regionalClient) Kinesis() *kinesis.Client {
 func (r *regionalClient) S3() *s3.Client {
 	return r.s3.(*s3.Client)
 }
+
+func (r *regionalClient) S3Control() *s3control.Client { return r.s3control.(*s3control.Client) }
 
 func (r *regionalClient) STS() *sts.Client {
 	return r.sts.(*sts.Client)
