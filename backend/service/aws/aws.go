@@ -24,6 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/iancoleman/strcase"
 	"github.com/uber-go/tally/v4"
@@ -155,6 +156,7 @@ func (c *client) createRegionalClients(accountAlias, region string, regions []st
 		},
 
 		s3:          s3.NewFromConfig(regionCfg),
+		s3control:   s3control.NewFromConfig(regionCfg),
 		kinesis:     kinesis.NewFromConfig(regionCfg),
 		ec2:         ec2.NewFromConfig(regionCfg),
 		autoscaling: autoscaling.NewFromConfig(regionCfg),
@@ -177,6 +179,8 @@ type Client interface {
 
 	S3GetBucketPolicy(ctx context.Context, account, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error)
 	S3StreamingGet(ctx context.Context, account, region, bucket, key string) (io.ReadCloser, error)
+
+	S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName string, accountID string) (*s3control.GetAccessPointPolicyOutput, error)
 
 	DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error)
 	UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
@@ -209,6 +213,7 @@ type DirectClient interface {
 	IAM() *iam.Client
 	Kinesis() *kinesis.Client
 	S3() *s3.Client
+	S3Control() *s3control.Client
 	STS() *sts.Client
 }
 
@@ -232,6 +237,7 @@ type regionalClient struct {
 	iam         iamClient
 	kinesis     kinesisClient
 	s3          s3Client
+	s3control   s3ControlClient
 	sts         stsClient
 }
 
@@ -262,6 +268,8 @@ func (r *regionalClient) Kinesis() *kinesis.Client {
 func (r *regionalClient) S3() *s3.Client {
 	return r.s3.(*s3.Client)
 }
+
+func (r *regionalClient) S3Control() *s3control.Client { return r.s3control.(*s3control.Client) }
 
 func (r *regionalClient) STS() *sts.Client {
 	return r.sts.(*sts.Client)
