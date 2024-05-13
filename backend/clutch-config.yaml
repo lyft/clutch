@@ -21,8 +21,6 @@ gateway:
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
-  assets:
-    enableStaticBaseRoute: true
   listener:
     tcp:
       address: 0.0.0.0
