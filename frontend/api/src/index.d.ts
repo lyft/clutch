@@ -7254,8 +7254,8 @@ export namespace clutch {
                     /** Assets s3 */
                     s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
 
-                    /** Assets enableStaticBaseRoute */
-                    enableStaticBaseRoute?: (boolean|null);
+                    /** Assets routableStaticPath */
+                    routableStaticPath?: (boolean|null);
                 }
 
                 /** Represents an Assets. */
@@ -7270,8 +7270,8 @@ export namespace clutch {
                     /** Assets s3. */
                     public s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
 
-                    /** Assets enableStaticBaseRoute. */
-                    public enableStaticBaseRoute: boolean;
+                    /** Assets routableStaticPath. */
+                    public routableStaticPath: boolean;
 
                     /** Assets provider. */
                     public provider?: "s3";

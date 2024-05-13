@@ -236,10 +236,10 @@ func TestCustomResponseForwarderAuthCookiesNonBrowser(t *testing.T) {
 	assert.Equal(t, "", rec.Header().Get("Location"))
 }
 
-func TestEnableStaticBaseRouteEnabled(t *testing.T) {
+func TestRoutableStaticPathEnabled(t *testing.T) {
 	assetHandler := &assetHandler{
 		assetCfg: &gatewayv1.Assets{
-			EnableStaticBaseRoute: true,
+			RoutableStaticPath: true,
 		},
 	}
 
@@ -286,6 +286,6 @@ func TestEnableStaticBaseRouteEnabled(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		assert.Equal(t, test.expected, assetHandler.enableStaticBaseRoute(test.urlPath), test.id)
+		assert.Equal(t, test.expected, assetHandler.isStaticPathRoutable(test.urlPath), test.id)
 	}
 }

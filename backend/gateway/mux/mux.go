@@ -79,7 +79,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// if enableStaticBaseRoute is set to true, we wont attempt to serve assets if there is no extension in the path.
 	// This is to prevent serving the SPA when the user is trying to access a nested route.
-	if a.enableStaticBaseRoute(r.URL.Path) {
+	if a.isStaticPathRoutable(r.URL.Path) {
 		a.next.ServeHTTP(w, r)
 		return
 	}
@@ -118,8 +118,8 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.fileServer.ServeHTTP(w, r)
 }
 
-func (a *assetHandler) enableStaticBaseRoute(urlPath string) bool {
-	if a.assetCfg != nil && a.assetCfg.EnableStaticBaseRoute {
+func (a *assetHandler) isStaticPathRoutable(urlPath string) bool {
+	if a.assetCfg != nil && a.assetCfg.RoutableStaticPath {
 		// If the path is the base route, we need to serve the SPA.
 		return path.Ext(urlPath) == "" && urlPath != "/"
 	}
