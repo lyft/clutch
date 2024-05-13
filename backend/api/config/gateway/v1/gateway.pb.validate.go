@@ -1440,6 +1440,8 @@ func (m *Assets) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for EnableStaticBaseRoute
+
 	switch v := m.Provider.(type) {
 	case *Assets_S3:
 		if v == nil {

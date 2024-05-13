@@ -17348,6 +17348,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.config.gateway.v1
                      * @interface IAssets
                      * @property {clutch.config.gateway.v1.Assets.IS3Provider|null} [s3] Assets s3
+                     * @property {boolean|null} [enableStaticBaseRoute] Assets enableStaticBaseRoute
                      */
 
                     /**
@@ -17372,6 +17373,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Assets.prototype.s3 = null;
+
+                    /**
+                     * Assets enableStaticBaseRoute.
+                     * @member {boolean} enableStaticBaseRoute
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Assets.prototype.enableStaticBaseRoute = false;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -17407,6 +17416,9 @@ export const clutch = $root.clutch = (() => {
                                     return "s3." + error;
                             }
                         }
+                        if (message.enableStaticBaseRoute != null && message.hasOwnProperty("enableStaticBaseRoute"))
+                            if (typeof message.enableStaticBaseRoute !== "boolean")
+                                return "enableStaticBaseRoute: boolean expected";
                         return null;
                     };
 
@@ -17427,6 +17439,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.Assets.s3: object expected");
                             message.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.fromObject(object.s3);
                         }
+                        if (object.enableStaticBaseRoute != null)
+                            message.enableStaticBaseRoute = Boolean(object.enableStaticBaseRoute);
                         return message;
                     };
 
@@ -17443,11 +17457,15 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
+                        if (options.defaults)
+                            object.enableStaticBaseRoute = false;
                         if (message.s3 != null && message.hasOwnProperty("s3")) {
                             object.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.toObject(message.s3, options);
                             if (options.oneofs)
                                 object.provider = "s3";
                         }
+                        if (message.enableStaticBaseRoute != null && message.hasOwnProperty("enableStaticBaseRoute"))
+                            object.enableStaticBaseRoute = message.enableStaticBaseRoute;
                         return object;
                     };
 

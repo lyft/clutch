@@ -235,3 +235,57 @@ func TestCustomResponseForwarderAuthCookiesNonBrowser(t *testing.T) {
 	assert.Equal(t, 200, rec.Code)
 	assert.Equal(t, "", rec.Header().Get("Location"))
 }
+
+func TestEnableStaticBaseRouteEnabled(t *testing.T) {
+	assetHandler := &assetHandler{
+		assetCfg: &gatewayv1.Assets{
+			EnableStaticBaseRoute: true,
+		},
+	}
+
+	testCases := []struct {
+		id       string
+		urlPath  string
+		expected bool
+	}{
+		{
+			id:       "should not route /",
+			urlPath:  "/",
+			expected: false,
+		},
+		{
+			id:       "should route static assets",
+			urlPath:  "/static/main.js",
+			expected: false,
+		},
+		{
+			id:       "should route static assets",
+			urlPath:  "/static/main.css",
+			expected: false,
+		},
+		{
+			id:       "should serve the base route",
+			urlPath:  "/static",
+			expected: true,
+		},
+		{
+			id:       "should serve the base route with a trailing slash",
+			urlPath:  "/static/",
+			expected: true,
+		},
+		{
+			id:       "should serve the base route with longer paths",
+			urlPath:  "/static/hello",
+			expected: true,
+		},
+		{
+			id:       "should serve the base route with query params",
+			urlPath:  "/static/hello?foo=bar",
+			expected: true,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, assetHandler.enableStaticBaseRoute(test.urlPath), test.id)
+	}
+}

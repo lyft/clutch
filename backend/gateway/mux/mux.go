@@ -30,9 +30,10 @@ import (
 )
 
 const (
-	xHeader        = "X-"
-	xForwardedFor  = "X-Forwarded-For"
-	xForwardedHost = "X-Forwarded-Host"
+	xHeader         = "X-"
+	xForwardedFor   = "X-Forwarded-For"
+	xForwardedHost  = "X-Forwarded-Host"
+	staticAssetPath = "/static/"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -76,10 +77,17 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Set the original path.
 	r.URL.Path = origPath
 
+	// if enableStaticBaseRoute is set to true, we wont attempt to serve assets if there is no extension in the path.
+	// This is to prevent serving the SPA when the user is trying to access a nested route.
+	if a.enableStaticBaseRoute(r.URL.Path) {
+		a.next.ServeHTTP(w, r)
+		return
+	}
+
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
-		if a.assetCfg != nil && a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static/") {
+		if a.assetCfg != nil && a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, staticAssetPath) {
 			// We attach this header simply for observability purposes.
 			// Otherwise its difficult to know if the assets are being served from the configured provider.
 			w.Header().Set("x-clutch-asset-passthrough", "true")
@@ -108,6 +116,15 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.fileServer.ServeHTTP(w, r)
+}
+
+func (a *assetHandler) enableStaticBaseRoute(urlPath string) bool {
+	if a.assetCfg != nil && a.assetCfg.EnableStaticBaseRoute {
+		// If the path is the base route, we need to serve the SPA.
+		return path.Ext(urlPath) == "" && urlPath != "/"
+	}
+
+	return false
 }
 
 func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string) (io.ReadCloser, error) {
