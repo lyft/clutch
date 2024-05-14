@@ -1440,8 +1440,6 @@ func (m *Assets) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RoutableStaticPath
-
 	switch v := m.Provider.(type) {
 	case *Assets_S3:
 		if v == nil {
