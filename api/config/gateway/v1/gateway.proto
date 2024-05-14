@@ -133,11 +133,6 @@ message Assets {
   oneof provider {
     S3Provider s3 = 1;
   }
-
-  // Clutch hosts static assets on the `/static/` path, any request to this path will result in a lookup of static
-  // assets. However if you would like to utilize this route for other pruposes in additon to static assets, you can
-  // enable this feature. eg: clutch.sh/static || /static/* -> you can now handle this route as you wish.
-  bool routable_static_path = 2;
 }
 
 message Logger {
