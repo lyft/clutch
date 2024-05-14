@@ -1,5 +1,6 @@
 import * as React from "react";
 import CheckIcon from "@mui/icons-material/Check";
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import type { CheckboxProps as MuiCheckboxProps, Theme } from "@mui/material";
 import {
   alpha,
@@ -26,7 +27,7 @@ const StyledCheckbox = styled(MuiCheckbox)(({ theme }: { theme: Theme }) => ({
   "&:active": {
     background: theme.palette.primary[300],
   },
-  "&.Mui-checked": {
+  "&.Mui-checked, &.MuiCheckbox-indeterminate": {
     color: theme.palette.contrastColor,
     "&:hover": {
       background: theme.palette.primary[100],
@@ -35,7 +36,6 @@ const StyledCheckbox = styled(MuiCheckbox)(({ theme }: { theme: Theme }) => ({
       background: theme.palette.primary[300],
     },
     "&.Mui-disabled": {
-      color: theme.palette.secondary[200],
       ".MuiIconButton-label": {
         color: alpha(theme.palette.secondary[900], 0.38),
       },
@@ -84,10 +84,19 @@ const SelectedIcon = styled("div")<StyledIconProps>(
 );
 
 export interface CheckboxProps
-  extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange" | "size"> {}
+  extends Pick<
+    MuiCheckboxProps,
+    "checked" | "disabled" | "indeterminate" | "name" | "onChange" | "size"
+  > {}
 
 // TODO (sperry): add 16px size variant
-const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled = false, size, ...props }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+  checked,
+  disabled = false,
+  indeterminate,
+  size,
+  ...props
+}) => {
   let sizePx;
   switch (size) {
     case "small":
@@ -100,11 +109,17 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled = false, size, ..
   return (
     <StyledCheckbox
       checked={checked}
+      indeterminate={indeterminate}
       size={size}
       icon={<Icon $disabled={disabled} $size={sizePx} />}
       checkedIcon={
         <SelectedIcon $disabled={disabled} $size={sizePx}>
           <CheckIcon />
+        </SelectedIcon>
+      }
+      indeterminateIcon={
+        <SelectedIcon $disabled={disabled} $size={sizePx}>
+          <HorizontalRuleIcon />
         </SelectedIcon>
       }
       {...props}
