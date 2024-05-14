@@ -3,7 +3,6 @@ package awsmock
 import (
 	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"io"
 	"math/rand"
 	"time"
@@ -14,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
 	"github.com/golang/protobuf/ptypes/any"

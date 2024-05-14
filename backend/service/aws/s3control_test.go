@@ -3,11 +3,11 @@ package aws
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestS3ControlGetAccessPointPolicy(t *testing.T) {

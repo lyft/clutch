@@ -5,7 +5,6 @@ package aws
 
 import (
 	"context"
-	"github.com/aws/aws-sdk-go-v2/service/s3control"
 
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -13,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
