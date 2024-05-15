@@ -31,6 +31,7 @@ type stsClient interface {
 
 type iamClient interface {
 	SimulateCustomPolicy(ctx context.Context, params *iam.SimulateCustomPolicyInput, optFns ...func(*iam.Options)) (*iam.SimulateCustomPolicyOutput, error)
+	GetRole(ctx context.Context, params *iam.GetRoleInput, optFns ...func(options *iam.Options)) (*iam.GetRoleOutput, error)
 }
 
 type kinesisClient interface {

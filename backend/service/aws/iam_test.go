@@ -14,6 +14,8 @@ import (
 type mockIAM struct {
 	getSimulationResultsErr error
 	getSimulationResults    *iam.SimulateCustomPolicyOutput
+	getGetRoleResultsErr    error
+	getGetRoleResults       *iam.GetRoleOutput
 }
 
 func TestIAMSimulateCustomPolicy(t *testing.T) {
@@ -103,4 +105,11 @@ func (m *mockIAM) SimulateCustomPolicy(ctx context.Context, params *iam.Simulate
 		return nil, m.getSimulationResultsErr
 	}
 	return m.getSimulationResults, nil
+}
+
+func (m *mockIAM) GetRole(ctx context.Context, params *iam.GetRoleInput, optFns ...func(*iam.Options)) (*iam.GetRoleOutput, error) {
+	if m.getGetRoleResultsErr != nil {
+		return nil, m.getGetRoleResultsErr
+	}
+	return m.getGetRoleResults, nil
 }

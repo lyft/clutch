@@ -189,6 +189,7 @@ type Client interface {
 	GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error)
 
 	SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
+	GetRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error)
 
 	Accounts() []string
 	AccountsAndRegions() map[string][]string
