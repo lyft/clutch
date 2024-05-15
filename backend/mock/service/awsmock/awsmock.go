@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
 	"github.com/golang/protobuf/ptypes/any"
@@ -28,6 +29,13 @@ import (
 )
 
 type svc struct{}
+
+func (s *svc) S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName string, accountID string) (*s3control.GetAccessPointPolicyOutput, error) {
+	return &s3control.GetAccessPointPolicyOutput{
+		Policy:         aws.String("{}"),
+		ResultMetadata: middleware.Metadata{},
+	}, nil
+}
 
 func (s *svc) GetDirectClient(account string, region string) (clutchawsclient.DirectClient, error) {
 	panic("implement me")
