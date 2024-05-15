@@ -37,6 +37,34 @@ type getFileQuery struct {
 	} `graphql:"repository(owner:$owner,name:$name)"`
 }
 
+type getFilePathQuery struct {
+	Repository struct {
+		// Get more information about desired ref and last modified ref for the file.
+		Ref struct {
+			Commit struct {
+				ID      githubv4.ID
+				OID     githubv4.GitObjectID
+				History struct {
+					Nodes []struct {
+						CommittedDate githubv4.DateTime
+						OID           githubv4.GitObjectID
+					}
+				} `graphql:"history(path:$path,first:1)"`
+			} `graphql:"... on Commit"`
+		} `graphql:"ref: object(expression:$ref)"`
+
+		// Fetch requested tree and its entries.
+		Object struct {
+			Tree struct {
+				Entries []struct {
+					Name githubv4.String
+					Type githubv4.String
+				} `graphql:"entries"`
+			} `graphql:"... on Tree"`
+		} `graphql:"object(expression:$refPath)"`
+	} `graphql:"repository(owner:$owner,name:$name)"`
+}
+
 type getRepositoryQuery struct {
 	Repository struct {
 		DefaultBranchRef struct {

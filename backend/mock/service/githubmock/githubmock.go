@@ -25,6 +25,10 @@ func (s svc) GetFile(ctx context.Context, ref *github.RemoteRef, path string) (*
 	panic("implement me")
 }
 
+func (s svc) GetFilePath(ctx context.Context, ref *github.RemoteRef, path string) (*github.FilePath, error) {
+	panic("implement me")
+}
+
 func (s svc) CreateBranch(ctx context.Context, req *github.CreateBranchRequest) error {
 	panic("implement me")
 }

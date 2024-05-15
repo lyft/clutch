@@ -96,9 +96,22 @@ type File struct {
 	LastModifiedSHA  string
 }
 
+type FileEntry struct {
+	Name string
+	Type string
+}
+
+type FilePath struct {
+	Path             string
+	LastModifiedTime time.Time
+	LastModifiedSHA  string
+	Files            []*FileEntry
+}
+
 // Client allows various interactions with remote repositories on GitHub.
 type Client interface {
 	GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error)
+	GetFilePath(ctx context.Context, ref *RemoteRef, path string) (*FilePath, error)
 	CreateBranch(ctx context.Context, req *CreateBranchRequest) error
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
@@ -467,6 +480,47 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	}
 
 	return f, nil
+}
+
+func (s *svc) GetFilePath(ctx context.Context, ref *RemoteRef, path string) (*FilePath, error) {
+	q := &getFilePathQuery{}
+
+	params := map[string]interface{}{
+		"owner":   githubv4.String(ref.RepoOwner),
+		"name":    githubv4.String(ref.RepoName),
+		"path":    githubv4.String(path),
+		"ref":     githubv4.String(ref.Ref),
+		"refPath": githubv4.String(fmt.Sprintf("%s:%s", ref.Ref, path)),
+	}
+
+	err := s.graphQL.Query(ctx, q, params)
+	if err != nil {
+		return nil, err
+	}
+
+	switch {
+	case q.Repository.Ref.Commit.ID == nil:
+		return nil, errors.New("ref not found")
+	case len(q.Repository.Object.Tree.Entries) == 0:
+		return nil, errors.New("path not found")
+	}
+
+	var entries []*FileEntry
+	for _, obj := range q.Repository.Object.Tree.Entries {
+		entries = append(entries, &FileEntry{
+			Name: string(obj.Name),
+			Type: string(obj.Type),
+		})
+	}
+
+	fp := &FilePath{
+		Path:             path,
+		Files:            entries,
+		LastModifiedTime: q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time,
+		LastModifiedSHA:  string(q.Repository.Ref.Commit.History.Nodes[0].OID),
+	}
+
+	return fp, nil
 }
 
 /*
