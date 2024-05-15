@@ -28,13 +28,10 @@ const DateTimePicker = ({ onChange, allowEmpty = false, ...props }: DateTimePick
     <MuiDateTimePicker
       renderInput={inputProps => <PaddedTextField {...inputProps} />}
       onChange={(value: Dayjs | null) => {
-        if (!allowEmpty && value && value.isValid()) {
-          const dateValue = value ? value.toDate() : null;
+        const isDateValid = value && value.isValid();
+        if (allowEmpty || (!allowEmpty && isDateValid)) {
+          const dateValue = isDateValid ? value.toDate() : null;
           onChange(dateValue);
-        }
-
-        if (allowEmpty && !value) {
-          onChange(null);
         }
       }}
       {...props}
