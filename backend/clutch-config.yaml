@@ -2,6 +2,8 @@ gateway:
   logger:
     pretty: true
     level: DEBUG
+  assets:
+    routableStaticPath: true
   accesslog:
     # log http 5xx errors by default
     status_code_filters:
