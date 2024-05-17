@@ -37,6 +37,15 @@ func (s *svc) S3GetAccessPointPolicy(ctx context.Context, account, region, acces
 	}, nil
 }
 
+func (s *svc) GetIAMRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error) {
+	return &iam.GetRoleOutput{
+		Role: &iamtypes.Role{
+			RoleName: aws.String(roleName),
+			Arn:      aws.String(fmt.Sprintf("arn:aws:iam::%s:role/%s", account, roleName)),
+		},
+	}, nil
+}
+
 func (s *svc) GetDirectClient(account string, region string) (clutchawsclient.DirectClient, error) {
 	panic("implement me")
 }

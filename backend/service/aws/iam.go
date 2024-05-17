@@ -14,3 +14,19 @@ func (c *client) SimulateCustomPolicy(ctx context.Context, account, region strin
 
 	return cl.iam.SimulateCustomPolicy(ctx, customPolicySimulatorParams)
 }
+
+func (c *client) GetIAMRole(
+	ctx context.Context,
+	account,
+	region,
+	roleName string,
+) (*iam.GetRoleOutput, error) {
+	cl, err := c.getAccountRegionClient(account, region)
+	if err != nil {
+		return nil, err
+	}
+
+	return cl.iam.GetRole(ctx, &iam.GetRoleInput{
+		RoleName: &roleName,
+	})
+}
