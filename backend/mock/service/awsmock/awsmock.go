@@ -37,7 +37,7 @@ func (s *svc) S3GetAccessPointPolicy(ctx context.Context, account, region, acces
 	}, nil
 }
 
-func (s *svc) GetRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error) {
+func (s *svc) GetIAMRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error) {
 	return &iam.GetRoleOutput{
 		Role: &iamtypes.Role{
 			RoleName: aws.String(roleName),

@@ -15,7 +15,7 @@ func (c *client) SimulateCustomPolicy(ctx context.Context, account, region strin
 	return cl.iam.SimulateCustomPolicy(ctx, customPolicySimulatorParams)
 }
 
-func (c *client) GetRole(
+func (c *client) GetIAMRole(
 	ctx context.Context,
 	account,
 	region,
