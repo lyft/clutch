@@ -84,7 +84,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// This is to prevent serving the SPA when the user is trying to access a nested route.
 	if a.isStaticPathRoutable(r.URL.Path) {
 		r.URL.Path = "/"
-		return
+		a.fileServer.ServeHTTP(w, r)
 	}
 
 	// Serve!
