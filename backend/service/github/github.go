@@ -96,22 +96,22 @@ type File struct {
 	LastModifiedSHA  string
 }
 
-type FileEntry struct {
+type DirectoryEntry struct {
 	Name string
 	Type string
 }
 
-type FilePath struct {
+type Directory struct {
 	Path             string
 	LastModifiedTime time.Time
 	LastModifiedSHA  string
-	Files            []*FileEntry
+	Files            []*DirectoryEntry
 }
 
 // Client allows various interactions with remote repositories on GitHub.
 type Client interface {
 	GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error)
-	GetFilePath(ctx context.Context, ref *RemoteRef, path string) (*FilePath, error)
+	GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*Directory, error)
 	CreateBranch(ctx context.Context, req *CreateBranchRequest) error
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
@@ -482,8 +482,8 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	return f, nil
 }
 
-func (s *svc) GetFilePath(ctx context.Context, ref *RemoteRef, path string) (*FilePath, error) {
-	q := &getFilePathQuery{}
+func (s *svc) GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*Directory, error) {
+	q := &getDirectoryQuery{}
 
 	params := map[string]interface{}{
 		"owner":   githubv4.String(ref.RepoOwner),
@@ -502,25 +502,25 @@ func (s *svc) GetFilePath(ctx context.Context, ref *RemoteRef, path string) (*Fi
 	case q.Repository.Ref.Commit.ID == nil:
 		return nil, errors.New("ref not found")
 	case len(q.Repository.Object.Tree.Entries) == 0:
-		return nil, errors.New("path not found")
+		return nil, errors.New("directory not found")
 	}
 
-	var entries []*FileEntry
+	var entries []*DirectoryEntry
 	for _, obj := range q.Repository.Object.Tree.Entries {
-		entries = append(entries, &FileEntry{
+		entries = append(entries, &DirectoryEntry{
 			Name: string(obj.Name),
 			Type: string(obj.Type),
 		})
 	}
 
-	fp := &FilePath{
+	d := &Directory{
 		Path:             path,
 		Files:            entries,
 		LastModifiedTime: q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time,
 		LastModifiedSHA:  string(q.Repository.Ref.Commit.History.Nodes[0].OID),
 	}
 
-	return fp, nil
+	return d, nil
 }
 
 /*

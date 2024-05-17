@@ -43,12 +43,12 @@ type getfileMock struct {
 	truncated, binary bool
 }
 
-type getfilepathMock struct {
+type getdirectoryMock struct {
 	v4client
 
 	queryError   bool
 	refID, objID string
-	entries      []*FileEntry
+	entries      []*DirectoryEntry
 }
 
 func (g *getfileMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
@@ -84,8 +84,8 @@ func (g *getfileMock) Query(ctx context.Context, query interface{}, variables ma
 	return nil
 }
 
-func (g *getfilepathMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
-	q, ok := query.(*getFilePathQuery)
+func (g *getdirectoryMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+	q, ok := query.(*getDirectoryQuery)
 	if !ok {
 		panic("not a query")
 	}
@@ -277,43 +277,43 @@ func TestGetFile(t *testing.T) {
 	}
 }
 
-var filePathEntries = []*FileEntry{{Name: "foo", Type: "blob"}}
+var directoryEntries = []*DirectoryEntry{{Name: "foo", Type: "blob"}}
 
-var getFilePathTests = []struct {
+var getDirectoryTests = []struct {
 	name    string
-	v4      getfilepathMock
+	v4      getdirectoryMock
 	errText string
 }{
 	{
 		name:    "queryError",
-		v4:      getfilepathMock{queryError: true},
+		v4:      getdirectoryMock{queryError: true},
 		errText: problem,
 	},
 	{
 		name:    "noRef",
-		v4:      getfilepathMock{},
+		v4:      getdirectoryMock{},
 		errText: "ref not found",
 	},
 	{
 		name:    "noObject",
-		v4:      getfilepathMock{refID: "abcdef12345"},
-		errText: "path not found",
+		v4:      getdirectoryMock{refID: "abcdef12345"},
+		errText: "directory not found",
 	},
 	{
 		name: "happyPath",
-		v4:   getfilepathMock{refID: "abcdef12345", objID: "abcdef12345", entries: filePathEntries},
+		v4:   getdirectoryMock{refID: "abcdef12345", objID: "abcdef12345", entries: directoryEntries},
 	},
 }
 
-func TestGetFilePath(t *testing.T) {
-	for _, tt := range getFilePathTests {
+func TestGetDirectory(t *testing.T) {
+	for _, tt := range getDirectoryTests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
 
 			s := &svc{graphQL: &tt.v4}
-			f, err := s.GetFilePath(context.Background(),
+			f, err := s.GetDirectory(context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
 					RepoName:  "myRepo",
@@ -333,7 +333,7 @@ func TestGetFilePath(t *testing.T) {
 			}
 
 			a.Equal("data/foo", f.Path)
-			a.Equal(filePathEntries, filePathEntries)
+			a.Equal(directoryEntries, f.Files)
 			a.Equal("otherSHA", f.LastModifiedSHA)
 			a.Equal(timestamp, f.LastModifiedTime)
 		})

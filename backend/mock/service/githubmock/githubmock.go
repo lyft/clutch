@@ -25,7 +25,7 @@ func (s svc) GetFile(ctx context.Context, ref *github.RemoteRef, path string) (*
 	panic("implement me")
 }
 
-func (s svc) GetFilePath(ctx context.Context, ref *github.RemoteRef, path string) (*github.FilePath, error) {
+func (s svc) GetDirectory(ctx context.Context, ref *github.RemoteRef, path string) (*github.Directory, error) {
 	panic("implement me")
 }
 

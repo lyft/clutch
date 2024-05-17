@@ -37,7 +37,7 @@ type getFileQuery struct {
 	} `graphql:"repository(owner:$owner,name:$name)"`
 }
 
-type getFilePathQuery struct {
+type getDirectoryQuery struct {
 	Repository struct {
 		// Get more information about desired ref and last modified ref for the file.
 		Ref struct {
