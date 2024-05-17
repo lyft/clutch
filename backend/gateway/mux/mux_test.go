@@ -283,6 +283,16 @@ func TestRoutableStaticPathEnabled(t *testing.T) {
 			urlPath:  "/static/hello?foo=bar",
 			expected: true,
 		},
+		{
+			id:       "should not route apis",
+			urlPath:  "/v1/getstatic/hello",
+			expected: false,
+		},
+		{
+			id:       "should not route apis",
+			urlPath:  "/v1/staticapi/hello",
+			expected: false,
+		},
 	}
 
 	for _, test := range testCases {

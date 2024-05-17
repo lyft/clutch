@@ -36,7 +36,10 @@ const (
 	staticAssetPath = "/static/"
 )
 
-var apiPattern = regexp.MustCompile(`^/v\d+/`)
+var (
+	apiPattern         = regexp.MustCompile(`^/v\d+/`)
+	staticRoutePattern = regexp.MustCompile(`^/static*`)
+)
 
 type assetHandler struct {
 	assetCfg *gatewayv1.Assets
@@ -121,7 +124,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (a *assetHandler) isStaticPathRoutable(urlPath string) bool {
 	if a.assetCfg != nil && a.assetCfg.RoutableStaticPath {
 		// If the path is the base route, we need to serve the SPA.
-		return strings.Contains(urlPath, "/static") && path.Ext(urlPath) == "" && urlPath != "/"
+		return staticRoutePattern.MatchString(urlPath) && path.Ext(urlPath) == "" && urlPath != "/"
 	}
 
 	return false
