@@ -190,10 +190,6 @@ module.exports = {
               label: "GitHub",
               to: "https://github.com/lyft/clutch",
             },
-            {
-              label: "Slack",
-              to: "https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA",
-            },
             { label: "Blog", to: "blog" },
             {
               label: "More",
