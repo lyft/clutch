@@ -43,6 +43,14 @@ type getfileMock struct {
 	truncated, binary bool
 }
 
+type getdirectoryMock struct {
+	v4client
+
+	queryError   bool
+	refID, objID string
+	entries      []*Entry
+}
+
 func (g *getfileMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
 	q, ok := query.(*getFileQuery)
 	if !ok {
@@ -73,6 +81,40 @@ func (g *getfileMock) Query(ctx context.Context, query interface{}, variables ma
 			OID           githubv4.GitObjectID
 		}{githubv4.DateTime{Time: timestamp}, "otherSHA"},
 	)
+	return nil
+}
+
+func (g *getdirectoryMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+	q, ok := query.(*getDirectoryQuery)
+	if !ok {
+		panic("not a query")
+	}
+
+	if g.queryError {
+		return errors.New(problem)
+	}
+
+	if g.refID != "" {
+		q.Repository.Ref.Commit.ID = g.refID
+		q.Repository.Ref.Commit.OID = githubv4.GitObjectID(g.refID)
+	}
+	if g.objID != "" {
+		q.Repository.Object.Tree.Entries = append(
+			q.Repository.Object.Tree.Entries,
+			struct {
+				Name githubv4.String
+				Type githubv4.String
+			}{Name: githubv4.String(g.entries[0].Name), Type: githubv4.String(g.entries[0].Type)})
+	}
+
+	q.Repository.Ref.Commit.History.Nodes = append(
+		q.Repository.Ref.Commit.History.Nodes,
+		struct {
+			CommittedDate githubv4.DateTime
+			OID           githubv4.GitObjectID
+		}{githubv4.DateTime{Time: timestamp}, "otherSHA"},
+	)
+
 	return nil
 }
 
@@ -229,6 +271,69 @@ func TestGetFile(t *testing.T) {
 			a.Equal("text", string(contents))
 			a.Equal("data/foo", f.Path)
 			a.Equal("abcdef12345", f.SHA)
+			a.Equal("otherSHA", f.LastModifiedSHA)
+			a.Equal(timestamp, f.LastModifiedTime)
+		})
+	}
+}
+
+var directoryEntries = []*Entry{{Name: "foo", Type: "blob"}}
+
+var getDirectoryTests = []struct {
+	name    string
+	v4      getdirectoryMock
+	errText string
+}{
+	{
+		name:    "queryError",
+		v4:      getdirectoryMock{queryError: true},
+		errText: problem,
+	},
+	{
+		name:    "noRef",
+		v4:      getdirectoryMock{},
+		errText: "ref not found",
+	},
+	{
+		name:    "noObject",
+		v4:      getdirectoryMock{refID: "abcdef12345"},
+		errText: "directory not found",
+	},
+	{
+		name: "happyPath",
+		v4:   getdirectoryMock{refID: "abcdef12345", objID: "abcdef12345", entries: directoryEntries},
+	},
+}
+
+func TestGetDirectory(t *testing.T) {
+	for _, tt := range getDirectoryTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+
+			s := &svc{graphQL: &tt.v4}
+			f, err := s.GetDirectory(context.Background(),
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+					Ref:       "master",
+				},
+				"data/foo",
+			)
+
+			if tt.errText != "" {
+				a.Error(err)
+				a.Contains(err.Error(), tt.errText)
+				return
+			}
+			if err != nil {
+				a.FailNow("unexpected error")
+				return
+			}
+
+			a.Equal("data/foo", f.Path)
+			a.Equal(directoryEntries, f.Entries)
 			a.Equal("otherSHA", f.LastModifiedSHA)
 			a.Equal(timestamp, f.LastModifiedTime)
 		})
