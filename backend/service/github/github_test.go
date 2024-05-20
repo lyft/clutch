@@ -48,7 +48,7 @@ type getdirectoryMock struct {
 
 	queryError   bool
 	refID, objID string
-	entries      []*DirectoryEntry
+	entries      []*Entry
 }
 
 func (g *getfileMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
@@ -277,7 +277,7 @@ func TestGetFile(t *testing.T) {
 	}
 }
 
-var directoryEntries = []*DirectoryEntry{{Name: "foo", Type: "blob"}}
+var directoryEntries = []*Entry{{Name: "foo", Type: "blob"}}
 
 var getDirectoryTests = []struct {
 	name    string
@@ -333,7 +333,7 @@ func TestGetDirectory(t *testing.T) {
 			}
 
 			a.Equal("data/foo", f.Path)
-			a.Equal(directoryEntries, f.Files)
+			a.Equal(directoryEntries, f.Entries)
 			a.Equal("otherSHA", f.LastModifiedSHA)
 			a.Equal(timestamp, f.LastModifiedTime)
 		})

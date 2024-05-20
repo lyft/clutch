@@ -96,7 +96,7 @@ type File struct {
 	LastModifiedSHA  string
 }
 
-type DirectoryEntry struct {
+type Entry struct {
 	Name string
 	Type string
 }
@@ -105,7 +105,7 @@ type Directory struct {
 	Path             string
 	LastModifiedTime time.Time
 	LastModifiedSHA  string
-	Files            []*DirectoryEntry
+	Entries          []*Entry
 }
 
 // Client allows various interactions with remote repositories on GitHub.
@@ -505,9 +505,9 @@ func (s *svc) GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*D
 		return nil, errors.New("directory not found")
 	}
 
-	var entries []*DirectoryEntry
+	var entries []*Entry
 	for _, obj := range q.Repository.Object.Tree.Entries {
-		entries = append(entries, &DirectoryEntry{
+		entries = append(entries, &Entry{
 			Name: string(obj.Name),
 			Type: string(obj.Type),
 		})
@@ -515,7 +515,7 @@ func (s *svc) GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*D
 
 	d := &Directory{
 		Path:             path,
-		Files:            entries,
+		Entries:          entries,
 		LastModifiedTime: q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time,
 		LastModifiedSHA:  string(q.Repository.Ref.Commit.History.Nodes[0].OID),
 	}
