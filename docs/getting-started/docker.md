@@ -20,66 +20,10 @@ Docker is required to use the examples below, see [Get Docker](https://docs.dock
 
 Clutch provides a [`Dockerfile`](https://github.com/lyft/clutch/blob/main/Dockerfile) that builds and runs a version of Clutch with all [core components](/docs/components) compiled in.
 
+### Building the Container From Scratch
 
-### Running the Image
+#### Cloning the Repository
 
-On every commit to the main branch, a Docker image is built and published to [Docker Hub](https://hub.docker.com/r/lyft/clutch) tagged with `latest` and the commit SHA in the form of `sha-<abcdef>`.
-
-The default configuration in [`backend/clutch-config.yaml`](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml) is used.
-If desired, use a custom configuration with the Docker image by mapping it into the container.
-
-<Tabs
-  defaultValue="default"
-  values={[
-    {label: 'Default Configuration', value: 'default'},
-    {label: 'Custom Configuration', value: 'custom'},
-    {label: 'With Environment Variables', value: 'env'},
-  ]}>
-<TabItem value="default">
-
-```bash
-docker run --rm -p 8080:8080 -it lyft/clutch:latest
-```
-
-</TabItem>
-<TabItem value="custom">
-
-```bash
-docker run --rm -p 8080:8080 \
--v /host/absolute/path/to/config.yaml:/clutch-config.yaml:ro \
--it lyft/clutch:latest
-```
-
-</TabItem>
-<TabItem value="env">
-
-```bash
-docker run --rm -p 8080:8080 \
--e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
--e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
--it lyft/clutch:latest
-```
-
-</TabItem>
-</Tabs>
-
-To update the image on subsequent uses of the container:
-```bash
-docker pull lyft/clutch:latest
-```
-
-:::info Configuration
-For more information on configuring Clutch, see the [Configuration Reference](/docs/configuration).
-:::
-
-### Accessing Clutch
-:tada: Clutch should now be accessible from `localhost:8080` in the browser.
-
-<img alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/landing-page.png')} width="50%" />
-
-## Building the Container From Scratch
-
-### Cloning the Repository
 Start by cloning the Clutch repository and entering into the source directory.
 
 <Tabs
@@ -112,12 +56,63 @@ cd clutch
 Build the Docker image locally. The frontend will build followed by the backend. The frontend is copied into the backend and compiled into a single binary.
 
 ```bash
-docker build -t clutch .
+docker build -t clutch:latest .
 ```
 
-### Running the Local Image
 
-Use the commands from the earlier step [Running the Image](#running-the-image), replacing `lyft/clutch:latest` with `clutch`, e.g. `docker run --rm -p 8080:8080 -it clutch` and access Clutch in the browser.
+## Running the Image
+
+On every commit to the main branch, a Docker image is built and published to [Docker Hub](https://hub.docker.com/r/lyft/clutch) tagged with `latest` and the commit SHA in the form of `sha-<abcdef>`.
+
+The default configuration in [`backend/clutch-config.yaml`](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml) is used.
+If desired, use a custom configuration with the Docker image by mapping it into the container.
+
+
+
+<Tabs
+  defaultValue="default"
+  values={[
+    {label: 'Default Configuration', value: 'default'},
+    {label: 'Custom Configuration', value: 'custom'},
+    {label: 'With Environment Variables', value: 'env'},
+  ]}>
+<TabItem value="default">
+
+```bash
+docker run --rm -p 8080:8080 -it clutch:latest
+```
+
+</TabItem>
+<TabItem value="custom">
+
+```bash
+docker run --rm -p 8080:8080 \
+-v /host/absolute/path/to/config.yaml:/clutch-config.yaml:ro \
+-it clutch:latest
+```
+
+</TabItem>
+<TabItem value="env">
+
+```bash
+docker run --rm -p 8080:8080 \
+-e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+-e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+-it clutch:latest
+```
+
+</TabItem>
+</Tabs>
+
+:::info Configuration
+For more information on configuring Clutch, see the [Configuration Reference](/docs/configuration).
+:::
+
+### Accessing Clutch
+:tada: Clutch should now be accessible from `localhost:8080` in the browser.
+
+<img alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/landing-page.png')} width="50%" />
+
 
 ## Next Steps
 

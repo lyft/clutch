@@ -43,9 +43,6 @@ Display the corresponding CLI command or raw API calls associated with an action
 
 </RoadmapItem>
 
-<RoadmapItem title="Feature Flags" description="Dynamically toggle feature availability to targeted users in Clutch." />
-
-
 <RoadmapItem title="Additional Integrations" description="Clutch is a platform for integrating the tools engineers use on a consistent basis.">
 
 We're building Clutch to be an everyday tool, consolidating disparate tools and sources information into one place that developers can visit to get things done and get back to developing new features. Integrating additional providers and technologies and combining them in intuitive and delightful ways will allow Clutch to further this mission.
