@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+
+	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 )
 
 func (c *client) SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error) {
@@ -20,13 +22,25 @@ func (c *client) GetIAMRole(
 	account,
 	region,
 	roleName string,
-) (*iam.GetRoleOutput, error) {
+) (*iamv1.Role, error) {
 	cl, err := c.getAccountRegionClient(account, region)
 	if err != nil {
 		return nil, err
 	}
 
-	return cl.iam.GetRole(ctx, &iam.GetRoleInput{
+	role, err := cl.iam.GetRole(ctx, &iam.GetRoleInput{
 		RoleName: &roleName,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &iamv1.Role{
+		Arn:         *role.Role.Arn,
+		Name:        *role.Role.RoleName,
+		CreatedDate: role.Role.CreateDate.String(),
+		Id:          *role.Role.RoleId,
+		Account:     account,
+		Region:      region,
+	}, nil
 }
