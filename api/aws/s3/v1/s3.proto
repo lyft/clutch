@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package clutch.aws.s3.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/aws/s3/v1;s3v1";
+
+import "api/v1/annotations.proto";
+
+message Bucket {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.s3.v1.Bucket",
+    pattern : "{account}/{region}/{name}"
+  };
+
+  string name = 1;
+  string region = 2;
+  string account = 3;
+}
+
+message AccessPoint {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.s3.v1.AccessPoint",
+    pattern : "{account}/{region}/{name}"
+  };
+
+  string name = 1;
+  string bucket = 2;
+  string alias = 3;
+  string creation_date = 4;
+  string bucket_account_id = 5;
+  string access_point_arn = 6;
+  string region = 7;
+  string account = 8;
+}

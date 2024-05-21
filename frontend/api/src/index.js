@@ -8635,6 +8635,216 @@ export const clutch = $root.clutch = (() => {
             return ec2;
         })();
 
+        aws.iam = (function() {
+
+            /**
+             * Namespace iam.
+             * @memberof clutch.aws
+             * @namespace
+             */
+            const iam = {};
+
+            iam.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.aws.iam
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.Role = (function() {
+
+                    /**
+                     * Properties of a Role.
+                     * @memberof clutch.aws.iam.v1
+                     * @interface IRole
+                     * @property {string|null} [name] Role name
+                     * @property {string|null} [id] Role id
+                     * @property {string|null} [arn] Role arn
+                     * @property {string|null} [createdDate] Role createdDate
+                     * @property {string|null} [region] Role region
+                     * @property {string|null} [account] Role account
+                     */
+
+                    /**
+                     * Constructs a new Role.
+                     * @memberof clutch.aws.iam.v1
+                     * @classdesc Represents a Role.
+                     * @implements IRole
+                     * @constructor
+                     * @param {clutch.aws.iam.v1.IRole=} [properties] Properties to set
+                     */
+                    function Role(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Role name.
+                     * @member {string} name
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.name = "";
+
+                    /**
+                     * Role id.
+                     * @member {string} id
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.id = "";
+
+                    /**
+                     * Role arn.
+                     * @member {string} arn
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.arn = "";
+
+                    /**
+                     * Role createdDate.
+                     * @member {string} createdDate
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.createdDate = "";
+
+                    /**
+                     * Role region.
+                     * @member {string} region
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.region = "";
+
+                    /**
+                     * Role account.
+                     * @member {string} account
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     */
+                    Role.prototype.account = "";
+
+                    /**
+                     * Verifies a Role message.
+                     * @function verify
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Role.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
+                        if (message.arn != null && message.hasOwnProperty("arn"))
+                            if (!$util.isString(message.arn))
+                                return "arn: string expected";
+                        if (message.createdDate != null && message.hasOwnProperty("createdDate"))
+                            if (!$util.isString(message.createdDate))
+                                return "createdDate: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Role message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.iam.v1.Role} Role
+                     */
+                    Role.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.iam.v1.Role)
+                            return object;
+                        let message = new $root.clutch.aws.iam.v1.Role();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.id != null)
+                            message.id = String(object.id);
+                        if (object.arn != null)
+                            message.arn = String(object.arn);
+                        if (object.createdDate != null)
+                            message.createdDate = String(object.createdDate);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Role message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @static
+                     * @param {clutch.aws.iam.v1.Role} message Role
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Role.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.id = "";
+                            object.arn = "";
+                            object.createdDate = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            object.id = message.id;
+                        if (message.arn != null && message.hasOwnProperty("arn"))
+                            object.arn = message.arn;
+                        if (message.createdDate != null && message.hasOwnProperty("createdDate"))
+                            object.createdDate = message.createdDate;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Role to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.iam.v1.Role
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Role.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Role;
+                })();
+
+                return v1;
+            })();
+
+            return iam;
+        })();
+
         aws.kinesis = (function() {
 
             /**
@@ -9366,6 +9576,385 @@ export const clutch = $root.clutch = (() => {
             })();
 
             return kinesis;
+        })();
+
+        aws.s3 = (function() {
+
+            /**
+             * Namespace s3.
+             * @memberof clutch.aws
+             * @namespace
+             */
+            const s3 = {};
+
+            s3.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.aws.s3
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.Bucket = (function() {
+
+                    /**
+                     * Properties of a Bucket.
+                     * @memberof clutch.aws.s3.v1
+                     * @interface IBucket
+                     * @property {string|null} [name] Bucket name
+                     * @property {string|null} [region] Bucket region
+                     * @property {string|null} [account] Bucket account
+                     */
+
+                    /**
+                     * Constructs a new Bucket.
+                     * @memberof clutch.aws.s3.v1
+                     * @classdesc Represents a Bucket.
+                     * @implements IBucket
+                     * @constructor
+                     * @param {clutch.aws.s3.v1.IBucket=} [properties] Properties to set
+                     */
+                    function Bucket(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Bucket name.
+                     * @member {string} name
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @instance
+                     */
+                    Bucket.prototype.name = "";
+
+                    /**
+                     * Bucket region.
+                     * @member {string} region
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @instance
+                     */
+                    Bucket.prototype.region = "";
+
+                    /**
+                     * Bucket account.
+                     * @member {string} account
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @instance
+                     */
+                    Bucket.prototype.account = "";
+
+                    /**
+                     * Verifies a Bucket message.
+                     * @function verify
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Bucket.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Bucket message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.s3.v1.Bucket} Bucket
+                     */
+                    Bucket.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.s3.v1.Bucket)
+                            return object;
+                        let message = new $root.clutch.aws.s3.v1.Bucket();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Bucket message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @static
+                     * @param {clutch.aws.s3.v1.Bucket} message Bucket
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Bucket.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Bucket to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.s3.v1.Bucket
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Bucket.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Bucket;
+                })();
+
+                v1.AccessPoint = (function() {
+
+                    /**
+                     * Properties of an AccessPoint.
+                     * @memberof clutch.aws.s3.v1
+                     * @interface IAccessPoint
+                     * @property {string|null} [name] AccessPoint name
+                     * @property {string|null} [bucket] AccessPoint bucket
+                     * @property {string|null} [alias] AccessPoint alias
+                     * @property {string|null} [creationDate] AccessPoint creationDate
+                     * @property {string|null} [bucketAccountId] AccessPoint bucketAccountId
+                     * @property {string|null} [accessPointArn] AccessPoint accessPointArn
+                     * @property {string|null} [region] AccessPoint region
+                     * @property {string|null} [account] AccessPoint account
+                     */
+
+                    /**
+                     * Constructs a new AccessPoint.
+                     * @memberof clutch.aws.s3.v1
+                     * @classdesc Represents an AccessPoint.
+                     * @implements IAccessPoint
+                     * @constructor
+                     * @param {clutch.aws.s3.v1.IAccessPoint=} [properties] Properties to set
+                     */
+                    function AccessPoint(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * AccessPoint name.
+                     * @member {string} name
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.name = "";
+
+                    /**
+                     * AccessPoint bucket.
+                     * @member {string} bucket
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.bucket = "";
+
+                    /**
+                     * AccessPoint alias.
+                     * @member {string} alias
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.alias = "";
+
+                    /**
+                     * AccessPoint creationDate.
+                     * @member {string} creationDate
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.creationDate = "";
+
+                    /**
+                     * AccessPoint bucketAccountId.
+                     * @member {string} bucketAccountId
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.bucketAccountId = "";
+
+                    /**
+                     * AccessPoint accessPointArn.
+                     * @member {string} accessPointArn
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.accessPointArn = "";
+
+                    /**
+                     * AccessPoint region.
+                     * @member {string} region
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.region = "";
+
+                    /**
+                     * AccessPoint account.
+                     * @member {string} account
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     */
+                    AccessPoint.prototype.account = "";
+
+                    /**
+                     * Verifies an AccessPoint message.
+                     * @function verify
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    AccessPoint.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.bucket != null && message.hasOwnProperty("bucket"))
+                            if (!$util.isString(message.bucket))
+                                return "bucket: string expected";
+                        if (message.alias != null && message.hasOwnProperty("alias"))
+                            if (!$util.isString(message.alias))
+                                return "alias: string expected";
+                        if (message.creationDate != null && message.hasOwnProperty("creationDate"))
+                            if (!$util.isString(message.creationDate))
+                                return "creationDate: string expected";
+                        if (message.bucketAccountId != null && message.hasOwnProperty("bucketAccountId"))
+                            if (!$util.isString(message.bucketAccountId))
+                                return "bucketAccountId: string expected";
+                        if (message.accessPointArn != null && message.hasOwnProperty("accessPointArn"))
+                            if (!$util.isString(message.accessPointArn))
+                                return "accessPointArn: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an AccessPoint message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.s3.v1.AccessPoint} AccessPoint
+                     */
+                    AccessPoint.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.s3.v1.AccessPoint)
+                            return object;
+                        let message = new $root.clutch.aws.s3.v1.AccessPoint();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.bucket != null)
+                            message.bucket = String(object.bucket);
+                        if (object.alias != null)
+                            message.alias = String(object.alias);
+                        if (object.creationDate != null)
+                            message.creationDate = String(object.creationDate);
+                        if (object.bucketAccountId != null)
+                            message.bucketAccountId = String(object.bucketAccountId);
+                        if (object.accessPointArn != null)
+                            message.accessPointArn = String(object.accessPointArn);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an AccessPoint message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @static
+                     * @param {clutch.aws.s3.v1.AccessPoint} message AccessPoint
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    AccessPoint.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.bucket = "";
+                            object.alias = "";
+                            object.creationDate = "";
+                            object.bucketAccountId = "";
+                            object.accessPointArn = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.bucket != null && message.hasOwnProperty("bucket"))
+                            object.bucket = message.bucket;
+                        if (message.alias != null && message.hasOwnProperty("alias"))
+                            object.alias = message.alias;
+                        if (message.creationDate != null && message.hasOwnProperty("creationDate"))
+                            object.creationDate = message.creationDate;
+                        if (message.bucketAccountId != null && message.hasOwnProperty("bucketAccountId"))
+                            object.bucketAccountId = message.bucketAccountId;
+                        if (message.accessPointArn != null && message.hasOwnProperty("accessPointArn"))
+                            object.accessPointArn = message.accessPointArn;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this AccessPoint to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.s3.v1.AccessPoint
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    AccessPoint.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return AccessPoint;
+                })();
+
+                return v1;
+            })();
+
+            return s3;
         })();
 
         return aws;
@@ -55816,6 +56405,411 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return DynamodbTableName;
+                })();
+
+                v1.S3BucketName = (function() {
+
+                    /**
+                     * Properties of a S3BucketName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @interface IS3BucketName
+                     * @property {string|null} [name] S3BucketName name
+                     * @property {string|null} [region] S3BucketName region
+                     * @property {string|null} [account] S3BucketName account
+                     */
+
+                    /**
+                     * Constructs a new S3BucketName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @classdesc Represents a S3BucketName.
+                     * @implements IS3BucketName
+                     * @constructor
+                     * @param {clutch.resolver.aws.v1.IS3BucketName=} [properties] Properties to set
+                     */
+                    function S3BucketName(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * S3BucketName name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @instance
+                     */
+                    S3BucketName.prototype.name = "";
+
+                    /**
+                     * S3BucketName region.
+                     * @member {string} region
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @instance
+                     */
+                    S3BucketName.prototype.region = "";
+
+                    /**
+                     * S3BucketName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @instance
+                     */
+                    S3BucketName.prototype.account = "";
+
+                    /**
+                     * Verifies a S3BucketName message.
+                     * @function verify
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    S3BucketName.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a S3BucketName message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.aws.v1.S3BucketName} S3BucketName
+                     */
+                    S3BucketName.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.aws.v1.S3BucketName)
+                            return object;
+                        let message = new $root.clutch.resolver.aws.v1.S3BucketName();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a S3BucketName message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @static
+                     * @param {clutch.resolver.aws.v1.S3BucketName} message S3BucketName
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    S3BucketName.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this S3BucketName to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.aws.v1.S3BucketName
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    S3BucketName.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return S3BucketName;
+                })();
+
+                v1.S3AccessPointName = (function() {
+
+                    /**
+                     * Properties of a S3AccessPointName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @interface IS3AccessPointName
+                     * @property {string|null} [name] S3AccessPointName name
+                     * @property {string|null} [region] S3AccessPointName region
+                     * @property {string|null} [account] S3AccessPointName account
+                     */
+
+                    /**
+                     * Constructs a new S3AccessPointName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @classdesc Represents a S3AccessPointName.
+                     * @implements IS3AccessPointName
+                     * @constructor
+                     * @param {clutch.resolver.aws.v1.IS3AccessPointName=} [properties] Properties to set
+                     */
+                    function S3AccessPointName(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * S3AccessPointName name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @instance
+                     */
+                    S3AccessPointName.prototype.name = "";
+
+                    /**
+                     * S3AccessPointName region.
+                     * @member {string} region
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @instance
+                     */
+                    S3AccessPointName.prototype.region = "";
+
+                    /**
+                     * S3AccessPointName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @instance
+                     */
+                    S3AccessPointName.prototype.account = "";
+
+                    /**
+                     * Verifies a S3AccessPointName message.
+                     * @function verify
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    S3AccessPointName.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a S3AccessPointName message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.aws.v1.S3AccessPointName} S3AccessPointName
+                     */
+                    S3AccessPointName.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.aws.v1.S3AccessPointName)
+                            return object;
+                        let message = new $root.clutch.resolver.aws.v1.S3AccessPointName();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a S3AccessPointName message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @static
+                     * @param {clutch.resolver.aws.v1.S3AccessPointName} message S3AccessPointName
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    S3AccessPointName.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this S3AccessPointName to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.aws.v1.S3AccessPointName
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    S3AccessPointName.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return S3AccessPointName;
+                })();
+
+                v1.IAMRoleName = (function() {
+
+                    /**
+                     * Properties of a IAMRoleName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @interface IIAMRoleName
+                     * @property {string|null} [name] IAMRoleName name
+                     * @property {string|null} [region] IAMRoleName region
+                     * @property {string|null} [account] IAMRoleName account
+                     */
+
+                    /**
+                     * Constructs a new IAMRoleName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @classdesc Represents a IAMRoleName.
+                     * @implements IIAMRoleName
+                     * @constructor
+                     * @param {clutch.resolver.aws.v1.IIAMRoleName=} [properties] Properties to set
+                     */
+                    function IAMRoleName(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * IAMRoleName name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @instance
+                     */
+                    IAMRoleName.prototype.name = "";
+
+                    /**
+                     * IAMRoleName region.
+                     * @member {string} region
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @instance
+                     */
+                    IAMRoleName.prototype.region = "";
+
+                    /**
+                     * IAMRoleName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @instance
+                     */
+                    IAMRoleName.prototype.account = "";
+
+                    /**
+                     * Verifies a IAMRoleName message.
+                     * @function verify
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    IAMRoleName.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a IAMRoleName message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.aws.v1.IAMRoleName} IAMRoleName
+                     */
+                    IAMRoleName.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.aws.v1.IAMRoleName)
+                            return object;
+                        let message = new $root.clutch.resolver.aws.v1.IAMRoleName();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a IAMRoleName message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @static
+                     * @param {clutch.resolver.aws.v1.IAMRoleName} message IAMRoleName
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    IAMRoleName.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this IAMRoleName to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.aws.v1.IAMRoleName
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    IAMRoleName.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return IAMRoleName;
                 })();
 
                 return v1;

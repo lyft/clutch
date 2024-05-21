@@ -3608,6 +3608,92 @@ export namespace clutch {
             }
         }
 
+        /** Namespace iam. */
+        namespace iam {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Role. */
+                interface IRole {
+
+                    /** Role name */
+                    name?: (string|null);
+
+                    /** Role id */
+                    id?: (string|null);
+
+                    /** Role arn */
+                    arn?: (string|null);
+
+                    /** Role createdDate */
+                    createdDate?: (string|null);
+
+                    /** Role region */
+                    region?: (string|null);
+
+                    /** Role account */
+                    account?: (string|null);
+                }
+
+                /** Represents a Role. */
+                class Role implements IRole {
+
+                    /**
+                     * Constructs a new Role.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.iam.v1.IRole);
+
+                    /** Role name. */
+                    public name: string;
+
+                    /** Role id. */
+                    public id: string;
+
+                    /** Role arn. */
+                    public arn: string;
+
+                    /** Role createdDate. */
+                    public createdDate: string;
+
+                    /** Role region. */
+                    public region: string;
+
+                    /** Role account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a Role message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Role message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Role
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.iam.v1.Role;
+
+                    /**
+                     * Creates a plain object from a Role message. Also converts values to other types if specified.
+                     * @param message Role
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.iam.v1.Role, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Role to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Namespace kinesis. */
         namespace kinesis {
 
@@ -3948,6 +4034,164 @@ export namespace clutch {
 
                     /**
                      * Converts this Stream to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
+        /** Namespace s3. */
+        namespace s3 {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Bucket. */
+                interface IBucket {
+
+                    /** Bucket name */
+                    name?: (string|null);
+
+                    /** Bucket region */
+                    region?: (string|null);
+
+                    /** Bucket account */
+                    account?: (string|null);
+                }
+
+                /** Represents a Bucket. */
+                class Bucket implements IBucket {
+
+                    /**
+                     * Constructs a new Bucket.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.s3.v1.IBucket);
+
+                    /** Bucket name. */
+                    public name: string;
+
+                    /** Bucket region. */
+                    public region: string;
+
+                    /** Bucket account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a Bucket message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Bucket message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Bucket
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.s3.v1.Bucket;
+
+                    /**
+                     * Creates a plain object from a Bucket message. Also converts values to other types if specified.
+                     * @param message Bucket
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.s3.v1.Bucket, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Bucket to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an AccessPoint. */
+                interface IAccessPoint {
+
+                    /** AccessPoint name */
+                    name?: (string|null);
+
+                    /** AccessPoint bucket */
+                    bucket?: (string|null);
+
+                    /** AccessPoint alias */
+                    alias?: (string|null);
+
+                    /** AccessPoint creationDate */
+                    creationDate?: (string|null);
+
+                    /** AccessPoint bucketAccountId */
+                    bucketAccountId?: (string|null);
+
+                    /** AccessPoint accessPointArn */
+                    accessPointArn?: (string|null);
+
+                    /** AccessPoint region */
+                    region?: (string|null);
+
+                    /** AccessPoint account */
+                    account?: (string|null);
+                }
+
+                /** Represents an AccessPoint. */
+                class AccessPoint implements IAccessPoint {
+
+                    /**
+                     * Constructs a new AccessPoint.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.s3.v1.IAccessPoint);
+
+                    /** AccessPoint name. */
+                    public name: string;
+
+                    /** AccessPoint bucket. */
+                    public bucket: string;
+
+                    /** AccessPoint alias. */
+                    public alias: string;
+
+                    /** AccessPoint creationDate. */
+                    public creationDate: string;
+
+                    /** AccessPoint bucketAccountId. */
+                    public bucketAccountId: string;
+
+                    /** AccessPoint accessPointArn. */
+                    public accessPointArn: string;
+
+                    /** AccessPoint region. */
+                    public region: string;
+
+                    /** AccessPoint account. */
+                    public account: string;
+
+                    /**
+                     * Verifies an AccessPoint message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an AccessPoint message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns AccessPoint
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.s3.v1.AccessPoint;
+
+                    /**
+                     * Creates a plain object from an AccessPoint message. Also converts values to other types if specified.
+                     * @param message AccessPoint
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.s3.v1.AccessPoint, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this AccessPoint to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -23145,6 +23389,186 @@ export namespace clutch {
 
                     /**
                      * Converts this DynamodbTableName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a S3BucketName. */
+                interface IS3BucketName {
+
+                    /** S3BucketName name */
+                    name?: (string|null);
+
+                    /** S3BucketName region */
+                    region?: (string|null);
+
+                    /** S3BucketName account */
+                    account?: (string|null);
+                }
+
+                /** Represents a S3BucketName. */
+                class S3BucketName implements IS3BucketName {
+
+                    /**
+                     * Constructs a new S3BucketName.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.aws.v1.IS3BucketName);
+
+                    /** S3BucketName name. */
+                    public name: string;
+
+                    /** S3BucketName region. */
+                    public region: string;
+
+                    /** S3BucketName account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a S3BucketName message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a S3BucketName message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns S3BucketName
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.aws.v1.S3BucketName;
+
+                    /**
+                     * Creates a plain object from a S3BucketName message. Also converts values to other types if specified.
+                     * @param message S3BucketName
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.aws.v1.S3BucketName, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this S3BucketName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a S3AccessPointName. */
+                interface IS3AccessPointName {
+
+                    /** S3AccessPointName name */
+                    name?: (string|null);
+
+                    /** S3AccessPointName region */
+                    region?: (string|null);
+
+                    /** S3AccessPointName account */
+                    account?: (string|null);
+                }
+
+                /** Represents a S3AccessPointName. */
+                class S3AccessPointName implements IS3AccessPointName {
+
+                    /**
+                     * Constructs a new S3AccessPointName.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.aws.v1.IS3AccessPointName);
+
+                    /** S3AccessPointName name. */
+                    public name: string;
+
+                    /** S3AccessPointName region. */
+                    public region: string;
+
+                    /** S3AccessPointName account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a S3AccessPointName message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a S3AccessPointName message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns S3AccessPointName
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.aws.v1.S3AccessPointName;
+
+                    /**
+                     * Creates a plain object from a S3AccessPointName message. Also converts values to other types if specified.
+                     * @param message S3AccessPointName
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.aws.v1.S3AccessPointName, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this S3AccessPointName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a IAMRoleName. */
+                interface IIAMRoleName {
+
+                    /** IAMRoleName name */
+                    name?: (string|null);
+
+                    /** IAMRoleName region */
+                    region?: (string|null);
+
+                    /** IAMRoleName account */
+                    account?: (string|null);
+                }
+
+                /** Represents a IAMRoleName. */
+                class IAMRoleName implements IIAMRoleName {
+
+                    /**
+                     * Constructs a new IAMRoleName.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.aws.v1.IIAMRoleName);
+
+                    /** IAMRoleName name. */
+                    public name: string;
+
+                    /** IAMRoleName region. */
+                    public region: string;
+
+                    /** IAMRoleName account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a IAMRoleName message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a IAMRoleName message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns IAMRoleName
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.aws.v1.IAMRoleName;
+
+                    /**
+                     * Creates a plain object from a IAMRoleName message. Also converts values to other types if specified.
+                     * @param message IAMRoleName
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.aws.v1.IAMRoleName, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this IAMRoleName to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
