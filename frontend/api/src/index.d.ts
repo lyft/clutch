@@ -3627,7 +3627,7 @@ export namespace clutch {
                     arn?: (string|null);
 
                     /** Role createdDate */
-                    createdDate?: (string|null);
+                    createdDate?: (google.protobuf.ITimestamp|null);
 
                     /** Role region */
                     region?: (string|null);
@@ -3655,7 +3655,7 @@ export namespace clutch {
                     public arn: string;
 
                     /** Role createdDate. */
-                    public createdDate: string;
+                    public createdDate?: (google.protobuf.ITimestamp|null);
 
                     /** Role region. */
                     public region: string;
@@ -4120,7 +4120,7 @@ export namespace clutch {
                     alias?: (string|null);
 
                     /** AccessPoint creationDate */
-                    creationDate?: (string|null);
+                    creationDate?: (google.protobuf.ITimestamp|null);
 
                     /** AccessPoint bucketAccountId */
                     bucketAccountId?: (string|null);
@@ -4154,7 +4154,7 @@ export namespace clutch {
                     public alias: string;
 
                     /** AccessPoint creationDate. */
-                    public creationDate: string;
+                    public creationDate?: (google.protobuf.ITimestamp|null);
 
                     /** AccessPoint bucketAccountId. */
                     public bucketAccountId: string;

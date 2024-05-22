@@ -4,6 +4,7 @@ package clutch.aws.s3.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/aws/s3/v1;s3v1";
 
+import "google/protobuf/timestamp.proto";
 import "api/v1/annotations.proto";
 
 message Bucket {
@@ -26,7 +27,7 @@ message AccessPoint {
   string name = 1;
   string bucket = 2;
   string alias = 3;
-  string creation_date = 4;
+  google.protobuf.Timestamp creation_date = 4;
   string bucket_account_id = 5;
   string access_point_arn = 6;
   string region = 7;

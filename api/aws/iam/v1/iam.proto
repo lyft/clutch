@@ -4,6 +4,7 @@ package clutch.aws.iam.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/aws/iam/v1;iamv1";
 
+import "google/protobuf/timestamp.proto";
 import "api/v1/annotations.proto";
 
 message Role {
@@ -15,7 +16,7 @@ message Role {
   string name = 1;
   string id = 2;
   string arn = 3;
-  string created_date = 4;
+  google.protobuf.Timestamp created_date = 4;
   string region = 5;
   string account = 6;
 }

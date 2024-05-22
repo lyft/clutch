@@ -8662,7 +8662,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [name] Role name
                      * @property {string|null} [id] Role id
                      * @property {string|null} [arn] Role arn
-                     * @property {string|null} [createdDate] Role createdDate
+                     * @property {google.protobuf.ITimestamp|null} [createdDate] Role createdDate
                      * @property {string|null} [region] Role region
                      * @property {string|null} [account] Role account
                      */
@@ -8708,11 +8708,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Role createdDate.
-                     * @member {string} createdDate
+                     * @member {google.protobuf.ITimestamp|null|undefined} createdDate
                      * @memberof clutch.aws.iam.v1.Role
                      * @instance
                      */
-                    Role.prototype.createdDate = "";
+                    Role.prototype.createdDate = null;
 
                     /**
                      * Role region.
@@ -8750,9 +8750,11 @@ export const clutch = $root.clutch = (() => {
                         if (message.arn != null && message.hasOwnProperty("arn"))
                             if (!$util.isString(message.arn))
                                 return "arn: string expected";
-                        if (message.createdDate != null && message.hasOwnProperty("createdDate"))
-                            if (!$util.isString(message.createdDate))
-                                return "createdDate: string expected";
+                        if (message.createdDate != null && message.hasOwnProperty("createdDate")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.createdDate);
+                            if (error)
+                                return "createdDate." + error;
+                        }
                         if (message.region != null && message.hasOwnProperty("region"))
                             if (!$util.isString(message.region))
                                 return "region: string expected";
@@ -8780,8 +8782,11 @@ export const clutch = $root.clutch = (() => {
                             message.id = String(object.id);
                         if (object.arn != null)
                             message.arn = String(object.arn);
-                        if (object.createdDate != null)
-                            message.createdDate = String(object.createdDate);
+                        if (object.createdDate != null) {
+                            if (typeof object.createdDate !== "object")
+                                throw TypeError(".clutch.aws.iam.v1.Role.createdDate: object expected");
+                            message.createdDate = $root.google.protobuf.Timestamp.fromObject(object.createdDate);
+                        }
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.account != null)
@@ -8806,7 +8811,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.id = "";
                             object.arn = "";
-                            object.createdDate = "";
+                            object.createdDate = null;
                             object.region = "";
                             object.account = "";
                         }
@@ -8817,7 +8822,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.arn != null && message.hasOwnProperty("arn"))
                             object.arn = message.arn;
                         if (message.createdDate != null && message.hasOwnProperty("createdDate"))
-                            object.createdDate = message.createdDate;
+                            object.createdDate = $root.google.protobuf.Timestamp.toObject(message.createdDate, options);
                         if (message.region != null && message.hasOwnProperty("region"))
                             object.region = message.region;
                         if (message.account != null && message.hasOwnProperty("account"))
@@ -9740,7 +9745,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [name] AccessPoint name
                      * @property {string|null} [bucket] AccessPoint bucket
                      * @property {string|null} [alias] AccessPoint alias
-                     * @property {string|null} [creationDate] AccessPoint creationDate
+                     * @property {google.protobuf.ITimestamp|null} [creationDate] AccessPoint creationDate
                      * @property {string|null} [bucketAccountId] AccessPoint bucketAccountId
                      * @property {string|null} [accessPointArn] AccessPoint accessPointArn
                      * @property {string|null} [region] AccessPoint region
@@ -9788,11 +9793,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * AccessPoint creationDate.
-                     * @member {string} creationDate
+                     * @member {google.protobuf.ITimestamp|null|undefined} creationDate
                      * @memberof clutch.aws.s3.v1.AccessPoint
                      * @instance
                      */
-                    AccessPoint.prototype.creationDate = "";
+                    AccessPoint.prototype.creationDate = null;
 
                     /**
                      * AccessPoint bucketAccountId.
@@ -9846,9 +9851,11 @@ export const clutch = $root.clutch = (() => {
                         if (message.alias != null && message.hasOwnProperty("alias"))
                             if (!$util.isString(message.alias))
                                 return "alias: string expected";
-                        if (message.creationDate != null && message.hasOwnProperty("creationDate"))
-                            if (!$util.isString(message.creationDate))
-                                return "creationDate: string expected";
+                        if (message.creationDate != null && message.hasOwnProperty("creationDate")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.creationDate);
+                            if (error)
+                                return "creationDate." + error;
+                        }
                         if (message.bucketAccountId != null && message.hasOwnProperty("bucketAccountId"))
                             if (!$util.isString(message.bucketAccountId))
                                 return "bucketAccountId: string expected";
@@ -9882,8 +9889,11 @@ export const clutch = $root.clutch = (() => {
                             message.bucket = String(object.bucket);
                         if (object.alias != null)
                             message.alias = String(object.alias);
-                        if (object.creationDate != null)
-                            message.creationDate = String(object.creationDate);
+                        if (object.creationDate != null) {
+                            if (typeof object.creationDate !== "object")
+                                throw TypeError(".clutch.aws.s3.v1.AccessPoint.creationDate: object expected");
+                            message.creationDate = $root.google.protobuf.Timestamp.fromObject(object.creationDate);
+                        }
                         if (object.bucketAccountId != null)
                             message.bucketAccountId = String(object.bucketAccountId);
                         if (object.accessPointArn != null)
@@ -9912,7 +9922,7 @@ export const clutch = $root.clutch = (() => {
                             object.name = "";
                             object.bucket = "";
                             object.alias = "";
-                            object.creationDate = "";
+                            object.creationDate = null;
                             object.bucketAccountId = "";
                             object.accessPointArn = "";
                             object.region = "";
@@ -9925,7 +9935,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.alias != null && message.hasOwnProperty("alias"))
                             object.alias = message.alias;
                         if (message.creationDate != null && message.hasOwnProperty("creationDate"))
-                            object.creationDate = message.creationDate;
+                            object.creationDate = $root.google.protobuf.Timestamp.toObject(message.creationDate, options);
                         if (message.bucketAccountId != null && message.hasOwnProperty("bucketAccountId"))
                             object.bucketAccountId = message.bucketAccountId;
                         if (message.accessPointArn != null && message.hasOwnProperty("accessPointArn"))
