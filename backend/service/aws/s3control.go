@@ -5,6 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 )
@@ -45,7 +46,7 @@ func (c *client) S3GetAccessPoint(ctx context.Context, account, region, accessPo
 		Bucket:          *out.Bucket,
 		Alias:           *out.Alias,
 		BucketAccountId: *out.BucketAccountId,
-		CreationDate:    out.CreationDate.String(),
+		CreationDate:    timestamppb.New(*out.CreationDate),
 		Account:         account,
 		Region:          region,
 	}, nil

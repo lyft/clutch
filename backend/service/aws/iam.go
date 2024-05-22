@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 )
@@ -38,7 +39,7 @@ func (c *client) GetIAMRole(
 	return &iamv1.Role{
 		Arn:         *role.Role.Arn,
 		Name:        *role.Role.RoleName,
-		CreatedDate: role.Role.CreateDate.String(),
+		CreatedDate: timestamppb.New(*role.Role.CreateDate),
 		Id:          *role.Role.RoleId,
 		Account:     account,
 		Region:      region,

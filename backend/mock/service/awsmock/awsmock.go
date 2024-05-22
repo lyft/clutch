@@ -337,7 +337,7 @@ func (s *svc) S3GetAccessPoint(ctx context.Context, account, region, accessPoint
 		Bucket:          "my-bucket",
 		Alias:           "alias",
 		BucketAccountId: accountId,
-		CreationDate:    timestamppb.New(time.Now()).String(),
+		CreationDate:    timestamppb.New(time.Now()),
 	}, nil
 }
 
