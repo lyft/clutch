@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package clutch.aws.iam.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/aws/iam/v1;iamv1";
+
+import "google/protobuf/timestamp.proto";
+import "api/v1/annotations.proto";
+
+message Role {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.iam.v1.Role",
+    pattern : "{account}/{region}/{name}"
+  };
+
+  string name = 1;
+  string id = 2;
+  string arn = 3;
+  google.protobuf.Timestamp created_date = 4;
+  string region = 5;
+  string account = 6;
+}

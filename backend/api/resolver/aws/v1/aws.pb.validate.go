@@ -463,3 +463,321 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DynamodbTableNameValidationError{}
+
+// Validate checks the field values on S3BucketName with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *S3BucketName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on S3BucketName with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in S3BucketNameMultiError, or
+// nil if none found.
+func (m *S3BucketName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *S3BucketName) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Region
+
+	// no validation rules for Account
+
+	if len(errors) > 0 {
+		return S3BucketNameMultiError(errors)
+	}
+
+	return nil
+}
+
+// S3BucketNameMultiError is an error wrapping multiple validation errors
+// returned by S3BucketName.ValidateAll() if the designated constraints aren't met.
+type S3BucketNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m S3BucketNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m S3BucketNameMultiError) AllErrors() []error { return m }
+
+// S3BucketNameValidationError is the validation error returned by
+// S3BucketName.Validate if the designated constraints aren't met.
+type S3BucketNameValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e S3BucketNameValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e S3BucketNameValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e S3BucketNameValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e S3BucketNameValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e S3BucketNameValidationError) ErrorName() string { return "S3BucketNameValidationError" }
+
+// Error satisfies the builtin error interface
+func (e S3BucketNameValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sS3BucketName.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = S3BucketNameValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = S3BucketNameValidationError{}
+
+// Validate checks the field values on S3AccessPointName with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *S3AccessPointName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on S3AccessPointName with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// S3AccessPointNameMultiError, or nil if none found.
+func (m *S3AccessPointName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *S3AccessPointName) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Region
+
+	// no validation rules for Account
+
+	if len(errors) > 0 {
+		return S3AccessPointNameMultiError(errors)
+	}
+
+	return nil
+}
+
+// S3AccessPointNameMultiError is an error wrapping multiple validation errors
+// returned by S3AccessPointName.ValidateAll() if the designated constraints
+// aren't met.
+type S3AccessPointNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m S3AccessPointNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m S3AccessPointNameMultiError) AllErrors() []error { return m }
+
+// S3AccessPointNameValidationError is the validation error returned by
+// S3AccessPointName.Validate if the designated constraints aren't met.
+type S3AccessPointNameValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e S3AccessPointNameValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e S3AccessPointNameValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e S3AccessPointNameValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e S3AccessPointNameValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e S3AccessPointNameValidationError) ErrorName() string {
+	return "S3AccessPointNameValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e S3AccessPointNameValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sS3AccessPointName.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = S3AccessPointNameValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = S3AccessPointNameValidationError{}
+
+// Validate checks the field values on IAMRoleName with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *IAMRoleName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IAMRoleName with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in IAMRoleNameMultiError, or
+// nil if none found.
+func (m *IAMRoleName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IAMRoleName) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Region
+
+	// no validation rules for Account
+
+	if len(errors) > 0 {
+		return IAMRoleNameMultiError(errors)
+	}
+
+	return nil
+}
+
+// IAMRoleNameMultiError is an error wrapping multiple validation errors
+// returned by IAMRoleName.ValidateAll() if the designated constraints aren't met.
+type IAMRoleNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IAMRoleNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IAMRoleNameMultiError) AllErrors() []error { return m }
+
+// IAMRoleNameValidationError is the validation error returned by
+// IAMRoleName.Validate if the designated constraints aren't met.
+type IAMRoleNameValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IAMRoleNameValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IAMRoleNameValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IAMRoleNameValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IAMRoleNameValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IAMRoleNameValidationError) ErrorName() string { return "IAMRoleNameValidationError" }
+
+// Error satisfies the builtin error interface
+func (e IAMRoleNameValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIAMRoleName.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IAMRoleNameValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IAMRoleNameValidationError{}
