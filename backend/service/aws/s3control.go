@@ -5,6 +5,9 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
+	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 )
 
 func (c *client) S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName, accountID string) (*s3control.GetAccessPointPolicyOutput, error) {
@@ -19,4 +22,32 @@ func (c *client) S3GetAccessPointPolicy(ctx context.Context, account, region, ac
 	}
 
 	return cl.s3control.GetAccessPointPolicy(ctx, in)
+}
+
+func (c *client) S3GetAccessPoint(ctx context.Context, account, region, accessPointName, accountId string) (*s3v1.AccessPoint, error) {
+	cl, err := c.getAccountRegionClient(account, region)
+	if err != nil {
+		return nil, err
+	}
+
+	in := &s3control.GetAccessPointInput{
+		Name:      aws.String(accessPointName),
+		AccountId: aws.String(accountId),
+	}
+
+	out, err := cl.s3control.GetAccessPoint(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+
+	return &s3v1.AccessPoint{
+		Name:            *out.Name,
+		AccessPointArn:  *out.AccessPointArn,
+		Bucket:          *out.Bucket,
+		Alias:           *out.Alias,
+		BucketAccountId: *out.BucketAccountId,
+		CreationDate:    timestamppb.New(*out.CreationDate),
+		Account:         account,
+		Region:          region,
+	}, nil
 }

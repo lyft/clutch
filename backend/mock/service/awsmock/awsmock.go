@@ -23,28 +23,14 @@ import (
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 	"github.com/lyft/clutch/backend/service"
 	clutchawsclient "github.com/lyft/clutch/backend/service/aws"
 )
 
 type svc struct{}
-
-func (s *svc) S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName string, accountID string) (*s3control.GetAccessPointPolicyOutput, error) {
-	return &s3control.GetAccessPointPolicyOutput{
-		Policy:         aws.String("{}"),
-		ResultMetadata: middleware.Metadata{},
-	}, nil
-}
-
-func (s *svc) GetIAMRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error) {
-	return &iam.GetRoleOutput{
-		Role: &iamtypes.Role{
-			RoleName: aws.String(roleName),
-			Arn:      aws.String(fmt.Sprintf("arn:aws:iam::%s:role/%s", account, roleName)),
-		},
-	}, nil
-}
 
 func (s *svc) GetDirectClient(account string, region string) (clutchawsclient.DirectClient, error) {
 	panic("implement me")
@@ -132,12 +118,25 @@ func (s *svc) RebootInstances(ctx context.Context, account, region string, ids [
 	return nil
 }
 
+func (s *svc) S3DescribeBucket(ctx context.Context, account, region, bucket string) (*s3v1.Bucket, error) {
+	return &s3v1.Bucket{
+		Name: bucket,
+	}, nil
+}
+
 func (s *svc) S3StreamingGet(ctx context.Context, account, region, bucket, key string) (io.ReadCloser, error) {
 	panic("implement me")
 }
 
 func (s *svc) S3GetBucketPolicy(ctx context.Context, account, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error) {
 	return &s3.GetBucketPolicyOutput{
+		Policy:         aws.String("{}"),
+		ResultMetadata: middleware.Metadata{},
+	}, nil
+}
+
+func (s *svc) S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName string, accountID string) (*s3control.GetAccessPointPolicyOutput, error) {
+	return &s3control.GetAccessPointPolicyOutput{
 		Policy:         aws.String("{}"),
 		ResultMetadata: middleware.Metadata{},
 	}, nil
@@ -321,6 +320,24 @@ func (s *svc) SimulateCustomPolicy(ctx context.Context, account, region string, 
 				MatchedStatements:    []iamtypes.Statement{},
 			},
 		},
+	}, nil
+}
+
+func (s *svc) GetIAMRole(ctx context.Context, account, region, roleName string) (*iamv1.Role, error) {
+	return &iamv1.Role{
+		Name: roleName,
+		Arn:  fmt.Sprintf("arn:aws:iam::%s:role/%s", account, roleName),
+	}, nil
+}
+
+func (s *svc) S3GetAccessPoint(ctx context.Context, account, region, accessPointName, accountId string) (*s3v1.AccessPoint, error) {
+	return &s3v1.AccessPoint{
+		Name:            accessPointName,
+		AccessPointArn:  fmt.Sprintf("arn:aws:s3:%s:%s:accesspoint/%s", region, account, accessPointName),
+		Bucket:          "my-bucket",
+		Alias:           "alias",
+		BucketAccountId: accountId,
+		CreationDate:    timestamppb.New(time.Now()),
 	}, nil
 }
 

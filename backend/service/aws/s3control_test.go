@@ -62,6 +62,10 @@ func TestS3ControlGetAccessPointPolicyErrorHandling(t *testing.T) {
 type mockS3Control struct {
 	getAccessPointPolicyOutput *s3control.GetAccessPointPolicyOutput
 	getAccessPointPolicyErr    error
+	getAccessPointOutput       *s3control.GetAccessPointOutput
+	getAccessPointErr          error
+	listAccessPointOutput      *s3control.ListAccessPointsOutput
+	listAccessPointErr         error
 }
 
 func (m *mockS3Control) GetAccessPointPolicy(ctx context.Context, params *s3control.GetAccessPointPolicyInput, optFns ...func(*s3control.Options)) (*s3control.GetAccessPointPolicyOutput, error) {
@@ -69,4 +73,18 @@ func (m *mockS3Control) GetAccessPointPolicy(ctx context.Context, params *s3cont
 		return nil, m.getAccessPointPolicyErr
 	}
 	return m.getAccessPointPolicyOutput, nil
+}
+
+func (m *mockS3Control) GetAccessPoint(ctx context.Context, params *s3control.GetAccessPointInput, optFns ...func(*s3control.Options)) (*s3control.GetAccessPointOutput, error) {
+	if m.getAccessPointPolicyErr != nil {
+		return nil, m.getAccessPointErr
+	}
+	return m.getAccessPointOutput, nil
+}
+
+func (m *mockS3Control) ListAccessPoints(ctx context.Context, params *s3control.ListAccessPointsInput, optFns ...func(*s3control.Options)) (*s3control.ListAccessPointsOutput, error) {
+	if m.listAccessPointErr != nil {
+		return nil, m.listAccessPointErr
+	}
+	return m.listAccessPointOutput, nil
 }

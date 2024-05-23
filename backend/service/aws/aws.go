@@ -36,7 +36,9 @@ import (
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -177,10 +179,12 @@ type Client interface {
 	DescribeKinesisStream(ctx context.Context, account, region, streamName string) (*kinesisv1.Stream, error)
 	UpdateKinesisShardCount(ctx context.Context, account, region, streamName string, targetShardCount int32) error
 
+	S3DescribeBucket(ctx context.Context, account, region, bucket string) (*s3v1.Bucket, error)
+	S3GetAccessPoint(ctx context.Context, account, region, accessPointName, accountId string) (*s3v1.AccessPoint, error)
+	S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName, accountId string) (*s3control.GetAccessPointPolicyOutput, error)
 	S3GetBucketPolicy(ctx context.Context, account, region, bucket, accountID string) (*s3.GetBucketPolicyOutput, error)
 	S3StreamingGet(ctx context.Context, account, region, bucket, key string) (io.ReadCloser, error)
 
-	S3GetAccessPointPolicy(ctx context.Context, account, region, accessPointName, accountID string) (*s3control.GetAccessPointPolicyOutput, error)
 	DescribeTable(ctx context.Context, account, region, tableName string) (*dynamodbv1.Table, error)
 	UpdateCapacity(ctx context.Context, account, region, tableName string, targetTableCapacity *dynamodbv1.Throughput, indexUpdates []*dynamodbv1.IndexUpdateAction, ignoreMaximums bool) (*dynamodbv1.Table, error)
 	BatchGetItem(ctx context.Context, account, region string, params *dynamodb.BatchGetItemInput) (*dynamodb.BatchGetItemOutput, error)
@@ -189,7 +193,7 @@ type Client interface {
 	GetCallerIdentity(ctx context.Context, account, region string) (*sts.GetCallerIdentityOutput, error)
 
 	SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
-	GetIAMRole(ctx context.Context, account, region, roleName string) (*iam.GetRoleOutput, error)
+	GetIAMRole(ctx context.Context, account, region, roleName string) (*iamv1.Role, error)
 
 	Accounts() []string
 	AccountsAndRegions() map[string][]string
