@@ -272,19 +272,19 @@ func (c *client) processAllS3Buckets(ctx context.Context, account string, client
 	for _, bucket := range output.Buckets {
 		v1Bucket, err := c.S3DescribeBucket(ctx, account, client.region, *bucket.Name)
 		if err != nil {
-			c.log.Error("unable to describe s3 bucket", zap.Error(err))
+			c.log.Error("unable to describe s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
 			continue
 		}
 
 		protoBucket, err := anypb.New(v1Bucket)
 		if err != nil {
-			c.log.Error("unable to marshal s3 bucket", zap.Error(err))
+			c.log.Error("unable to marshal s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
 			continue
 		}
 
 		patternId, err := meta.HydratedPatternForProto(v1Bucket)
 		if err != nil {
-			c.log.Error("unable to get proto id from pattern", zap.Error(err))
+			c.log.Error("unable to get proto id from pattern", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
 			continue
 		}
 
