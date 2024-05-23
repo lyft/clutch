@@ -66,12 +66,13 @@ const routesByGrouping = (workflows: Workflow[]): GroupedRoutes => {
   const routes = {};
   workflows.forEach(workflow => {
     const category = workflow.group;
-    if (routes[category] === undefined) {
-      routes[category] = {
-        workflows: [],
-        icon: workflow.icon,
-      };
-    }
+
+    routes[category] ??= {
+      workflows: [],
+      icon: workflow.icon,
+    };
+
+    routes[category].icon.path = routes[category].icon.path || workflow.icon?.path;
 
     routes[category].workflows = [
       ...routes[category].workflows,
