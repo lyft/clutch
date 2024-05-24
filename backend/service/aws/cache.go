@@ -9,7 +9,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3control"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 
@@ -50,6 +54,9 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), account.alias, client, c.processAllAutoScalingGroups)
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllKinesisStreams)
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllDynamoDatabases)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllS3Buckets)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllS3AccessPoints)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllIamRoles)
 		}
 	}
 }
@@ -245,6 +252,136 @@ func (c *client) processAllDynamoDatabases(ctx context.Context, account string, 
 				Resource: &topologyv1.Resource{
 					Id: patternId,
 					Pb: tableAny,
+				},
+				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+			}
+		}
+	}
+}
+
+func (c *client) processAllS3Buckets(ctx context.Context, account string, client *regionalClient) {
+	c.log.Info("starting to process s3 for region", zap.String("region", client.region))
+
+	input := s3.ListBucketsInput{}
+
+	output, err := client.s3.ListBuckets(ctx, &input)
+	if err != nil {
+		c.log.Error("unable to list s3 buckets", zap.Error(err))
+		return
+	}
+	for _, bucket := range output.Buckets {
+		v1Bucket, err := c.S3DescribeBucket(ctx, account, client.region, *bucket.Name)
+		if err != nil {
+			c.log.Error("unable to describe s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			continue
+		}
+
+		protoBucket, err := anypb.New(v1Bucket)
+		if err != nil {
+			c.log.Error("unable to marshal s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			continue
+		}
+
+		patternId, err := meta.HydratedPatternForProto(v1Bucket)
+		if err != nil {
+			c.log.Error("unable to get proto id from pattern", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			continue
+		}
+
+		c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+			Resource: &topologyv1.Resource{
+				Id: patternId,
+				Pb: protoBucket,
+			},
+			Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+		}
+	}
+}
+
+func (c *client) processAllS3AccessPoints(ctx context.Context, account string, client *regionalClient) {
+	c.log.Info("starting to process s3 access points for region", zap.String("region", client.region))
+
+	callerIdentity, err := client.sts.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if err != nil {
+		c.log.Error("unable to get caller identity", zap.Error(err))
+		return
+	}
+
+	accountId := callerIdentity.Account
+
+	input := s3control.ListAccessPointsInput{
+		AccountId: accountId,
+	}
+
+	output, err := client.s3control.ListAccessPoints(ctx, &input)
+	if err != nil {
+		c.log.Error("unable to list s3 access points", zap.Error(err))
+		return
+	}
+	for _, accessPoint := range output.AccessPointList {
+		v1AccessPoint, err := c.S3GetAccessPoint(ctx, account, client.region, *accessPoint.Name, *accountId)
+		if err != nil {
+			c.log.Error("unable to describe s3 access point", zap.Error(err))
+			continue
+		}
+
+		protoAccessPoint, err := anypb.New(v1AccessPoint)
+		if err != nil {
+			c.log.Error("unable to marshal s3 access point", zap.Error(err))
+			continue
+		}
+
+		patternId, err := meta.HydratedPatternForProto(v1AccessPoint)
+		if err != nil {
+			c.log.Error("unable to get proto id from pattern", zap.Error(err))
+			continue
+		}
+
+		c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+			Resource: &topologyv1.Resource{
+				Id: patternId,
+				Pb: protoAccessPoint,
+			},
+			Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+		}
+	}
+}
+
+func (c *client) processAllIamRoles(ctx context.Context, account string, client *regionalClient) {
+	c.log.Info("starting to process iam roles for region", zap.String("region", client.region))
+
+	input := &iam.ListRolesInput{}
+	paginator := iam.NewListRolesPaginator(client.iam, input)
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+		if err != nil {
+			c.log.Error("unable to get next iam role page", zap.Error(err))
+			break
+		}
+
+		for _, role := range output.Roles {
+			protoRole, err := c.GetIAMRole(ctx, account, client.region, *role.RoleName)
+			if err != nil {
+				c.log.Error("unable to get iam role", zap.Error(err))
+				continue
+			}
+
+			roleAny, err := anypb.New(protoRole)
+			if err != nil {
+				c.log.Error("unable to marshal iam role proto", zap.Error(err))
+				continue
+			}
+
+			patternId, err := meta.HydratedPatternForProto(protoRole)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
+			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+				Resource: &topologyv1.Resource{
+					Id: patternId,
+					Pb: roleAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}
