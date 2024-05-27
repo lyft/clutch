@@ -329,22 +329,22 @@ func (c *client) processAllS3AccessPoints(ctx context.Context, account string, c
 		return
 	}
 	for _, accessPoint := range output.AccessPointList {
-		bucketLogger := funcLogger.With(zap.String("access_point", *accessPoint.Name))
+		accessPointLogger := funcLogger.With(zap.String("access_point", *accessPoint.Name))
 		v1AccessPoint, err := c.S3GetAccessPoint(ctx, account, client.region, *accessPoint.Name, *accountId)
 		if err != nil {
-			bucketLogger.Error("unable to describe s3 access point", zap.Error(err))
+			accessPointLogger.Error("unable to describe s3 access point", zap.Error(err))
 			continue
 		}
 
 		protoAccessPoint, err := anypb.New(v1AccessPoint)
 		if err != nil {
-			bucketLogger.Error("unable to marshal s3 access point", zap.Error(err))
+			accessPointLogger.Error("unable to marshal s3 access point", zap.Error(err))
 			continue
 		}
 
 		patternId, err := meta.HydratedPatternForProto(v1AccessPoint)
 		if err != nil {
-			bucketLogger.Error("unable to get proto id from pattern", zap.Error(err))
+			accessPointLogger.Error("unable to get proto id from pattern", zap.Error(err))
 			continue
 		}
 
