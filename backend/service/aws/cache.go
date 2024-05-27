@@ -3,9 +3,11 @@ package aws
 import (
 	"context"
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -260,31 +262,38 @@ func (c *client) processAllDynamoDatabases(ctx context.Context, account string, 
 }
 
 func (c *client) processAllS3Buckets(ctx context.Context, account string, client *regionalClient) {
-	c.log.Info("starting to process s3 for region", zap.String("region", client.region))
+	funcLogger := c.log.With(zap.String("region", client.region))
+	funcLogger.Info("starting to process s3 for region", zap.String("region", client.region), zap.String("account", account))
 
 	input := s3.ListBucketsInput{}
 
 	output, err := client.s3.ListBuckets(ctx, &input)
 	if err != nil {
-		c.log.Error("unable to list s3 buckets", zap.Error(err))
+		funcLogger.Error("unable to list s3 buckets", zap.Error(err))
 		return
 	}
 	for _, bucket := range output.Buckets {
+		bucketLogger := funcLogger.With(zap.String("bucket", *bucket.Name))
 		v1Bucket, err := c.S3DescribeBucket(ctx, account, client.region, *bucket.Name)
 		if err != nil {
-			c.log.Error("unable to describe s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			var httpErr *awshttp.ResponseError
+			if errors.As(err, &httpErr) && httpErr.HTTPStatusCode() == http.StatusMovedPermanently {
+				bucketLogger.Info("skipping bucket in different region", zap.Error(err))
+			} else {
+				bucketLogger.Error("unable to describe s3 bucket", zap.Error(err))
+			}
 			continue
 		}
 
 		protoBucket, err := anypb.New(v1Bucket)
 		if err != nil {
-			c.log.Error("unable to marshal s3 bucket", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			bucketLogger.Error("unable to marshal s3 bucket", zap.Error(err))
 			continue
 		}
 
 		patternId, err := meta.HydratedPatternForProto(v1Bucket)
 		if err != nil {
-			c.log.Error("unable to get proto id from pattern", zap.Error(err), zap.String("bucket", *bucket.Name), zap.String("region", client.region))
+			bucketLogger.Error("unable to get proto id from pattern", zap.Error(err))
 			continue
 		}
 
@@ -299,11 +308,12 @@ func (c *client) processAllS3Buckets(ctx context.Context, account string, client
 }
 
 func (c *client) processAllS3AccessPoints(ctx context.Context, account string, client *regionalClient) {
-	c.log.Info("starting to process s3 access points for region", zap.String("region", client.region))
+	funcLogger := c.log.With(zap.String("region", client.region), zap.String("account", account))
+	funcLogger.Info("starting to process s3 access points for region", zap.String("region", client.region))
 
 	callerIdentity, err := client.sts.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
-		c.log.Error("unable to get caller identity", zap.Error(err))
+		funcLogger.Error("unable to get caller identity", zap.Error(err))
 		return
 	}
 
@@ -315,25 +325,26 @@ func (c *client) processAllS3AccessPoints(ctx context.Context, account string, c
 
 	output, err := client.s3control.ListAccessPoints(ctx, &input)
 	if err != nil {
-		c.log.Error("unable to list s3 access points", zap.Error(err))
+		funcLogger.Error("unable to list s3 access points", zap.Error(err))
 		return
 	}
 	for _, accessPoint := range output.AccessPointList {
+		bucketLogger := funcLogger.With(zap.String("access_point", *accessPoint.Name))
 		v1AccessPoint, err := c.S3GetAccessPoint(ctx, account, client.region, *accessPoint.Name, *accountId)
 		if err != nil {
-			c.log.Error("unable to describe s3 access point", zap.Error(err))
+			bucketLogger.Error("unable to describe s3 access point", zap.Error(err))
 			continue
 		}
 
 		protoAccessPoint, err := anypb.New(v1AccessPoint)
 		if err != nil {
-			c.log.Error("unable to marshal s3 access point", zap.Error(err))
+			bucketLogger.Error("unable to marshal s3 access point", zap.Error(err))
 			continue
 		}
 
 		patternId, err := meta.HydratedPatternForProto(v1AccessPoint)
 		if err != nil {
-			c.log.Error("unable to get proto id from pattern", zap.Error(err))
+			bucketLogger.Error("unable to get proto id from pattern", zap.Error(err))
 			continue
 		}
 
