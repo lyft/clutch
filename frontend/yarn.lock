@@ -1899,6 +1899,8 @@ __metadata:
     "@storybook/preset-typescript": "npm:^3.0.0"
     "@storybook/react-webpack5": "npm:^7.6.0"
     "@storybook/theming": "npm:^7.6.0"
+    "@types/eslint": "npm:^8"
+    eslint: "npm:^8.3.0"
     jest: "npm:^27.0.0"
     license-checker: "npm:^25.0.1"
     pre-commit: "npm:^1.2.2"

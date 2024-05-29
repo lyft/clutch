@@ -2,7 +2,7 @@
 
 ROOT_DIR=$(pwd)
 FRONTEND_DIR="${ROOT_DIR}/frontend"
-BASE_GIT_DIFF_CMD="git diff --name-only --staged --relative=frontend"
+BASE_GIT_DIFF_CMD="git diff --name-only --staged --diff-filter=d --relative=frontend"
 
 if [[ $(${BASE_GIT_DIFF_CMD} -- frontend) ]]; then
   echo "Running frontend checks in ${FRONTEND_DIR}..."
