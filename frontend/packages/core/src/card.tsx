@@ -126,13 +126,13 @@ const BaseCardContent = styled("div")<SpacingProps>`
   ${spacing}
 `;
 
-const StyledCardContentContainer = styled("div")((props: { maxHeight: number | "none" }) => ({
+const StyledCardContentContainer = styled("div")((props: { $maxHeight: number | "none" }) => ({
   "> .MuiPaper-root": {
     border: "0",
     borderRadius: "0",
   },
   overflow: "hidden",
-  maxHeight: props.maxHeight,
+  maxHeight: props.$maxHeight,
 }));
 
 const BaseCardActionArea = styled(CardActionArea)<SpacingProps>`
@@ -224,7 +224,7 @@ const CardContent = ({
 
   return (
     <BaseCardContent {...props}>
-      <StyledCardContentContainer maxHeight={expanded ? "none" : maxHeight} ref={ref}>
+      <StyledCardContentContainer $maxHeight={expanded ? "none" : maxHeight} ref={ref}>
         {children}
       </StyledCardContentContainer>
       {collapsible && showExpand && (
@@ -271,11 +271,11 @@ const TruncatedText = styled(Typography)({
   display: "-webkit-box",
   overflow: "hidden",
   WebkitBoxOrient: "vertical",
-  "-webkit-line-clamp": "3",
+  WebkitLineClamp: 3,
   [`@media screen and (max-width: 595px),
   screen and (min-width: 900px) and (max-width: 950px),
   screen and (min-width: 1200px) and (max-width: 1250px)`]: {
-    "-webkit-line-clamp": "2",
+    WebkitLineClamp: 2,
   },
 });
 
