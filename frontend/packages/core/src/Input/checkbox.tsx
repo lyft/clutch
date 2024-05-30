@@ -183,13 +183,15 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({
   const column2Keys = [...optionKeys].splice(column1Keys.length, optionKeys.length);
 
   const handleOnClear = () => {
-    const clearedOptions = { ...selected };
+    const updatedOptions = { ...selected };
+    const clearedOptions = {};
 
-    Object.keys(clearedOptions).forEach(entry => {
-      clearedOptions[entry] = { checked: false, value: entry };
+    Object.keys(updatedOptions).forEach(entry => {
+      updatedOptions[entry] = { checked: false, value: entry };
+      clearedOptions[entry] = false;
     });
 
-    setSelected(clearedOptions);
+    setSelected(updatedOptions);
 
     if (onClear) {
       onClear(clearedOptions);
