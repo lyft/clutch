@@ -23,3 +23,14 @@ CheckboxPanel.args = {
     "Option 3": false,
   },
 };
+
+export const WithClearOption = Template.bind({});
+WithClearOption.args = {
+  header: "Select all that apply:",
+  options: {
+    "Option 1": false,
+    "Option 2": false,
+    "Option 3": false,
+  },
+  onClear: () => null,
+};

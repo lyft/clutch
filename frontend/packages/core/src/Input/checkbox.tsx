@@ -12,6 +12,7 @@ import {
   Grid,
 } from "@mui/material";
 
+import { Button } from "../button";
 import styled from "../styled";
 
 const FormControl = styled(MuiFormControl)({
@@ -83,6 +84,16 @@ const SelectedIcon = styled("div")<StyledIconProps>(
   })
 );
 
+const ClearWrapper = styled("div")({
+  display: "flex",
+  justifyContent: "flex-end",
+});
+
+const ClearButton = styled(Button)({
+  margin: "10px 0",
+  padding: 0,
+});
+
 export interface CheckboxProps
   extends Pick<
     MuiCheckboxProps,
@@ -134,9 +145,15 @@ export interface CheckboxPanelProps {
     [option: string]: boolean;
   };
   onChange: (state: { [option: string]: boolean }) => void;
+  onClear?: (state: { [option: string]: boolean }) => void;
 }
 
-const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange }) => {
+const CheckboxPanel: React.FC<CheckboxPanelProps> = ({
+  header,
+  options,
+  onChange,
+  onClear = null,
+}) => {
   const allOptions = {};
   Object.keys(options).forEach(option => {
     allOptions[option] = { checked: options[option], value: option };
@@ -165,12 +182,36 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
   const column1Keys = [...optionKeys].splice(0, Math.ceil(optionKeys.length / 2));
   const column2Keys = [...optionKeys].splice(column1Keys.length, optionKeys.length);
 
+  const handleOnClear = () => {
+    const clearedOptions = { ...selected };
+
+    Object.keys(clearedOptions).forEach(entry => {
+      clearedOptions[entry] = { checked: false, value: entry };
+    });
+
+    setSelected(clearedOptions);
+
+    if (onClear) {
+      onClear(clearedOptions);
+    }
+  };
+
   return (
     <FormControl>
       <Grid container direction="column">
         <FormLabel color="secondary" focused>
           {header}
         </FormLabel>
+        {onClear && (
+          <ClearWrapper>
+            <ClearButton
+              text="Clear all"
+              variant="secondary"
+              size="small"
+              onClick={handleOnClear}
+            />
+          </ClearWrapper>
+        )}
         <Grid container direction="row">
           <FormGroup>
             {column1Keys.map(option => (
