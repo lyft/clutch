@@ -40,3 +40,25 @@ Disabled.args = {
   ...PrimaryDemo.args,
   disabled: true,
 } as DateTimePickerProps;
+
+export const WithError = Template.bind({});
+WithError.args = {
+  ...PrimaryDemo.args,
+  error: true,
+  helperText: "error in the field",
+  onChange: (newValue: unknown) => null,
+} as DateTimePickerProps;
+
+export const WithMinDate = Template.bind({});
+WithMinDate.args = {
+  ...PrimaryDemo.args,
+  minDate: new Date(),
+  onChange: (newValue: unknown) => null,
+} as DateTimePickerProps;
+
+export const WithMaxDate = Template.bind({});
+WithMaxDate.args = {
+  ...PrimaryDemo.args,
+  maxDate: new Date(),
+  onChange: (newValue: unknown) => null,
+} as DateTimePickerProps;

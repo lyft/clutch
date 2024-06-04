@@ -19,14 +19,27 @@ const PaddedTextField = styled(TextField)({
 });
 
 export interface DateTimePickerProps
-  extends Pick<MuiDateTimePickerProps<Date, Date>, "disabled" | "value" | "onChange" | "label"> {
+  extends Pick<
+    MuiDateTimePickerProps<Date, Date>,
+    "disabled" | "value" | "onChange" | "label" | "minDate" | "maxDate"
+  > {
   allowEmpty?: boolean;
+  error?: boolean;
+  helperText?: string;
 }
 
-const DateTimePicker = ({ onChange, allowEmpty = false, ...props }: DateTimePickerProps) => (
+const DateTimePicker = ({
+  onChange,
+  allowEmpty = false,
+  error = false,
+  helperText = "",
+  ...props
+}: DateTimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
     <MuiDateTimePicker
-      renderInput={inputProps => <PaddedTextField {...inputProps} />}
+      renderInput={inputProps => (
+        <PaddedTextField {...inputProps} error={error} helperText={helperText} />
+      )}
       onChange={(value: Dayjs | null) => {
         const isDateValid = value && value.isValid();
         if (allowEmpty || (!allowEmpty && isDateValid)) {
