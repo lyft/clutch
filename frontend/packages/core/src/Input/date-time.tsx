@@ -33,6 +33,8 @@ const DateTimePicker = ({
   allowEmpty = false,
   error = false,
   helperText = "",
+  minDate = null,
+  maxDate = null,
   ...props
 }: DateTimePickerProps) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
