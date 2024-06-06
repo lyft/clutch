@@ -103,6 +103,7 @@
     "@storybook/addon-actions": "^7.6.0",
     "@storybook/addon-essentials": "^7.6.0",
     "@storybook/addon-links": "^7.6.0",
+    "@storybook/addon-themes": "^7.6.17",
     "@storybook/node-logger": "^7.6.0",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react-webpack5": "^7.6.0",

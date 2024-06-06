@@ -1,12 +1,13 @@
-import React from "react";
-import { Theme } from "./../packages/core/src/AppProvider/themes";
+import { withClutchTheme } from "./withClutchTheme.decorator";
 
 export const decorators = [
-  (Story) => (
-    <Theme variant="light">
-      <Story />
-    </Theme>
-  ),
+  withClutchTheme({
+    themes: {
+      light: "light",
+      dark: "dark",
+    },
+    defaultTheme: "light",
+  }),
 ];
 
 export const parameters = {

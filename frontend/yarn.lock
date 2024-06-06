@@ -1895,6 +1895,7 @@ __metadata:
     "@storybook/addon-actions": "npm:^7.6.0"
     "@storybook/addon-essentials": "npm:^7.6.0"
     "@storybook/addon-links": "npm:^7.6.0"
+    "@storybook/addon-themes": "npm:^7.6.17"
     "@storybook/node-logger": "npm:^7.6.0"
     "@storybook/preset-typescript": "npm:^3.0.0"
     "@storybook/react-webpack5": "npm:^7.6.0"
@@ -4773,6 +4774,15 @@ __metadata:
     "@storybook/global": "npm:^5.0.0"
     ts-dedent: "npm:^2.0.0"
   checksum: 10c0/840a554504c457e3dee273266ba90a7f36b7488a72644d046f0233c305d7fe3a0773848d104a3dc7d6efafc3e1b41a3fc4d6cdd7a37b3a3fe75a03fcde206efb
+  languageName: node
+  linkType: hard
+
+"@storybook/addon-themes@npm:^7.6.17":
+  version: 7.6.19
+  resolution: "@storybook/addon-themes@npm:7.6.19"
+  dependencies:
+    ts-dedent: "npm:^2.0.0"
+  checksum: 10c0/c5932710df39b13cfd669febd8fa6d400fdff65466acc8afe857d49573da9d40e9515d8e0d3687846d50d128f76bf5ac84a37ef7634e2383671fbd9b6ab03483
   languageName: node
   linkType: hard
 
