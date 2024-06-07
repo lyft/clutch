@@ -134,56 +134,62 @@ interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
     | React.ReactElement<TableRowProps>;
 }
 
-const Table: React.FC<TableProps> = ({
-  columns,
-  compressBreakpoint = "sm",
-  hideHeader = false,
-  actionsColumn = false,
-  responsive = false,
-  overflow = "scroll",
-  children,
-  ...props
-}) => {
-  const showHeader = !hideHeader;
-  const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
+const Table: React.FC<TableProps> = React.forwardRef(
+  (
+    {
+      columns,
+      compressBreakpoint = "sm",
+      hideHeader = false,
+      actionsColumn = false,
+      responsive = false,
+      overflow = "scroll",
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const showHeader = !hideHeader;
+    const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
 
-  return (
-    <TableContainer>
-      <StyledTable
-        $compress={compress}
-        $columnCount={columns?.length}
-        $hasActionsColumn={actionsColumn}
-        $responsive={responsive}
-        $overflow={overflow}
-        {...props}
-      >
-        {/*
+    return (
+      <TableContainer>
+        <StyledTable
+          $compress={compress}
+          $columnCount={columns?.length}
+          $hasActionsColumn={actionsColumn}
+          $responsive={responsive}
+          $overflow={overflow}
+          ref={ref}
+          {...props}
+        >
+          {/*
           Filter out empty strings from column headers.
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
-        {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
-          <MuiTableHead>
-            <StyledTableHeadRow>
-              {columns.map(h => (
-                <StyledTableCell key={h} $responsive={responsive}>
-                  <Typography variant="subtitle3">{h}</Typography>
-                </StyledTableCell>
-              ))}
-              {actionsColumn && !(responsive && compress) && (
-                <StyledTableCell $responsive={responsive} $action />
-              )}
-            </StyledTableHeadRow>
-          </MuiTableHead>
-        )}
-        <StyledTableBody>
-          {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
-            React.cloneElement(c, { responsive })
+          {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
+            <MuiTableHead>
+              <StyledTableHeadRow>
+                {columns.map(h => (
+                  <StyledTableCell key={h} $responsive={responsive}>
+                    <Typography variant="subtitle3">{h}</Typography>
+                  </StyledTableCell>
+                ))}
+                {actionsColumn && !(responsive && compress) && (
+                  <StyledTableCell $responsive={responsive} $action />
+                )}
+              </StyledTableHeadRow>
+            </MuiTableHead>
           )}
-        </StyledTableBody>
-      </StyledTable>
-    </TableContainer>
-  );
-};
+          <StyledTableBody>
+            {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
+              React.cloneElement(c, { responsive })
+            )}
+          </StyledTableBody>
+        </StyledTable>
+      </TableContainer>
+    );
+  }
+);
 
 export interface TableRowProps
   extends Pick<MuiTableRowProps, "onClick">,
