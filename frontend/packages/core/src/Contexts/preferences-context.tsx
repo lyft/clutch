@@ -9,6 +9,7 @@ type Dispatch = (action: Action) => void;
 type UserPreferencesProviderProps = { children: React.ReactNode };
 const DEFAULT_PREFERENCES: State = {
   timeFormat: "UTC",
+  themeMode: "light",
 } as any;
 interface ContextProps {
   preferences: State;

@@ -19,6 +19,10 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import * as _ from "lodash";
 
+import { useTheme } from "../AppProvider/themes";
+import { useUserPreferences } from "../Contexts";
+import { Switch } from "../Input";
+
 const UserPhoto = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   padding: "12px",
   "&:hover": {
@@ -175,6 +179,7 @@ const UserInformation: React.FC<UserInformationProps> = ({
   const userInitials = user.slice(0, 2).toUpperCase();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const { preferences, dispatch } = useUserPreferences();
 
   const handleToggle = () => {
     setOpen(!open);
@@ -194,6 +199,19 @@ const UserInformation: React.FC<UserInformationProps> = ({
       event.preventDefault();
       setOpen(false);
     }
+  };
+
+  const theme = useTheme();
+
+  const toggleTheme = () => {
+    const newTheme = theme.palette.mode === "dark" ? "light" : "dark";
+    console.log("Palette mode: ", theme.palette.mode);
+    console.log("Preferences theme mode: ", preferences.themeMode);
+    console.log("Changing theme to: ", newTheme);
+    dispatch({
+      type: "SetPref",
+      payload: { key: "themeMode", value: preferences.themeMode === "dark" ? "light" : "dark" },
+    });
   };
 
   return (
@@ -222,6 +240,11 @@ const UserInformation: React.FC<UserInformationProps> = ({
                     </AvatarListItemIcon>
                     <AvatarListItemText>{user}</AvatarListItemText>
                   </AvatarMenuItem>
+                  {/* Theme mode toggle START */}
+                  <MenuItem>
+                    <ListItemText>Dark mode</ListItemText>
+                    <Switch checked={theme.palette.mode === "dark"} onChange={toggleTheme} />
+                  </MenuItem>
                   {data?.map((d, i) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <React.Fragment key={i}>
