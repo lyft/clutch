@@ -32,14 +32,14 @@ const StyledHorizontalRule = styled(HorizontalRuleBase)(({ theme }: { theme: The
 
   ".line > span": {
     display: "block",
-    borderTop: `1px solid ${alpha(theme.palette.secondary[900], 0.12)}`,
+    borderTop: `1px solid ${alpha(theme.palette.secondary[900], 0.38)}`,
   },
 
   ".content": {
     padding: "0 16px",
     fontWeight: "bold",
     fontSize: "14px",
-    color: alpha(theme.palette.secondary[900], 0.38),
+    color: alpha(theme.palette.secondary[900], 0.6),
     textTransform: "uppercase",
     display: "inline-flex",
     alignItems: "center",
