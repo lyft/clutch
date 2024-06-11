@@ -18,7 +18,6 @@ import { useAppContext } from "../Contexts";
 import { useNavigate } from "../navigation";
 import type { PopperItemProps } from "../popper";
 import { Popper, PopperItem } from "../popper";
-import { THEME_VARIANTS } from "../Theme/colors";
 
 import { filterHiddenRoutes, routesByGrouping, sortedGroupings, workflowByRoute } from "./utils";
 
@@ -30,9 +29,7 @@ const DrawerPanel = styled(MuiDrawer)(({ theme }: { theme: Theme }) => ({
     top: "unset",
     width: "inherit",
     backgroundColor:
-      theme.palette.mode === THEME_VARIANTS.light
-        ? theme.palette.contrastColor
-        : theme.palette.background.paper,
+      theme.palette.mode === "light" ? theme.palette.contrastColor : theme.palette.background.paper,
     boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[400], 0.2)}`,
     position: "relative",
     display: "flex",

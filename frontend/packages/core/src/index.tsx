@@ -59,8 +59,7 @@ export { default as Code } from "./text";
 export { default as TimeAgo } from "./timeago";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
-export { useTheme } from "./AppProvider/themes";
-export { ThemeProvider } from "./Theme";
+export { ThemeProvider, useTheme } from "./Theme";
 
 export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";
 
@@ -77,3 +76,12 @@ export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn 
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
 export type { StyledComponent } from "@emotion/styled";
+export type {
+  CustomClutchColor,
+  CustomClutchColors,
+  CustomChartColors,
+  CustomPalette,
+  CustomThemeOptions,
+  CustomClutchTheme,
+  ThemeOverrides,
+} from "./Theme/types";

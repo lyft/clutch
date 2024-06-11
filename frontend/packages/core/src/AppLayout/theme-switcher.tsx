@@ -6,18 +6,17 @@ import get from "lodash/get";
 
 import { useUserPreferences } from "../Contexts";
 import { Select } from "../Input";
-import { THEME_VARIANTS } from "../Theme/colors";
 
 const ThemeSwitcher = () => {
   const { preferences, dispatch } = useUserPreferences();
 
   const options = [
     {
-      label: THEME_VARIANTS.light,
+      label: "Light",
       startAdornment: <LightModeIcon />,
     },
     {
-      label: THEME_VARIANTS.dark,
+      label: "Dark",
       startAdornment: <DarkModeIcon />,
     },
   ];
@@ -25,7 +24,7 @@ const ThemeSwitcher = () => {
   const handleOnChange = (value: string) => {
     dispatch({
       type: "SetPref",
-      payload: { key: "theme", value },
+      payload: { key: "theme", value: value.toUpperCase() },
     });
   };
 

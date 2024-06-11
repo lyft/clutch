@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import { userId } from "./AppLayout/user";
 import { workflowsByTrending } from "./AppLayout/utils";
 import { MonsterGraphic } from "./Assets/Graphics";
-import { THEME_VARIANTS } from "./Theme/colors";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { useNavigate } from "./navigation";
@@ -18,9 +17,7 @@ const StyledLanding = styled.div(({ theme }: { theme: Theme }) => ({
   "& .welcome": {
     display: "flex",
     backgroundColor:
-      theme.palette.mode === THEME_VARIANTS.light
-        ? theme.palette.contrastColor
-        : theme.palette.background.paper,
+      theme.palette.mode === "light" ? theme.palette.contrastColor : theme.palette.background.paper,
     padding: "32px 80px",
   },
 

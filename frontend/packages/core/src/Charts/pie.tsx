@@ -95,11 +95,11 @@ interface PieChartState {
 }
 
 const ChartLabelPrimary = styled("text")(({ theme }: { theme: Theme }) => ({
-  fill: theme.colors.charts.pie.labelPrimary,
+  fill: theme.chartColors.pie.labelPrimary,
 }));
 
 const ChartLabelSecondary = styled("text")(({ theme }: { theme: Theme }) => ({
-  fill: theme.colors.charts.pie.labelSecondary,
+  fill: theme.chartColors.pie.labelSecondary,
 }));
 
 const renderActiveShape = (props, options) => {
