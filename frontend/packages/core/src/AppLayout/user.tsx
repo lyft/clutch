@@ -21,7 +21,8 @@ import * as _ from "lodash";
 
 import { useTheme } from "../AppProvider/themes";
 import { useUserPreferences } from "../Contexts";
-import { Switch } from "../Input";
+import { Select } from "../Input";
+import { THEME_VARIANTS } from "../Theme/colors";
 
 const UserPhoto = styled(IconButton)(({ theme }: { theme: Theme }) => ({
   padding: "12px",
@@ -203,16 +204,20 @@ const UserInformation: React.FC<UserInformationProps> = ({
 
   const theme = useTheme();
 
-  const toggleTheme = () => {
-    const newTheme = theme.palette.mode === "dark" ? "light" : "dark";
-    console.log("Palette mode: ", theme.palette.mode);
-    console.log("Preferences theme mode: ", preferences.themeMode);
-    console.log("Changing theme to: ", newTheme);
+  const handleSelectTheme = value =>
     dispatch({
       type: "SetPref",
-      payload: { key: "themeMode", value: preferences.themeMode === "dark" ? "light" : "dark" },
+      payload: { key: "themeMode", value },
     });
-  };
+
+  const themeOptions = React.useMemo(
+    () =>
+      Object.keys(THEME_VARIANTS).map(key => ({
+        value: key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+      })),
+    []
+  );
 
   return (
     <>
@@ -240,10 +245,19 @@ const UserInformation: React.FC<UserInformationProps> = ({
                     </AvatarListItemIcon>
                     <AvatarListItemText>{user}</AvatarListItemText>
                   </AvatarMenuItem>
-                  {/* Theme mode toggle START */}
                   <MenuItem>
-                    <ListItemText>Dark mode</ListItemText>
-                    <Switch checked={theme.palette.mode === "dark"} onChange={toggleTheme} />
+                    <ListItemText>
+                      {`Appearance: ${
+                        theme.palette.mode === THEME_VARIANTS.light ? "Light" : "Dark"
+                      }`}
+                      <Select
+                        noDefault
+                        value={preferences.themeMode}
+                        name="theme"
+                        onChange={handleSelectTheme}
+                        options={themeOptions}
+                      />
+                    </ListItemText>
                   </MenuItem>
                   {data?.map((d, i) => (
                     // eslint-disable-next-line react/no-array-index-key

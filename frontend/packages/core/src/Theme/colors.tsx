@@ -3,6 +3,7 @@ import type { ClutchColors, ComponentState, ThemeVariant } from "./types";
 export enum THEME_VARIANTS {
   light = "light",
   dark = "dark",
+  system = "system",
 }
 
 export const brandColor = "#02acbe";

@@ -3,7 +3,7 @@ import _ from "lodash";
 
 export type ActionType = "SetPref" | "RemovePref" | "SetLocalPref" | "RemoveLocalPref";
 const STORAGE_KEY = "userPreferences";
-type State = { key: string; value?: unknown };
+type State = { [key: string]: any };
 type Action = { type: ActionType; payload: State };
 type Dispatch = (action: Action) => void;
 type UserPreferencesProviderProps = { children: React.ReactNode };

@@ -1,11 +1,6 @@
 import type { Color } from "@mui/material";
 
-export type ThemeVariant = "light" | "dark";
-
-export enum THEME_VARIANTS {
-  light = "light",
-  dark = "dark",
-}
+export type ThemeVariant = "light" | "dark" | "system";
 
 export interface StrokeColor {
   primary: string;

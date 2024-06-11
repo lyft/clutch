@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme as useMuiTheme } from "@mui/material";
 import type { Theme as MuiTheme } from "@mui/material/styles";
 
@@ -25,12 +25,31 @@ const useTheme = () => useMuiTheme() as MuiTheme;
 
 const Theme: React.FC = ({ children }) => {
   const { preferences } = useUserPreferences();
-  // Detect system color mode
-  const prefersDarkMode =
-    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const themeVariant = preferences.themeMode;
+  const [themeVariant, setThemeVariant] = useState(preferences.themeMode);
 
-  return <ThemeProvider variant={themeVariant}>{children}</ThemeProvider>;
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const setThemeMode = e => {
+      if (e.matches) {
+        setThemeVariant(THEME_VARIANTS.dark);
+      } else {
+        setThemeVariant(THEME_VARIANTS.light);
+      }
+    };
+
+    if (preferences.themeMode === THEME_VARIANTS.system) {
+      setThemeMode(darkModeMediaQuery);
+      darkModeMediaQuery.addListener(setThemeMode);
+    } else if (themeVariant !== preferences.themeMode) {
+      setThemeVariant(preferences.themeMode);
+    }
+
+    return () => {
+      darkModeMediaQuery.removeListener(setThemeMode);
+    };
+  }, [preferences.themeMode, themeVariant]);
+
+  return <ThemeProvider variant={themeVariant as THEME_VARIANTS}>{children}</ThemeProvider>;
 };
 
 export { Theme, useTheme };
