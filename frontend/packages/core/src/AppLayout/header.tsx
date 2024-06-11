@@ -11,6 +11,7 @@ import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
 import ShortLinker from "./shortLinker";
+import ThemeSwitcher from "./theme-switcher";
 import { UserInformation } from "./user";
 
 export const APP_BAR_HEIGHT = "64px";
@@ -115,7 +116,11 @@ const Header: React.FC<HeaderProps> = ({
               </>
             )}
             {children && children}
-            {userInfo && <UserInformation />}
+            {userInfo && (
+              <UserInformation>
+                <ThemeSwitcher />
+              </UserInformation>
+            )}
           </Grid>
         </Toolbar>
       </AppBar>

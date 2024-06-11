@@ -56,7 +56,7 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
     ".MuiStepLabel-label": {
       fontWeight: 500,
       fontSize: "14px",
-      color: alpha(theme.palette.secondary[900], 0.38),
+      color: alpha(theme.palette.secondary[900], 0.5),
     },
     ".MuiStepLabel-label.Mui-active": {
       color: theme.palette.secondary[900],

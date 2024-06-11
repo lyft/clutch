@@ -160,10 +160,10 @@ const ClutchApp = ({
 
   return (
     <Router>
-      <Theme>
-        <div id="App">
-          <ApplicationContext.Provider value={appContextValue}>
-            <UserPreferencesProvider>
+      <UserPreferencesProvider>
+        <Theme>
+          <div id="App">
+            <ApplicationContext.Provider value={appContextValue}>
               <ShortLinkContext.Provider value={shortLinkProviderProps}>
                 {hydrateError && (
                   <Toast onClose={() => setHydrateError(null)}>
@@ -238,10 +238,10 @@ const ClutchApp = ({
                   </Route>
                 </Routes>
               </ShortLinkContext.Provider>
-            </UserPreferencesProvider>
-          </ApplicationContext.Provider>
-        </div>
-      </Theme>
+            </ApplicationContext.Provider>
+          </div>
+        </Theme>
+      </UserPreferencesProvider>
     </Router>
   );
 };
