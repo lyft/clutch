@@ -7,6 +7,7 @@ import type {
   Theme,
 } from "@mui/material";
 import {
+  Box,
   IconButton,
   Paper as MuiPaper,
   Table as MuiTable,
@@ -15,6 +16,7 @@ import {
   TableContainer as MuiTableContainer,
   TableHead as MuiTableHead,
   TableRow as MuiTableRow,
+  TableSortLabel as MuiTableSortLabel,
   useMediaQuery,
 } from "@mui/material";
 import type { Breakpoint } from "@mui/material/styles";
@@ -115,6 +117,8 @@ const TableContainer = ({ children }: TableContainerProps) => (
   </MuiTableContainer>
 );
 
+export type Order = "asc" | "desc";
+
 interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
   columns: string[];
@@ -132,64 +136,84 @@ interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   children?:
     | (React.ReactElement<TableRowProps> | null | undefined | {})[]
     | React.ReactElement<TableRowProps>;
+  order?: Order;
+  orderBy?: string;
+  onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
 }
 
-const Table: React.FC<TableProps> = React.forwardRef(
-  (
-    {
-      columns,
-      compressBreakpoint = "sm",
-      hideHeader = false,
-      actionsColumn = false,
-      responsive = false,
-      overflow = "scroll",
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const showHeader = !hideHeader;
-    const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
+const Table: React.FC<TableProps> = ({
+  columns,
+  compressBreakpoint = "sm",
+  hideHeader = false,
+  actionsColumn = false,
+  responsive = false,
+  overflow = "scroll",
+  children,
+  order,
+  orderBy,
+  onRequestSort,
+  ...props
+}) => {
+  const showHeader = !hideHeader;
+  const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
 
-    return (
-      <TableContainer>
-        <StyledTable
-          $compress={compress}
-          $columnCount={columns?.length}
-          $hasActionsColumn={actionsColumn}
-          $responsive={responsive}
-          $overflow={overflow}
-          ref={ref}
-          {...props}
-        >
-          {/*
+  const createSortHandler = property => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableContainer>
+      <StyledTable
+        $compress={compress}
+        $columnCount={columns?.length}
+        $hasActionsColumn={actionsColumn}
+        $responsive={responsive}
+        $overflow={overflow}
+        {...props}
+      >
+        {/*
           Filter out empty strings from column headers.
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
-          {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
-            <MuiTableHead>
-              <StyledTableHeadRow>
-                {columns.map(h => (
-                  <StyledTableCell key={h} $responsive={responsive}>
+        {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
+          <MuiTableHead>
+            <StyledTableHeadRow>
+              {columns.map(h => (
+                <StyledTableCell
+                  key={h}
+                  $responsive={responsive}
+                  align="left"
+                  sortDirection={orderBy === h ? order : false}
+                >
+                  <MuiTableSortLabel
+                    active={orderBy === h}
+                    direction={orderBy === h ? order : "asc"}
+                    onClick={createSortHandler(h)}
+                  >
                     <Typography variant="subtitle3">{h}</Typography>
-                  </StyledTableCell>
-                ))}
-                {actionsColumn && !(responsive && compress) && (
-                  <StyledTableCell $responsive={responsive} $action />
-                )}
-              </StyledTableHeadRow>
-            </MuiTableHead>
+                    {orderBy === h ? (
+                      <Box component="span">
+                        {order === "desc" ? "sorted descending" : "sorted ascending"}
+                      </Box>
+                    ) : null}
+                  </MuiTableSortLabel>
+                </StyledTableCell>
+              ))}
+              {actionsColumn && !(responsive && compress) && (
+                <StyledTableCell $responsive={responsive} $action />
+              )}
+            </StyledTableHeadRow>
+          </MuiTableHead>
+        )}
+        <StyledTableBody>
+          {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
+            React.cloneElement(c, { responsive })
           )}
-          <StyledTableBody>
-            {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
-              React.cloneElement(c, { responsive })
-            )}
-          </StyledTableBody>
-        </StyledTable>
-      </TableContainer>
-    );
-  }
-);
+        </StyledTableBody>
+      </StyledTable>
+    </TableContainer>
+  );
+};
 
 export interface TableRowProps
   extends Pick<MuiTableRowProps, "onClick">,
