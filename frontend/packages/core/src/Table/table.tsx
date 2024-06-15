@@ -4,6 +4,7 @@ import type {
   TableCellProps as MuiTableCellProps,
   TableProps as MuiTableProps,
   TableRowProps as MuiTableRowProps,
+  TableSortLabelProps as MuiTableSortLabelProps,
   Theme,
 } from "@mui/material";
 import {
@@ -116,11 +117,9 @@ const TableContainer = ({ children }: TableContainerProps) => (
   </MuiTableContainer>
 );
 
-export type Order = "asc" | "desc";
-
 interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
-  columns: string[];
+  columns: string[] | { id: string; title: string; sortable?: boolean }[];
   /** The breakpoint at which to compress the table rows. By default the small breakpoint is used. */
   compressBreakpoint?: Breakpoint;
   /** Hide the header. By default this is false. */
@@ -135,8 +134,7 @@ interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   children?:
     | (React.ReactElement<TableRowProps> | null | undefined | {})[]
     | React.ReactElement<TableRowProps>;
-  order?: Order;
-  orderBy?: string;
+  defaultSort?: [string, MuiTableSortLabelProps["direction"]];
   onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
 }
 
@@ -150,8 +148,7 @@ const Table: React.FC<TableProps> = React.forwardRef(
       responsive = false,
       overflow = "scroll",
       children,
-      order,
-      orderBy,
+      defaultSort,
       onRequestSort,
       ...props
     },
@@ -179,31 +176,42 @@ const Table: React.FC<TableProps> = React.forwardRef(
           Filter out empty strings from column headers.
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
-          {showHeader && columns?.length !== 0 && columns.filter(h => h.length !== 0).length !== 0 && (
-            <MuiTableHead>
-              <StyledTableHeadRow>
-                {columns.map(h => (
-                  <StyledTableCell
-                    key={h}
-                    $responsive={responsive}
-                    align="left"
-                    sortDirection={orderBy === h ? order : false}
-                  >
-                    <MuiTableSortLabel
-                      active={orderBy === h}
-                      direction={orderBy === h ? order : "asc"}
-                      onClick={createSortHandler(h)}
+          {showHeader &&
+            columns?.length !== 0 &&
+            columns.filter(h => {
+              const title = typeof h === "string" ? h : h?.title;
+              return title.length !== 0;
+            }).length !== 0 && (
+              <MuiTableHead>
+                <StyledTableHeadRow>
+                  {columns.map(h => (
+                    <StyledTableCell
+                      key={typeof h === "string" ? h : h?.id}
+                      $responsive={responsive}
+                      align="left"
+                      sortDirection={
+                        h?.sortable && defaultSort?.[0] === h?.id ? defaultSort[1] : false
+                      }
                     >
-                      <Typography variant="subtitle3">{h}</Typography>
-                    </MuiTableSortLabel>
-                  </StyledTableCell>
-                ))}
-                {actionsColumn && !(responsive && compress) && (
-                  <StyledTableCell $responsive={responsive} $action />
-                )}
-              </StyledTableHeadRow>
-            </MuiTableHead>
-          )}
+                      {h?.sortable ? (
+                        <MuiTableSortLabel
+                          active={defaultSort[0] === h?.id}
+                          direction={defaultSort[0] === h?.id ? defaultSort[1] : "asc"}
+                          onClick={createSortHandler(h?.id)}
+                        >
+                          <Typography variant="subtitle3">{h?.title}</Typography>
+                        </MuiTableSortLabel>
+                      ) : (
+                        <Typography variant="subtitle3">{h}</Typography>
+                      )}
+                    </StyledTableCell>
+                  ))}
+                  {actionsColumn && !(responsive && compress) && (
+                    <StyledTableCell $responsive={responsive} $action />
+                  )}
+                </StyledTableHeadRow>
+              </MuiTableHead>
+            )}
           <StyledTableBody>
             {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
               React.cloneElement(c, { responsive })
