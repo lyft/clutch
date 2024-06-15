@@ -202,7 +202,9 @@ const Table: React.FC<TableProps> = React.forwardRef(
                           <Typography variant="subtitle3">{h?.title}</Typography>
                         </MuiTableSortLabel>
                       ) : (
-                        <Typography variant="subtitle3">{h}</Typography>
+                        <Typography variant="subtitle3">
+                          {typeof h === "string" ? h : h?.title}
+                        </Typography>
                       )}
                     </StyledTableCell>
                   ))}
