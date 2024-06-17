@@ -2,13 +2,5 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist"
-  },
-  "exclude": [
-    "node_modules",
-    "**/*.stories.ts*",
-    "**/*.stories.js*",
-    "**/*.test.js*",
-    "**/*.test.ts*",
-    "**/dist/*"
-  ]
+  }
 }

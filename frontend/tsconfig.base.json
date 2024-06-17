@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "composite": true,
@@ -28,5 +27,13 @@
     "strict": false,
     "target": "ES2018",
     "types": ["jest", "node", "long"]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.stories.ts*",
+    "**/*.stories.js*",
+    "**/*.test.js*",
+    "**/*.test.ts*",
+    "**/dist/*"
+  ]
 }
