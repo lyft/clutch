@@ -35,7 +35,7 @@ export {
   useParams,
   useSearchParams,
 } from "./navigation";
-export { client } from "./Network";
+export { client, proxyClient } from "./Network";
 export * from "./NPS";
 export { default as ExpansionPanel } from "./panel";
 export { default as Paper } from "./paper";

@@ -2,7 +2,7 @@ import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
-import { grpcResponseToError } from "./errors";
+import { grpcResponseToError, HTTP_CODE_MAPPING } from "./errors";
 
 /**
  * HTTP response status.
@@ -22,6 +22,23 @@ export interface HttpStatus {
 }
 
 const successInterceptor = (response: AxiosResponse) => {
+  return response;
+};
+
+const successProxyInterceptor = (response: AxiosResponse) => {
+  // Handle proxy errors
+  if (response.data.httpStatus >= 400) {
+    const error = {
+      status: {
+        code: response.data.httpStatus,
+        text: HTTP_CODE_MAPPING[response.data.httpStatus] || "Unknown",
+      },
+      message: response.data.response.message,
+      data: response.data,
+    } as ClutchError;
+    return Promise.reject(error);
+  }
+
   return response;
 };
 
@@ -49,7 +66,7 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   // since we have already accounted for axios errors.
   const responseData = error?.response?.data;
   // if the response data has a code on it we know it's a gRPC response.
-  let err;
+  let err: ClutchError;
   if (responseData?.code !== undefined) {
     err = grpcResponseToError(error);
   } else {
@@ -81,6 +98,20 @@ const createClient = () => {
   return axiosClient;
 };
 
+const createProxyClient = () => {
+  const axiosClient = axios.create({
+    // n.b. the client will treat any response code >= 400 as an error and apply the error interceptor.
+    validateStatus: status => {
+      return status < 400;
+    },
+  });
+  axiosClient.interceptors.response.use(successProxyInterceptor, errorInterceptor);
+
+  return axiosClient;
+};
+
 const client = createClient();
 
-export { client, errorInterceptor, successInterceptor };
+const proxyClient = createProxyClient();
+
+export { client, proxyClient, errorInterceptor, successInterceptor, successProxyInterceptor };
