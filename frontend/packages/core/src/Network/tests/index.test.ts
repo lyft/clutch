@@ -153,7 +153,7 @@ describe("axios client", () => {
 });
 
 describe("axios success proxy interceptor", () => {
-  it("returns an error if the proxy call returns response.data.httpStatus >= 400", () => {
+  it("returns an error if the proxy call returns response.data.httpStatus >= 400", async () => {
     const response = {
       status: 200,
       statusText: "Not Found",
@@ -177,6 +177,6 @@ describe("axios success proxy interceptor", () => {
       data: response.data,
     } as ClutchError;
 
-    expect(successProxyInterceptor(response)).rejects.toEqual(err);
+    await expect(successProxyInterceptor(response)).rejects.toEqual(err);
   });
 });
