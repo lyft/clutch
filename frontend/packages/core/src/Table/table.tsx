@@ -117,9 +117,16 @@ const TableContainer = ({ children }: TableContainerProps) => (
   </MuiTableContainer>
 );
 
+interface SortableColumn {
+  id: string;
+  title: string;
+  sortable?: boolean;
+}
+
+type Column = string | SortableColumn;
 interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
-  columns: string[] | { id: string; title: string; sortable?: boolean }[];
+  columns: Column[];
   /** The breakpoint at which to compress the table rows. By default the small breakpoint is used. */
   compressBreakpoint?: Breakpoint;
   /** Hide the header. By default this is false. */
@@ -161,6 +168,17 @@ const Table: React.FC<TableProps> = React.forwardRef(
       onRequestSort && onRequestSort(event, property);
     };
 
+    const [managedColumns, setManagedColumns] = React.useState<SortableColumn[]>([]);
+
+    React.useEffect(() => {
+      if (columns?.length === 0) {
+        // eslint-disable-next-line no-console
+        console.warn("Table must have at least one column.");
+      } else {
+        setManagedColumns(columns.map(c => (typeof c === "string" ? { id: c, title: c } : c)));
+      }
+    }, [columns]);
+
     return (
       <TableContainer>
         <StyledTable
@@ -177,14 +195,11 @@ const Table: React.FC<TableProps> = React.forwardRef(
           This may be unintended which is why we override wit hthe hideHeader prop.
         */}
           {showHeader &&
-            columns?.length !== 0 &&
-            columns.filter(h => {
-              const title = typeof h === "string" ? h : h?.title;
-              return title.length !== 0;
-            }).length !== 0 && (
+            managedColumns?.length !== 0 &&
+            managedColumns.filter(h => h.title.length !== 0).length !== 0 && (
               <MuiTableHead>
                 <StyledTableHeadRow>
-                  {columns.map(h => (
+                  {managedColumns.map(h => (
                     <StyledTableCell
                       key={typeof h === "string" ? h : h?.id}
                       $responsive={responsive}
