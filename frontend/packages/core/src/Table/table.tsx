@@ -119,11 +119,12 @@ const TableContainer = ({ children }: TableContainerProps) => (
 
 interface SortableColumn {
   id: string;
-  title: string;
+  title?: string;
   sortable?: boolean;
+  render?: JSX.Element;
 }
 
-type Column = string | SortableColumn;
+type Column = string | SortableColumn | JSX.Element;
 interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
   /** The names of the columns. This must be set (even to empty string) to render the table. */
   columns: Column[];
@@ -175,7 +176,17 @@ const Table: React.FC<TableProps> = React.forwardRef(
         // eslint-disable-next-line no-console
         console.warn("Table must have at least one column.");
       } else {
-        setManagedColumns(columns.map(c => (typeof c === "string" ? { id: c, title: c } : c)));
+        setManagedColumns(
+          columns.map((c, i) => {
+            if (React.isValidElement(c)) {
+              return { id: `element${i}`, render: c };
+            }
+            if (typeof c === "string") {
+              return { id: c, title: c };
+            }
+            return c as SortableColumn;
+          })
+        );
       }
     }, [columns]);
 
@@ -192,16 +203,16 @@ const Table: React.FC<TableProps> = React.forwardRef(
         >
           {/*
           Filter out empty strings from column headers.
-          This may be unintended which is why we override wit hthe hideHeader prop.
+          This may be unintended which is why we override with the hideHeader prop.
         */}
           {showHeader &&
             managedColumns?.length !== 0 &&
-            managedColumns.filter(h => h.title.length !== 0).length !== 0 && (
+            managedColumns.filter(h => h?.title?.length !== 0 || h?.render).length !== 0 && (
               <MuiTableHead>
                 <StyledTableHeadRow>
                   {managedColumns.map(h => (
                     <StyledTableCell
-                      key={typeof h === "string" ? h : h?.id}
+                      key={h?.id}
                       $responsive={responsive}
                       align="left"
                       sortDirection={
@@ -217,9 +228,7 @@ const Table: React.FC<TableProps> = React.forwardRef(
                           <Typography variant="subtitle3">{h?.title}</Typography>
                         </MuiTableSortLabel>
                       ) : (
-                        <Typography variant="subtitle3">
-                          {typeof h === "string" ? h : h?.title}
-                        </Typography>
+                        <Typography variant="subtitle3">{h?.title || h?.render}</Typography>
                       )}
                     </StyledTableCell>
                   ))}
