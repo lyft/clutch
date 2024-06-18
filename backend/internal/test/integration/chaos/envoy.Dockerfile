@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy-alpine:v1.17.1
+FROM envoyproxy/envoy:v1.30.0
 
 COPY build/envoyconfiggen /envoyconfiggen
 RUN /envoyconfiggen > /config.json
