@@ -296,6 +296,10 @@ const HTTP_CODE_MAPPING = {
   504: "Gateway Timeout",
 };
 
+const httpCodeToText = (code: number): string => {
+  return HTTP_CODE_MAPPING[code] || "Unknown";
+};
+
 /* eslint-disable no-underscore-dangle */
 const isHelpDetails = (details: ErrorDetails): details is Help => {
   return details._type === "types.googleapis.com/google.rpc.Help";
@@ -306,4 +310,4 @@ const isClutchErrorDetails = (details: ErrorDetails): details is IClutch.api.v1.
 };
 /* eslint-enable */
 
-export { grpcResponseToError, isClutchErrorDetails, isHelpDetails, HTTP_CODE_MAPPING };
+export { grpcResponseToError, httpCodeToText, isClutchErrorDetails, isHelpDetails };

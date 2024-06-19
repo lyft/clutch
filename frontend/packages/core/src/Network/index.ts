@@ -2,7 +2,7 @@ import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
-import { grpcResponseToError, HTTP_CODE_MAPPING } from "./errors";
+import { grpcResponseToError, httpCodeToText } from "./errors";
 
 /**
  * HTTP response status.
@@ -31,7 +31,7 @@ const successProxyInterceptor = (response: AxiosResponse) => {
     const error = {
       status: {
         code: response.data.httpStatus,
-        text: HTTP_CODE_MAPPING[response.data.httpStatus] || "Unknown",
+        text: httpCodeToText(response.data.httpStatus),
       },
       message: response.data.response.message,
       data: response.data,
