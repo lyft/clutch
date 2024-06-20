@@ -21,6 +21,13 @@ export interface HttpStatus {
   text: string;
 }
 
+interface CreateClientProps {
+  response?: {
+    success: (response: AxiosResponse) => AxiosResponse | Promise<never>;
+    error: (error: AxiosError) => Promise<ClutchError>;
+  };
+}
+
 const successInterceptor = (response: AxiosResponse) => {
   return response;
 };
@@ -86,32 +93,27 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   return Promise.reject(err);
 };
 
-const createClient = () => {
+const createClient = ({ response }: CreateClientProps) => {
   const axiosClient = axios.create({
     // n.b. the client will treat any response code >= 400 as an error and apply the error interceptor.
     validateStatus: status => {
       return status < 400;
     },
   });
-  axiosClient.interceptors.response.use(successInterceptor, errorInterceptor);
+
+  if (response) {
+    axiosClient.interceptors.response.use(response.success, response.error);
+  }
 
   return axiosClient;
 };
 
-const createProxyClient = () => {
-  const axiosClient = axios.create({
-    // n.b. the client will treat any response code >= 400 as an error and apply the error interceptor.
-    validateStatus: status => {
-      return status < 400;
-    },
-  });
-  axiosClient.interceptors.response.use(successProxyInterceptor, errorInterceptor);
+const client = createClient({
+  response: { success: successInterceptor, error: errorInterceptor },
+});
 
-  return axiosClient;
-};
-
-const client = createClient();
-
-const proxyClient = createProxyClient();
+const proxyClient = createClient({
+  response: { success: successProxyInterceptor, error: errorInterceptor },
+});
 
 export { client, proxyClient, errorInterceptor, successInterceptor, successProxyInterceptor };
