@@ -1,7 +1,7 @@
-import type { AxiosError } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
 import type { ClutchError } from "../errors";
-import { client, errorInterceptor } from "../index";
+import { client, errorInterceptor, successProxyInterceptor } from "../index";
 
 describe("error interceptor", () => {
   describe("on axios error", () => {
@@ -149,5 +149,34 @@ describe("axios client", () => {
 
   it("treats status codes < 400 as success", () => {
     expect(client.defaults.validateStatus(399)).toBe(true);
+  });
+});
+
+describe("axios success proxy interceptor", () => {
+  it("returns an error if the proxy call returns response.data.httpStatus >= 400", async () => {
+    const response = {
+      status: 200,
+      statusText: "Not Found",
+      data: {
+        httpStatus: 404,
+        headers: {
+          "Cache-Control": ["no-cache"],
+        },
+        response: {
+          message: "Item not found",
+        },
+      },
+    } as AxiosResponse;
+
+    const err = {
+      status: {
+        code: 404,
+        text: "Not Found",
+      },
+      message: "Item not found",
+      data: response.data,
+    } as ClutchError;
+
+    await expect(successProxyInterceptor(response)).rejects.toEqual(err);
   });
 });
