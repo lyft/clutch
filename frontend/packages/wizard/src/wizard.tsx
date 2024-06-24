@@ -281,4 +281,3 @@ const Wizard = ({
 };
 
 export default Wizard;
-
