@@ -80,7 +80,7 @@ const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
 );
 
 const StepperContainer = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
-  {},
+  { position: "absolute" },
   props => ({ theme }: { theme: Theme }) => ({
     ...(props.$orientation === "vertical" && {
       padding: "16px",
@@ -95,6 +95,10 @@ const StepperContainer = styled(Grid)<{ $orientation: MuiStepperProps["orientati
 
 const MaxHeightGrid = styled(Grid)({
   height: "100%",
+});
+
+const MainContainer = styled(Grid)({
+  position: "relative",
 });
 
 const StyledStepContainer = styled(Grid)({
@@ -244,26 +248,28 @@ const Wizard = ({
             )}
           </Header>
         )}
-        <MaxHeightGrid
+        <MainContainer
           container
           item
           direction={orientation === "vertical" ? "row" : "column"}
           wrap="nowrap"
           spacing={2}
         >
-          <StepperContainer item xs="auto" $orientation={orientation}>
-            <Stepper activeStep={state.activeStep} orientation={orientation}>
-              {filteredChildren.map((child: WizardChildren) => {
-                const { name } = child.props;
-                const hasError = wizardStepData[child.type.name]?.hasError;
-                return <Step key={name} label={name} error={hasError} />;
-              })}
-            </Stepper>
-          </StepperContainer>
-          <StyledStepContainer item xs={12}>
+          <Grid style={{ overflow: "hidden" }} xs={3}>
+            <StepperContainer item xs="auto" $orientation={orientation}>
+              <Stepper activeStep={state.activeStep} orientation={orientation}>
+                {filteredChildren.map((child: WizardChildren) => {
+                  const { name } = child.props;
+                  const hasError = wizardStepData[child.type.name]?.hasError;
+                  return <Step key={name} label={name} error={hasError} />;
+                })}
+              </Stepper>
+            </StepperContainer>
+          </Grid>
+          <StyledStepContainer item xs={9}>
             <StyledPaper elevation={0}>{steps[state.activeStep]}</StyledPaper>
           </StyledStepContainer>
-        </MaxHeightGrid>
+        </MainContainer>
       </MaxHeightGrid>
       {globalWarnings.map(error => (
         <Toast key={error} onClose={() => removeWarning(error)}>
@@ -275,3 +281,4 @@ const Wizard = ({
 };
 
 export default Wizard;
+
