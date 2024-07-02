@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "composite": true,
     "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
@@ -10,11 +12,16 @@
     "isolatedModules": true,
     "jsx": "react",
     "lib": ["DOM", "ESNext"],
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noImplicitReturns": true,
+    "paths": {
+      "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"]
+    },
     "preserveConstEnums": true,
     "preserveSymlinks": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
     "target": "ES2018",

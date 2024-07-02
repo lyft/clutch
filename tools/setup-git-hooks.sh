@@ -13,5 +13,7 @@ fi
 GITHUB_ROOT="${SCRIPT_ROOT}/.github"
 GIT_REPO_ROOT="${REPO_ROOT}/.git"
 
-echo "Setting up git pre-commit hooks for ${REPO_ROOT}"
-ln -s -f "${GITHUB_ROOT}/hooks/pre-commit" "${GIT_REPO_ROOT}/hooks/pre-commit"
+if [[ -f "${GITHUB_ROOT}/hooks/pre-commit" && -f "${GIT_REPO_ROOT}/hooks/pre-commit" ]]; then
+  echo "Setting up git pre-commit hooks for ${REPO_ROOT}"
+  ln -s -f "${GITHUB_ROOT}/hooks/pre-commit" "${GIT_REPO_ROOT}/hooks/pre-commit"
+fi
