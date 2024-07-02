@@ -3,7 +3,6 @@ const byteSize = require("byte-size");
 const esbuild = require("esbuild");
 const fs = require("fs");
 const path = require("path");
-const { replaceTscAliasPaths } = require("tsc-alias");
 
 const args = process.argv.slice(2);
 const fileDetailsLimit = 20;
@@ -24,16 +23,6 @@ const getAllFiles = (dirPath, arrayOfFiles) => {
   });
 
   return tmpArrayOfFiles;
-};
-
-const tscAliasPlugin = {
-  name: "tscAlias",
-  setup(build) {
-    build.onEnd(() => {
-      fs.existsSync(`${process.argv[2]}/tsconfig.paths.json`) &&
-        replaceTscAliasPaths({ configFile: `${process.argv[2]}/tsconfig.paths.json` });
-    });
-  },
 };
 
 const sizeOutputPlugin = {
@@ -75,11 +64,11 @@ const sizeOutputPlugin = {
 const options = {
   entryPoints: getAllFiles(`${process.argv[2]}/src`),
   outdir: `${process.argv[2]}/dist/`,
-  target: "es2019",
+  target: "es2020",
   sourcemap: true,
   preserveSymlinks: true,
   color: true,
-  plugins: [tscAliasPlugin],
+  plugins: [],
   tsconfig: `${process.argv[2]}/tsconfig.json`,
 };
 

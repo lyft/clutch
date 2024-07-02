@@ -14,7 +14,7 @@
     "node_modules:find": "find $PROJECT_CWD -name 'node_modules' -type d -prune -print",
     "node_modules:nuke": "echo \"Deleting below 'node_modules' folders...\" && npm run --silent node_modules:find | xargs du -chs && echo '' && npm run --silent node_modules:find -- -exec rm -rf '{}' \\;",
     "package:clean": "cd $INIT_CWD && rm -rf dist tsconfig.tsbuildinfo",
-    "package:compile": "cd $INIT_CWD && run -T tsc -b && find $INIT_CWD -name \"tsconfig.paths.json\" -exec yarn run -T tsc-alias -p \"tsconfig.paths.json\" \\;",
+    "package:compile": "cd $INIT_CWD && run -T tsc -b",
     "package:compile:dev": "yarn node devBuild.js $INIT_CWD",
     "package:compile:watch": "yarn node devBuild.js $INIT_CWD -w",
     "package:lint": "eslint --ext .js,.jsx,.ts,.tsx $INIT_CWD",
@@ -69,7 +69,8 @@
     "jest": "^27.0.0",
     "prettier": "~2.2.1",
     "react-scripts": "^5.0.1",
-    "tsc-alias": "^1.8.8"
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "^5.5.3"
   },
   "devDependencies": {
     "@types/byte-size": "^8",

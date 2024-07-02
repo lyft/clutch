@@ -1864,7 +1864,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -1883,7 +1883,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -1908,8 +1908,7 @@ __metadata:
     react-dom: "npm:^17.0.2"
     sort-package-json: "npm:^1.48.1"
     storybook: "npm:^7.6.0"
-    tsc-alias: "npm:^1.8.8"
-    typescript: "npm:^4.2.3"
+    typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft
 
@@ -1957,7 +1956,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -1973,7 +1972,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -1993,7 +1992,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2012,7 +2011,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2035,7 +2034,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2056,7 +2055,7 @@ __metadata:
     "@mui/styles": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2080,7 +2079,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2100,7 +2099,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2125,7 +2124,7 @@ __metadata:
     react: ^17.0.2
     react-dom: ^17.0.2
     react-router-dom: 6.0.0-beta.0
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2143,7 +2142,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2165,7 +2164,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2187,7 +2186,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2209,7 +2208,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -2262,7 +2261,8 @@ __metadata:
     jest: "npm:^27.0.0"
     prettier: "npm:~2.2.1"
     react-scripts: "npm:^5.0.1"
-    tsc-alias: "npm:^1.8.8"
+    tsconfig-paths-webpack-plugin: "npm:^4.1.0"
+    typescript: "npm:^5.5.3"
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -2283,7 +2283,7 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    typescript: ^4.2.3
+    typescript: ^5.5.3
   languageName: unknown
   linkType: soft
 
@@ -8802,13 +8802,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^9.0.0":
-  version: 9.5.0
-  resolution: "commander@npm:9.5.0"
-  checksum: 10c0/5f7784fbda2aaec39e89eb46f06a999e00224b3763dc65976e05929ec486e174fe9aac2655f03ba6a5e83875bd173be5283dc19309b7c65954701c02025b3c1d
-  languageName: node
-  linkType: hard
-
 "common-path-prefix@npm:^3.0.0":
   version: 3.0.0
   resolution: "common-path-prefix@npm:3.0.0"
@@ -10363,6 +10356,16 @@ __metadata:
     graceful-fs: "npm:^4.2.4"
     tapable: "npm:^2.2.0"
   checksum: 10c0/dd69669cbb638ccacefd03e04d5e195ee6a99b7f5f8012f86d2df7781834de357923e06064ea621137c4ce0b37cc12b872b4e6d1ac6ab15fe98e7f1dfbbb08c4
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.7.0":
+  version: 5.17.0
+  resolution: "enhanced-resolve@npm:5.17.0"
+  dependencies:
+    graceful-fs: "npm:^4.2.4"
+    tapable: "npm:^2.2.0"
+  checksum: 10c0/90065e58e4fd08e77ba47f827eaa17d60c335e01e4859f6e644bb3b8d0e32b203d33894aee92adfa5121fa262f912b48bdf0d0475e98b4a0a1132eea1169ad37
   languageName: node
   linkType: hard
 
@@ -14742,7 +14745,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.1.2, json5@npm:^2.2.0, json5@npm:^2.2.3":
+"json5@npm:^2.1.2, json5@npm:^2.2.0, json5@npm:^2.2.2, json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -15867,13 +15870,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mylas@npm:^2.1.9":
-  version: 2.1.13
-  resolution: "mylas@npm:2.1.13"
-  checksum: 10c0/093dfaf88f444d9da956c68a61ddcfe05ab9411c0024b0c7f4d721639ba7d311ea8f9c052ce617344e67d40982f67614cd634b525b923048bf9a191234968c9c
-  languageName: node
-  linkType: hard
-
 "nanoclone@npm:^0.2.1":
   version: 0.2.1
   resolution: "nanoclone@npm:0.2.1"
@@ -16847,15 +16843,6 @@ __metadata:
   dependencies:
     find-up: "npm:^3.0.0"
   checksum: 10c0/ecb60e1f8e1f611c0bdf1a0b6a474d6dfb51185567dc6f29cdef37c8d480ecba5362e006606bb290519bbb6f49526c403fabea93c3090c20368d98bb90c999ab
-  languageName: node
-  linkType: hard
-
-"plimit-lit@npm:^1.2.6":
-  version: 1.6.1
-  resolution: "plimit-lit@npm:1.6.1"
-  dependencies:
-    queue-lit: "npm:^1.5.1"
-  checksum: 10c0/af5d351bb55afe1eaa84b27c2b329699e150e4cf70464f3d474f5eabe9bdb9f48ed378ada1498d3b893f68ee7da2423ba6d9a4d88b1429d3b0aea22afcf5292b
   languageName: node
   linkType: hard
 
@@ -18065,13 +18052,6 @@ __metadata:
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 10c0/2036c9424beaacd3978bac9e4ba514331cc73163bea7bf3ad7e2c7355e55501938ec195312c607753f9c6e70b1bf9dfcda38db6241bd299c034e27ac639d64ed
-  languageName: node
-  linkType: hard
-
-"queue-lit@npm:^1.5.1":
-  version: 1.5.2
-  resolution: "queue-lit@npm:1.5.2"
-  checksum: 10c0/8aa838b2c939aeaa6cd272b5b6b172379a3fa1d9193b2a3e687643c68c0efee3cd3493af4f1f8a11ff79b8207e4d00cc5d0b072f6e4bbeaaa27ee01f567ec4ac
   languageName: node
   linkType: hard
 
@@ -21074,19 +21054,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsc-alias@npm:^1.8.8":
-  version: 1.8.8
-  resolution: "tsc-alias@npm:1.8.8"
+"tsconfig-paths-webpack-plugin@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "tsconfig-paths-webpack-plugin@npm:4.1.0"
   dependencies:
-    chokidar: "npm:^3.5.3"
-    commander: "npm:^9.0.0"
-    globby: "npm:^11.0.4"
-    mylas: "npm:^2.1.9"
-    normalize-path: "npm:^3.0.0"
-    plimit-lit: "npm:^1.2.6"
-  bin:
-    tsc-alias: dist/bin/index.js
-  checksum: 10c0/02d0e3309f5b4d5c2dfc09ddb1192faa75108025e37d51f85dd7cfaab1ebe69cd50a6ed17d2e5d692ddc406455c1b17dfc056ca6ac56f587cba7b63993de251c
+    chalk: "npm:^4.1.0"
+    enhanced-resolve: "npm:^5.7.0"
+    tsconfig-paths: "npm:^4.1.2"
+  checksum: 10c0/c030e867e70a3f6d1799fdffa209c3a35e1435ad99aac01946b9ebb0fa8208b7b508c1dfe8c8e13d6a2ef70c75b4db062fbfd3c1f3362c69b6c65ffd4a50e226
   languageName: node
   linkType: hard
 
@@ -21099,6 +21074,17 @@ __metadata:
     minimist: "npm:^1.2.6"
     strip-bom: "npm:^3.0.0"
   checksum: 10c0/67cd2e400119a0063514782176a9e5c3420d43b7a550804ae65d833027379c0559dec44d21c93791825a3be3c2ec593f07cba658c4167dcbbadb048cb3d36fa3
+  languageName: node
+  linkType: hard
+
+"tsconfig-paths@npm:^4.1.2":
+  version: 4.2.0
+  resolution: "tsconfig-paths@npm:4.2.0"
+  dependencies:
+    json5: "npm:^2.2.2"
+    minimist: "npm:^1.2.6"
+    strip-bom: "npm:^3.0.0"
+  checksum: 10c0/09a5877402d082bb1134930c10249edeebc0211f36150c35e1c542e5b91f1047b1ccf7da1e59babca1ef1f014c525510f4f870de7c9bda470c73bb4e2721b3ea
   languageName: node
   linkType: hard
 
@@ -21227,23 +21213,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.2.3":
-  version: 4.2.3
-  resolution: "typescript@npm:4.2.3"
+"typescript@npm:5.5.3":
+  version: 5.5.3
+  resolution: "typescript@npm:5.5.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/5ee3178699da3c0be7c79cd326670d407c3c788b3f3d2794df3ffa8f7ec9dfb52db320cd2c9054ce76047ad0436e1c80e74d0a1b552af490d99d0ff43bf85d3e
+  checksum: 10c0/f52c71ccbc7080b034b9d3b72051d563601a4815bf3e39ded188e6ce60813f75dbedf11ad15dd4d32a12996a9ed8c7155b46c93a9b9c9bad1049766fe614bbdd
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.2.3#optional!builtin<compat/typescript>":
-  version: 4.2.3
-  resolution: "typescript@patch:typescript@npm%3A4.2.3#optional!builtin<compat/typescript>::version=4.2.3&hash=334f98"
+"typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>":
+  version: 5.5.3
+  resolution: "typescript@patch:typescript@npm%3A5.5.3#optional!builtin<compat/typescript>::version=5.5.3&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/cc740a2298d4a8c25b5d24829bb60a8e748263f365bc0ff8c19487130c68c75c1c72af88873028ac71ac86eebf6a368f909c63544f6975a3c166869fc0976904
+  checksum: 10c0/911c7811d61f57f07df79c4a35f56a0f426a65426a020e5fcd792f66559f399017205f5f10255329ab5a3d8c2d1f1d19530aeceffda70758a521fae1d469432e
   languageName: node
   linkType: hard
 

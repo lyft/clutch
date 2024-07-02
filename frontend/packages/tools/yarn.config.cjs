@@ -20,11 +20,12 @@ const enforcedPackages = {
   jest: "^27.0.0",
   lodash: "^4.17.0",
   react: "^17.0.2",
-  typescript: "^4.2.3",
+  typescript: "^5.5.3",
 };
 
 const enforceWorkspaceEngines = workspace => {
   workspace.set("engines.node", ">=18 <19");
+  workspace.set("engines.yarn", "^4.3.1");
 };
 
 const enforceDependencies = workspace => {
