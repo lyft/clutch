@@ -281,6 +281,25 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   return error;
 };
 
+const HTTP_CODE_MAPPING = {
+  200: "OK",
+  400: "Failed Precondition",
+  401: "Unauthenticated",
+  403: "Permission Denied",
+  404: "Not Found",
+  409: "Already Exists",
+  429: "Resource Exhausted",
+  499: "Cancelled",
+  500: "Internal Server Error",
+  501: "Not Implemented",
+  503: "Service Unavailable",
+  504: "Gateway Timeout",
+};
+
+const httpCodeToText = (code: number): string => {
+  return HTTP_CODE_MAPPING[code] || "Unknown";
+};
+
 /* eslint-disable no-underscore-dangle */
 const isHelpDetails = (details: ErrorDetails): details is Help => {
   return details._type === "types.googleapis.com/google.rpc.Help";
@@ -291,4 +310,4 @@ const isClutchErrorDetails = (details: ErrorDetails): details is IClutch.api.v1.
 };
 /* eslint-enable */
 
-export { grpcResponseToError, isClutchErrorDetails, isHelpDetails };
+export { grpcResponseToError, httpCodeToText, isClutchErrorDetails, isHelpDetails };

@@ -2,7 +2,7 @@ import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
-import { grpcResponseToError } from "./errors";
+import { grpcResponseToError, httpCodeToText } from "./errors";
 
 /**
  * HTTP response status.
@@ -21,7 +21,31 @@ export interface HttpStatus {
   text: string;
 }
 
+interface CreateClientProps {
+  response?: {
+    success: (response: AxiosResponse) => AxiosResponse | Promise<never>;
+    error: (error: AxiosError) => Promise<ClutchError>;
+  };
+}
+
 const successInterceptor = (response: AxiosResponse) => {
+  return response;
+};
+
+const successProxyInterceptor = (response: AxiosResponse) => {
+  // Handle proxy errors
+  if (response.data.httpStatus >= 400) {
+    const error = {
+      status: {
+        code: response.data.httpStatus,
+        text: httpCodeToText(response.data.httpStatus),
+      },
+      message: response.data.response.message,
+      data: response.data,
+    } as ClutchError;
+    return Promise.reject(error);
+  }
+
   return response;
 };
 
@@ -49,7 +73,7 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   // since we have already accounted for axios errors.
   const responseData = error?.response?.data;
   // if the response data has a code on it we know it's a gRPC response.
-  let err;
+  let err: ClutchError;
   if (responseData?.code !== undefined) {
     err = grpcResponseToError(error);
   } else {
@@ -69,18 +93,27 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   return Promise.reject(err);
 };
 
-const createClient = () => {
+const createClient = ({ response }: CreateClientProps) => {
   const axiosClient = axios.create({
     // n.b. the client will treat any response code >= 400 as an error and apply the error interceptor.
     validateStatus: status => {
       return status < 400;
     },
   });
-  axiosClient.interceptors.response.use(successInterceptor, errorInterceptor);
+
+  if (response) {
+    axiosClient.interceptors.response.use(response.success, response.error);
+  }
 
   return axiosClient;
 };
 
-const client = createClient();
+const client = createClient({
+  response: { success: successInterceptor, error: errorInterceptor },
+});
 
-export { client, errorInterceptor, successInterceptor };
+const proxyClient = createClient({
+  response: { success: successProxyInterceptor, error: errorInterceptor },
+});
+
+export { client, proxyClient, errorInterceptor, successInterceptor, successProxyInterceptor };

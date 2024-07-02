@@ -29,7 +29,7 @@ run_tests () {
 		popd
   	popd
 
-	docker-compose up --build --abort-on-container-exit
+	docker compose up --build --abort-on-container-exit
 }
 
 run_tests "internal/test/integration/chaos/experimentation/cmd/envoyconfiggen" "module/chaos/experimentation/xds"
