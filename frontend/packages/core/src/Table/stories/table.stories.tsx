@@ -3,14 +3,8 @@ import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import {
-  Table,
-  TableProps,
-  TableRow,
-  TableRowAction,
-  TableRowActions,
-  TableRowProps,
-} from "../table";
+import { Table, TableRow, TableRowAction, TableRowActions } from "../table";
+import type { TableProps, TableRowProps } from "../types";
 
 export default {
   title: "Core/Table/Table",
