@@ -72,7 +72,6 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
     padding: "32px",
-    height: "100%",
   },
   props => ({
     width: props.$width === "full" ? "100%" : "800px",
@@ -86,9 +85,11 @@ const StepperContainer = styled(Grid)<{ $orientation: MuiStepperProps["orientati
       padding: "16px",
       scrollbarGutter: "stable",
       height: "fit-content",
-      maxHeight: "100%",
+      maxHeight: "70vh",
       overflowY: "scroll",
       background: alpha(theme.palette.secondary[200], 0.35),
+      position: "sticky",
+      top: "24px",
     }),
   })
 );
