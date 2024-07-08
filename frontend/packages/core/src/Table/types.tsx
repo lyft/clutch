@@ -27,8 +27,7 @@ interface TableColumn {
   title?: string;
   sortable?: boolean;
   render?: JSX.Element;
-  filter?: boolean;
-  filterRender?: JSX.Element;
+  options?: JSX.Element;
 }
 
 type Column = string | TableColumn | JSX.Element;
@@ -57,25 +56,4 @@ interface TableContainerProps {
   children: React.ReactElement<TableProps>;
 }
 
-interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
-  action?: boolean;
-  border?: boolean;
-}
-
-interface TableHeaderProps {
-  columns: Column[];
-  responsive?: boolean;
-  defaultSort?: [string, MuiTableSortLabelProps["direction"]];
-  onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
-  actionsColumn?: boolean;
-  compress?: boolean;
-}
-
-export type {
-  TableRowProps,
-  TableColumn,
-  TableProps,
-  TableContainerProps,
-  TableCellProps,
-  TableHeaderProps,
-};
+export type { Column, TableRowProps, TableColumn, TableProps, TableContainerProps };

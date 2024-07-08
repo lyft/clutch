@@ -1,5 +1,5 @@
 import React from "react";
-import type { Theme } from "@mui/material";
+import type { TableSortLabelProps as MuiTableSortLabelProps, Theme } from "@mui/material";
 import {
   TableHead as MuiTableHead,
   TableRow as MuiTableRow,
@@ -8,7 +8,7 @@ import {
 
 import styled from "../../styled";
 import { Typography } from "../../typography";
-import type { TableColumn, TableHeaderProps } from "../types";
+import type { Column, TableColumn } from "../types";
 
 import TableCell from "./TableCell";
 
@@ -22,6 +22,15 @@ const HeaderCell = styled("div")({
   alignItems: "center",
   justifyContent: "space-between",
 });
+
+interface TableHeaderProps {
+  columns: Column[];
+  responsive?: boolean;
+  defaultSort?: [string, MuiTableSortLabelProps["direction"]];
+  onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
+  actionsColumn?: boolean;
+  compress?: boolean;
+}
 
 const TableHeader = ({
   columns,
@@ -77,12 +86,12 @@ const TableHeader = ({
                   >
                     <Typography variant="subtitle3">{h?.title}</Typography>
                   </MuiTableSortLabel>
-                  {h?.filter && h?.filterRender}
+                  {h?.options}
                 </HeaderCell>
               ) : (
                 <HeaderCell>
                   <Typography variant="subtitle3">{h?.title || h?.render}</Typography>
-                  {h?.filter && h?.filterRender}
+                  {h?.options}
                 </HeaderCell>
               )}
             </TableCell>

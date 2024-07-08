@@ -1,9 +1,14 @@
 import React from "react";
-import type { Theme } from "@mui/material";
+import type { TableCellProps as MuiTableCellProps, Theme } from "@mui/material";
 import { TableCell as MuiTableCell } from "@mui/material";
 
 import styled from "../../styled";
-import type { TableCellProps } from "../types";
+import type { TableProps } from "../types";
+
+interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
+  action?: boolean;
+  border?: boolean;
+}
 
 const StyledTableCell = styled(MuiTableCell)<{
   $border?: TableCellProps["border"];
