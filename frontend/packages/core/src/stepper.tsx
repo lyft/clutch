@@ -8,6 +8,7 @@ import type {
 import {
   alpha,
   Step as MuiStep,
+  StepButton as MuiStepButton,
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
@@ -191,11 +192,22 @@ const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 export interface StepperProps extends Pick<MuiStepperProps, "orientation"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
+  nonLinear?: boolean;
+  completed?: { [key: number]: boolean };
+  handleStepClick?: (index: number) => void;
 }
 
-const Stepper = ({ activeStep, orientation = "horizontal", children }: StepperProps) => (
+const Stepper = ({
+  activeStep,
+  orientation = "horizontal",
+  children,
+  nonLinear,
+  handleStepClick,
+  completed,
+}: StepperProps) => (
   <StepContainer $orientation={orientation}>
     <MuiStepper
+      nonLinear={nonLinear}
       activeStep={activeStep}
       connector={<MuiStepConnector />}
       alternativeLabel={orientation === "horizontal"}
@@ -206,18 +218,31 @@ const Stepper = ({ activeStep, orientation = "horizontal", children }: StepperPr
           index: idx + 1,
           variant: "pending" as StepIconVariant,
         };
-        if (idx === activeStep) {
+
+        if (completed) {
+          if (completed[idx]) {
+            stepProps.variant = "success";
+          } else if (idx === activeStep) {
+            stepProps.variant = step.props.error ? "failed" : "active";
+          }
+        } else if (idx === activeStep) {
           stepProps.variant = step.props.error ? "failed" : "active";
         } else if (idx < activeStep) {
           stepProps.variant = "success";
         }
 
+        const label = step.props.label ?? `Step ${idx + 1}`;
+        const icon = <StepIcon {...stepProps} />;
+        const StepProps = completed ? { completed: completed[idx] } : {};
         return (
-          <MuiStep key={step.props.label}>
-            {/* eslint-disable-next-line react/no-unstable-nested-components */}
-            <MuiStepLabel StepIconComponent={() => <StepIcon {...stepProps} />}>
-              {step.props.label ?? `Step ${idx + 1}`}
-            </MuiStepLabel>
+          <MuiStep key={step.props.label} {...StepProps}>
+            {nonLinear ? (
+              <MuiStepButton onClick={() => handleStepClick(idx)} icon={icon}>
+                {label}
+              </MuiStepButton>
+            ) : (
+              <MuiStepLabel icon={icon}>{label}</MuiStepLabel>
+            )}
           </MuiStep>
         );
       })}

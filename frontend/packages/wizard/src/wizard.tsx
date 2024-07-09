@@ -25,7 +25,7 @@ import type {
 } from "@mui/material";
 import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
-import { useWizardState, WizardAction } from "./state";
+import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
 export interface WizardProps
@@ -37,6 +37,7 @@ export interface WizardProps
     | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
   heading?: string | React.ReactElement;
+  nonLinear?: boolean;
 }
 
 export interface WizardChild {
@@ -113,6 +114,7 @@ const Wizard = ({
   orientation = "horizontal",
   children,
   className,
+  nonLinear = false,
 }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
@@ -135,11 +137,17 @@ const Wizard = ({
   };
 
   const handleNext = () => {
-    dispatch(WizardAction.NEXT);
+    dispatch({ type: WizardActionType.NEXT });
+  };
+
+  const handleStepClick = (step: number) => {
+    dispatch({ type: WizardActionType.GO_TO_STEP, step });
   };
 
   const context = (child: JSX.Element) => {
     return {
+      getNextStepToComplete: () => state.nextStepToComplete,
+      onComplete: id => dispatch({ type: WizardActionType.ADD_COMPLETED_STEP, step: id }),
       onSubmit: wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
@@ -161,7 +169,18 @@ const Wizard = ({
         if (params?.toOrigin && origin) {
           navigate(origin);
         } else {
-          dispatch(WizardAction.BACK);
+          dispatch({ type: WizardActionType.BACK });
+        }
+      },
+      onNext: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
+        setGlobalWarnings([]);
+        if (!params?.keepSearch) {
+          setSearchParams({});
+        }
+        if (params?.toOrigin && origin) {
+          navigate(origin);
+        } else {
+          dispatch({ type: WizardActionType.NEXT });
         }
       },
     };
@@ -213,7 +232,7 @@ const Wizard = ({
                     onClick={() => {
                       dataLayoutManager.reset();
                       setSearchParams({});
-                      dispatch(WizardAction.RESET);
+                      dispatch({ type: WizardActionType.RESET });
                       if (origin) {
                         navigate(origin);
                       }
@@ -252,7 +271,13 @@ const Wizard = ({
           spacing={2}
         >
           <StepperContainer item xs="auto" $orientation={orientation}>
-            <Stepper activeStep={state.activeStep} orientation={orientation}>
+            <Stepper
+              activeStep={state.activeStep}
+              orientation={orientation}
+              nonLinear={nonLinear}
+              handleStepClick={handleStepClick}
+              completed={state.completed}
+            >
               {filteredChildren.map((child: WizardChildren) => {
                 const { name } = child.props;
                 const hasError = wizardStepData[child.type.name]?.hasError;
