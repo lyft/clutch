@@ -13,11 +13,12 @@ import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
+import { Theme } from "../Theme";
+import type { ThemeOverrides } from "../Theme/types";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
 import ShortLinkStateHydrator from "./short-link-state-hydrator";
-import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
 
@@ -76,14 +77,16 @@ interface ClutchAppProps {
     [key: string]: () => WorkflowConfiguration;
   };
   configuration: UserConfiguration;
-  appConfiguration: AppConfiguration;
+  appConfiguration?: AppConfiguration;
   children?: ClutchAppChild | ClutchAppChild[];
+  themeOverrides?: ThemeOverrides;
 }
 
 const ClutchApp = ({
   availableWorkflows,
   configuration: userConfiguration,
   appConfiguration,
+  themeOverrides,
   children,
 }: ClutchAppProps) => {
   const [workflows, setWorkflows] = React.useState<Workflow[]>([]);
@@ -161,7 +164,7 @@ const ClutchApp = ({
   return (
     <Router>
       <UserPreferencesProvider>
-        <Theme>
+        <Theme overrides={themeOverrides}>
           <div id="App">
             <ApplicationContext.Provider value={appContextValue}>
               <ShortLinkContext.Provider value={shortLinkProviderProps}>

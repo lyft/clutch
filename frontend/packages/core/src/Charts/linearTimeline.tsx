@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { useTheme } from "../AppProvider/themes";
+import { useTheme } from "../Theme";
 
 import { calculateDomainEdges, calculateTicks, localTimeFormatter } from "./helpers";
 import type { CustomTooltipProps, LinearTimelineData, LinearTimelineStylingProps } from "./types";
@@ -92,9 +92,9 @@ const LinearTimeline = ({
           style={{
             backgroundColor:
               stylingProps?.tooltipBackgroundColor ||
-              theme.colors.charts.linearTimeline.tooltipBackgroundColor,
+              theme.chartColors.linearTimeline.tooltipBackgroundColor,
             color:
-              stylingProps?.tooltipTextColor || theme.colors.charts.linearTimeline.tooltipTextColor,
+              stylingProps?.tooltipTextColor || theme.chartColors.linearTimeline.tooltipTextColor,
           }}
         >
           {localTimeFormatter(payload[0].value)}
@@ -111,9 +111,9 @@ const LinearTimeline = ({
         <CartesianGrid
           fill={
             stylingProps?.gridBackgroundColor ??
-            theme.colors.charts.linearTimeline.gridBackgroundColor
+            theme.chartColors.linearTimeline.gridBackgroundColor
           }
-          stroke={stylingProps?.gridStroke ?? theme.colors.charts.linearTimeline.gridStroke}
+          stroke={stylingProps?.gridStroke ?? theme.chartColors.linearTimeline.gridStroke}
         />
         <XAxis
           dataKey={xAxisDataKey}

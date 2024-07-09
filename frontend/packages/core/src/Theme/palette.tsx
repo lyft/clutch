@@ -1,38 +1,30 @@
-import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles";
 import { alpha, TypeText } from "@mui/material/styles";
 
-import { brandColor, DARK_COLORS, LIGHT_COLORS, THEME_VARIANTS } from "./colors";
-import type { ClutchColors, ThemeVariant } from "./types";
-
-interface PaletteOptions extends MuiPaletteOptions {
-  type: ThemeVariant;
-  contrastColor: string;
-  headerGradient: string;
-  brandColor: string;
-}
+import { brandColor } from "./colors";
+import type { ClutchColors, PaletteOptions, ThemeVariant } from "./types";
+import VARIANTS from "./variants";
 
 const lightText: Partial<TypeText> = {
-  primary: LIGHT_COLORS.neutral[900],
-  secondary: alpha(LIGHT_COLORS.neutral[900], 0.65),
+  primary: VARIANTS.LIGHT.colors.neutral[900],
+  secondary: alpha(VARIANTS.LIGHT.colors.neutral[900], 0.65),
   // tertiary
   // inverse
 };
 
 const darkText: Partial<TypeText> = {
-  primary: alpha(DARK_COLORS.neutral[900], 0.9),
-  secondary: alpha(DARK_COLORS.neutral[900], 0.75),
+  primary: alpha(VARIANTS.DARK.colors.neutral[900], 0.9),
+  secondary: alpha(VARIANTS.DARK.colors.neutral[900], 0.75),
   // tertiary
   // inverse
 };
 
 const palette = (variant: ThemeVariant): PaletteOptions => {
-  const isLightMode = variant === THEME_VARIANTS.light;
-  const color = (isLightMode ? LIGHT_COLORS : DARK_COLORS) as ClutchColors;
+  const isLightMode = variant === "LIGHT";
+  const color = (isLightMode ? VARIANTS.LIGHT.colors : VARIANTS.DARK.colors) as ClutchColors;
 
-  // TODO: add all clutch colors to "common colors"
   return {
     type: variant,
-    mode: variant,
+    mode: (variant === "LIGHT" ? "light" : "dark") as PaletteOptions["mode"],
     brandColor,
     primary: color.blue,
     secondary: color.neutral,

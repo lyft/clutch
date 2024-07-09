@@ -6,19 +6,43 @@ import {
   StyledEngineProvider,
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
+import { defaultsDeep } from "lodash";
 
-import { clutchColors, THEME_VARIANTS } from "./colors";
+import { clutchColors } from "./colors";
 import palette from "./palette";
-import type { ThemeVariant } from "./types";
+import type {
+  ChartColors,
+  ClutchColors,
+  CustomClutchTheme,
+  ThemeOverrides,
+  ThemeVariant,
+} from "./types";
 
 declare module "@emotion/react" {
   export interface Theme extends MuiTheme {}
 }
 
-// Create a Material UI theme is propagated to all children.
-const createTheme = (variant: ThemeVariant): MuiTheme => {
+declare module "@mui/material/styles" {
+  interface Theme {
+    colors: ClutchColors;
+    chartColors: ChartColors;
+  }
+  interface ThemeOptions {
+    colors?: ClutchColors;
+    chartColors?: ChartColors;
+  }
+  interface Palette {
+    contrastColor: string;
+    headerGradient: string;
+    brandColor: string;
+  }
+}
+
+const defaultTheme = (variant: ThemeVariant): MuiTheme => {
+  const { colors, chartColors } = clutchColors(variant);
   return createMuiTheme({
-    colors: clutchColors(variant),
+    colors,
+    chartColors,
     palette: palette(variant),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
@@ -69,14 +93,30 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
   });
 };
 
+const generateTheme = (variant: ThemeVariant, theme?: CustomClutchTheme): MuiTheme => {
+  const baseTheme = defaultTheme(variant);
+  if (!theme) {
+    return baseTheme;
+  }
+  const { colors, chartColors, palette: basePalette, ...rest } = baseTheme;
+
+  return createMuiTheme({
+    colors: defaultsDeep(theme.colors ?? {}, colors),
+    chartColors: defaultsDeep(theme.chartColors ?? {}, chartColors),
+    palette: defaultsDeep(theme?.palette ?? {}, basePalette),
+    ...defaultsDeep(theme?.themeOptions ?? {}, rest),
+  });
+};
+
 interface ThemeProps {
   variant?: ThemeVariant;
   children: React.ReactNode;
+  overrides?: ThemeOverrides;
 }
 
-const ThemeProvider = ({ children, variant = THEME_VARIANTS.light }: ThemeProps) => (
+const ThemeProvider = ({ children, variant, overrides = {} }: ThemeProps) => (
   <StyledEngineProvider injectFirst>
-    <MuiThemeProvider theme={createTheme(variant)}>
+    <MuiThemeProvider theme={generateTheme(variant, overrides[variant])}>
       <CssBaseline />
       {children}
     </MuiThemeProvider>
