@@ -4,6 +4,7 @@
   "description": "Clutch Project Catalog",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
+  "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist"

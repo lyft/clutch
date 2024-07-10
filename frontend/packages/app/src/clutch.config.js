@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   "@clutch-sh/ec2": {
     terminateInstance: {
       trending: true,

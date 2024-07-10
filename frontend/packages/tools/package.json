@@ -5,6 +5,7 @@
   "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shtools",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
+  "type": "module",
   "scripts": {
     "buildDev": "echo \"This command is deprecated, please use 'yarn run package:compile:dev' instead.\" && exit 1",
     "constraints:check": "cd $INIT_CWD && yarn constraints",
@@ -68,7 +69,6 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.0.0",
     "prettier": "~2.2.1",
-    "react-scripts": "^5.0.1",
     "tsc-alias": "^1.8.8"
   },
   "devDependencies": {

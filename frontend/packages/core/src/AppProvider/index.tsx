@@ -76,7 +76,7 @@ interface ClutchAppProps {
     [key: string]: () => WorkflowConfiguration;
   };
   configuration: UserConfiguration;
-  appConfiguration: AppConfiguration;
+  appConfiguration?: AppConfiguration;
   children?: ClutchAppChild | ClutchAppChild[];
 }
 
@@ -247,11 +247,11 @@ const ClutchApp = ({
 };
 
 const BugSnagApp = (props: ClutchAppProps) => {
-  if (process.env.REACT_APP_BUGSNAG_API_TOKEN) {
+  if (import.meta.env.VITE_APP_BUGSNAG_API_TOKEN) {
     // eslint-disable-next-line no-underscore-dangle
     if (!(Bugsnag as any)._client) {
       Bugsnag.start({
-        apiKey: process.env.REACT_APP_BUGSNAG_API_TOKEN,
+        apiKey: import.meta.env.VITE_APP_BUGSNAG_API_TOKEN,
         plugins: [new BugsnagPluginReact()],
         releaseStage: process.env.APPLICATION_ENV || "production",
       });

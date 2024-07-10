@@ -16,7 +16,7 @@ The feature flag module on the backend powers the storing and serving of feature
 
 At the moment the module only supports simple flags with boolean types.
 
-```yaml  title="backend/clutch-config.yaml"
+```yaml title="backend/clutch-config.yaml"
 modules:
   - name: clutch.module.assets
   - name: clutch.module.healthcheck
@@ -43,7 +43,7 @@ Workflow route feature flags must be set as simple feature flags on the server w
 :::
 
 The frontend will fetch feature flags on the initial rendering of Clutch as well as at a determined interval. This interval
-defaults to 5 minutes but can be overridden by setting the `REACT_APP_FF_POLL` environment variable. The polling behavior
+defaults to 5 minutes but can be overridden by setting the `VITE_APP_FF_POLL` environment variable. The polling behavior
 ensures that even if users do not reload the application there is a max TTL of user's local feature flag values of N, where N is the
 afformentioned polling interval.
 
@@ -85,7 +85,6 @@ Once the above backend and frontend code has been deployed the configuration fil
 ```
 
 Above the `amiiboLookupEnabled` flag has been set to `true`. Once that is deployed the `/amiibo/lookup` route will now be accessible.
-
 
 ## Gating Components
 
@@ -134,7 +133,7 @@ const WorkflowStep: React.FC<WizardChild> = () => {
             {amiiboResults.map((amiibo, index: number) => (
               <TableRow key={index}>
                 {amiibo.name}
-                <img src={amiibo.imageUrl} height="75px"/>
+                <img src={amiibo.imageUrl} height="75px" />
                 {amiibo.amiiboSeries}
                 {amiibo.type}
               </TableRow>

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-const byteSize = require("byte-size");
-const esbuild = require("esbuild");
-const fs = require("fs");
-const path = require("path");
-const { replaceTscAliasPaths } = require("tsc-alias");
+import byteSize from "byte-size";
+import esbuild from "esbuild";
+import fs from "fs";
+import path from "path";
+import { replaceTscAliasPaths } from "tsc-alias";
 
 const args = process.argv.slice(2);
 const fileDetailsLimit = 20;
@@ -75,7 +75,7 @@ const sizeOutputPlugin = {
 const options = {
   entryPoints: getAllFiles(`${process.argv[2]}/src`),
   outdir: `${process.argv[2]}/dist/`,
-  target: "es2019",
+  target: "ESNext",
   sourcemap: true,
   preserveSymlinks: true,
   color: true,

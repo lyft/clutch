@@ -4,6 +4,7 @@
   "description": "Redis Fault Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "resilience@lyft.com",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "clean": "yarn run package:clean",

@@ -4,8 +4,8 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "./Network/errors";
 import { client } from "./Network/index";
 
-const FEATURE_FLAG_POLL_RATE = +process.env.REACT_APP_FF_POLL || 300000;
-const FF_CACHE_TTL = +process.env.REACT_APP_FF_CACHE_TTL || 60000;
+const FEATURE_FLAG_POLL_RATE = +import.meta.env.VITE_APP_FF_POLL || 300000;
+const FF_CACHE_TTL = +import.meta.env.VITE_APP_FF_CACHE_TTL || 60000;
 
 export interface FeatureFlags {
   [name: string]: IClutch.featureflag.v1.IFlag;

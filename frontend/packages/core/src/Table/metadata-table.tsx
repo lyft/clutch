@@ -257,7 +257,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
 
   return (
     <TableContainer $maxHeight={maxHeight}>
-      {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
+      {import.meta.env.VITE_APP_DEBUG_FORMS && onUpdate !== undefined && (
+        <DevTool control={control} />
+      )}
       <Table>
         <TableBody>
           {rows.map((row: IdentifiableRowData) => {

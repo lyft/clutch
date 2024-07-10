@@ -1,13 +1,14 @@
-const childProcess = require("child_process");
-const fs = require("fs");
+import childProcess from "child_process";
+import fs from "fs";
 
 const srcDir = process.argv[2];
 const configFile = process.argv[3] || "clutch.config.js";
 
-const config = require(`${srcDir}/${configFile}`); // eslint-disable-line import/no-dynamic-require
+const { default: config } = await import(`${srcDir}/${configFile}`);
+
 const rootFrontendDir = `${srcDir}/..`;
 
-const WORKFLOW_MODULE_PATH = `${srcDir}/workflows.jsx`;
+const WORKFLOW_MODULE_PATH = `${srcDir}/workflows.tsx`;
 
 const addImport = workflow => {
   const wkflwName = workflow.replace("@", "");
@@ -32,7 +33,7 @@ const addImport = workflow => {
 };
 
 const discoverWorkflows = () => {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     fs.appendFileSync(WORKFLOW_MODULE_PATH, `/* eslint-disable */\n`);
     fs.appendFileSync(
       WORKFLOW_MODULE_PATH,
@@ -77,12 +78,12 @@ try {
 
 (() => {
   return discoverWorkflows().then(modules => {
-    fs.appendFileSync(WORKFLOW_MODULE_PATH, `\nconst registeredWorkflows = {\n`);
+    fs.appendFileSync(WORKFLOW_MODULE_PATH, `\nexport default {\n`);
     Object.keys(modules).forEach(moduleKey => {
       const value = modules[moduleKey];
       fs.appendFileSync(WORKFLOW_MODULE_PATH, `  "${moduleKey}": ${value},\n`);
     });
-    fs.appendFileSync(WORKFLOW_MODULE_PATH, `};\nexport default registeredWorkflows;`);
+    fs.appendFileSync(WORKFLOW_MODULE_PATH, `};\n`);
     console.log("Generated Workflow imports!"); // eslint-disable-line no-console
   });
 })();

@@ -82,7 +82,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({
   const error = validation.formState.errors?.query;
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
-      {process.env.REACT_APP_DEBUG_FORMS && <DevTool control={validation.control} />}
+      {import.meta.env.VITE_APP_DEBUG_FORMS && <DevTool control={validation.control} />}
       <TextField
         label={typeLabel}
         name="query"
@@ -130,7 +130,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
 
   return (
     <Form noValidate onSubmit={schemaValidation.handleSubmit(() => submitHandler(data))}>
-      {/* {process.env.REACT_APP_DEBUG_FORMS && <DevTool control={schemaValidation.control} />} */}
+      {/* {import.meta.env.VITE_APP_DEBUG_FORMS && <DevTool control={schemaValidation.control} />} */}
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}

@@ -25,8 +25,8 @@ const uploadToBugsnag = async ({ apiKey, baseUrl, distDir: directory }) => {
 };
 
 const uploadBugsnagSourcemaps = () => {
-  const apiKey = process.env.REACT_APP_BUGSNAG_API_TOKEN || "";
-  const baseUrl = process.env.REACT_APP_BASE_URL || "";
+  const apiKey = process.env.VITE_APP_BUGSNAG_API_TOKEN || "";
+  const baseUrl = process.env.VITE_APP_BASE_URL || "";
   if (!apiKey) {
     console.error(`[BugSnag] No API token found in ${dotEnvFile} file. Skipping upload.`);
     return Promise.reject(new Error("[BugSnag] API Key missing"));
@@ -41,7 +41,7 @@ const uploadBugsnagSourcemaps = () => {
 
   return uploadToBugsnag({
     apiKey,
-    baseUrl: `${baseUrl}${process.env.REACT_APP_BASE_URL_PATH ?? "/static/js/"}`,
+    baseUrl: `${baseUrl}${process.env.VITE_APP_BASE_URL_PATH ?? "/static/js/"}`,
     distDir: process.env.SOURCEMAPS_DIR || `${srcDir}/${buildDir}`,
   });
 };

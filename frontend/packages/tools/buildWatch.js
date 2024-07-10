@@ -1,6 +1,6 @@
-const childProcess = require("child_process");
-const path = require("path");
-const chalk = require("chalk");
+import childProcess from "child_process";
+import path from "path";
+import chalk from "chalk";
 
 const { WORKSPACES } = process.env;
 const buildCmd = process.argv[2];

@@ -27,6 +27,10 @@ const enforceWorkspaceEngines = workspace => {
   workspace.set("engines.node", ">=18 <19");
 };
 
+const enforceType = workspace => {
+  workspace.set("type", "module");
+};
+
 const enforceDependencies = workspace => {
   workspace.pkg.dependencies.forEach(dep => {
     if (enforcedPackages[dep.ident]) {
@@ -35,7 +39,7 @@ const enforceDependencies = workspace => {
   });
 };
 
-const workspaceEnforcers = [enforceWorkspaceEngines];
+const workspaceEnforcers = [enforceWorkspaceEngines, enforceType];
 const dependencyEnforcers = [enforceDependencies];
 
 const constraintFn = workspace => {

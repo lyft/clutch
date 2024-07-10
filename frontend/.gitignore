@@ -36,4 +36,4 @@ storybook-static
 .env.production.local
 
 # clutch generated files
-**/workflows.jsx
+**/workflows.tsx

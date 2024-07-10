@@ -5,6 +5,7 @@
   "homepage": "https://clutch.sh/docs/development/frontend/overview#clutch-shcore",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

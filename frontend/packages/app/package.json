@@ -5,21 +5,23 @@
   "description": "Clutch Application Components",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
+  "type": "module",
   "scripts": {
-    "build": "yarn register-workflows && react-app-rewired build",
+    "build": "yarn register-workflows && vite build",
     "clean": "rm -rf build",
-    "eject": "react-scripts eject",
     "lint": "yarn register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "yarn run workspace:registerWorkflows $INIT_CWD/src",
-    "start": "yarn register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false react-app-rewired start",
+    "start": "yarn register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false vite",
     "test": "yarn register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
   },
   "dependencies": {
     "@clutch-sh/core": "workspace:^",
-    "react-app-rewired": "^2.1.8"
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.3",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",

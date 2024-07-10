@@ -4,6 +4,7 @@
   "description": " Filter your projects",
   "license": "Apache-2.0",
   "author": "hello@example.com",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "clean": "yarn run package:clean",

@@ -21,8 +21,8 @@ if [[ $ARGS = *'bin='* ]]; then
 fi
 
 DEST_DIR="${ROOT_DEST_DIR}/.yarn/releases"
-DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.js"
-YARN_VERSION_FILE=".yarn/releases/yarn-${YARN_VERSION}.js"
+DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.cjs"
+YARN_VERSION_FILE=".yarn/releases/yarn-${YARN_VERSION}.cjs"
 WRAPPER_DEST_DIR="${ROOT_DIR}/${BIN_DIR:-"build/bin"}"
 WRAPPER_DEST_FILE="${WRAPPER_DEST_DIR}/yarn.sh"
 

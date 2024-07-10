@@ -128,8 +128,8 @@ interface JwtToken {
 
 const userId = (): string => {
   if (process.env.NODE_ENV === "development") {
-    if (process.env.REACT_APP_USER_ID) {
-      return process.env.REACT_APP_USER_ID;
+    if (import.meta.env.VITE_APP_USER_ID) {
+      return import.meta.env.VITE_APP_USER_ID;
     }
   }
   // Check JWT token for subject and display if available.

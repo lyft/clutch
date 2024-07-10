@@ -22,9 +22,9 @@ frontend
 
 ### Example .env.production
 ```bash
-REACT_APP_SERVICE_NAME=<app>
-REACT_APP_BUGSNAG_API_TOKEN=....
-REACT_APP_BASE_URL=https://<app>.net
+VITE_APP_SERVICE_NAME=<app>
+VITE_APP_BUGSNAG_API_TOKEN=....
+VITE_APP_BASE_URL=https://<app>.net
 APPLICATION_ENV=production
 ```
 

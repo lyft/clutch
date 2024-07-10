@@ -19,6 +19,7 @@
   },
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
+  "type": "module",
   "workspaces": [
     "api",
     "{packages,workflows}/*"
