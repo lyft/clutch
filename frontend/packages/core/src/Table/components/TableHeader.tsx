@@ -35,7 +35,7 @@ interface TableHeaderProps {
 const TableHeader = ({
   columns,
   responsive,
-  defaultSort,
+  defaultSort: [sortKey, sortDir],
   onRequestSort,
   actionsColumn,
   compress,
@@ -75,13 +75,13 @@ const TableHeader = ({
               key={h?.id}
               responsive={responsive}
               align="left"
-              sortDirection={h?.sortable && defaultSort?.[0] === h?.id ? defaultSort[1] : false}
+              sortDirection={h?.sortable && sortKey === h?.id ? sortDir : false}
             >
               {h?.sortable ? (
                 <HeaderCell>
                   <MuiTableSortLabel
-                    active={defaultSort[0] === h?.id}
-                    direction={defaultSort[0] === h?.id ? defaultSort[1] : "asc"}
+                    active={sortKey === h?.id}
+                    direction={sortKey === h?.id ? sortDir : "asc"}
                     onClick={createSortHandler(h?.id)}
                   >
                     <Typography variant="subtitle3">{h?.title}</Typography>
