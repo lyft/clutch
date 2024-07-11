@@ -71,7 +71,8 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
-    padding: "32px",
+    paddingBlock: "24px 32px",
+    height: "calc(100% - 56px)",
   },
   props => ({
     width: props.$width === "full" ? "100%" : "800px",
@@ -85,11 +86,9 @@ const StepperContainer = styled(Grid)<{ $orientation: MuiStepperProps["orientati
       padding: "16px",
       scrollbarGutter: "stable",
       height: "fit-content",
-      maxHeight: "70vh",
+      maxHeight: "100%",
       overflowY: "scroll",
       background: alpha(theme.palette.secondary[200], 0.35),
-      position: "sticky",
-      top: "24px",
     }),
   })
 );
@@ -105,6 +104,8 @@ const StyledStepContainer = styled(Grid)({
 const StyledPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
   padding: "32px",
+  maxHeight: "100%",
+  overflowY: "scroll",
 }));
 
 const Wizard = ({
@@ -235,7 +236,7 @@ const Wizard = ({
 
   return (
     <Container $width={width} maxWidth={false} className={className}>
-      <MaxHeightGrid container alignItems="stretch" spacing={2}>
+      <MaxHeightGrid container alignItems="stretch">
         {heading && (
           <Header item $orientation={orientation}>
             {React.isValidElement(heading) ? (
@@ -251,6 +252,7 @@ const Wizard = ({
           direction={orientation === "vertical" ? "row" : "column"}
           wrap="nowrap"
           spacing={2}
+          marginTop={0}
         >
           <StepperContainer item xs="auto" $orientation={orientation}>
             <Stepper activeStep={state.activeStep} orientation={orientation}>
