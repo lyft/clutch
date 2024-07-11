@@ -1,29 +1,22 @@
 import * as React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import type {
-  TableCellProps as MuiTableCellProps,
-  TableProps as MuiTableProps,
-  TableRowProps as MuiTableRowProps,
-  TableSortLabelProps as MuiTableSortLabelProps,
-  Theme,
-} from "@mui/material";
+import type { Theme } from "@mui/material";
 import {
   IconButton,
   Paper as MuiPaper,
   Table as MuiTable,
   TableBody as MuiTableBody,
-  TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
-  TableHead as MuiTableHead,
   TableRow as MuiTableRow,
-  TableSortLabel as MuiTableSortLabel,
   useMediaQuery,
 } from "@mui/material";
-import type { Breakpoint } from "@mui/material/styles";
 
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
-import { Typography } from "../typography";
+
+import TableCell from "./components/TableCell";
+import TableHeader from "./components/TableHeader";
+import type { TableContainerProps, TableProps, TableRowProps } from "./types";
 
 const StyledPaper = styled(MuiPaper)(({ theme }: { theme: Theme }) => ({
   border: `1px solid ${theme.palette.secondary[200]}`,
@@ -56,11 +49,6 @@ const StyledTableBody = styled(MuiTableBody)({
   display: "contents",
 });
 
-const StyledTableHeadRow = styled(MuiTableRow)(({ theme }: { theme: Theme }) => ({
-  display: "contents",
-  backgroundColor: theme.palette.primary[300],
-}));
-
 const StyledTableRow = styled(MuiTableRow)<{
   $responsive?: TableRowProps["responsive"];
 }>(
@@ -77,74 +65,11 @@ const StyledTableRow = styled(MuiTableRow)<{
   })
 );
 
-const StyledTableCell = styled(MuiTableCell)<{
-  $border?: TableCellProps["border"];
-  $responsive?: TableCellProps["responsive"];
-  $action?: TableCellProps["action"];
-}>(
-  ({ theme }: { theme: Theme }) => ({
-    alignItems: "center",
-    fontSize: "14px",
-    padding: "15px 16px",
-    color: theme.palette.secondary[900],
-    overflow: "hidden",
-    background: "inherit",
-    minHeight: "100%",
-  }),
-  props => ({ theme }: { theme: Theme }) => ({
-    borderBottom: props?.$border ? `1px solid ${theme.palette.secondary[200]}` : "0",
-    display: props.$responsive ? "flex" : "",
-    width: !props.$responsive && props.$action ? "80px" : "",
-  })
-);
-
-interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
-  action?: boolean;
-  border?: boolean;
-}
-
-const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
-  <StyledTableCell $action={action} $border={border} $responsive={responsive} {...props} />
-);
-
-interface TableContainerProps {
-  children: React.ReactElement<TableProps>;
-}
-
 const TableContainer = ({ children }: TableContainerProps) => (
   <MuiTableContainer component={StyledPaper} elevation={0}>
     {children}
   </MuiTableContainer>
 );
-
-interface SortableColumn {
-  id: string;
-  title?: string;
-  sortable?: boolean;
-  render?: JSX.Element;
-}
-
-type Column = string | SortableColumn | JSX.Element;
-interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
-  /** The names of the columns. This must be set (even to empty string) to render the table. */
-  columns: Column[];
-  /** The breakpoint at which to compress the table rows. By default the small breakpoint is used. */
-  compressBreakpoint?: Breakpoint;
-  /** Hide the header. By default this is false. */
-  hideHeader?: boolean;
-  /** Add an actions column. By default this is false. */
-  actionsColumn?: boolean;
-  /** Make table responsive */
-  responsive?: boolean;
-  /** How to handle horizontal overflow */
-  overflow?: "scroll" | "break-word";
-  /** Table rows to render */
-  children?:
-    | (React.ReactElement<TableRowProps> | null | undefined | {})[]
-    | React.ReactElement<TableRowProps>;
-  defaultSort?: [string, MuiTableSortLabelProps["direction"]];
-  onRequestSort?: (event: React.MouseEvent<unknown>, property: string) => void;
-}
 
 const Table: React.FC<TableProps> = React.forwardRef(
   (
@@ -165,31 +90,6 @@ const Table: React.FC<TableProps> = React.forwardRef(
     const showHeader = !hideHeader;
     const compress = useMediaQuery((theme: any) => theme.breakpoints.down(compressBreakpoint));
 
-    const createSortHandler = property => (event: React.MouseEvent<unknown>) => {
-      onRequestSort && onRequestSort(event, property);
-    };
-
-    const [managedColumns, setManagedColumns] = React.useState<SortableColumn[]>([]);
-
-    React.useEffect(() => {
-      if (columns?.length === 0) {
-        // eslint-disable-next-line no-console
-        console.warn("Table must have at least one column.");
-      } else {
-        setManagedColumns(
-          columns.map((c, i) => {
-            if (React.isValidElement(c)) {
-              return { id: `element${i}`, render: c };
-            }
-            if (typeof c === "string") {
-              return { id: c, title: c };
-            }
-            return c as SortableColumn;
-          })
-        );
-      }
-    }, [columns]);
-
     return (
       <TableContainer>
         <StyledTable
@@ -205,39 +105,16 @@ const Table: React.FC<TableProps> = React.forwardRef(
           Filter out empty strings from column headers.
           This may be unintended which is why we override with the hideHeader prop.
         */}
-          {showHeader &&
-            managedColumns?.length !== 0 &&
-            managedColumns.filter(h => h?.title?.length !== 0 || h?.render).length !== 0 && (
-              <MuiTableHead>
-                <StyledTableHeadRow>
-                  {managedColumns.map(h => (
-                    <StyledTableCell
-                      key={h?.id}
-                      $responsive={responsive}
-                      align="left"
-                      sortDirection={
-                        h?.sortable && defaultSort?.[0] === h?.id ? defaultSort[1] : false
-                      }
-                    >
-                      {h?.sortable ? (
-                        <MuiTableSortLabel
-                          active={defaultSort[0] === h?.id}
-                          direction={defaultSort[0] === h?.id ? defaultSort[1] : "asc"}
-                          onClick={createSortHandler(h?.id)}
-                        >
-                          <Typography variant="subtitle3">{h?.title}</Typography>
-                        </MuiTableSortLabel>
-                      ) : (
-                        <Typography variant="subtitle3">{h?.title || h?.render}</Typography>
-                      )}
-                    </StyledTableCell>
-                  ))}
-                  {actionsColumn && !(responsive && compress) && (
-                    <StyledTableCell $responsive={responsive} $action />
-                  )}
-                </StyledTableHeadRow>
-              </MuiTableHead>
-            )}
+          {showHeader && (
+            <TableHeader
+              columns={columns}
+              responsive={responsive}
+              defaultSort={defaultSort}
+              onRequestSort={onRequestSort}
+              actionsColumn={actionsColumn}
+              compress={compress}
+            />
+          )}
           <StyledTableBody>
             {React.Children.map(children, (c: React.ReactElement<TableRowProps>) =>
               React.cloneElement(c, { responsive })
@@ -248,22 +125,6 @@ const Table: React.FC<TableProps> = React.forwardRef(
     );
   }
 );
-
-export interface TableRowProps
-  extends Pick<MuiTableRowProps, "onClick">,
-    Pick<MuiTableCellProps, "colSpan"> {
-  children?: React.ReactNode;
-  /**
-   * The default element to render if children are null. If not present and a child is null
-   * this the child's value will be used.
-   */
-  cellDefault?: React.ReactNode;
-  /**
-   * Make the table row responsive. This is mainly used for internal rendering. Consumers
-   * should set the responsive prop on the table.
-   */
-  responsive?: boolean;
-}
 
 const TableRow = ({
   children = [],
@@ -276,9 +137,9 @@ const TableRow = ({
   <StyledTableRow onClick={onClick} $responsive={responsive} {...props}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <StyledTableCell key={index} $responsive={responsive} colSpan={colSpan}>
+      <TableCell key={index} responsive={responsive} colSpan={colSpan}>
         {value === null && cellDefault !== undefined ? cellDefault : value}
-      </StyledTableCell>
+      </TableCell>
     ))}
   </StyledTableRow>
 );
@@ -327,6 +188,3 @@ const TableRowActions = ({ children }: TableRowActionsProps) => {
 };
 
 export { TableCell, Table, TableContainer, TableRow, TableRowAction, TableRowActions };
-
-export type { TableProps };
-export type { TableContainerProps };
