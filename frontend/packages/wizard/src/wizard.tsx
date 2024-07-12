@@ -30,14 +30,14 @@ import type { WizardStepProps } from "./step";
 
 export interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
-    Pick<MuiStepperProps, "orientation"> {
+    Pick<MuiStepperProps, "orientation">,
+    Pick<MuiStepperProps, "nonLinear"> {
   children:
     | React.ReactNode
     | React.ReactElement<WizardStepProps>
     | React.ReactElement<WizardStepProps>[];
   dataLayout: ManagerLayout;
   heading?: string | React.ReactElement;
-  nonLinear?: boolean;
 }
 
 export interface WizardChild {
@@ -144,6 +144,21 @@ const Wizard = ({
     dispatch({ type: WizardActionType.GO_TO_STEP, step });
   };
 
+  const handleNavigation = (
+    params: { toOrigin?: boolean; keepSearch?: boolean },
+    actionType: WizardActionType
+  ) => {
+    setGlobalWarnings([]);
+    if (!params?.keepSearch) {
+      setSearchParams({});
+    }
+    if (params?.toOrigin && origin) {
+      navigate(origin);
+    } else {
+      dispatch({ type: actionType });
+    }
+  };
+
   const context = (child: JSX.Element) => {
     return {
       getNextStepToComplete: () => state.nextStepToComplete,
@@ -162,26 +177,10 @@ const Wizard = ({
         setGlobalWarnings(warnings);
       },
       onBack: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
-        setGlobalWarnings([]);
-        if (!params?.keepSearch) {
-          setSearchParams({});
-        }
-        if (params?.toOrigin && origin) {
-          navigate(origin);
-        } else {
-          dispatch({ type: WizardActionType.BACK });
-        }
+        handleNavigation(params, WizardActionType.BACK);
       },
       onNext: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
-        setGlobalWarnings([]);
-        if (!params?.keepSearch) {
-          setSearchParams({});
-        }
-        if (params?.toOrigin && origin) {
-          navigate(origin);
-        } else {
-          dispatch({ type: WizardActionType.NEXT });
-        }
+        handleNavigation(params, WizardActionType.NEXT);
       },
     };
   };

@@ -18,7 +18,7 @@ import {
 
 import styled from "./styled";
 
-const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
+const StepContainer = styled("div")<{ $orientation: StepperOrientation; $nonLinear: boolean }>(
   {
     ".MuiStepper-root": {
       background: "transparent",
@@ -79,9 +79,11 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
             },
           },
           ".MuiStepConnector-line": {
-            height: "5px",
+            height: props.$nonLinear ? "3px" : "5px",
             border: 0,
-            backgroundColor: theme.palette.secondary[200],
+            backgroundColor: props.$nonLinear
+              ? theme.palette.primary[600]
+              : theme.palette.secondary[200],
             borderRadius: "4px",
           },
           ".Mui-active .MuiStepConnector-line": {
@@ -94,7 +96,9 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
       : {
           margin: "0px 2px 8px 2px",
           ".MuiStepConnector-line": {
-            borderColor: theme.palette.secondary[300],
+            borderColor: props.$nonLinear
+              ? theme.palette.primary[600]
+              : theme.palette.secondary[300],
           },
           ".Mui-active .MuiStepConnector-line": {
             borderColor: theme.palette.primary[600],
@@ -139,19 +143,20 @@ type StepIconVariant = "active" | "pending" | "success" | "failed";
 export interface StepIconProps {
   index: number;
   variant: StepIconVariant;
+  nonLinear: boolean;
 }
 
-const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
+const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
   const theme = useTheme();
   const stepIconVariants = {
     active: {
-      background: theme.palette.contrastColor,
+      background: nonLinear ? theme.palette.primary[600] : theme.palette.contrastColor,
       border: `1px solid ${theme.palette.primary[600]}`,
-      font: theme.palette.primary[600],
+      font: nonLinear ? theme.palette.contrastColor : theme.palette.primary[600],
     },
     pending: {
-      background: theme.palette.secondary[200],
-      border: theme.palette.secondary[200],
+      background: nonLinear ? theme.palette.secondary[50] : theme.palette.secondary[200],
+      border: nonLinear ? `1px solid ${theme.palette.primary[600]}` : theme.palette.secondary[200],
       font: alpha(theme.palette.secondary[900], 0.38),
     },
     success: {
@@ -189,10 +194,11 @@ export interface StepProps {
 
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
-export interface StepperProps extends Pick<MuiStepperProps, "orientation"> {
+export interface StepperProps
+  extends Pick<MuiStepperProps, "orientation">,
+    Pick<MuiStepperProps, "nonLinear"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
-  nonLinear?: boolean;
   completed?: { [key: number]: boolean };
   handleStepClick?: (index: number) => void;
 }
@@ -205,7 +211,7 @@ const Stepper = ({
   handleStepClick,
   completed,
 }: StepperProps) => (
-  <StepContainer $orientation={orientation}>
+  <StepContainer $orientation={orientation} $nonLinear={nonLinear}>
     <MuiStepper
       nonLinear={nonLinear}
       activeStep={activeStep}
@@ -217,6 +223,7 @@ const Stepper = ({
         const stepProps = {
           index: idx + 1,
           variant: "pending" as StepIconVariant,
+          nonLinear,
         };
 
         if (completed) {
