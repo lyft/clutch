@@ -5,8 +5,8 @@ import { IconButton as MuiIconButton, TableRow, Theme } from "@mui/material";
 
 import styled from "../styled";
 
-import type { TableRowProps } from "./table";
-import { TableCell } from "./table";
+import TableCell from "./components/TableCell";
+import type { TableRowProps } from "./types";
 
 const IconButton = styled(MuiIconButton)(({ theme }: { theme: Theme }) => ({
   padding: "0",
