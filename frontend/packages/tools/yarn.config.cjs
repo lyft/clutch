@@ -15,7 +15,7 @@ const enforcedPackages = {
   "react-dom": "^17.0.2",
   "react-router-dom": "^6.0.0-beta.0",
   "react-router": "^6.0.0-beta.0",
-  esbuild: "^0.18.0",
+  esbuild: "^0.23.0",
   eslint: "^8.3.0",
   jest: "^27.0.0",
   lodash: "^4.17.0",

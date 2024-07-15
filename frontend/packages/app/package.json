@@ -7,13 +7,13 @@
   "author": "clutch@lyft.com",
   "type": "module",
   "scripts": {
-    "build": "yarn register-workflows && vite build",
-    "clean": "rm -rf build",
-    "lint": "yarn register-workflows && yarn run package:lint",
+    "build": "yarn run register-workflows && yarn run clean && vite build",
+    "clean": "yarn run package:clean",
+    "lint": "yarn run register-workflows && yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "yarn run workspace:registerWorkflows $INIT_CWD/src",
-    "start": "yarn register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false vite",
-    "test": "yarn register-workflows && yarn run package:test",
+    "start": "yarn run register-workflows && DANGEROUSLY_DISABLE_HOST_CHECK=true GENERATE_SOURCEMAP=false vite",
+    "test": "yarn run register-workflows && yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
   },
@@ -26,7 +26,7 @@
   "devDependencies": {
     "@clutch-sh/tools": "workspace:^",
     "cypress": "9.7.0",
-    "esbuild-loader": "^3.0.0"
+    "esbuild-loader": "^4.2.0"
   },
   "peerDependencies": {
     "react": "^17.0.2",

@@ -8,7 +8,7 @@ import "./index.css";
 
 import config from "./clutch.config";
 
-ReactDOM.render(
-  <ClutchApp availableWorkflows={registeredWorkflows} configuration={config} />,
-  document.getElementById("root")
-);
+const defaultConfig = () => (
+<ClutchApp availableWorkflows={registeredWorkflows} configuration={config} />);
+
+export default defaultConfig;

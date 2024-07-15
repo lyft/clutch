@@ -12,7 +12,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn compile",
+    "build": "yarn run clean && yarn run compile",
     "clean": "yarn run package:clean",
     "compile": "yarn run package:compile",
     "compile:dev": "yarn run package:compile:dev",
