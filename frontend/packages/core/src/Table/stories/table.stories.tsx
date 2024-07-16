@@ -1,16 +1,11 @@
 import * as React from "react";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import {
-  Table,
-  TableProps,
-  TableRow,
-  TableRowAction,
-  TableRowActions,
-  TableRowProps,
-} from "../table";
+import { Table, TableRow, TableRowAction, TableRowActions } from "../table";
+import type { TableProps, TableRowProps } from "../types";
 
 export default {
   title: "Core/Table/Table",
@@ -20,6 +15,17 @@ export default {
 const Template = ({ row, ...props }: TableProps & { row: React.ReactElement }) => (
   <div style={{ maxHeight: "300px", display: "flex" }}>
     <Table {...props} columns={["Column 1", "Column 2", "Column 3", "Column 4", "Column 5"]}>
+      {Array(10)
+        .fill(null)
+        // eslint-disable-next-line react/no-array-index-key
+        .map((_, index: number) => React.cloneElement(row, { key: index }))}
+    </Table>
+  </div>
+);
+
+const Template2 = ({ row, ...props }: TableProps & { row: React.ReactElement }) => (
+  <div style={{ maxHeight: "300px", display: "flex" }}>
+    <Table {...props}>
       {Array(10)
         .fill(null)
         // eslint-disable-next-line react/no-array-index-key
@@ -91,4 +97,43 @@ export const ActionableRows = Template.bind({});
 ActionableRows.args = {
   actionsColumn: true,
   row: <ActionableTableRow />,
+};
+
+export const SortFilterOptions = Template2.bind({});
+SortFilterOptions.args = {
+  defaultSort: ["column1", "asc"],
+  onRequestSort: () => {},
+  columns: [
+    {
+      id: "column1",
+      title: "Column 1",
+      sortable: true,
+      options: <FilterListIcon fontSize="medium" />,
+    },
+    {
+      id: "column2",
+      title: "Column 2",
+      sortable: true,
+      options: <FilterListIcon fontSize="medium" />,
+    },
+    {
+      id: "column3",
+      title: "Column 3",
+      sortable: true,
+      options: <FilterListIcon fontSize="medium" />,
+    },
+    {
+      id: "column4",
+      title: "Column 4",
+      sortable: true,
+      options: <FilterListIcon fontSize="medium" />,
+    },
+    {
+      id: "column5",
+      title: "Column 5",
+      sortable: true,
+      options: <FilterListIcon fontSize="medium" />,
+    },
+  ],
+  row: <PrimaryTableRow />,
 };
