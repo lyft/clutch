@@ -226,7 +226,7 @@ func generateAPI(args *args, tmpFolder, dest string) {
 func generateFrontend(args *args, tmpFolder, dest string) {
 	yarnInstallVersion := args.YarnPin
 	if len(yarnInstallVersion) == 0 {
-		yarnInstallVersion = "4.1.1"
+		yarnInstallVersion = "4.3.1"
 	}
 
 	// Update clutch.config.js for new workflow
@@ -297,7 +297,7 @@ func parseArgs() *args {
 	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
 	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
 	flag.StringVar(&f.Org, "o", "lyft", "overrides the github organization (for use in fork testing)")
-	flag.StringVar(&f.YarnPin, "y", "4.1.1", "version of yarn to use")
+	flag.StringVar(&f.YarnPin, "y", "4.3.1", "version of yarn to use")
 	flag.Parse()
 	return f
 }
