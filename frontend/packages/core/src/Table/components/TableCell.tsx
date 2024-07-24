@@ -8,7 +8,6 @@ import type { TableProps } from "../types";
 interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
   action?: boolean;
   border?: boolean;
-  maxWidth?: number;
 }
 
 const StyledTableCell = styled(MuiTableCell)<{
