@@ -20,6 +20,7 @@ interface TableRowProps
    * should set the responsive prop on the table.
    */
   responsive?: boolean;
+  style?: {};
 }
 
 interface TableColumn {

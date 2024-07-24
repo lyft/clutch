@@ -132,12 +132,13 @@ const TableRow = ({
   cellDefault,
   responsive = false,
   colSpan,
+  style = [],
   ...props
 }: TableRowProps) => (
   <StyledTableRow onClick={onClick} $responsive={responsive} {...props}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index} responsive={responsive} colSpan={colSpan}>
+      <TableCell key={index} responsive={responsive} colSpan={colSpan} style={style?.[index]}>
         {value === null && cellDefault !== undefined ? cellDefault : value}
       </TableCell>
     ))}
