@@ -44,6 +44,47 @@ const PrimaryTableRow = (props: TableRowProps) => (
   </TableRow>
 );
 
+const SecondaryTableRow = (props: TableRowProps) => (
+  <TableRow
+    {...props}
+    style={[
+      {
+        width: "100px",
+        maxWidth: "100px",
+      },
+      {
+        width: "100px",
+        maxWidth: "100px",
+      },
+      {
+        width: "100px",
+        maxWidth: "100px",
+      },
+      {
+        width: "300px",
+        maxWidth: "300px",
+      },
+      {
+        width: "100px",
+        maxWidth: "100px",
+      },
+    ]}
+  >
+    <div>Value 1</div>
+    <div>Value 2</div>
+    <div>Value 3</div>
+    <div>
+      Long description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+      occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+      laborum.
+    </div>
+    <div>Value 5</div>
+  </TableRow>
+);
+
 const IncompleteTableRow = (props: TableRowProps) => {
   let data;
   return (
@@ -135,5 +176,5 @@ SortFilterOptions.args = {
       options: <FilterListIcon fontSize="medium" />,
     },
   ],
-  row: <PrimaryTableRow />,
+  row: <SecondaryTableRow />,
 };
