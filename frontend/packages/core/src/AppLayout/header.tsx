@@ -12,6 +12,7 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import ShortLinker from "./shortLinker";
 import { UserInformation } from "./user";
+import { Alert } from "../Feedback";
 
 export const APP_BAR_HEIGHT = "64px";
 
@@ -70,6 +71,10 @@ const StyledLogo = styled("img")({
   verticalAlign: "middle",
 });
 
+const StyledAlert = styled(Alert)({
+  padding: "8px 16px 8px 16px",
+});
+
 const Header: React.FC<HeaderProps> = ({
   title = "clutch",
   logo = <Logo />,
@@ -88,6 +93,11 @@ const Header: React.FC<HeaderProps> = ({
           <Link to="/">{typeof logo === "string" ? <StyledLogo src={logo} /> : logo}</Link>
           <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
+            <Grid item xs={3}>
+              <StyledAlert severity="info" elevation={6}>
+                This is an alert to test!
+              </StyledAlert>
+            </Grid>
             {search && (
               <Box>
                 <SearchField />

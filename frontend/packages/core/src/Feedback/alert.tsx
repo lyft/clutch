@@ -8,7 +8,10 @@ import { Alert as MuiAlert, AlertTitle as MuiAlertTitle, alpha, Grid, Theme } fr
 
 import styled from "../styled";
 
-const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
+const StyledAlert = styled(MuiAlert)<{
+  $title: MuiAlertProps["title"];
+  severity: MuiAlertProps["severity"];
+}>(
   ({ theme }: { theme: Theme }) => ({
     borderRadius: "8px",
     padding: "16px",
@@ -17,6 +20,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
     color: alpha(theme.palette.secondary[900], 0.75),
     fontSize: "14px",
     overflow: "auto",
+    display: "flex",
     ".MuiAlert-icon": {
       marginRight: "16px",
       padding: "0",
@@ -40,6 +44,7 @@ const StyledAlert = styled(MuiAlert)<{ severity: MuiAlertProps["severity"] }>(
     };
 
     return {
+      ...(props.$title ? {} : { alignItems: "end" }),
       background: backgroundColors[props.severity],
     };
   }
@@ -79,13 +84,13 @@ export const SEVERITIES = Object.keys(iconMappings);
 export interface AlertProps
   extends Pick<
     MuiAlertProps,
-    "severity" | "action" | "onClose" | "elevation" | "variant" | "icon"
+    "severity" | "action" | "onClose" | "elevation" | "variant" | "icon" | "className"
   > {
   title?: React.ReactNode;
 }
 
 export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children, ...props }) => (
-  <StyledAlert severity={severity} iconMapping={iconMappings} {...props}>
+  <StyledAlert severity={severity} $title={title} iconMapping={iconMappings} {...props}>
     {title && <AlertTitle>{title}</AlertTitle>}
     {children}
   </StyledAlert>
