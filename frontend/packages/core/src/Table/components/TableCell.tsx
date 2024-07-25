@@ -8,6 +8,7 @@ import type { TableProps } from "../types";
 interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
   action?: boolean;
   border?: boolean;
+  type?: string;
 }
 
 const StyledTableCell = styled(MuiTableCell)<{
@@ -31,14 +32,8 @@ const StyledTableCell = styled(MuiTableCell)<{
   })
 );
 
-const TableCell = ({ action, border, responsive, style = {}, ...props }: TableCellProps) => (
-  <StyledTableCell
-    $action={action}
-    $border={border}
-    $responsive={responsive}
-    {...props}
-    sx={style}
-  />
+const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
+  <StyledTableCell $action={action} $border={border} $responsive={responsive} {...props} />
 );
 
 export default TableCell;

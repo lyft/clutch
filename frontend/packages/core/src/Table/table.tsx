@@ -126,22 +126,43 @@ const Table: React.FC<TableProps> = React.forwardRef(
   }
 );
 
+export enum TableCellType {
+  TABLE_CELL = "TableCell",
+}
+
 const TableRow = ({
   children = [],
   onClick,
   cellDefault,
   responsive = false,
   colSpan,
-  style = [],
   ...props
 }: TableRowProps) => (
   <StyledTableRow onClick={onClick} $responsive={responsive} {...props}>
-    {React.Children.map(children, (value, index) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index} responsive={responsive} colSpan={colSpan} style={style?.[index]}>
-        {value === null && cellDefault !== undefined ? cellDefault : value}
-      </TableCell>
-    ))}
+    {React.Children.map(children, (child, index) => {
+      const withTableCellWrapper = (
+        <TableCell
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+          responsive={responsive}
+          colSpan={colSpan}
+        >
+          {child === null && cellDefault !== undefined ? cellDefault : child}
+        </TableCell>
+      );
+
+      if (React.isValidElement(child)) {
+        const { type } = child?.props || {};
+
+        switch (type) {
+          case TableCellType.TABLE_CELL:
+            return child;
+          default:
+            return withTableCellWrapper;
+        }
+      }
+      return withTableCellWrapper;
+    })}
   </StyledTableRow>
 );
 
