@@ -5,7 +5,7 @@ import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
 import TableCell from "../components/TableCell";
-import { Table, TableCellType, TableRow, TableRowAction, TableRowActions } from "../table";
+import { Table, TableRow, TableRowAction, TableRowActions } from "../table";
 import type { TableProps, TableRowProps } from "../types";
 
 export default {
@@ -47,16 +47,16 @@ const PrimaryTableRow = (props: TableRowProps) => (
 
 const SecondaryTableRow = (props: TableRowProps) => (
   <TableRow {...props}>
-    <TableCell type={TableCellType.TABLE_CELL} sx={{ width: "100px", maxWidth: "100px" }}>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
       <div>Value 1</div>
     </TableCell>
-    <TableCell type={TableCellType.TABLE_CELL} sx={{ width: "100px", maxWidth: "100px" }}>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
       <div>Value 2</div>
     </TableCell>
-    <TableCell type={TableCellType.TABLE_CELL} sx={{ width: "100px", maxWidth: "100px" }}>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
       <div>Value 3</div>
     </TableCell>
-    <TableCell type={TableCellType.TABLE_CELL} sx={{ width: "300px", maxWidth: "300px" }}>
+    <TableCell sx={{ width: "300px", maxWidth: "300px" }}>
       <div>
         Long description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -66,7 +66,7 @@ const SecondaryTableRow = (props: TableRowProps) => (
         laborum.
       </div>
     </TableCell>
-    <TableCell type={TableCellType.TABLE_CELL} sx={{ width: "100px", maxWidth: "100px" }}>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
       <div>Value 5</div>
     </TableCell>
   </TableRow>

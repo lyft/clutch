@@ -14,7 +14,7 @@ import {
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
 
-import TableCell from "./components/TableCell";
+import TableCell, { TableCellType } from "./components/TableCell";
 import TableHeader from "./components/TableHeader";
 import type { TableContainerProps, TableProps, TableRowProps } from "./types";
 
@@ -125,10 +125,6 @@ const Table: React.FC<TableProps> = React.forwardRef(
     );
   }
 );
-
-export enum TableCellType {
-  TABLE_CELL = "TableCell",
-}
 
 const TableRow = ({
   children = [],
