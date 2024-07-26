@@ -150,13 +150,15 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
   const theme = useTheme();
   const stepIconVariants = {
     active: {
-      background: nonLinear ? theme.palette.primary[600] : theme.palette.contrastColor,
+      background: theme.palette.contrastColor,
       border: `1px solid ${theme.palette.primary[600]}`,
-      font: nonLinear ? theme.palette.contrastColor : theme.palette.primary[600],
+      font: theme.palette.primary[600],
     },
     pending: {
       background: nonLinear ? theme.palette.secondary[50] : theme.palette.secondary[200],
-      border: nonLinear ? `1px solid ${theme.palette.primary[600]}` : theme.palette.secondary[200],
+      border: nonLinear
+        ? `1px solid ${theme.palette.secondary[200]}`
+        : theme.palette.secondary[200],
       font: alpha(theme.palette.secondary[900], 0.38),
     },
     success: {
