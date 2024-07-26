@@ -13,8 +13,9 @@ import {
 
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
+import { getDisplayName } from "../utils";
 
-import TableCell, { TableCellType } from "./components/TableCell";
+import TableCell from "./components/TableCell";
 import TableHeader from "./components/TableHeader";
 import type { TableContainerProps, TableProps, TableRowProps } from "./types";
 
@@ -148,10 +149,8 @@ const TableRow = ({
       );
 
       if (React.isValidElement(child)) {
-        const { type } = child?.props || {};
-
-        switch (type) {
-          case TableCellType.TABLE_CELL:
+        switch (getDisplayName(child)) {
+          case "ClutchTableCell":
             return child;
           default:
             return withTableCellWrapper;

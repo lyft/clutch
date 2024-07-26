@@ -5,14 +5,9 @@ import { TableCell as MuiTableCell } from "@mui/material";
 import styled from "../../styled";
 import type { TableProps } from "../types";
 
-export enum TableCellType {
-  TABLE_CELL = "TableCell",
-}
-
 interface TableCellProps extends MuiTableCellProps, Pick<TableProps, "responsive"> {
   action?: boolean;
   border?: boolean;
-  type?: string;
 }
 
 const StyledTableCell = styled(MuiTableCell)<{
@@ -36,10 +31,10 @@ const StyledTableCell = styled(MuiTableCell)<{
   })
 );
 
-const BaseTableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
+const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => (
   <StyledTableCell $action={action} $border={border} $responsive={responsive} {...props} />
 );
 
-const TableCell = props => <BaseTableCell type={TableCellType.TABLE_CELL} {...props} />;
+TableCell.displayName = "ClutchTableCell";
 
 export default TableCell;
