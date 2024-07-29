@@ -234,6 +234,12 @@ const Stepper = ({
           stepProps.variant = step.props.error ? "failed" : "active";
         }
 
+        if (!nonLinear) {
+          if (idx < activeStep) {
+            stepProps.variant = "success";
+          }
+        }
+
         const label = step.props.label ?? `Step ${idx + 1}`;
         const icon = <StepIcon {...stepProps} />;
         const StepProps = isCompleted ? { completed: isCompleted } : {};

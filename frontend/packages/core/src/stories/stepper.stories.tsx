@@ -68,7 +68,7 @@ const PrimaryTemplate = ({
               .fill(null)
               .map((_, index: number) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Step key={index} label={`Step ${index + 1}`} />
+                <Step key={index} label={`Step ${index + 1}`} isCompleted={completedSteps[index]} />
               ))}
           </Stepper>
         </Grid>
