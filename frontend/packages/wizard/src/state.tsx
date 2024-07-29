@@ -16,9 +16,6 @@ interface WizardAction {
 interface StateProps {
   activeStep: number;
   nextStepToComplete: number;
-  completed: {
-    [key: number]: boolean;
-  };
 }
 
 const reducer = (state: StateProps, action: WizardAction): StateProps => {
@@ -46,10 +43,6 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
     case WizardActionType.ADD_COMPLETED_STEP:
       return {
         ...state,
-        completed: {
-          ...state.completed,
-          [action.step]: true,
-        },
         nextStepToComplete: state.nextStepToComplete + 1,
       };
     default:
@@ -59,7 +52,6 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
 
 const initialState = {
   activeStep: 0,
-  completed: {},
   nextStepToComplete: 0,
 };
 

@@ -191,6 +191,7 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
 export interface StepProps {
   label: string;
   error?: boolean;
+  completed?: boolean;
 }
 /* eslint-enable react/no-unused-prop-types */
 
@@ -201,7 +202,6 @@ export interface StepperProps
     Pick<MuiStepperProps, "nonLinear"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
-  completed?: { [key: number]: boolean };
   handleStepClick?: (index: number) => void;
 }
 
@@ -211,7 +211,6 @@ const Stepper = ({
   children,
   nonLinear,
   handleStepClick,
-  completed,
 }: StepperProps) => (
   <StepContainer $orientation={orientation} $nonLinear={nonLinear}>
     <MuiStepper
@@ -227,13 +226,10 @@ const Stepper = ({
           variant: "pending" as StepIconVariant,
           nonLinear,
         };
+        const { completed } = step.props;
 
         if (completed) {
-          if (completed[idx]) {
-            stepProps.variant = "success";
-          } else if (idx === activeStep) {
-            stepProps.variant = step.props.error ? "failed" : "active";
-          }
+          stepProps.variant = "success";
         } else if (idx === activeStep) {
           stepProps.variant = step.props.error ? "failed" : "active";
         } else if (idx < activeStep) {
@@ -242,7 +238,7 @@ const Stepper = ({
 
         const label = step.props.label ?? `Step ${idx + 1}`;
         const icon = <StepIcon {...stepProps} />;
-        const StepProps = completed ? { completed: completed[idx] } : {};
+        const StepProps = completed ? { completed } : {};
         return (
           <MuiStep key={step.props.label} {...StepProps}>
             {nonLinear ? (
