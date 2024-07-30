@@ -155,11 +155,11 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
       font: theme.palette.primary[600],
     },
     pending: {
-      background: nonLinear ? theme.palette.secondary[50] : theme.palette.secondary[200],
+      background: nonLinear ? theme.palette.contrastColor : theme.palette.secondary[200],
       border: nonLinear
         ? `1px solid ${theme.palette.secondary[200]}`
         : theme.palette.secondary[200],
-      font: alpha(theme.palette.secondary[900], 0.38),
+      font: nonLinear ? theme.palette.primary[600] : alpha(theme.palette.secondary[900], 0.38),
     },
     success: {
       background: theme.palette.primary[600],
