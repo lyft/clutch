@@ -191,7 +191,7 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
 export interface StepProps {
   label: string;
   error?: boolean;
-  isCompleted?: boolean;
+  isComplete?: boolean;
 }
 /* eslint-enable react/no-unused-prop-types */
 
@@ -226,9 +226,9 @@ const Stepper = ({
           variant: "pending" as StepIconVariant,
           nonLinear,
         };
-        const { isCompleted } = step.props;
+        const { isComplete = false } = step.props;
 
-        if (isCompleted) {
+        if (isComplete) {
           stepProps.variant = "success";
         } else if (idx === activeStep) {
           stepProps.variant = step.props.error ? "failed" : "active";
@@ -242,9 +242,9 @@ const Stepper = ({
 
         const label = step.props.label ?? `Step ${idx + 1}`;
         const icon = <StepIcon {...stepProps} />;
-        const StepProps = isCompleted ? { completed: isCompleted } : {};
+
         return (
-          <MuiStep key={step.props.label} {...StepProps}>
+          <MuiStep key={label} completed={isComplete}>
             {nonLinear ? (
               <MuiStepButton onClick={() => handleStepClick(idx)} icon={icon}>
                 {label}

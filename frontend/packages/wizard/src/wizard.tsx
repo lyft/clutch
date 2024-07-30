@@ -277,9 +277,9 @@ const Wizard = ({
               handleStepClick={handleStepClick}
             >
               {filteredChildren.map((child: WizardChildren) => {
-                const { name, isCompleted } = child.props;
+                const { name, isComplete } = child.props;
                 const hasError = wizardStepData[child.type.name]?.hasError;
-                return <Step key={name} label={name} error={hasError} isCompleted={isCompleted} />;
+                return <Step key={name} label={name} error={hasError} isComplete={isComplete} />;
               })}
             </Stepper>
           </StepperContainer>
