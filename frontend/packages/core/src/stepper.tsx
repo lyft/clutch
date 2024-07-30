@@ -228,16 +228,10 @@ const Stepper = ({
         };
         const { isComplete = false } = step.props;
 
-        if (isComplete) {
+        if (isComplete || (!nonLinear && idx < activeStep)) {
           stepProps.variant = "success";
         } else if (idx === activeStep) {
           stepProps.variant = step.props.error ? "failed" : "active";
-        }
-
-        if (!nonLinear) {
-          if (idx < activeStep) {
-            stepProps.variant = "success";
-          }
         }
 
         const label = step.props.label ?? `Step ${idx + 1}`;
