@@ -4,6 +4,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
+import TableCell from "../components/TableCell";
 import { Table, TableRow, TableRowAction, TableRowActions } from "../table";
 import type { TableProps, TableRowProps } from "../types";
 
@@ -41,6 +42,33 @@ const PrimaryTableRow = (props: TableRowProps) => (
     <div>Value 3</div>
     <div>Value 4</div>
     <div>Value 5</div>
+  </TableRow>
+);
+
+const SecondaryTableRow = (props: TableRowProps) => (
+  <TableRow {...props}>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
+      <div>Value 1</div>
+    </TableCell>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
+      <div>Value 2</div>
+    </TableCell>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
+      <div>Value 3</div>
+    </TableCell>
+    <TableCell sx={{ width: "300px", maxWidth: "300px" }}>
+      <div>
+        Long description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+        sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
+      </div>
+    </TableCell>
+    <TableCell sx={{ width: "100px", maxWidth: "100px" }}>
+      <div>Value 5</div>
+    </TableCell>
   </TableRow>
 );
 
@@ -135,5 +163,5 @@ SortFilterOptions.args = {
       options: <FilterListIcon fontSize="medium" />,
     },
   ],
-  row: <PrimaryTableRow />,
+  row: <SecondaryTableRow />,
 };

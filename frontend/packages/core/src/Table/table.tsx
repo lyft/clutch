@@ -13,6 +13,7 @@ import {
 
 import { Popper, PopperItem } from "../popper";
 import styled from "../styled";
+import { getDisplayName } from "../utils";
 
 import TableCell from "./components/TableCell";
 import TableHeader from "./components/TableHeader";
@@ -135,12 +136,28 @@ const TableRow = ({
   ...props
 }: TableRowProps) => (
   <StyledTableRow onClick={onClick} $responsive={responsive} {...props}>
-    {React.Children.map(children, (value, index) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index} responsive={responsive} colSpan={colSpan}>
-        {value === null && cellDefault !== undefined ? cellDefault : value}
-      </TableCell>
-    ))}
+    {React.Children.map(children, (child, index) => {
+      const withTableCellWrapper = (
+        <TableCell
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+          responsive={responsive}
+          colSpan={colSpan}
+        >
+          {child === null && cellDefault !== undefined ? cellDefault : child}
+        </TableCell>
+      );
+
+      if (React.isValidElement(child)) {
+        switch (getDisplayName(child)) {
+          case "ClutchTableCell":
+            return child;
+          default:
+            return withTableCellWrapper;
+        }
+      }
+      return withTableCellWrapper;
+    })}
   </StyledTableRow>
 );
 
