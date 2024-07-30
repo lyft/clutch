@@ -162,7 +162,7 @@ const Wizard = ({
   const context = (child: JSX.Element) => {
     return {
       getNextStepToComplete: () => state.nextStepToComplete,
-      onComplete: id => dispatch({ type: WizardActionType.ADD_COMPLETED_STEP, step: id }),
+      onComplete: id => dispatch({ type: WizardActionType.ON_COMPLETE, step: id }),
       onSubmit: wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
@@ -275,12 +275,11 @@ const Wizard = ({
               orientation={orientation}
               nonLinear={nonLinear}
               handleStepClick={handleStepClick}
-              completed={state.completed}
             >
               {filteredChildren.map((child: WizardChildren) => {
-                const { name } = child.props;
+                const { name, isComplete } = child.props;
                 const hasError = wizardStepData[child.type.name]?.hasError;
-                return <Step key={name} label={name} error={hasError} />;
+                return <Step key={name} label={name} error={hasError} isComplete={isComplete} />;
               })}
             </Stepper>
           </StepperContainer>

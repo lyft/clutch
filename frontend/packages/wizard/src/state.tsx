@@ -5,7 +5,7 @@ enum WizardActionType {
   BACK,
   RESET,
   GO_TO_STEP,
-  ADD_COMPLETED_STEP,
+  ON_COMPLETE,
 }
 
 interface WizardAction {
@@ -16,9 +16,6 @@ interface WizardAction {
 interface StateProps {
   activeStep: number;
   nextStepToComplete: number;
-  completed: {
-    [key: number]: boolean;
-  };
 }
 
 const reducer = (state: StateProps, action: WizardAction): StateProps => {
@@ -43,13 +40,9 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
         ...state,
         activeStep: action.step,
       };
-    case WizardActionType.ADD_COMPLETED_STEP:
+    case WizardActionType.ON_COMPLETE:
       return {
         ...state,
-        completed: {
-          ...state.completed,
-          [action.step]: true,
-        },
         nextStepToComplete: state.nextStepToComplete + 1,
       };
     default:
@@ -59,7 +52,6 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
 
 const initialState = {
   activeStep: 0,
-  completed: {},
   nextStepToComplete: 0,
 };
 
