@@ -58,14 +58,11 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation; $nonLine
       ".MuiStepLabel-iconContainer .icon-circle-nonlinear-pending": {
         border: props.$nonLinear ? "2px solid black" : "",
       },
-      ".MuiStepLabel-label": {
-        color: props.$nonLinear ? theme.palette.secondary[600] : "",
-      },
     },
     ".MuiStepLabel-label": {
       fontWeight: 500,
       fontSize: "14px",
-      color: theme.palette.secondary[300],
+      color: theme.palette.secondary[600],
     },
     ".MuiStepLabel-label.Mui-active": {
       color: theme.palette.primary[600],
