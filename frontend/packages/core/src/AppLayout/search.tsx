@@ -80,7 +80,7 @@ const ResultLabel = styled(Typography)(({ theme }: { theme: Theme }) => ({
 
 // main search icon on header
 const SearchIconButton = styled(IconButton)(({ theme }: { theme: Theme }) => ({
-  color: theme.palette.contrastColor,
+  color: theme.palette.common.white,
   fontSize: "24px",
   padding: "12px",
   marginRight: "8px",

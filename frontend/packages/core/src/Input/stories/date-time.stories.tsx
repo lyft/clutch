@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
+import dayjs from "dayjs";
 
 import type { DateTimePickerProps } from "../date-time";
 import DateTimePicker from "../date-time";
@@ -46,19 +47,19 @@ WithError.args = {
   ...PrimaryDemo.args,
   error: true,
   helperText: "error in the field",
-  onChange: (newValue: unknown) => null,
+  onChange: (_newValue: unknown) => null,
 } as DateTimePickerProps;
 
 export const WithMinDate = Template.bind({});
 WithMinDate.args = {
   ...PrimaryDemo.args,
-  minDate: new Date(),
+  minDate: dayjs(new Date()),
   onChange: (newValue: unknown) => null,
 } as DateTimePickerProps;
 
 export const WithMaxDate = Template.bind({});
 WithMaxDate.args = {
   ...PrimaryDemo.args,
-  maxDate: new Date(),
-  onChange: (newValue: unknown) => null,
+  maxDate: dayjs(new Date()),
+  onChange: (_newValue: unknown) => null,
 } as DateTimePickerProps;

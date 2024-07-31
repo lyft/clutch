@@ -5,6 +5,7 @@ import { Box, Grid as MuiGrid, Theme } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
+import { THEME_VARIANTS } from "../../Theme/colors";
 import SearchFieldComponent from "../search";
 
 export default {
@@ -62,7 +63,10 @@ export default {
 
 const Grid = styled(MuiGrid)(({ theme }: { theme: Theme }) => ({
   height: "64px",
-  backgroundColor: theme.palette.primary[900],
+  backgroundColor:
+    theme.palette.mode === THEME_VARIANTS.light
+      ? theme.palette.primary[900]
+      : theme.palette.headerGradient,
 }));
 
 const Template = () => (
