@@ -54,16 +54,21 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation; $nonLine
     },
   },
   props => ({ theme }: { theme: Theme }) => ({
+    ".MuiStep-root:hover": {
+      ".MuiStepLabel-iconContainer .icon-circle-nonlinear-pending": {
+        border: props.$nonLinear ? "2px solid black" : "",
+      },
+    },
     ".MuiStepLabel-label": {
       fontWeight: 500,
       fontSize: "14px",
-      color: alpha(theme.palette.secondary[900], 0.38),
+      color: theme.palette.secondary[600],
     },
     ".MuiStepLabel-label.Mui-active": {
-      color: theme.palette.secondary[900],
+      color: theme.palette.primary[600],
     },
     ".MuiStepLabel-label.Mui-completed": {
-      color: alpha(theme.palette.secondary[900], 0.38),
+      color: theme.palette.secondary[600],
     },
     ...(props.$orientation === "horizontal"
       ? {
@@ -151,15 +156,13 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
   const stepIconVariants = {
     active: {
       background: theme.palette.contrastColor,
-      border: `1px solid ${theme.palette.primary[600]}`,
+      border: `2px solid ${theme.palette.primary[600]}`,
       font: theme.palette.primary[600],
     },
     pending: {
-      background: nonLinear ? theme.palette.contrastColor : theme.palette.secondary[200],
-      border: nonLinear
-        ? `1px solid ${theme.palette.secondary[200]}`
-        : theme.palette.secondary[200],
-      font: nonLinear ? theme.palette.primary[600] : alpha(theme.palette.secondary[900], 0.38),
+      background: nonLinear ? theme.palette.secondary[100] : theme.palette.secondary[200],
+      border: nonLinear ? theme.palette.secondary[100] : theme.palette.secondary[200],
+      font: nonLinear ? theme.palette.secondary[600] : alpha(theme.palette.secondary[900], 0.38),
     },
     success: {
       background: theme.palette.primary[600],
@@ -179,8 +182,9 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
   } else if (variant === "failed") {
     Icon = <ClearIcon font={color.font} fontSize="large" />;
   }
+  const pendingClass = nonLinear && variant === "pending" ? "icon-circle-nonlinear-pending" : "";
   return (
-    <Circle background={color.background} border={color.border}>
+    <Circle background={color.background} border={color.border} className={pendingClass}>
       <DefaultIcon font={color.font}>{Icon}</DefaultIcon>
     </Circle>
   );
