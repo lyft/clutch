@@ -5,34 +5,30 @@
   "description": "Echo workflow",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist",
-    "compile": "esbuild --target=es2019 --outdir=dist src/*.jsx",
-    "compile:dev": "yarn compile --sourcemap",
-    "compile:watch": "yarn run compile:dev --watch=forever",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "build": "yarn run clean && yarn run compile",
+    "clean": "yarn run package:clean",
+    "compile": "yarn run package:compile",
+    "compile:dev": "yarn run package:compile:dev",
+    "compile:watch": "yarn run package:compile:watch",
+    "lint": "yarn run package:lint",
     "lint:fix": "yarn run lint --fix",
-    "test": "jest --passWithNoTests",
+    "test": "yarn run package:test",
     "test:coverage": "yarn run test --collect-coverage",
-    "test:watch": "yarn run test --watch",
-    "upgrade": "yarn upgrade"
+    "test:watch": "yarn run test --watch"
   },
   "dependencies": {
     "@clutch-sh/core": "^4.0.0-beta",
     "@clutch-sh/data-layout": "^4.0.0-beta",
     "@clutch-sh/wizard": "^4.0.0-beta",
-    "@mui/material": "^5.8.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-is": "^17.0.2"
-  },
-  "resolutions": {
-    "react-hook-form": "7.25.3"
+    "@mui/material": "^5.8.5"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^4.0.0-beta",
-    "esbuild": "^0.18.0",
-    "eslint": "^8.3.0",
-    "jest": "^27.0.0"
+    "@clutch-sh/tools": "^4.0.0-beta"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": ">=18 <19",

@@ -42,8 +42,8 @@ frontend: yarn-install
 yarn-install: yarn-ensure
 ifneq ("$(wildcard frontend/yarn.lock)","")
 	$(YARN) --cwd frontend install --immutable
-else
-	$(YARN) --cwd frontend install --no-immutable
+else # First run requires double install to setup the workflows for using the @clutch-sh/tools package.
+	$(YARN) --cwd frontend install --no-immutable && $(YARN) --cwd frontend install --no-immutable
 endif 
 
 .PHONY: yarn-ensure

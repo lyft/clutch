@@ -2,4 +2,3 @@ go.sum linguist-generated
 yarn.lock linguist-generated
 
 frontend/api/src/*.js linguist-generated
-frontend/api/src/*.ts linguist-generated
