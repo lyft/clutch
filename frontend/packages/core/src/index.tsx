@@ -73,7 +73,12 @@ export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/wor
 export type { ButtonProps } from "./button";
 export type { CardHeaderSummaryProps } from "./card";
 export type { GridJustification } from "./grid";
-export type { WorkflowRemoveDataFn, WorkflowRetrieveDataFn, WorkflowStoreDataFn } from "./Contexts";
+export type {
+  WorkflowRemoveDataFn,
+  WorkflowRetrieveDataFn,
+  WorkflowStoreDataFn,
+  NavigationProps,
+} from "./Contexts";
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
 export type { StyledComponent } from "@emotion/styled";

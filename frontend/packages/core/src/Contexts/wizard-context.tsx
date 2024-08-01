@@ -1,5 +1,9 @@
 import React from "react";
-import type { NavigationProps } from "@clutch-sh/wizard";
+
+export interface NavigationProps {
+  toOrigin?: boolean;
+  keepSearch?: boolean;
+}
 
 export interface ContextProps {
   displayWarnings: (warnings: string[]) => void;

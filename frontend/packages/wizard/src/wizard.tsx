@@ -4,6 +4,7 @@ import {
   ButtonGroup,
   FeatureOn,
   Grid,
+  NavigationProps,
   NPSWizard,
   Paper,
   SimpleFeatureFlag,
@@ -27,11 +28,6 @@ import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
 import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
-
-export interface NavigationProps {
-  toOrigin?: boolean;
-  keepSearch?: boolean;
-}
 
 export interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
