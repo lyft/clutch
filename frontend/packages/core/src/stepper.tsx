@@ -182,10 +182,9 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
   } else if (variant === "failed") {
     Icon = <ClearIcon font={color.font} fontSize="large" />;
   }
-  const nonLinearPendingClass =
-    nonLinear && variant === "pending" ? "icon-circle-nonlinear-pending" : "";
+  const pendingClass = nonLinear && variant === "pending" ? "icon-circle-nonlinear-pending" : "";
   return (
-    <Circle background={color.background} border={color.border} className={nonLinearPendingClass}>
+    <Circle background={color.background} border={color.border} className={pendingClass}>
       <DefaultIcon font={color.font}>{Icon}</DefaultIcon>
     </Circle>
   );
