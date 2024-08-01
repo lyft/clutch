@@ -66,7 +66,14 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   if (response?.status === 401) {
     // TODO: turn this in to silent refresh once refresh tokens are supported.
     const redirectUrl = window.location.pathname + window.location.search;
-    window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
+    client.get(`/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`).then(response => {
+      console.log("MY RESPONSE", response);
+      const { authUrl = null } = response.data;
+      if (authUrl) {
+        window.location.href = authUrl;
+      }
+    });
+    // window.location.href = `/v1/authn/login?redirect_url=${encodeURIComponent(redirectUrl)}`;
   }
 
   // we are guaranteed to have a response object on the error from this point on

@@ -134,6 +134,7 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Got a redirectURL", redirectURL)
 
 	token, err := a.provider.Exchange(ctx, request.Code)
 	if err != nil {
@@ -143,7 +144,7 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	// set the cookie header
 	// redirect back to original location
 	md := metadata.New(map[string]string{
-		"Location":         redirectURL,
+		"Location":         "http://localhost:3000" + redirectURL,
 		"Set-Cookie-Token": token.AccessToken,
 	})
 
