@@ -28,10 +28,14 @@ import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
+export interface NavigationProps {
+  toOrigin?: boolean;
+  keepSearch?: boolean;
+}
+
 export interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
-    Pick<MuiStepperProps, "orientation">,
-    Pick<MuiStepperProps, "nonLinear"> {
+    Pick<MuiStepperProps, "orientation" | "nonLinear"> {
   children:
     | React.ReactNode
     | React.ReactElement<WizardStepProps>
@@ -144,10 +148,7 @@ const Wizard = ({
     dispatch({ type: WizardActionType.GO_TO_STEP, step });
   };
 
-  const handleNavigation = (
-    params: { toOrigin?: boolean; keepSearch?: boolean },
-    actionType: WizardActionType
-  ) => {
+  const handleNavigation = (params: NavigationProps, actionType: WizardActionType) => {
     setGlobalWarnings([]);
     if (!params?.keepSearch) {
       setSearchParams({});

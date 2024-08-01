@@ -62,7 +62,6 @@ const PrimaryTemplate = ({
             orientation={orientation}
             handleStepClick={handleStepClick}
             nonLinear={nonLinear}
-            {...(nonLinear ? { completed: completedSteps } : {})}
           >
             {Array(stepCount)
               .fill(null)

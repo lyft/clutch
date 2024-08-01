@@ -148,10 +148,10 @@ type StepIconVariant = "active" | "pending" | "success" | "failed";
 export interface StepIconProps {
   index: number;
   variant: StepIconVariant;
-  nonLinear: boolean;
+  nonLinear?: boolean;
 }
 
-const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear }) => {
+const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear = false }) => {
   const theme = useTheme();
   const stepIconVariants = {
     active: {
@@ -213,7 +213,7 @@ const Stepper = ({
   activeStep,
   orientation = "horizontal",
   children,
-  nonLinear,
+  nonLinear = false,
   handleStepClick,
 }: StepperProps) => (
   <StepContainer $orientation={orientation} $nonLinear={nonLinear}>
