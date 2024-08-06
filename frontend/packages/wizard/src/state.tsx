@@ -5,7 +5,6 @@ enum WizardActionType {
   BACK,
   RESET,
   GO_TO_STEP,
-  ON_COMPLETE,
 }
 
 interface WizardAction {
@@ -15,7 +14,6 @@ interface WizardAction {
 
 interface StateProps {
   activeStep: number;
-  nextStepToComplete: number;
 }
 
 const reducer = (state: StateProps, action: WizardAction): StateProps => {
@@ -40,11 +38,6 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
         ...state,
         activeStep: action.step,
       };
-    case WizardActionType.ON_COMPLETE:
-      return {
-        ...state,
-        nextStepToComplete: state.nextStepToComplete + 1,
-      };
     default:
       throw new Error(`Unknown wizard state: ${action}`);
   }
@@ -52,7 +45,6 @@ const reducer = (state: StateProps, action: WizardAction): StateProps => {
 
 const initialState = {
   activeStep: 0,
-  nextStepToComplete: 0,
 };
 
 const useWizardState = (): [StateProps, React.Dispatch<WizardAction>] => {

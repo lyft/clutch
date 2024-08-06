@@ -160,8 +160,6 @@ const Wizard = ({
 
   const context = (child: JSX.Element) => {
     return {
-      getNextStepToComplete: () => state.nextStepToComplete,
-      onComplete: id => dispatch({ type: WizardActionType.ON_COMPLETE, step: id }),
       onSubmit: wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
