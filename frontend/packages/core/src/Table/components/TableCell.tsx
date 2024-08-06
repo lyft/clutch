@@ -35,4 +35,6 @@ const TableCell = ({ action, border, responsive, ...props }: TableCellProps) => 
   <StyledTableCell $action={action} $border={border} $responsive={responsive} {...props} />
 );
 
+TableCell.displayName = "ClutchTableCell";
+
 export default TableCell;

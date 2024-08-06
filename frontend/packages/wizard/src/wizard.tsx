@@ -72,8 +72,8 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
-    padding: "32px",
-    height: "100%",
+    paddingBlock: "24px 32px",
+    height: "calc(100% - 56px)",
   },
   props => ({
     width: props.$width === "full" ? "100%" : "800px",
@@ -105,6 +105,8 @@ const StyledStepContainer = styled(Grid)({
 const StyledPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
   boxShadow: `0px 5px 15px ${alpha(theme.palette.primary[600], 0.2)}`,
   padding: "32px",
+  maxHeight: "100%",
+  overflowY: "scroll",
 }));
 
 const Wizard = ({
@@ -249,7 +251,7 @@ const Wizard = ({
 
   return (
     <Container $width={width} maxWidth={false} className={className}>
-      <MaxHeightGrid container alignItems="stretch" spacing={2}>
+      <MaxHeightGrid container alignItems="stretch">
         {heading && (
           <Header item $orientation={orientation}>
             {React.isValidElement(heading) ? (
@@ -265,6 +267,7 @@ const Wizard = ({
           direction={orientation === "vertical" ? "row" : "column"}
           wrap="nowrap"
           spacing={2}
+          marginTop={0}
         >
           <StepperContainer item xs="auto" $orientation={orientation}>
             <Stepper

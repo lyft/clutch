@@ -76,7 +76,7 @@ interface ClutchAppProps {
     [key: string]: () => WorkflowConfiguration;
   };
   configuration: UserConfiguration;
-  appConfiguration: AppConfiguration;
+  appConfiguration?: AppConfiguration;
   children?: ClutchAppChild | ClutchAppChild[];
 }
 

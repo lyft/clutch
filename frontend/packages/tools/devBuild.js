@@ -30,7 +30,8 @@ const tscAliasPlugin = {
   name: "tscAlias",
   setup(build) {
     build.onEnd(() => {
-      replaceTscAliasPaths({ configFile: `${process.argv[2]}/tsconfig.json` });
+      fs.existsSync(`${process.argv[2]}/tsconfig.paths.json`) &&
+        replaceTscAliasPaths({ configFile: `${process.argv[2]}/tsconfig.paths.json` });
     });
   },
 };

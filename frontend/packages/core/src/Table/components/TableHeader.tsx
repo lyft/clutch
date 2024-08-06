@@ -35,7 +35,7 @@ interface TableHeaderProps {
 const TableHeader = ({
   columns,
   responsive,
-  defaultSort: [sortKey, sortDir],
+  defaultSort: [sortKey, sortDir] = ["", "asc"],
   onRequestSort,
   actionsColumn,
   compress,
