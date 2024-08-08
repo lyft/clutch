@@ -104,7 +104,8 @@ func (g *getdirectoryMock) Query(ctx context.Context, query interface{}, variabl
 			struct {
 				Name githubv4.String
 				Type githubv4.String
-			}{Name: githubv4.String(g.entries[0].Name), Type: githubv4.String(g.entries[0].Type)})
+				OID  githubv4.GitObjectID
+			}{Name: githubv4.String(g.entries[0].Name), Type: githubv4.String(g.entries[0].Type), OID: githubv4.GitObjectID(g.entries[0].SHA)})
 	}
 
 	q.Repository.Ref.Commit.History.Nodes = append(
@@ -277,7 +278,7 @@ func TestGetFile(t *testing.T) {
 	}
 }
 
-var directoryEntries = []*Entry{{Name: "foo", Type: "blob"}}
+var directoryEntries = []*Entry{{Name: "foo", Type: "blob", SHA: "abcdef12345"}}
 
 var getDirectoryTests = []struct {
 	name    string
@@ -582,6 +583,7 @@ var getCommitsTests = []struct {
 	authorLogin     string
 	authorAvatarURL string
 	authorID        int64
+	sha             string
 	parentRef       string
 }{
 	{
@@ -596,6 +598,7 @@ var getCommitsTests = []struct {
 		message:         "committing some changes (#1)",
 		authorAvatarURL: "https://foo.bar/baz.png",
 		authorID:        1234,
+		sha:             "test",
 		parentRef:       "test",
 	},
 }
@@ -633,6 +636,9 @@ func TestGetCommit(t *testing.T) {
 			if commit.Author != nil {
 				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
 				a.Equal(tt.authorID, *commit.Author.ID)
+			}
+			if commit.SHA != "" {
+				a.Equal(tt.sha, commit.SHA)
 			}
 			if commit.ParentRef != "" {
 				a.Equal(tt.parentRef, commit.ParentRef)

@@ -99,6 +99,7 @@ type File struct {
 type Entry struct {
 	Name string
 	Type string
+	SHA  string
 }
 
 type Directory struct {
@@ -371,6 +372,9 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		if _, err := io.Copy(fh, contents); err != nil {
 			return err
 		}
+		if err := wt.AddWithOptions(&git.AddOptions{Path: filename}); err != nil {
+			return err
+		}
 	}
 
 	opts := commitOptionsFromClaims(ctx, time.Now())
@@ -510,17 +514,21 @@ func (s *svc) GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*D
 		entries = append(entries, &Entry{
 			Name: string(obj.Name),
 			Type: string(obj.Type),
+			SHA:  string(obj.OID),
 		})
 	}
 
-	d := &Directory{
-		Path:             path,
-		Entries:          entries,
-		LastModifiedTime: q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time,
-		LastModifiedSHA:  string(q.Repository.Ref.Commit.History.Nodes[0].OID),
+	directory := &Directory{
+		Path:    path,
+		Entries: entries,
 	}
 
-	return d, nil
+	if len(q.Repository.Ref.Commit.History.Nodes) > 0 {
+		directory.LastModifiedTime = q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time
+		directory.LastModifiedSHA = string(q.Repository.Ref.Commit.History.Nodes[0].OID)
+	}
+
+	return directory, nil
 }
 
 /*
@@ -539,6 +547,7 @@ type Commit struct {
 	Files     []*githubv3.CommitFile
 	Message   string
 	Author    *githubv3.User
+	SHA       string
 	ParentRef string
 }
 
@@ -550,6 +559,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 
 	// Currently we are using the Author (Github) rather than commit Author (Git)
 	retCommit := &Commit{
+		SHA:     commit.GetSHA(),
 		Files:   commit.Files,
 		Message: commit.GetCommit().GetMessage(),
 		Author:  commit.GetAuthor(),

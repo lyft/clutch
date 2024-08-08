@@ -59,6 +59,7 @@ type getDirectoryQuery struct {
 				Entries []struct {
 					Name githubv4.String
 					Type githubv4.String
+					OID  githubv4.GitObjectID
 				} `graphql:"entries"`
 			} `graphql:"... on Tree"`
 		} `graphql:"object(expression:$refPath)"`
