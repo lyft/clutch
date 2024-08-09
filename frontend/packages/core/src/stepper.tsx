@@ -242,7 +242,11 @@ const Stepper = ({
         return (
           <MuiStep key={label} completed={isComplete}>
             {nonLinear ? (
-              <MuiStepButton onClick={() => handleStepClick && handleStepClick(idx)} icon={icon}>
+              <MuiStepButton
+                disabled={isComplete}
+                onClick={() => handleStepClick && handleStepClick(idx)}
+                icon={icon}
+              >
                 {label}
               </MuiStepButton>
             ) : (
