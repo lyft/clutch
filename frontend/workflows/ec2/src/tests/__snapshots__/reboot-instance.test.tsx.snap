@@ -15,7 +15,7 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-omj7fc-MuiGrid-root"
         >
           <div
-            class="css-146xe7x"
+            class="css-n5nrl9"
           >
             <div
               class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
@@ -31,8 +31,8 @@ exports[`renders correctly 1`] = `
                   >
                     <div
                       background="#ffffff"
-                      border="1px solid #3548D4"
-                      class="css-1t41j0i"
+                      border="2px solid #3548D4"
+                      class=" css-1xlrzg7"
                     >
                       <div
                         class="css-h5bkmw"
@@ -72,7 +72,7 @@ exports[`renders correctly 1`] = `
                     <div
                       background="#DBDBE0"
                       border="#DBDBE0"
-                      class="css-yqpyq0"
+                      class=" css-yqpyq0"
                     >
                       <div
                         class="css-1c0nvhn"
@@ -112,7 +112,7 @@ exports[`renders correctly 1`] = `
                     <div
                       background="#DBDBE0"
                       border="#DBDBE0"
-                      class="css-yqpyq0"
+                      class=" css-yqpyq0"
                     >
                       <div
                         class="css-1c0nvhn"

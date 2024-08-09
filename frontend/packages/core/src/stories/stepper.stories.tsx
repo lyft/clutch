@@ -1,4 +1,5 @@
 import * as React from "react";
+import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
 import { Button, ButtonGroup } from "../button";
@@ -25,8 +26,10 @@ const PrimaryTemplate = ({
   stepCount,
   activeStep,
   orientation,
+  nonLinear,
 }: StepperProps & { stepCount: number }) => {
   const [curStep, setCurStep] = React.useState(activeStep || 0);
+  const [completedSteps, setCompletedSteps] = React.useState({});
 
   const handleNext = () => {
     setCurStep(prevActiveStep => prevActiveStep + 1);
@@ -36,20 +39,35 @@ const PrimaryTemplate = ({
     setCurStep(prevActiveStep => prevActiveStep - 1);
   };
 
+  const handleStepClick = step => {
+    setCurStep(step);
+    action("handleStepClick")(step);
+  };
+
   const handleReset = () => {
     setCurStep(0);
+    setCompletedSteps({});
+  };
+
+  const handleCompleteStep = () => {
+    setCompletedSteps({ ...completedSteps, [curStep]: true });
   };
 
   return (
     <>
       <Grid container direction={orientation === "horizontal" ? "column" : "row"}>
         <Grid item xs={1}>
-          <Stepper activeStep={curStep} orientation={orientation}>
+          <Stepper
+            activeStep={curStep}
+            orientation={orientation}
+            handleStepClick={handleStepClick}
+            nonLinear={nonLinear}
+          >
             {Array(stepCount)
               .fill(null)
               .map((_, index: number) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Step key={index} label={`Step ${index + 1}`} />
+                <Step key={index} label={`Step ${index + 1}`} isComplete={completedSteps[index]} />
               ))}
           </Stepper>
         </Grid>
@@ -66,6 +84,7 @@ const PrimaryTemplate = ({
             <Button onClick={handleNext} text={curStep === stepCount ? "Finish" : "Next"} />
           </>
         )}
+        <Button onClick={handleCompleteStep} text="Complete" disabled={!nonLinear} />
       </ButtonGroup>
     </>
   );
