@@ -13,6 +13,7 @@ export interface ContextProps {
   setOnSubmit: (f: (...args: any[]) => void) => void;
   setIsLoading: (isLoading: boolean) => void;
   setHasError: (hasError: boolean) => void;
+  setIsComplete?: (isComplete: boolean) => void;
 }
 
 const WizardContext = React.createContext<() => ContextProps>(undefined);
