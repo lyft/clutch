@@ -201,9 +201,7 @@ export interface StepProps {
 
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
-export interface StepperProps
-  extends Pick<MuiStepperProps, "orientation">,
-    Pick<MuiStepperProps, "nonLinear"> {
+export interface StepperProps extends Pick<MuiStepperProps, "orientation" | "nonLinear"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
   handleStepClick?: (index: number) => void;
@@ -244,7 +242,7 @@ const Stepper = ({
         return (
           <MuiStep key={label} completed={isComplete}>
             {nonLinear ? (
-              <MuiStepButton onClick={() => handleStepClick(idx)} icon={icon}>
+              <MuiStepButton onClick={() => handleStepClick && handleStepClick(idx)} icon={icon}>
                 {label}
               </MuiStepButton>
             ) : (

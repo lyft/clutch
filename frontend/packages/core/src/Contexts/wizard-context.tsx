@@ -1,14 +1,14 @@
 import React from "react";
 
-export interface NavigationProps {
+export interface WizardNavigationProps {
   toOrigin?: boolean;
   keepSearch?: boolean;
 }
 
 export interface ContextProps {
   displayWarnings: (warnings: string[]) => void;
-  onBack: (params?: NavigationProps) => void;
-  onNext: (params?: NavigationProps) => void;
+  onBack: (params?: WizardNavigationProps) => void;
+  onNext?: (params?: WizardNavigationProps) => void;
   onSubmit: () => void;
   setOnSubmit: (f: (...args: any[]) => void) => void;
   setIsLoading: (isLoading: boolean) => void;

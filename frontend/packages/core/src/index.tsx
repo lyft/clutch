@@ -77,7 +77,7 @@ export type {
   WorkflowRemoveDataFn,
   WorkflowRetrieveDataFn,
   WorkflowStoreDataFn,
-  NavigationProps,
+  WizardNavigationProps,
 } from "./Contexts";
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";

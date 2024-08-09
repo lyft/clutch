@@ -1,10 +1,10 @@
 import React from "react";
+import type { WizardNavigationProps } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
   FeatureOn,
   Grid,
-  NavigationProps,
   NPSWizard,
   Paper,
   SimpleFeatureFlag,
@@ -146,7 +146,7 @@ const Wizard = ({
     dispatch({ type: WizardActionType.GO_TO_STEP, step });
   };
 
-  const handleNavigation = (params: NavigationProps, actionType: WizardActionType) => {
+  const handleNavigation = (params: WizardNavigationProps, actionType: WizardActionType) => {
     setGlobalWarnings([]);
     if (!params?.keepSearch) {
       setSearchParams({});
@@ -173,10 +173,10 @@ const Wizard = ({
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
-      onBack: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
+      onBack: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.BACK);
       },
-      onNext: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
+      onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
       },
     };
