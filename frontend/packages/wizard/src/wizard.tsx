@@ -170,6 +170,9 @@ const Wizard = ({
       setHasError: (hasError: boolean) => {
         updateStepData(child.type.name, { hasError });
       },
+      setIsComplete: (isComplete: boolean) => {
+        updateStepData(child.type.name, { isComplete });
+      },
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
@@ -275,8 +278,9 @@ const Wizard = ({
               handleStepClick={handleStepClick}
             >
               {filteredChildren.map((child: WizardChildren) => {
-                const { name, isComplete } = child.props;
+                const { name } = child.props;
                 const hasError = wizardStepData[child.type.name]?.hasError;
+                const isComplete = wizardStepData[child.type.name]?.isComplete;
                 return <Step key={name} label={name} error={hasError} isComplete={isComplete} />;
               })}
             </Stepper>
