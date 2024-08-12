@@ -1,4 +1,5 @@
 import React from "react";
+import type { WizardNavigationProps } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
@@ -25,12 +26,12 @@ import type {
 } from "@mui/material";
 import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
-import { useWizardState, WizardAction } from "./state";
+import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
 export interface WizardProps
   extends Pick<ContainerProps, "width" | "className">,
-    Pick<MuiStepperProps, "orientation"> {
+    Pick<MuiStepperProps, "orientation" | "nonLinear"> {
   children:
     | React.ReactNode
     | React.ReactElement<WizardStepProps>
@@ -115,6 +116,7 @@ const Wizard = ({
   orientation = "horizontal",
   children,
   className,
+  nonLinear = false,
 }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
@@ -137,7 +139,23 @@ const Wizard = ({
   };
 
   const handleNext = () => {
-    dispatch(WizardAction.NEXT);
+    dispatch({ type: WizardActionType.NEXT });
+  };
+
+  const handleStepClick = (step: number) => {
+    dispatch({ type: WizardActionType.GO_TO_STEP, step });
+  };
+
+  const handleNavigation = (params: WizardNavigationProps, actionType: WizardActionType) => {
+    setGlobalWarnings([]);
+    if (!params?.keepSearch) {
+      setSearchParams({});
+    }
+    if (params?.toOrigin && origin) {
+      navigate(origin);
+    } else {
+      dispatch({ type: actionType });
+    }
   };
 
   const context = (child: JSX.Element) => {
@@ -152,19 +170,17 @@ const Wizard = ({
       setHasError: (hasError: boolean) => {
         updateStepData(child.type.name, { hasError });
       },
+      setIsComplete: (isComplete: boolean) => {
+        updateStepData(child.type.name, { isComplete });
+      },
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
-      onBack: (params: { toOrigin?: boolean; keepSearch?: boolean }) => {
-        setGlobalWarnings([]);
-        if (!params?.keepSearch) {
-          setSearchParams({});
-        }
-        if (params?.toOrigin && origin) {
-          navigate(origin);
-        } else {
-          dispatch(WizardAction.BACK);
-        }
+      onBack: (params: WizardNavigationProps) => {
+        handleNavigation(params, WizardActionType.BACK);
+      },
+      onNext: (params: WizardNavigationProps) => {
+        handleNavigation(params, WizardActionType.NEXT);
       },
     };
   };
@@ -215,7 +231,7 @@ const Wizard = ({
                     onClick={() => {
                       dataLayoutManager.reset();
                       setSearchParams({});
-                      dispatch(WizardAction.RESET);
+                      dispatch({ type: WizardActionType.RESET });
                       if (origin) {
                         navigate(origin);
                       }
@@ -255,11 +271,17 @@ const Wizard = ({
           marginTop={0}
         >
           <StepperContainer item xs="auto" $orientation={orientation}>
-            <Stepper activeStep={state.activeStep} orientation={orientation}>
+            <Stepper
+              activeStep={state.activeStep}
+              orientation={orientation}
+              nonLinear={nonLinear}
+              handleStepClick={handleStepClick}
+            >
               {filteredChildren.map((child: WizardChildren) => {
                 const { name } = child.props;
                 const hasError = wizardStepData[child.type.name]?.hasError;
-                return <Step key={name} label={name} error={hasError} />;
+                const isComplete = wizardStepData[child.type.name]?.isComplete;
+                return <Step key={name} label={name} error={hasError} isComplete={isComplete} />;
               })}
             </Stepper>
           </StepperContainer>
