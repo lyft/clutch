@@ -11,8 +11,10 @@ import type { HydratedData, HydrateState } from "../Contexts/workflow-storage-co
 import { Toast } from "../Feedback";
 import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
+import LayoutWithNotifications from "../LayoutWithNotifications";
 import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
+import { AppConfiguration } from "../Types";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
@@ -20,9 +22,6 @@ import ShortLinkStateHydrator from "./short-link-state-hydrator";
 import { Theme } from "./themes";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
 import ErrorBoundary from "./workflow";
-import { Alert } from "../Feedback";
-import Grid from "../grid";
-import type { AlertProps } from "../Feedback/alert";
 
 export interface WorkflowIcon {
   path: string;
@@ -33,35 +32,6 @@ export interface UserConfiguration {
     icon: WorkflowIcon;
     [key: string]: WorkflowIcon | ConfiguredRoute;
   };
-}
-
-interface Banner extends Pick<AlertProps, "title" | "severity"> {
-  message: string;
-}
-
-interface PerWorkflowBanner {
-  [workflowName: string]: Notification;
-}
-
-interface WorkflowsBanner extends Banner {
-  workflows: string[];
-}
-
-interface AppBanners {
-  /** Will display a notification banner at the top of the application */
-  header?: Notification;
-  /** Allows for setting a notification banner on a per workflow basis */
-  perWorkflow?: PerWorkflowBanner;
-  /** Allows for setting a notification banner across multiple workflows */
-  multiWorkflow?: WorkflowsBanner;
-}
-
-export interface AppConfiguration {
-  /** Will override the title of the given application */
-  title?: string;
-  /** Supports a react node or a string representing a public assets path */
-  logo?: React.ReactNode | string;
-  banners?: AppBanners;
 }
 
 /**
@@ -104,49 +74,6 @@ interface ClutchAppProps {
   appConfiguration?: AppConfiguration;
   children?: ClutchAppChild | ClutchAppChild[];
 }
-
-const LayoutWithNotifications = ({
-  children,
-  config,
-  workflow,
-}: {
-  children: React.ReactNode;
-  config: AppConfiguration;
-  workflow?: string;
-}) => {
-  const { banners: { perWorkflow = {}, multiWorkflow = {} } = {} } = config;
-
-  if (workflow) {
-    if (Object.keys(perWorkflow).length > 0) {
-      const foundWorkflow = Object.entries(perWorkflow).find(
-        ([key]) => key.toLowerCase() === workflow.toLowerCase()
-      )?.[1];
-
-      console.log("FOUND", foundWorkflow);
-    }
-    // const perWorkflowKeys = Object.keys(perWorkflow)
-    //   .map(key => key.toLowerCase())
-    //   .filter(key => key === workflow.toLowerCase());
-
-    // const multiWorkflowKeys = multiWorkflow?.workflows.map(key => key.toLowerCase());
-    // console.log(workflow.toLowerCase(), perWorkflow, multiWorkflow);
-  }
-
-  return (
-    <>
-      {config && config.banners && (
-        <Grid container justifyContent="center" pt={2} pb={1} px={3}>
-          <Grid item xs>
-            <Alert severity="info" elevation={6}>
-              This is an info alert — check it out!
-            </Alert>
-          </Grid>
-        </Grid>
-      )}
-      {children}
-    </>
-  );
-};
 
 const ClutchApp = ({
   availableWorkflows,
@@ -298,14 +225,6 @@ const ClutchApp = ({
                                   </LayoutWithNotifications>
                                 }
                               />
-                              // <Route
-                              //   key={workflow.path}
-                              //   path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
-                              //   element={React.cloneElement(<route.component />, {
-                              //     ...route.componentProps,
-                              //     heading,
-                              //   })}
-                              // />
                             );
                           })}
                           <Route
