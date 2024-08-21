@@ -1,4 +1,4 @@
-import { AppBanners } from "./banner";
+import type { AppBanners } from "./notification";
 
 export interface AppConfiguration {
   /** Will override the title of the given application */

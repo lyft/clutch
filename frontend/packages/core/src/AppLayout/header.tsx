@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Theme, Toolbar, Typography } from "@mui/material";
 
-import { Alert } from "../Feedback";
+import AppNotification from "../AppNotifications";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
-import type { AppConfiguration } from "../Types";
+import type { AppBanners, AppConfiguration } from "../Types";
 
 import Logo from "./logo";
 import Notifications from "./notifications";
@@ -44,6 +44,7 @@ interface HeaderProps extends AppConfiguration {
    * Will enable the user information component in the header
    */
   userInfo?: boolean;
+  banners?: AppBanners;
 }
 
 const AppBar = styled(MuiAppBar)(({ theme }: { theme: Theme }) => ({
@@ -71,13 +72,10 @@ const StyledLogo = styled("img")({
   verticalAlign: "middle",
 });
 
-const StyledAlert = styled(Alert)({
-  padding: "8px 16px 8px 16px",
-});
-
 const Header: React.FC<HeaderProps> = ({
   title = "clutch",
   logo = <Logo />,
+  banners,
   enableNPS = false,
   search = true,
   feedback = true,
@@ -93,11 +91,7 @@ const Header: React.FC<HeaderProps> = ({
           <Link to="/">{typeof logo === "string" ? <StyledLogo src={logo} /> : logo}</Link>
           <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
-            <Grid item xs={3}>
-              <StyledAlert severity="info" elevation={6}>
-                This is an alert to test!
-              </StyledAlert>
-            </Grid>
+            <AppNotification type="header" banners={banners} />
             {search && (
               <Box>
                 <SearchField />

@@ -3,8 +3,8 @@ import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@mui/material";
 
-import type { AppConfiguration } from "../AppProvider";
 import Loadable from "../loading";
+import type { AppConfiguration } from "../Types";
 
 import Drawer from "./drawer";
 import Header, { APP_BAR_HEIGHT } from "./header";
