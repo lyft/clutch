@@ -35,6 +35,8 @@ type v3pullrequests interface {
 	Create(ctx context.Context, owner string, repo string, pull *githubv3.NewPullRequest) (*githubv3.PullRequest, *githubv3.Response, error)
 	// ListPullRequestsWithCommit returns pull requests associated with a commit SHA.
 	ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error)
+	// GetPullRequest returns a single pull request specified by the PR number
+	Get(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error)
 }
 
 type v4client interface {
