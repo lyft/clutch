@@ -22,3 +22,11 @@ message Commit {
   string message = 3;
   string display_name = 4;
 }
+
+message GetQueryResultsCountRequest {
+  string query = 1 [ (validate.rules).string = {min_bytes : 1, ignore_empty : true} ];
+}
+
+message GetQueryResultsCountResponse {
+  uint32 count = 1;
+}
