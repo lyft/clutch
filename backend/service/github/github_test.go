@@ -896,6 +896,13 @@ func (m *mockPullRequests) Create(ctx context.Context, owner string, repo string
 	return &githubv3.PullRequest{}, &githubv3.Response{}, nil
 }
 
+func (m *mockPullRequests) Get(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error) {
+	if m.generalError == true {
+		return nil, nil, errors.New(problem)
+	}
+	return &githubv3.PullRequest{}, &githubv3.Response{}, nil
+}
+
 // Mock of ListPullRequestsWithCommit API
 func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error) {
 	if m.generalError {
@@ -980,6 +987,58 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 				assert.Equal(t, tt.mockPullReq.actualNumber, resp[0].Number)
 				assert.Equal(t, tt.mockPullReq.actualHTMLURL, resp[0].HTMLURL)
 				assert.Equal(t, tt.mockPullReq.actualBranchName, resp[0].BranchName)
+			}
+		})
+	}
+}
+
+var getPullRequestTests = []struct {
+	name        string
+	errorText   string
+	mockPullReq *mockPullRequests
+	repoOwner   string
+	repoName    string
+	prNumber    int
+}{
+	{
+		name:        "happy path",
+		mockPullReq: &mockPullRequests{},
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		prNumber:    4242,
+	},
+	{
+		name:        "v3 client error",
+		mockPullReq: &mockPullRequests{generalError: true},
+		errorText:   "we've had a problem",
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		prNumber:    4242,
+	},
+}
+
+func TestGetPullRequest(t *testing.T) {
+	for _, tt := range getPullRequestTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				PullRequests: tt.mockPullReq,
+			}}
+
+			resp, err := s.GetPullRequest(
+				context.Background(),
+				tt.repoOwner,
+				tt.repoName,
+				tt.prNumber)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.mockPullReq.actualNumber, resp.GetNumber())
 			}
 		})
 	}

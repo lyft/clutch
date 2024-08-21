@@ -80,6 +80,12 @@ func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteR
 	}, nil
 }
 
+func (s svc) GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error) {
+	return &githubv3.PullRequest{
+		Number: githubv3.Int(4242),
+	}, nil
+}
+
 func (s svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
 	role := "member"
 	return &githubv3.Membership{Role: &role}, nil

@@ -125,6 +125,7 @@ type Client interface {
 	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.ListOptions) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
+	GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -297,6 +298,14 @@ func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sh
 	}
 
 	return prInfos, nil
+}
+
+func (s *svc) GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error) {
+	pr, _, err := s.rest.PullRequests.Get(ctx, owner, repo, number)
+	if err != nil {
+		return nil, err
+	}
+	return pr, nil
 }
 
 type CreateBranchRequest struct {
