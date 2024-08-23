@@ -22,6 +22,7 @@ const Name = "clutch.service.sourcegraph"
 
 type Service interface {
 	CompareCommits(context.Context, *sourcegraphv1.CompareCommitsRequest) (*sourcegraphv1.CompareCommitsResponse, error)
+	GetQueryResultsCount(context.Context, *sourcegraphv1.GetQueryResultsCountRequest) (*sourcegraphv1.GetQueryResultsCountResponse, error)
 }
 
 type client struct {
@@ -49,6 +50,14 @@ var compareCommitsQuery struct {
 			}
 		} `graphql:"comparison(base: $base, head: $head)"`
 	} `graphql:"repository(name: $name)"`
+}
+
+var getQueryResultsCountQuery struct {
+	Search struct {
+		Results struct {
+			ResultCount graphql.Int
+		}
+	} `graphql:"search(query: $query)"`
 }
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -127,5 +136,33 @@ func (c *client) CompareCommits(ctx context.Context, req *sourcegraphv1.CompareC
 
 	return &sourcegraphv1.CompareCommitsResponse{
 		Commits: commits,
+	}, nil
+}
+
+func (c *client) GetQueryResultsCount(ctx context.Context, req *sourcegraphv1.GetQueryResultsCountRequest) (resp *sourcegraphv1.GetQueryResultsCountResponse, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			c.log.Warn("Recovered from panic in gql client query")
+			resp = nil
+			err = errors.New("unsuccessful response from sourcegraph")
+		}
+	}()
+
+	variables := map[string]interface{}{
+		"query": graphql.String(req.Query),
+	}
+
+	query := &getQueryResultsCountQuery
+	e := c.gqlClient.Query(ctx, query, variables)
+	if e != nil {
+		c.log.Error("unsuccessful response from sourcegraph",
+			zap.String("query", req.Query),
+			zap.Error(e))
+
+		return nil, errors.New("unsuccessful response from sourcegraph")
+	}
+
+	return &sourcegraphv1.GetQueryResultsCountResponse{
+		Count: uint32(query.Search.Results.ResultCount),
 	}, nil
 }

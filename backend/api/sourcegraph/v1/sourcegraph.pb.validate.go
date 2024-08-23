@@ -411,3 +411,226 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CommitValidationError{}
+
+// Validate checks the field values on GetQueryResultsCountRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetQueryResultsCountRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetQueryResultsCountRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetQueryResultsCountRequestMultiError, or nil if none found.
+func (m *GetQueryResultsCountRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetQueryResultsCountRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetQuery() != "" {
+
+		if len(m.GetQuery()) < 1 {
+			err := GetQueryResultsCountRequestValidationError{
+				field:  "Query",
+				reason: "value length must be at least 1 bytes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return GetQueryResultsCountRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetQueryResultsCountRequestMultiError is an error wrapping multiple
+// validation errors returned by GetQueryResultsCountRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetQueryResultsCountRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetQueryResultsCountRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetQueryResultsCountRequestMultiError) AllErrors() []error { return m }
+
+// GetQueryResultsCountRequestValidationError is the validation error returned
+// by GetQueryResultsCountRequest.Validate if the designated constraints
+// aren't met.
+type GetQueryResultsCountRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetQueryResultsCountRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetQueryResultsCountRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetQueryResultsCountRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetQueryResultsCountRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetQueryResultsCountRequestValidationError) ErrorName() string {
+	return "GetQueryResultsCountRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetQueryResultsCountRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetQueryResultsCountRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetQueryResultsCountRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetQueryResultsCountRequestValidationError{}
+
+// Validate checks the field values on GetQueryResultsCountResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetQueryResultsCountResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetQueryResultsCountResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetQueryResultsCountResponseMultiError, or nil if none found.
+func (m *GetQueryResultsCountResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetQueryResultsCountResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return GetQueryResultsCountResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetQueryResultsCountResponseMultiError is an error wrapping multiple
+// validation errors returned by GetQueryResultsCountResponse.ValidateAll() if
+// the designated constraints aren't met.
+type GetQueryResultsCountResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetQueryResultsCountResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetQueryResultsCountResponseMultiError) AllErrors() []error { return m }
+
+// GetQueryResultsCountResponseValidationError is the validation error returned
+// by GetQueryResultsCountResponse.Validate if the designated constraints
+// aren't met.
+type GetQueryResultsCountResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetQueryResultsCountResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetQueryResultsCountResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetQueryResultsCountResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetQueryResultsCountResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetQueryResultsCountResponseValidationError) ErrorName() string {
+	return "GetQueryResultsCountResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetQueryResultsCountResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetQueryResultsCountResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetQueryResultsCountResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetQueryResultsCountResponseValidationError{}

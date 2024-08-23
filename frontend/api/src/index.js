@@ -61975,6 +61975,206 @@ export const clutch = $root.clutch = (() => {
                 return Commit;
             })();
 
+            v1.GetQueryResultsCountRequest = (function() {
+
+                /**
+                 * Properties of a GetQueryResultsCountRequest.
+                 * @memberof clutch.sourcegraph.v1
+                 * @interface IGetQueryResultsCountRequest
+                 * @property {string|null} [query] GetQueryResultsCountRequest query
+                 */
+
+                /**
+                 * Constructs a new GetQueryResultsCountRequest.
+                 * @memberof clutch.sourcegraph.v1
+                 * @classdesc Represents a GetQueryResultsCountRequest.
+                 * @implements IGetQueryResultsCountRequest
+                 * @constructor
+                 * @param {clutch.sourcegraph.v1.IGetQueryResultsCountRequest=} [properties] Properties to set
+                 */
+                function GetQueryResultsCountRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetQueryResultsCountRequest query.
+                 * @member {string} query
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountRequest
+                 * @instance
+                 */
+                GetQueryResultsCountRequest.prototype.query = "";
+
+                /**
+                 * Verifies a GetQueryResultsCountRequest message.
+                 * @function verify
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetQueryResultsCountRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.query != null && message.hasOwnProperty("query"))
+                        if (!$util.isString(message.query))
+                            return "query: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetQueryResultsCountRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcegraph.v1.GetQueryResultsCountRequest} GetQueryResultsCountRequest
+                 */
+                GetQueryResultsCountRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcegraph.v1.GetQueryResultsCountRequest)
+                        return object;
+                    let message = new $root.clutch.sourcegraph.v1.GetQueryResultsCountRequest();
+                    if (object.query != null)
+                        message.query = String(object.query);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetQueryResultsCountRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountRequest
+                 * @static
+                 * @param {clutch.sourcegraph.v1.GetQueryResultsCountRequest} message GetQueryResultsCountRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetQueryResultsCountRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.query = "";
+                    if (message.query != null && message.hasOwnProperty("query"))
+                        object.query = message.query;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetQueryResultsCountRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetQueryResultsCountRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetQueryResultsCountRequest;
+            })();
+
+            v1.GetQueryResultsCountResponse = (function() {
+
+                /**
+                 * Properties of a GetQueryResultsCountResponse.
+                 * @memberof clutch.sourcegraph.v1
+                 * @interface IGetQueryResultsCountResponse
+                 * @property {number|null} [count] GetQueryResultsCountResponse count
+                 */
+
+                /**
+                 * Constructs a new GetQueryResultsCountResponse.
+                 * @memberof clutch.sourcegraph.v1
+                 * @classdesc Represents a GetQueryResultsCountResponse.
+                 * @implements IGetQueryResultsCountResponse
+                 * @constructor
+                 * @param {clutch.sourcegraph.v1.IGetQueryResultsCountResponse=} [properties] Properties to set
+                 */
+                function GetQueryResultsCountResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetQueryResultsCountResponse count.
+                 * @member {number} count
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountResponse
+                 * @instance
+                 */
+                GetQueryResultsCountResponse.prototype.count = 0;
+
+                /**
+                 * Verifies a GetQueryResultsCountResponse message.
+                 * @function verify
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetQueryResultsCountResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.count != null && message.hasOwnProperty("count"))
+                        if (!$util.isInteger(message.count))
+                            return "count: integer expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetQueryResultsCountResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcegraph.v1.GetQueryResultsCountResponse} GetQueryResultsCountResponse
+                 */
+                GetQueryResultsCountResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcegraph.v1.GetQueryResultsCountResponse)
+                        return object;
+                    let message = new $root.clutch.sourcegraph.v1.GetQueryResultsCountResponse();
+                    if (object.count != null)
+                        message.count = object.count >>> 0;
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetQueryResultsCountResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountResponse
+                 * @static
+                 * @param {clutch.sourcegraph.v1.GetQueryResultsCountResponse} message GetQueryResultsCountResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetQueryResultsCountResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.count = 0;
+                    if (message.count != null && message.hasOwnProperty("count"))
+                        object.count = message.count;
+                    return object;
+                };
+
+                /**
+                 * Converts this GetQueryResultsCountResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcegraph.v1.GetQueryResultsCountResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetQueryResultsCountResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetQueryResultsCountResponse;
+            })();
+
             return v1;
         })();
 
