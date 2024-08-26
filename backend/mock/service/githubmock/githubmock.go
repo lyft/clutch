@@ -25,6 +25,14 @@ func (s svc) GetFile(ctx context.Context, ref *github.RemoteRef, path string) (*
 	panic("implement me")
 }
 
+func (s svc) DeleteFile(ctx context.Context, ref *github.RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error) {
+	return &githubv3.RepositoryContentResponse{
+		Commit: githubv3.Commit{
+			SHA: githubv3.String("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"),
+		},
+	}, nil
+}
+
 func (s svc) GetDirectory(ctx context.Context, ref *github.RemoteRef, path string) (*github.Directory, error) {
 	panic("implement me")
 }
