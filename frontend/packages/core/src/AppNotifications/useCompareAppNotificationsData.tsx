@@ -18,9 +18,10 @@ const useCompareAppNotificationsData = (banners: AppBanners) => {
 
   if (!isEmpty(banners?.header)) {
     const headerPreferences = {
-      title: bannersPreferences?.header?.title,
       message: bannersPreferences?.header?.message,
+      linkText: bannersPreferences?.header.linkText,
       link: bannersPreferences?.header.link,
+      severity: bannersPreferences?.header.severity,
     };
 
     if (!isEqual(banners?.header, headerPreferences)) {
@@ -37,6 +38,8 @@ const useCompareAppNotificationsData = (banners: AppBanners) => {
       message: bannersPreferences?.multiWorkflow?.message,
       workflows: bannersPreferences?.multiWorkflow.workflows,
       link: bannersPreferences?.multiWorkflow.link,
+      linkText: bannersPreferences?.multiWorkflow.linkText,
+      severity: bannersPreferences?.multiWorkflow.severity,
     };
 
     if (!isEqual(banners?.multiWorkflow, multiWorkflowPreferences)) {
@@ -53,7 +56,9 @@ const useCompareAppNotificationsData = (banners: AppBanners) => {
         const perWorkflowPreferences = {
           title: bannersPreferences?.perWorkflow?.[key]?.title,
           message: bannersPreferences?.perWorkflow?.[key]?.message,
+          linkText: bannersPreferences?.perWorkflow?.[key].linkText,
           link: bannersPreferences?.perWorkflow?.[key].link,
+          severity: bannersPreferences?.perWorkflow?.[key].severity,
         };
 
         if (!isEqual(banners?.perWorkflow?.[key], perWorkflowPreferences)) {

@@ -25,7 +25,11 @@ const LayoutWithNotifications = ({
   const showAlertPerWorkflow =
     workflow && perWorkflowData[workflow] && !perWorkflowData[workflow]?.dismissed;
   const showAlertMultiWorkflow =
-    workflow && multiWorkflowData?.workflows?.includes(workflow) && !multiWorkflowData?.dismissed;
+    showAlertPerWorkflow || perWorkflowData[workflow]?.dismissed
+      ? false
+      : workflow &&
+        multiWorkflowData?.workflows?.includes(workflow) &&
+        !multiWorkflowData?.dismissed;
 
   const onDismissAlertPerWorkflow = () => {
     onDismissAlert({
@@ -56,7 +60,7 @@ const LayoutWithNotifications = ({
           <Grid item xs>
             {showAlertPerWorkflow && (
               <Alert
-                severity={perWorkflowData[workflow]?.severity}
+                severity={perWorkflowData[workflow]?.severity || "info"}
                 title={perWorkflowData[workflow]?.title}
                 elevation={6}
                 onClose={onDismissAlertPerWorkflow}
@@ -71,7 +75,7 @@ const LayoutWithNotifications = ({
             )}
             {showAlertMultiWorkflow && !showAlertPerWorkflow && (
               <Alert
-                severity={multiWorkflowData?.severity}
+                severity={multiWorkflowData?.severity || "info"}
                 title={multiWorkflowData?.title}
                 elevation={6}
                 onClose={onDismissAlertMultiWorkflow}

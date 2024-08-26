@@ -9,6 +9,22 @@ import type { AppBanners } from "../Types";
 
 const StyledAlert = styled(Alert)({
   padding: "8px 16px 8px 16px",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const StyledAlertContent = styled.div({
+  display: "flex",
+});
+
+const StyledMessage = styled.div({
+  flexWrap: "wrap",
+  maxHeight: "40px",
+  overflowY: "auto",
+});
+
+const StyledLink = styled.div({
+  marginLeft: "10px",
 });
 
 interface HeaderNotificationProps {
@@ -34,17 +50,20 @@ const HeaderNotification = ({ bannersData, onDismissAlert }: HeaderNotificationP
       {!isEmpty(headerBannerData) && !headerBannerData?.dismissed && (
         <Grid item xs={4}>
           <StyledAlert
-            severity={headerBannerData?.severity}
-            title={headerBannerData?.title}
+            severity={headerBannerData?.severity || "info"}
             elevation={6}
             onClose={onDismissAlertHeader}
           >
-            {headerBannerData?.message}
-            {headerBannerData?.link && headerBannerData?.linkText && (
-              <LinkComponent href={headerBannerData?.link}>
-                {headerBannerData?.linkText}
-              </LinkComponent>
-            )}
+            <StyledAlertContent>
+              <StyledMessage>{headerBannerData.message}</StyledMessage>
+              {headerBannerData?.link && headerBannerData?.linkText && (
+                <StyledLink>
+                  <LinkComponent href={headerBannerData?.link}>
+                    {headerBannerData?.linkText}
+                  </LinkComponent>
+                </StyledLink>
+              )}
+            </StyledAlertContent>
           </StyledAlert>
         </Grid>
       )}

@@ -10,7 +10,6 @@ const config = require("./clutch.config");
 
 const banners = {
   header: {
-    title: "this is a header banner",
     message: "this is message header",
     linkText: "infra docs",
     link: "https://infradocs.lyft.net/index.html",
