@@ -32,7 +32,7 @@ const HeaderNotification = ({ bannersData, onDismissAlert }: HeaderNotificationP
   return (
     <>
       {!isEmpty(headerBannerData) && !headerBannerData?.dismissed && (
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <StyledAlert
             severity={headerBannerData?.severity}
             title={headerBannerData?.title}
@@ -40,7 +40,11 @@ const HeaderNotification = ({ bannersData, onDismissAlert }: HeaderNotificationP
             onClose={onDismissAlertHeader}
           >
             {headerBannerData?.message}
-            {headerBannerData?.link && <LinkComponent>{headerBannerData?.link}</LinkComponent>}
+            {headerBannerData?.link && headerBannerData?.linkText && (
+              <LinkComponent href={headerBannerData?.link}>
+                {headerBannerData?.linkText}
+              </LinkComponent>
+            )}
           </StyledAlert>
         </Grid>
       )}

@@ -54,19 +54,6 @@ const LayoutWithNotifications = ({
       {showContainer && (
         <Grid container justifyContent="center" pt={2} pb={1} px={3}>
           <Grid item xs>
-            {showAlertMultiWorkflow && (
-              <Alert
-                severity={multiWorkflowData?.severity}
-                title={multiWorkflowData?.title}
-                elevation={6}
-                onClose={onDismissAlertMultiWorkflow}
-              >
-                {multiWorkflowData?.message}
-                {multiWorkflowData?.link && (
-                  <LinkComponent>{multiWorkflowData?.link}</LinkComponent>
-                )}
-              </Alert>
-            )}
             {showAlertPerWorkflow && (
               <Alert
                 severity={perWorkflowData[workflow]?.severity}
@@ -75,8 +62,25 @@ const LayoutWithNotifications = ({
                 onClose={onDismissAlertPerWorkflow}
               >
                 {perWorkflowData[workflow]?.message}
-                {perWorkflowData[workflow]?.link && (
-                  <LinkComponent>{perWorkflowData[workflow]?.link}</LinkComponent>
+                {perWorkflowData[workflow]?.link && perWorkflowData[workflow]?.linkText && (
+                  <LinkComponent href={perWorkflowData[workflow]?.link}>
+                    {perWorkflowData[workflow]?.linkText}
+                  </LinkComponent>
+                )}
+              </Alert>
+            )}
+            {showAlertMultiWorkflow && !showAlertPerWorkflow && (
+              <Alert
+                severity={multiWorkflowData?.severity}
+                title={multiWorkflowData?.title}
+                elevation={6}
+                onClose={onDismissAlertMultiWorkflow}
+              >
+                {multiWorkflowData?.message}
+                {multiWorkflowData?.link && multiWorkflowData?.linkText && (
+                  <LinkComponent href={multiWorkflowData?.link}>
+                    {multiWorkflowData?.linkText}
+                  </LinkComponent>
                 )}
               </Alert>
             )}

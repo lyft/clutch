@@ -11,7 +11,8 @@ export interface AlertProps
 export interface Banner extends Pick<AlertProps, "title" | "severity"> {
   message: string;
   dismissed: boolean;
-  link: string;
+  linkText?: string;
+  link?: string;
 }
 
 export interface PerWorkflowBanner {
