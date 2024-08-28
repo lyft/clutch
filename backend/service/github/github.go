@@ -375,7 +375,9 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 
 	for filename, contents := range req.Files {
 		if contents == nil {
-			wt.Filesystem.Remove(filename)
+			if err := wt.Filesystem.Remove(filename); err != nil {
+				return err
+			}
 		} else {
 			fh, err := wt.Filesystem.Create(filename)
 			if err != nil {
