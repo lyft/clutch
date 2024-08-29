@@ -126,6 +126,7 @@ type Client interface {
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 	GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error)
+	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -600,4 +601,17 @@ func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, 
 	}
 
 	return r, nil
+}
+
+func (s *svc) DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error) {
+	contentRes, _, err := s.rest.Repositories.DeleteFile(ctx, ref.RepoOwner, ref.RepoName, path, &githubv3.RepositoryContentFileOptions{
+		Message: &message,
+		Branch:  &ref.Ref,
+		SHA:     &sha,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return contentRes, nil
 }

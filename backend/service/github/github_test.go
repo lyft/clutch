@@ -406,6 +406,18 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 	}, nil, nil
 }
 
+func (m *mockRepositories) DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error) {
+	if m.generalError {
+		return &githubv3.RepositoryContentResponse{}, &githubv3.Response{}, errors.New(problem)
+	}
+	return &githubv3.RepositoryContentResponse{
+
+		Commit: githubv3.Commit{
+			SHA: githubv3.String("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"),
+		},
+	}, nil, nil
+}
+
 type mockUsers struct {
 	user        githubv3.User
 	defaultUser string
@@ -1039,6 +1051,67 @@ func TestGetPullRequest(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.mockPullReq.actualNumber, resp.GetNumber())
+			}
+		})
+	}
+}
+
+var deleteFileTests = []struct {
+	name          string
+	errorText     string
+	mockRepo      *mockRepositories
+	repoOwner     string
+	repoName      string
+	branchName    string
+	filePath      string
+	fileSha       string
+	commitMessage string
+	commitSha     string
+}{
+	{
+		name:       "happy path",
+		mockRepo:   &mockRepositories{},
+		repoOwner:  "my-org",
+		repoName:   "my-repo",
+		branchName: "my-branch",
+		commitSha:  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	},
+	{
+		name:       "v3 client error",
+		mockRepo:   &mockRepositories{generalError: true},
+		errorText:  "we've had a problem",
+		repoOwner:  "my-org",
+		repoName:   "my-repo",
+		branchName: "my-branch",
+		commitSha:  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	},
+}
+
+func TestDeleteFile(t *testing.T) {
+	for _, tt := range deleteFileTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			resp, err := s.
+				DeleteFile(
+					context.Background(),
+					&RemoteRef{
+						RepoOwner: tt.repoOwner,
+						RepoName:  tt.repoName,
+						Ref:       tt.branchName,
+					}, tt.filePath, tt.fileSha, tt.commitMessage)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.commitSha, resp.GetSHA())
 			}
 		})
 	}
