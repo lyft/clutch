@@ -127,6 +127,7 @@ type Client interface {
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 	GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error)
 	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
+	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -620,4 +621,72 @@ func (s *svc) DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message
 		return nil, err
 	}
 	return contentRes, nil
+}
+
+func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error) {
+	cloneOpts := &git.CloneOptions{
+		SingleBranch:  true,
+		Depth:         1,
+		URL:           fmt.Sprintf("https://github.com/%s/%s", ref.RepoOwner, ref.RepoName),
+		ReferenceName: plumbing.NewBranchReferenceName(ref.Ref),
+		Auth:          s.basicAuth(ctx),
+	}
+
+	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), cloneOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	wt, err := repo.Worktree()
+	if err != nil {
+		return nil, err
+	}
+
+	checkoutOpts := &git.CheckoutOptions{
+		Branch: plumbing.NewBranchReferenceName(ref.Ref),
+	}
+	if err := wt.Checkout(checkoutOpts); err != nil {
+		return nil, err
+	}
+
+	for filename, contents := range files {
+		if contents == nil {
+			if err := wt.Filesystem.Remove(filename); err != nil {
+				return nil, err
+			}
+		} else {
+			fh, err := wt.Filesystem.Create(filename)
+			if err != nil {
+				return nil, err
+			}
+			if _, err := io.Copy(fh, contents); err != nil {
+				return nil, err
+			}
+			if err := wt.AddWithOptions(&git.AddOptions{Path: filename}); err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	opts := commitOptionsFromClaims(ctx, time.Now())
+	hash, err := wt.Commit(message, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	pushOpts := &git.PushOptions{Auth: s.basicAuth(ctx)}
+	if err := repo.PushContext(ctx, pushOpts); err != nil {
+		return nil, err
+	}
+
+	commit, err := s.GetCommit(ctx, &RemoteRef{
+		RepoOwner: ref.RepoOwner,
+		RepoName:  ref.RepoName,
+		Ref:       hash.String(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return commit, nil
 }
