@@ -346,6 +346,28 @@ func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.Com
 	return ret
 }
 
+func deleteWorktreeDirFiles(wt *git.Worktree, dirPath string) error {
+	files, err := wt.Filesystem.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		filePath := wt.Filesystem.Join(dirPath, file.Name())
+		if file.IsDir() {
+			if err := deleteWorktreeDirFiles(wt, filePath); err != nil {
+				return err
+			}
+		} else {
+			if _, err := wt.Remove(filePath); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
 	cloneOpts := &git.CloneOptions{
@@ -374,20 +396,26 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		return err
 	}
 
-	for filename, contents := range req.Files {
+	for filePath, contents := range req.Files {
 		if contents == nil {
-			if err := wt.Filesystem.Remove(filename); err != nil {
-				return err
+			if err := wt.Filesystem.Remove(filePath); err != nil {
+				if strings.HasPrefix(err.Error(), "dir:") {
+					if err := deleteWorktreeDirFiles(wt, filePath); err != nil {
+						return err
+					}
+				} else {
+					return err
+				}
 			}
 		} else {
-			fh, err := wt.Filesystem.Create(filename)
+			fh, err := wt.Filesystem.Create(filePath)
 			if err != nil {
 				return err
 			}
 			if _, err := io.Copy(fh, contents); err != nil {
 				return err
 			}
-			if err := wt.AddWithOptions(&git.AddOptions{Path: filename}); err != nil {
+			if err := wt.AddWithOptions(&git.AddOptions{Path: filePath}); err != nil {
 				return err
 			}
 		}
