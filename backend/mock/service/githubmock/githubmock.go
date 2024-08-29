@@ -105,6 +105,12 @@ func (s svc) GetUser(ctx context.Context, username string) (*githubv3.User, erro
 	return &githubv3.User{Login: &login, AvatarURL: &avatarURL}, nil
 }
 
+func (s svc) CreateCommit(ctx context.Context, ref *github.RemoteRef, message string, files github.FileMap) (*github.Commit, error) {
+	return &github.Commit{
+		SHA: "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	}, nil
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
