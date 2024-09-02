@@ -651,7 +651,7 @@ func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, 
 
 	for filename, contents := range files {
 		if contents == nil {
-			if err := wt.Filesystem.Remove(filename); err != nil {
+			if _, err := wt.Remove(filename); err != nil {
 				return nil, err
 			}
 		} else {
