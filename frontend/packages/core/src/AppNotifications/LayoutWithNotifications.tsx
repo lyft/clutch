@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
 
 import { Alert } from "../Feedback";
@@ -22,8 +23,14 @@ const LayoutWithNotifications = ({
   const perWorkflowData = bannersData?.perWorkflow;
   const multiWorkflowData = bannersData?.multiWorkflow;
 
-  const showAlertPerWorkflow =
+  const location = useLocation();
+
+  const hasPerWorkflowAlert =
     workflow && perWorkflowData[workflow] && !perWorkflowData[workflow]?.dismissed;
+  const showAlertPerWorkflow = !isEmpty(perWorkflowData[workflow]?.paths)
+    ? hasPerWorkflowAlert && perWorkflowData[workflow]?.paths?.includes(location.pathname)
+    : hasPerWorkflowAlert;
+
   const showAlertMultiWorkflow =
     showAlertPerWorkflow || perWorkflowData[workflow]?.dismissed
       ? false
