@@ -349,61 +349,10 @@ func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.Com
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
-	cloneOpts := &git.CloneOptions{
-		SingleBranch:  req.SingleBranch,
-		Depth:         1,
-		URL:           fmt.Sprintf("https://github.com/%s/%s", req.Ref.RepoOwner, req.Ref.RepoName),
-		ReferenceName: plumbing.NewBranchReferenceName(req.Ref.Ref),
-		Auth:          s.basicAuth(ctx),
-	}
-
-	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), cloneOpts)
+	_, err := s.createWorktreeCommit(ctx, req.Ref, req.CommitMessage, req.Files, &req.BranchName, &req.SingleBranch)
 	if err != nil {
 		return err
 	}
-
-	wt, err := repo.Worktree()
-	if err != nil {
-		return err
-	}
-
-	checkoutOpts := &git.CheckoutOptions{
-		Branch: plumbing.NewBranchReferenceName(req.BranchName),
-		Create: true,
-	}
-	if err := wt.Checkout(checkoutOpts); err != nil {
-		return err
-	}
-
-	for filePath, contents := range req.Files {
-		if contents == nil {
-			if _, err := wt.Remove(filePath); err != nil {
-				return err
-			}
-		} else {
-			fh, err := wt.Filesystem.Create(filePath)
-			if err != nil {
-				return err
-			}
-			if _, err := io.Copy(fh, contents); err != nil {
-				return err
-			}
-			if err := wt.AddWithOptions(&git.AddOptions{Path: filePath}); err != nil {
-				return err
-			}
-		}
-	}
-
-	opts := commitOptionsFromClaims(ctx, time.Now())
-	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
-		return err
-	}
-
-	pushOpts := &git.PushOptions{Auth: s.basicAuth(ctx)}
-	if err := repo.PushContext(ctx, pushOpts); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -624,8 +573,31 @@ func (s *svc) DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message
 }
 
 func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error) {
+	hash, err := s.createWorktreeCommit(ctx, ref, message, files, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	commit, err := s.GetCommit(ctx, &RemoteRef{
+		RepoOwner: ref.RepoOwner,
+		RepoName:  ref.RepoName,
+		Ref:       hash.String(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return commit, nil
+}
+
+func (s *svc) createWorktreeCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap, branchName *string, singleBranch *bool) (*plumbing.Hash, error) {
+	singleBrn := true
+	if singleBranch != nil {
+		singleBrn = *singleBranch
+	}
+
 	cloneOpts := &git.CloneOptions{
-		SingleBranch:  true,
+		SingleBranch:  singleBrn,
 		Depth:         1,
 		URL:           fmt.Sprintf("https://github.com/%s/%s", ref.RepoOwner, ref.RepoName),
 		ReferenceName: plumbing.NewBranchReferenceName(ref.Ref),
@@ -645,6 +617,14 @@ func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, 
 	checkoutOpts := &git.CheckoutOptions{
 		Branch: plumbing.NewBranchReferenceName(ref.Ref),
 	}
+
+	if branchName != nil {
+		checkoutOpts = &git.CheckoutOptions{
+			Branch: plumbing.NewBranchReferenceName(*branchName),
+			Create: true,
+		}
+	}
+
 	if err := wt.Checkout(checkoutOpts); err != nil {
 		return nil, err
 	}
@@ -679,14 +659,5 @@ func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, 
 		return nil, err
 	}
 
-	commit, err := s.GetCommit(ctx, &RemoteRef{
-		RepoOwner: ref.RepoOwner,
-		RepoName:  ref.RepoName,
-		Ref:       hash.String(),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return commit, nil
+	return &hash, nil
 }
