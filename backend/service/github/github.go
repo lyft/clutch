@@ -375,20 +375,20 @@ func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error 
 		return err
 	}
 
-	for filename, contents := range req.Files {
+	for filePath, contents := range req.Files {
 		if contents == nil {
-			if err := wt.Filesystem.Remove(filename); err != nil {
+			if _, err := wt.Remove(filePath); err != nil {
 				return err
 			}
 		} else {
-			fh, err := wt.Filesystem.Create(filename)
+			fh, err := wt.Filesystem.Create(filePath)
 			if err != nil {
 				return err
 			}
 			if _, err := io.Copy(fh, contents); err != nil {
 				return err
 			}
-			if err := wt.AddWithOptions(&git.AddOptions{Path: filename}); err != nil {
+			if err := wt.AddWithOptions(&git.AddOptions{Path: filePath}); err != nil {
 				return err
 			}
 		}
