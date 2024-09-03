@@ -111,6 +111,23 @@ func (s svc) CreateCommit(ctx context.Context, ref *github.RemoteRef, message st
 	}, nil
 }
 
+func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error) {
+	var codeResults []*githubv3.CodeResult
+
+	codeResults = append(codeResults, &githubv3.CodeResult{
+		Name:       githubv3.String("file.go"),
+		Path:       githubv3.String("path/to/file.go"),
+		SHA:        githubv3.String("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"),
+		HTMLURL:    githubv3.String("https://github.com/owner/repo/path/to/file.go"),
+		Repository: nil,
+	})
+	return &githubv3.CodeSearchResult{
+		Total:             githubv3.Int(1),
+		IncompleteResults: githubv3.Bool(false),
+		CodeResults:       codeResults,
+	}, nil
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }

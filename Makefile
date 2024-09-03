@@ -56,7 +56,7 @@ backend-dev-mock:
 
 .PHONY: backend-lint # Lint the backend code.
 backend-lint: preflight-checks-backend
-	tools/golangci-lint.sh run
+	tools/golangci-lint.sh run --verbose
 
 .PHONY: backend-lint-fix # Lint and fix the backend code.
 backend-lint-fix: preflight-checks-backend

@@ -85,8 +85,6 @@ type v3repositories interface {
 	CompareCommits(ctx context.Context, owner, repo string, base, head string, opts *githubv3.ListOptions) (*githubv3.CommitsComparison, *githubv3.Response, error)
 	// GetCommit fetches the specified commit, including all details about it.
 	GetCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) (*githubv3.RepositoryCommit, *githubv3.Response, error)
-	// GetBranch gets the specified branch for a repository.
-	GetBranch(ctx context.Context, owner, repo, branch string, followRedirects bool) (*githubv3.Branch, *githubv3.Response, error)
 	// DeleteFile deletes a file from a repository and returns the commit.
 	// Requires the blob SHA of the file to be deleted.
 	DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error)
