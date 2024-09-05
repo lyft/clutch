@@ -15,12 +15,12 @@ const StyledAlert = styled(Alert)({
 
 const StyledAlertContent = styled.div({
   display: "flex",
+  maxHeight: "40px",
+  overflowY: "auto",
 });
 
 const StyledMessage = styled.div({
   flexWrap: "wrap",
-  maxHeight: "40px",
-  overflowY: "auto",
 });
 
 const StyledLink = styled.div({
