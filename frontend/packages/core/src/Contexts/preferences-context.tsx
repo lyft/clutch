@@ -9,6 +9,11 @@ type Dispatch = (action: Action) => void;
 type UserPreferencesProviderProps = { children: React.ReactNode };
 const DEFAULT_PREFERENCES: State = {
   timeFormat: "UTC",
+  banners: {
+    header: {},
+    multiWorkflow: {},
+    perWorkflow: {},
+  },
 } as any;
 interface ContextProps {
   preferences: State;

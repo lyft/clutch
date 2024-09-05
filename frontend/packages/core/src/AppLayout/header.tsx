@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Theme, Toolbar, Typography } from "@mui/material";
 
-import type { AppConfiguration } from "../AppProvider";
+import AppNotification from "../AppNotifications";
 import { FeatureOn, SimpleFeatureFlag } from "../flags";
 import { NPSHeader } from "../NPS";
+import type { AppBanners, AppConfiguration } from "../Types";
 
 import Logo from "./logo";
 import Notifications from "./notifications";
@@ -43,6 +44,7 @@ interface HeaderProps extends AppConfiguration {
    * Will enable the user information component in the header
    */
   userInfo?: boolean;
+  banners?: AppBanners;
 }
 
 const AppBar = styled(MuiAppBar)(({ theme }: { theme: Theme }) => ({
@@ -73,6 +75,7 @@ const StyledLogo = styled("img")({
 const Header: React.FC<HeaderProps> = ({
   title = "clutch",
   logo = <Logo />,
+  banners,
   enableNPS = false,
   search = true,
   feedback = true,
@@ -88,6 +91,7 @@ const Header: React.FC<HeaderProps> = ({
           <Link to="/">{typeof logo === "string" ? <StyledLogo src={logo} /> : logo}</Link>
           <Title>{title}</Title>
           <Grid container alignItems="center" justifyContent="flex-end">
+            <AppNotification type="header" banners={banners} />
             {search && (
               <Box>
                 <SearchField />

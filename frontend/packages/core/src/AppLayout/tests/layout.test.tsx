@@ -5,11 +5,20 @@ import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import * as appContext from "../../Contexts/app-context";
+import * as preferencesContext from "../../Contexts/preferences-context";
 import { client } from "../../Network";
 import { ThemeProvider } from "../../Theme";
 import AppLayout from "..";
 
 jest.spyOn(appContext, "useAppContext").mockReturnValue({ workflows: [] });
+jest.spyOn(preferencesContext, "useUserPreferences").mockReturnValue({
+  timeFormat: "UTC",
+  banners: {
+    header: {},
+    multiWorkflow: {},
+    perWorkflow: {},
+  },
+});
 jest.spyOn(client, "post").mockReturnValue(
   new Promise((resolve, reject) => {
     resolve({

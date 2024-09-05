@@ -4,6 +4,7 @@ import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
 
 import AppLayout from "../AppLayout";
+import AppNotification from "../AppNotifications";
 import { ApplicationContext, ShortLinkContext, UserPreferencesProvider } from "../Contexts";
 import type { HeaderItem, TriggeredHeaderData } from "../Contexts/app-context";
 import type { ShortLinkContextProps } from "../Contexts/short-link-context";
@@ -13,6 +14,7 @@ import { FEATURE_FLAG_POLL_RATE, featureFlags } from "../flags";
 import Landing from "../landing";
 import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
+import type { AppConfiguration } from "../Types";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
@@ -30,13 +32,6 @@ export interface UserConfiguration {
     icon: WorkflowIcon;
     [key: string]: WorkflowIcon | ConfiguredRoute;
   };
-}
-
-export interface AppConfiguration {
-  /** Will override the title of the given application */
-  title?: string;
-  /** Supports a react node or a string representing a public assets path */
-  logo?: React.ReactNode | string;
 }
 
 /**
@@ -108,6 +103,7 @@ const ClutchApp = ({
   React.useEffect(() => {
     loadWorkflows();
     const interval = setInterval(loadWorkflows, FEATURE_FLAG_POLL_RATE);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -181,7 +177,21 @@ const ClutchApp = ({
                       />
                     }
                   >
-                    {!hasCustomLanding && <Route key="landing" path="" element={<Landing />} />}
+                    {!hasCustomLanding && (
+                      <Route
+                        key="landing"
+                        path=""
+                        element={
+                          <AppNotification
+                            type="layout"
+                            workflow="landing"
+                            banners={appConfiguration?.banners}
+                          >
+                            <Landing />
+                          </AppNotification>
+                        }
+                      />
+                    )}
                     {workflows.map((workflow: Workflow) => {
                       const workflowPath = workflow.path.replace(/^\/+/, "").replace(/\/+$/, "");
                       const workflowKey = workflow.path.split("/")[0];
@@ -208,10 +218,18 @@ const ClutchApp = ({
                               <Route
                                 key={workflow.path}
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
-                                element={React.cloneElement(<route.component />, {
-                                  ...route.componentProps,
-                                  heading,
-                                })}
+                                element={
+                                  <AppNotification
+                                    type="layout"
+                                    workflow={workflow?.displayName}
+                                    banners={appConfiguration?.banners}
+                                  >
+                                    {React.cloneElement(<route.component />, {
+                                      ...route.componentProps,
+                                      heading,
+                                    })}
+                                  </AppNotification>
+                                }
                               />
                             );
                           })}
