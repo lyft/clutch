@@ -88,7 +88,7 @@ exports[`renders correctly 1`] = `
                     <span
                       class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
-                      Modify
+                      Verify
                     </span>
                   </span>
                 </span>

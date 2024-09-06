@@ -88,7 +88,47 @@ exports[`renders correctly 1`] = `
                     <span
                       class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
                     >
-                      Details
+                      Verify
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div
+                class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-n7tliy-MuiStep-root"
+              >
+                <div
+                  class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-zpcwqm-MuiStepConnector-root"
+                >
+                  <span
+                    class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-w01xna-MuiStepConnector-line"
+                  />
+                </div>
+                <span
+                  class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-ascpo7-MuiStepLabel-root"
+                >
+                  <span
+                    class="MuiStepLabel-iconContainer MuiStepLabel-alternativeLabel css-vnkopk-MuiStepLabel-iconContainer"
+                  >
+                    <div
+                      background="#DBDBE0"
+                      border="#DBDBE0"
+                      class=" css-yqpyq0"
+                    >
+                      <div
+                        class="css-1c0nvhn"
+                        font="rgba(13, 16, 48, 0.38)"
+                      >
+                        3
+                      </div>
+                    </div>
+                  </span>
+                  <span
+                    class="MuiStepLabel-labelContainer css-17kxmxq-MuiStepLabel-labelContainer"
+                  >
+                    <span
+                      class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-15exmdl-MuiStepLabel-label"
+                    >
+                      Result
                     </span>
                   </span>
                 </span>
@@ -105,55 +145,25 @@ exports[`renders correctly 1`] = `
             <div
               class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
             >
-              <div
-                class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1wvyz87-MuiFormControl-root-MuiTextField-root"
+              <span
+                class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-vzjh3v-MuiCircularProgress-root"
+                role="progressbar"
+                style="width: 40px; height: 40px;"
               >
-                <label
-                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary css-1eup1al-MuiFormLabel-root-MuiInputLabel-root"
-                  data-shrink="true"
-                  for="mui-1"
-                  id="mui-1-label"
+                <svg
+                  class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+                  viewBox="22 22 44 44"
                 >
-                  IP Address
-                </label>
-                <div
-                  class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-nq81ol-MuiInputBase-root-MuiOutlinedInput-root"
-                >
-                  <input
-                    aria-invalid="false"
-                    class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1tmw4j-MuiInputBase-input-MuiOutlinedInput-input"
-                    id="mui-1"
-                    placeholder="127.0.0.1"
-                    type="text"
-                    value=""
+                  <circle
+                    class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+                    cx="44"
+                    cy="44"
+                    fill="none"
+                    r="20.2"
+                    stroke-width="3.6"
                   />
-                  <fieldset
-                    aria-hidden="true"
-                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
-                  >
-                    <legend
-                      class="css-t08j42"
-                    >
-                      <span>
-                        IP Address
-                      </span>
-                    </legend>
-                  </fieldset>
-                </div>
-              </div>
-              <div
-                class="MuiGrid-root MuiGrid-container css-mgb5sa-MuiGrid-root"
-                data-border="top"
-              >
-                <button
-                  class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation css-61rao6-MuiButtonBase-root-MuiButton-root"
-                  palette="[object Object]"
-                  tabindex="0"
-                  type="button"
-                >
-                  Search
-                </button>
-              </div>
+                </svg>
+              </span>
             </div>
             <div
               class="MuiGrid-root MuiGrid-container css-1lym95h-MuiGrid-root"
