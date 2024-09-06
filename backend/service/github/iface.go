@@ -26,6 +26,7 @@ type v3repositories interface {
 	GetContents(ctx context.Context, owner, repo, path string, opt *githubv3.RepositoryContentGetOptions) (*githubv3.RepositoryContent, []*githubv3.RepositoryContent, *githubv3.Response, error)
 	CompareCommits(ctx context.Context, owner, repo string, base, head string, opts *githubv3.ListOptions) (*githubv3.CommitsComparison, *githubv3.Response, error)
 	GetCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) (*githubv3.RepositoryCommit, *githubv3.Response, error)
+	DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/pulls.go.
@@ -35,6 +36,8 @@ type v3pullrequests interface {
 	Create(ctx context.Context, owner string, repo string, pull *githubv3.NewPullRequest) (*githubv3.PullRequest, *githubv3.Response, error)
 	// ListPullRequestsWithCommit returns pull requests associated with a commit SHA.
 	ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error)
+	// GetPullRequest returns a single pull request specified by the PR number
+	Get(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error)
 }
 
 type v4client interface {

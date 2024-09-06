@@ -1,9 +1,15 @@
 import React from "react";
 
-enum WizardAction {
+enum WizardActionType {
   NEXT,
   BACK,
   RESET,
+  GO_TO_STEP,
+}
+
+interface WizardAction {
+  type: WizardActionType;
+  step?: number;
 }
 
 interface StateProps {
@@ -11,21 +17,26 @@ interface StateProps {
 }
 
 const reducer = (state: StateProps, action: WizardAction): StateProps => {
-  switch (action) {
-    case WizardAction.NEXT:
+  switch (action.type) {
+    case WizardActionType.NEXT:
       return {
         ...state,
         activeStep: state.activeStep + 1,
       };
-    case WizardAction.BACK:
+    case WizardActionType.BACK:
       return {
         ...state,
         activeStep: state.activeStep > 0 ? state.activeStep - 1 : 0,
       };
-    case WizardAction.RESET:
+    case WizardActionType.RESET:
       return {
         ...state,
         activeStep: 0,
+      };
+    case WizardActionType.GO_TO_STEP:
+      return {
+        ...state,
+        activeStep: action.step,
       };
     default:
       throw new Error(`Unknown wizard state: ${action}`);
@@ -40,4 +51,4 @@ const useWizardState = (): [StateProps, React.Dispatch<WizardAction>] => {
   return React.useReducer(reducer, initialState);
 };
 
-export { WizardAction, useWizardState };
+export { WizardActionType, useWizardState };

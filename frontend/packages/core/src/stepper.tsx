@@ -8,6 +8,7 @@ import type {
 import {
   alpha,
   Step as MuiStep,
+  StepButton as MuiStepButton,
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
   Stepper as MuiStepper,
@@ -17,7 +18,7 @@ import {
 
 import styled from "./styled";
 
-const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
+const StepContainer = styled("div")<{ $orientation: StepperOrientation; $nonLinear: boolean }>(
   {
     ".MuiStepper-root": {
       background: "transparent",
@@ -53,16 +54,21 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
     },
   },
   props => ({ theme }: { theme: Theme }) => ({
+    ".MuiStep-root:hover": {
+      ".MuiStepLabel-iconContainer .icon-circle-nonlinear-pending": {
+        border: props.$nonLinear ? "2px solid black" : "",
+      },
+    },
     ".MuiStepLabel-label": {
       fontWeight: 500,
       fontSize: "14px",
-      color: alpha(theme.palette.secondary[900], 0.38),
+      color: theme.palette.secondary[600],
     },
     ".MuiStepLabel-label.Mui-active": {
-      color: theme.palette.secondary[900],
+      color: theme.palette.primary[600],
     },
     ".MuiStepLabel-label.Mui-completed": {
-      color: alpha(theme.palette.secondary[900], 0.38),
+      color: theme.palette.secondary[600],
     },
     ...(props.$orientation === "horizontal"
       ? {
@@ -78,9 +84,11 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
             },
           },
           ".MuiStepConnector-line": {
-            height: "5px",
+            height: props.$nonLinear ? "3px" : "5px",
             border: 0,
-            backgroundColor: theme.palette.secondary[200],
+            backgroundColor: props.$nonLinear
+              ? theme.palette.primary[600]
+              : theme.palette.secondary[200],
             borderRadius: "4px",
           },
           ".Mui-active .MuiStepConnector-line": {
@@ -93,7 +101,9 @@ const StepContainer = styled("div")<{ $orientation: StepperOrientation }>(
       : {
           margin: "0px 2px 8px 2px",
           ".MuiStepConnector-line": {
-            borderColor: theme.palette.secondary[300],
+            borderColor: props.$nonLinear
+              ? theme.palette.primary[600]
+              : theme.palette.secondary[300],
           },
           ".Mui-active .MuiStepConnector-line": {
             borderColor: theme.palette.primary[600],
@@ -138,20 +148,21 @@ type StepIconVariant = "active" | "pending" | "success" | "failed";
 export interface StepIconProps {
   index: number;
   variant: StepIconVariant;
+  nonLinear?: boolean;
 }
 
-const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
+const StepIcon: React.FC<StepIconProps> = ({ index, variant, nonLinear = false }) => {
   const theme = useTheme();
   const stepIconVariants = {
     active: {
       background: theme.palette.contrastColor,
-      border: `1px solid ${theme.palette.primary[600]}`,
+      border: `2px solid ${theme.palette.primary[600]}`,
       font: theme.palette.primary[600],
     },
     pending: {
-      background: theme.palette.secondary[200],
-      border: theme.palette.secondary[200],
-      font: alpha(theme.palette.secondary[900], 0.38),
+      background: nonLinear ? theme.palette.secondary[100] : theme.palette.secondary[200],
+      border: nonLinear ? theme.palette.secondary[100] : theme.palette.secondary[200],
+      font: nonLinear ? theme.palette.secondary[600] : alpha(theme.palette.secondary[900], 0.38),
     },
     success: {
       background: theme.palette.primary[600],
@@ -171,8 +182,9 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
   } else if (variant === "failed") {
     Icon = <ClearIcon font={color.font} fontSize="large" />;
   }
+  const pendingClass = nonLinear && variant === "pending" ? "icon-circle-nonlinear-pending" : "";
   return (
-    <Circle background={color.background} border={color.border}>
+    <Circle background={color.background} border={color.border} className={pendingClass}>
       <DefaultIcon font={color.font}>{Icon}</DefaultIcon>
     </Circle>
   );
@@ -183,19 +195,28 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
 export interface StepProps {
   label: string;
   error?: boolean;
+  isComplete?: boolean;
 }
 /* eslint-enable react/no-unused-prop-types */
 
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
-export interface StepperProps extends Pick<MuiStepperProps, "orientation"> {
+export interface StepperProps extends Pick<MuiStepperProps, "orientation" | "nonLinear"> {
   activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
+  handleStepClick?: (index: number) => void;
 }
 
-const Stepper = ({ activeStep, orientation = "horizontal", children }: StepperProps) => (
-  <StepContainer $orientation={orientation}>
+const Stepper = ({
+  activeStep,
+  orientation = "horizontal",
+  children,
+  nonLinear = false,
+  handleStepClick,
+}: StepperProps) => (
+  <StepContainer $orientation={orientation} $nonLinear={nonLinear}>
     <MuiStepper
+      nonLinear={nonLinear}
       activeStep={activeStep}
       connector={<MuiStepConnector />}
       alternativeLabel={orientation === "horizontal"}
@@ -205,19 +226,32 @@ const Stepper = ({ activeStep, orientation = "horizontal", children }: StepperPr
         const stepProps = {
           index: idx + 1,
           variant: "pending" as StepIconVariant,
+          nonLinear,
         };
-        if (idx === activeStep) {
-          stepProps.variant = step.props.error ? "failed" : "active";
-        } else if (idx < activeStep) {
+        const { isComplete = false } = step.props;
+
+        if (isComplete || (!nonLinear && idx < activeStep)) {
           stepProps.variant = "success";
+        } else if (idx === activeStep) {
+          stepProps.variant = step.props.error ? "failed" : "active";
         }
 
+        const label = step.props.label ?? `Step ${idx + 1}`;
+        const icon = <StepIcon {...stepProps} />;
+
         return (
-          <MuiStep key={step.props.label}>
-            {/* eslint-disable-next-line react/no-unstable-nested-components */}
-            <MuiStepLabel StepIconComponent={() => <StepIcon {...stepProps} />}>
-              {step.props.label ?? `Step ${idx + 1}`}
-            </MuiStepLabel>
+          <MuiStep key={label} completed={isComplete}>
+            {nonLinear ? (
+              <MuiStepButton
+                disabled={isComplete}
+                onClick={() => handleStepClick && handleStepClick(idx)}
+                icon={icon}
+              >
+                {label}
+              </MuiStepButton>
+            ) : (
+              <MuiStepLabel icon={icon}>{label}</MuiStepLabel>
+            )}
           </MuiStep>
         );
       })}

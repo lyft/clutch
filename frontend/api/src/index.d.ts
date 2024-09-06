@@ -25804,6 +25804,102 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of a GetQueryResultsCountRequest. */
+            interface IGetQueryResultsCountRequest {
+
+                /** GetQueryResultsCountRequest query */
+                query?: (string|null);
+            }
+
+            /** Represents a GetQueryResultsCountRequest. */
+            class GetQueryResultsCountRequest implements IGetQueryResultsCountRequest {
+
+                /**
+                 * Constructs a new GetQueryResultsCountRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcegraph.v1.IGetQueryResultsCountRequest);
+
+                /** GetQueryResultsCountRequest query. */
+                public query: string;
+
+                /**
+                 * Verifies a GetQueryResultsCountRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQueryResultsCountRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQueryResultsCountRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcegraph.v1.GetQueryResultsCountRequest;
+
+                /**
+                 * Creates a plain object from a GetQueryResultsCountRequest message. Also converts values to other types if specified.
+                 * @param message GetQueryResultsCountRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcegraph.v1.GetQueryResultsCountRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQueryResultsCountRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetQueryResultsCountResponse. */
+            interface IGetQueryResultsCountResponse {
+
+                /** GetQueryResultsCountResponse count */
+                count?: (number|null);
+            }
+
+            /** Represents a GetQueryResultsCountResponse. */
+            class GetQueryResultsCountResponse implements IGetQueryResultsCountResponse {
+
+                /**
+                 * Constructs a new GetQueryResultsCountResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcegraph.v1.IGetQueryResultsCountResponse);
+
+                /** GetQueryResultsCountResponse count. */
+                public count: number;
+
+                /**
+                 * Verifies a GetQueryResultsCountResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetQueryResultsCountResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetQueryResultsCountResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcegraph.v1.GetQueryResultsCountResponse;
+
+                /**
+                 * Creates a plain object from a GetQueryResultsCountResponse message. Also converts values to other types if specified.
+                 * @param message GetQueryResultsCountResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcegraph.v1.GetQueryResultsCountResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetQueryResultsCountResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
     }
 

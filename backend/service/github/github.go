@@ -99,6 +99,7 @@ type File struct {
 type Entry struct {
 	Name string
 	Type string
+	SHA  string
 }
 
 type Directory struct {
@@ -124,6 +125,9 @@ type Client interface {
 	ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sha string, opts *githubv3.ListOptions) ([]*PullRequestInfo, error)
 	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
 	GetUser(ctx context.Context, username string) (*githubv3.User, error)
+	GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error)
+	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
+	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -298,6 +302,14 @@ func (s *svc) ListPullRequestsWithCommit(ctx context.Context, ref *RemoteRef, sh
 	return prInfos, nil
 }
 
+func (s *svc) GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error) {
+	pr, _, err := s.rest.PullRequests.Get(ctx, owner, repo, number)
+	if err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
 type CreateBranchRequest struct {
 	// The base for the new branch.
 	Ref *RemoteRef
@@ -337,52 +349,10 @@ func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.Com
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
-	cloneOpts := &git.CloneOptions{
-		SingleBranch:  req.SingleBranch,
-		Depth:         1,
-		URL:           fmt.Sprintf("https://github.com/%s/%s", req.Ref.RepoOwner, req.Ref.RepoName),
-		ReferenceName: plumbing.NewBranchReferenceName(req.Ref.Ref),
-		Auth:          s.basicAuth(ctx),
-	}
-
-	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), cloneOpts)
+	_, err := s.createWorktreeCommit(ctx, req.Ref, req.CommitMessage, req.Files, &req.BranchName, &req.SingleBranch)
 	if err != nil {
 		return err
 	}
-
-	wt, err := repo.Worktree()
-	if err != nil {
-		return err
-	}
-
-	checkoutOpts := &git.CheckoutOptions{
-		Branch: plumbing.NewBranchReferenceName(req.BranchName),
-		Create: true,
-	}
-	if err := wt.Checkout(checkoutOpts); err != nil {
-		return err
-	}
-
-	for filename, contents := range req.Files {
-		fh, err := wt.Filesystem.Create(filename)
-		if err != nil {
-			return err
-		}
-		if _, err := io.Copy(fh, contents); err != nil {
-			return err
-		}
-	}
-
-	opts := commitOptionsFromClaims(ctx, time.Now())
-	if _, err := wt.Commit(req.CommitMessage, opts); err != nil {
-		return err
-	}
-
-	pushOpts := &git.PushOptions{Auth: s.basicAuth(ctx)}
-	if err := repo.PushContext(ctx, pushOpts); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -510,17 +480,21 @@ func (s *svc) GetDirectory(ctx context.Context, ref *RemoteRef, path string) (*D
 		entries = append(entries, &Entry{
 			Name: string(obj.Name),
 			Type: string(obj.Type),
+			SHA:  string(obj.OID),
 		})
 	}
 
-	d := &Directory{
-		Path:             path,
-		Entries:          entries,
-		LastModifiedTime: q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time,
-		LastModifiedSHA:  string(q.Repository.Ref.Commit.History.Nodes[0].OID),
+	directory := &Directory{
+		Path:    path,
+		Entries: entries,
 	}
 
-	return d, nil
+	if len(q.Repository.Ref.Commit.History.Nodes) > 0 {
+		directory.LastModifiedTime = q.Repository.Ref.Commit.History.Nodes[0].CommittedDate.Time
+		directory.LastModifiedSHA = string(q.Repository.Ref.Commit.History.Nodes[0].OID)
+	}
+
+	return directory, nil
 }
 
 /*
@@ -539,6 +513,7 @@ type Commit struct {
 	Files     []*githubv3.CommitFile
 	Message   string
 	Author    *githubv3.User
+	SHA       string
 	ParentRef string
 }
 
@@ -550,6 +525,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 
 	// Currently we are using the Author (Github) rather than commit Author (Git)
 	retCommit := &Commit{
+		SHA:     commit.GetSHA(),
 		Files:   commit.Files,
 		Message: commit.GetCommit().GetMessage(),
 		Author:  commit.GetAuthor(),
@@ -581,4 +557,107 @@ func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, 
 	}
 
 	return r, nil
+}
+
+func (s *svc) DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error) {
+	contentRes, _, err := s.rest.Repositories.DeleteFile(ctx, ref.RepoOwner, ref.RepoName, path, &githubv3.RepositoryContentFileOptions{
+		Message: &message,
+		Branch:  &ref.Ref,
+		SHA:     &sha,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return contentRes, nil
+}
+
+func (s *svc) CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error) {
+	hash, err := s.createWorktreeCommit(ctx, ref, message, files, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	commit, err := s.GetCommit(ctx, &RemoteRef{
+		RepoOwner: ref.RepoOwner,
+		RepoName:  ref.RepoName,
+		Ref:       hash.String(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return commit, nil
+}
+
+func (s *svc) createWorktreeCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap, branchName *string, singleBranch *bool) (*plumbing.Hash, error) {
+	singleBrn := true
+	if singleBranch != nil {
+		singleBrn = *singleBranch
+	}
+
+	cloneOpts := &git.CloneOptions{
+		SingleBranch:  singleBrn,
+		Depth:         1,
+		URL:           fmt.Sprintf("https://github.com/%s/%s", ref.RepoOwner, ref.RepoName),
+		ReferenceName: plumbing.NewBranchReferenceName(ref.Ref),
+		Auth:          s.basicAuth(ctx),
+	}
+
+	repo, err := git.CloneContext(ctx, memory.NewStorage(), memfs.New(), cloneOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	wt, err := repo.Worktree()
+	if err != nil {
+		return nil, err
+	}
+
+	checkoutOpts := &git.CheckoutOptions{
+		Branch: plumbing.NewBranchReferenceName(ref.Ref),
+	}
+
+	if branchName != nil {
+		checkoutOpts = &git.CheckoutOptions{
+			Branch: plumbing.NewBranchReferenceName(*branchName),
+			Create: true,
+		}
+	}
+
+	if err := wt.Checkout(checkoutOpts); err != nil {
+		return nil, err
+	}
+
+	for filename, contents := range files {
+		if contents == nil {
+			if _, err := wt.Remove(filename); err != nil {
+				return nil, err
+			}
+		} else {
+			fh, err := wt.Filesystem.Create(filename)
+			if err != nil {
+				return nil, err
+			}
+			if _, err := io.Copy(fh, contents); err != nil {
+				return nil, err
+			}
+			if err := wt.AddWithOptions(&git.AddOptions{Path: filename}); err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	opts := commitOptionsFromClaims(ctx, time.Now())
+	hash, err := wt.Commit(message, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	pushOpts := &git.PushOptions{Auth: s.basicAuth(ctx)}
+	if err := repo.PushContext(ctx, pushOpts); err != nil {
+		return nil, err
+	}
+
+	return &hash, nil
 }

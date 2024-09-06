@@ -20,6 +20,7 @@ export default {
             displayWarnings: () => {},
             onBack: () => {},
             setHasError: () => {},
+            setIsComplete: () => {},
           };
         }}
       >

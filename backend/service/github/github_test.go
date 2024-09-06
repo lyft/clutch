@@ -104,7 +104,8 @@ func (g *getdirectoryMock) Query(ctx context.Context, query interface{}, variabl
 			struct {
 				Name githubv4.String
 				Type githubv4.String
-			}{Name: githubv4.String(g.entries[0].Name), Type: githubv4.String(g.entries[0].Type)})
+				OID  githubv4.GitObjectID
+			}{Name: githubv4.String(g.entries[0].Name), Type: githubv4.String(g.entries[0].Type), OID: githubv4.GitObjectID(g.entries[0].SHA)})
 	}
 
 	q.Repository.Ref.Commit.History.Nodes = append(
@@ -277,7 +278,7 @@ func TestGetFile(t *testing.T) {
 	}
 }
 
-var directoryEntries = []*Entry{{Name: "foo", Type: "blob"}}
+var directoryEntries = []*Entry{{Name: "foo", Type: "blob", SHA: "abcdef12345"}}
 
 var getDirectoryTests = []struct {
 	name    string
@@ -401,6 +402,18 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 			Author: &githubv3.CommitAuthor{
 				Login: &authorLogin,
 			},
+		},
+	}, nil, nil
+}
+
+func (m *mockRepositories) DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error) {
+	if m.generalError {
+		return &githubv3.RepositoryContentResponse{}, &githubv3.Response{}, errors.New(problem)
+	}
+	return &githubv3.RepositoryContentResponse{
+
+		Commit: githubv3.Commit{
+			SHA: githubv3.String("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"),
 		},
 	}, nil, nil
 }
@@ -582,6 +595,7 @@ var getCommitsTests = []struct {
 	authorLogin     string
 	authorAvatarURL string
 	authorID        int64
+	sha             string
 	parentRef       string
 }{
 	{
@@ -596,6 +610,7 @@ var getCommitsTests = []struct {
 		message:         "committing some changes (#1)",
 		authorAvatarURL: "https://foo.bar/baz.png",
 		authorID:        1234,
+		sha:             "test",
 		parentRef:       "test",
 	},
 }
@@ -633,6 +648,9 @@ func TestGetCommit(t *testing.T) {
 			if commit.Author != nil {
 				a.Equal(tt.authorAvatarURL, *commit.Author.AvatarURL)
 				a.Equal(tt.authorID, *commit.Author.ID)
+			}
+			if commit.SHA != "" {
+				a.Equal(tt.sha, commit.SHA)
 			}
 			if commit.ParentRef != "" {
 				a.Equal(tt.parentRef, commit.ParentRef)
@@ -890,6 +908,13 @@ func (m *mockPullRequests) Create(ctx context.Context, owner string, repo string
 	return &githubv3.PullRequest{}, &githubv3.Response{}, nil
 }
 
+func (m *mockPullRequests) Get(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error) {
+	if m.generalError == true {
+		return nil, nil, errors.New(problem)
+	}
+	return &githubv3.PullRequest{}, &githubv3.Response{}, nil
+}
+
 // Mock of ListPullRequestsWithCommit API
 func (m *mockPullRequests) ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error) {
 	if m.generalError {
@@ -974,6 +999,119 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 				assert.Equal(t, tt.mockPullReq.actualNumber, resp[0].Number)
 				assert.Equal(t, tt.mockPullReq.actualHTMLURL, resp[0].HTMLURL)
 				assert.Equal(t, tt.mockPullReq.actualBranchName, resp[0].BranchName)
+			}
+		})
+	}
+}
+
+var getPullRequestTests = []struct {
+	name        string
+	errorText   string
+	mockPullReq *mockPullRequests
+	repoOwner   string
+	repoName    string
+	prNumber    int
+}{
+	{
+		name:        "happy path",
+		mockPullReq: &mockPullRequests{},
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		prNumber:    4242,
+	},
+	{
+		name:        "v3 client error",
+		mockPullReq: &mockPullRequests{generalError: true},
+		errorText:   "we've had a problem",
+		repoOwner:   "my-org",
+		repoName:    "my-repo",
+		prNumber:    4242,
+	},
+}
+
+func TestGetPullRequest(t *testing.T) {
+	for _, tt := range getPullRequestTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				PullRequests: tt.mockPullReq,
+			}}
+
+			resp, err := s.GetPullRequest(
+				context.Background(),
+				tt.repoOwner,
+				tt.repoName,
+				tt.prNumber)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.mockPullReq.actualNumber, resp.GetNumber())
+			}
+		})
+	}
+}
+
+var deleteFileTests = []struct {
+	name          string
+	errorText     string
+	mockRepo      *mockRepositories
+	repoOwner     string
+	repoName      string
+	branchName    string
+	filePath      string
+	fileSha       string
+	commitMessage string
+	commitSha     string
+}{
+	{
+		name:       "happy path",
+		mockRepo:   &mockRepositories{},
+		repoOwner:  "my-org",
+		repoName:   "my-repo",
+		branchName: "my-branch",
+		commitSha:  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	},
+	{
+		name:       "v3 client error",
+		mockRepo:   &mockRepositories{generalError: true},
+		errorText:  "we've had a problem",
+		repoOwner:  "my-org",
+		repoName:   "my-repo",
+		branchName: "my-branch",
+		commitSha:  "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	},
+}
+
+func TestDeleteFile(t *testing.T) {
+	for _, tt := range deleteFileTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			resp, err := s.
+				DeleteFile(
+					context.Background(),
+					&RemoteRef{
+						RepoOwner: tt.repoOwner,
+						RepoName:  tt.repoName,
+						Ref:       tt.branchName,
+					}, tt.filePath, tt.fileSha, tt.commitMessage)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.commitSha, resp.GetSHA())
 			}
 		})
 	}

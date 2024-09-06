@@ -25,6 +25,14 @@ func (s svc) GetFile(ctx context.Context, ref *github.RemoteRef, path string) (*
 	panic("implement me")
 }
 
+func (s svc) DeleteFile(ctx context.Context, ref *github.RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error) {
+	return &githubv3.RepositoryContentResponse{
+		Commit: githubv3.Commit{
+			SHA: githubv3.String("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"),
+		},
+	}, nil
+}
+
 func (s svc) GetDirectory(ctx context.Context, ref *github.RemoteRef, path string) (*github.Directory, error) {
 	panic("implement me")
 }
@@ -80,6 +88,12 @@ func (s svc) ListPullRequestsWithCommit(ctx context.Context, ref *github.RemoteR
 	}, nil
 }
 
+func (s svc) GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error) {
+	return &githubv3.PullRequest{
+		Number: githubv3.Int(4242),
+	}, nil
+}
+
 func (s svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
 	role := "member"
 	return &githubv3.Membership{Role: &role}, nil
@@ -89,6 +103,12 @@ func (s svc) GetUser(ctx context.Context, username string) (*githubv3.User, erro
 	login := "user"
 	avatarURL := "https://clutch.sh/img/microsite/logo.svg"
 	return &githubv3.User{Login: &login, AvatarURL: &avatarURL}, nil
+}
+
+func (s svc) CreateCommit(ctx context.Context, ref *github.RemoteRef, message string, files github.FileMap) (*github.Commit, error) {
+	return &github.Commit{
+		SHA: "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+	}, nil
 }
 
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
