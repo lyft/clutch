@@ -3,19 +3,19 @@
 exports[`renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root css-1ylvkhp-MuiContainer-root"
+    class="MuiContainer-root css-1s2y8jy-MuiContainer-root"
   >
     <div
-      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-jaq6nv-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container css-1yw6yql-MuiGrid-root"
     >
       <div
-        class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-spacing-xs-2 MuiGrid-direction-xs-column MuiGrid-wrap-xs-nowrap css-lvrko9-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-spacing-xs-2 MuiGrid-direction-xs-column MuiGrid-wrap-xs-nowrap css-mwk3cp-MuiGrid-root"
       >
         <div
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-omj7fc-MuiGrid-root"
         >
           <div
-            class="css-146xe7x"
+            class="css-n5nrl9"
           >
             <div
               class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-10mg1vw-MuiStepper-root"
@@ -31,8 +31,8 @@ exports[`renders correctly 1`] = `
                   >
                     <div
                       background="#ffffff"
-                      border="1px solid #3548D4"
-                      class="css-1t41j0i"
+                      border="2px solid #3548D4"
+                      class=" css-1xlrzg7"
                     >
                       <div
                         class="css-h5bkmw"
@@ -72,7 +72,7 @@ exports[`renders correctly 1`] = `
                     <div
                       background="#DBDBE0"
                       border="#DBDBE0"
-                      class="css-yqpyq0"
+                      class=" css-yqpyq0"
                     >
                       <div
                         class="css-1c0nvhn"
@@ -112,7 +112,7 @@ exports[`renders correctly 1`] = `
                     <div
                       background="#DBDBE0"
                       border="#DBDBE0"
-                      class="css-yqpyq0"
+                      class=" css-yqpyq0"
                     >
                       <div
                         class="css-1c0nvhn"
@@ -140,7 +140,7 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1lwj3w1-MuiGrid-root"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-55fo0g-MuiPaper-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-e7v8dc-MuiPaper-root"
           >
             <div
               class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column css-1ewlecp-MuiGrid-root"
