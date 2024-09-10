@@ -6,6 +6,7 @@ import { Alert } from "../Feedback";
 import Grid from "../grid";
 import { Link as LinkComponent } from "../link";
 import type { AppBanners } from "../Types";
+import { checkPathMatchList } from "../utils";
 
 interface LayoutWithNotificationsProps {
   bannersData: AppBanners;
@@ -24,6 +25,8 @@ const LayoutWithNotifications = ({
   const multiWorkflowData = bannersData?.multiWorkflow;
 
   const location = useLocation();
+
+  checkPathMatchList(location?.pathname, perWorkflowData[workflow]?.paths);
 
   const hasPerWorkflowAlert =
     workflow && perWorkflowData[workflow] && !perWorkflowData[workflow]?.dismissed;
