@@ -531,7 +531,7 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 		Author:  commit.GetAuthor(),
 	}
 
-	if commit.Parents != nil && len(commit.Parents) > 0 {
+	if len(commit.Parents) > 0 {
 		retCommit.ParentRef = commit.Parents[0].GetSHA()
 	}
 

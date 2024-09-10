@@ -2,8 +2,6 @@ module github.com/lyft/clutch/backend
 
 go 1.23.0
 
-toolchain go1.23.0
-
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.4
