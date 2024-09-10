@@ -186,7 +186,7 @@ func awaitGaugeValue(ctx context.Context, t *testing.T, testScope tally.TestScop
 				return
 			}
 		case <-ctx.Done():
-			t.Errorf(context.Canceled.Error())
+			t.Errorf("%s", context.Canceled.Error())
 			return
 		}
 	}
