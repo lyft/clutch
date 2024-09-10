@@ -1,6 +1,6 @@
 module github.com/lyft/clutch/docs/website/generator
 
-go 1.22
+go 1.23
 
 require (
 	github.com/Masterminds/sprig/v3 v3.2.3

@@ -152,7 +152,7 @@ func TestGetEvents(t *testing.T) {
 
 	for _, test := range testCases {
 		test := test
-		t.Run(fmt.Sprintf(test.id), func(t *testing.T) {
+		t.Run(test.id, func(t *testing.T) {
 			t.Parallel()
 			m := &mod{
 				client: auditmock.New(),

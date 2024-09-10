@@ -103,7 +103,7 @@ func (m *mod) GetSurveys(tx context.Context, req *feedbackv1.GetSurveysRequest) 
 			zap.Any("request origins", req.Origins),
 			zap.Any("config origins", m.surveyMap.surveys),
 		)
-		return nil, status.Errorf(codes.InvalidArgument, msg)
+		return nil, status.Errorf(codes.InvalidArgument, "%s", msg)
 	}
 
 	return &feedbackv1.GetSurveysResponse{
