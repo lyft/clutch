@@ -1,11 +1,17 @@
 import { matchPath } from "react-router";
 
-const checkPathMatchList = (locationPathname: string, pathstoMatch: string[]) => {
-  pathstoMatch.forEach(path => {
+const findPathMatchList = (locationPathname: string, pathstoMatch: string[]) => {
+  let pathFound = false;
+
+  pathstoMatch?.forEach((path: string) => {
     const match = matchPath({ path }, locationPathname);
 
-    console.log("match: ", match);
+    if (match) {
+      pathFound = true;
+    }
   });
+
+  return pathFound;
 };
 
-export default checkPathMatchList;
+export default findPathMatchList;
