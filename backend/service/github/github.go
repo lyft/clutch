@@ -128,6 +128,7 @@ type Client interface {
 	GetPullRequest(ctx context.Context, owner, repo string, number int) (*githubv3.PullRequest, error)
 	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
 	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
+	SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -401,11 +402,12 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 
 	restClient := githubv3.NewClient(httpClient)
 	ret.rest = v3client{
-		Repositories:  restClient.Repositories,
-		PullRequests:  restClient.PullRequests,
 		Issues:        restClient.Issues,
-		Users:         restClient.Users,
 		Organizations: restClient.Organizations,
+		PullRequests:  restClient.PullRequests,
+		Repositories:  restClient.Repositories,
+		Search:        restClient.Search,
+		Users:         restClient.Users,
 	}
 
 	ret.graphQL = githubv4.NewClient(httpClient)
@@ -660,4 +662,14 @@ func (s *svc) createWorktreeCommit(ctx context.Context, ref *RemoteRef, message 
 	}
 
 	return &hash, nil
+}
+
+func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error) {
+	results, _, err := s.rest.Search.Code(ctx, query, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }
