@@ -59,6 +59,7 @@ const useCompareAppNotificationsData = (banners: AppBanners) => {
           linkText: bannersPreferences?.perWorkflow?.[key].linkText,
           link: bannersPreferences?.perWorkflow?.[key].link,
           severity: bannersPreferences?.perWorkflow?.[key].severity,
+          paths: bannersPreferences?.perWorkflow?.[key].paths,
         };
 
         if (!isEqual(banners?.perWorkflow?.[key], perWorkflowPreferences)) {

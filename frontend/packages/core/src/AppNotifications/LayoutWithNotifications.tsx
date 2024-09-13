@@ -1,10 +1,13 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import styled from "@emotion/styled";
 import isEmpty from "lodash/isEmpty";
 
 import { Alert } from "../Feedback";
 import Grid from "../grid";
 import { Link as LinkComponent } from "../link";
 import type { AppBanners } from "../Types";
+import { findPathMatchList } from "../utils";
 
 interface LayoutWithNotificationsProps {
   bannersData: AppBanners;
@@ -12,6 +15,14 @@ interface LayoutWithNotificationsProps {
   children: React.ReactNode;
   workflow?: string;
 }
+
+const AlertContent = styled.div({
+  display: "flex",
+});
+
+const StyledLink = styled(LinkComponent)({
+  marginLeft: "8px",
+});
 
 const LayoutWithNotifications = ({
   bannersData,
@@ -22,8 +33,17 @@ const LayoutWithNotifications = ({
   const perWorkflowData = bannersData?.perWorkflow;
   const multiWorkflowData = bannersData?.multiWorkflow;
 
-  const showAlertPerWorkflow =
+  const location = useLocation();
+
+  const pathMatches = findPathMatchList(location?.pathname, perWorkflowData[workflow]?.paths);
+
+  const hasPerWorkflowAlert =
     workflow && perWorkflowData[workflow] && !perWorkflowData[workflow]?.dismissed;
+  const showAlertPerWorkflow = !isEmpty(perWorkflowData[workflow]?.paths)
+    ? hasPerWorkflowAlert &&
+      (perWorkflowData[workflow]?.paths?.includes(location.pathname) || pathMatches)
+    : hasPerWorkflowAlert;
+
   const showAlertMultiWorkflow =
     showAlertPerWorkflow || perWorkflowData[workflow]?.dismissed
       ? false
@@ -65,12 +85,14 @@ const LayoutWithNotifications = ({
                 elevation={6}
                 onClose={onDismissAlertPerWorkflow}
               >
-                {perWorkflowData[workflow]?.message}
-                {perWorkflowData[workflow]?.link && perWorkflowData[workflow]?.linkText && (
-                  <LinkComponent href={perWorkflowData[workflow]?.link}>
-                    {perWorkflowData[workflow]?.linkText}
-                  </LinkComponent>
-                )}
+                <AlertContent>
+                  {perWorkflowData[workflow]?.message}
+                  {perWorkflowData[workflow]?.link && perWorkflowData[workflow]?.linkText && (
+                    <StyledLink href={perWorkflowData[workflow]?.link}>
+                      {perWorkflowData[workflow]?.linkText}
+                    </StyledLink>
+                  )}
+                </AlertContent>
               </Alert>
             )}
             {showAlertMultiWorkflow && !showAlertPerWorkflow && (
@@ -80,12 +102,14 @@ const LayoutWithNotifications = ({
                 elevation={6}
                 onClose={onDismissAlertMultiWorkflow}
               >
-                {multiWorkflowData?.message}
-                {multiWorkflowData?.link && multiWorkflowData?.linkText && (
-                  <LinkComponent href={multiWorkflowData?.link}>
-                    {multiWorkflowData?.linkText}
-                  </LinkComponent>
-                )}
+                <AlertContent>
+                  {multiWorkflowData?.message}
+                  {multiWorkflowData?.link && multiWorkflowData?.linkText && (
+                    <StyledLink href={multiWorkflowData?.link}>
+                      {multiWorkflowData?.linkText}
+                    </StyledLink>
+                  )}
+                </AlertContent>
               </Alert>
             )}
           </Grid>
