@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import styled from "@emotion/styled";
 import isEmpty from "lodash/isEmpty";
 
 import { Alert } from "../Feedback";
@@ -14,6 +15,14 @@ interface LayoutWithNotificationsProps {
   children: React.ReactNode;
   workflow?: string;
 }
+
+const AlertContent = styled.div({
+  display: "flex",
+});
+
+const StyledLink = styled(LinkComponent)({
+  marginLeft: "8px",
+});
 
 const LayoutWithNotifications = ({
   bannersData,
@@ -76,12 +85,14 @@ const LayoutWithNotifications = ({
                 elevation={6}
                 onClose={onDismissAlertPerWorkflow}
               >
-                {perWorkflowData[workflow]?.message}
-                {perWorkflowData[workflow]?.link && perWorkflowData[workflow]?.linkText && (
-                  <LinkComponent href={perWorkflowData[workflow]?.link}>
-                    {perWorkflowData[workflow]?.linkText}
-                  </LinkComponent>
-                )}
+                <AlertContent>
+                  {perWorkflowData[workflow]?.message}
+                  {perWorkflowData[workflow]?.link && perWorkflowData[workflow]?.linkText && (
+                    <StyledLink href={perWorkflowData[workflow]?.link}>
+                      {perWorkflowData[workflow]?.linkText}
+                    </StyledLink>
+                  )}
+                </AlertContent>
               </Alert>
             )}
             {showAlertMultiWorkflow && !showAlertPerWorkflow && (
@@ -91,12 +102,14 @@ const LayoutWithNotifications = ({
                 elevation={6}
                 onClose={onDismissAlertMultiWorkflow}
               >
-                {multiWorkflowData?.message}
-                {multiWorkflowData?.link && multiWorkflowData?.linkText && (
-                  <LinkComponent href={multiWorkflowData?.link}>
-                    {multiWorkflowData?.linkText}
-                  </LinkComponent>
-                )}
+                <AlertContent>
+                  {multiWorkflowData?.message}
+                  {multiWorkflowData?.link && multiWorkflowData?.linkText && (
+                    <StyledLink href={multiWorkflowData?.link}>
+                      {multiWorkflowData?.linkText}
+                    </StyledLink>
+                  )}
+                </AlertContent>
               </Alert>
             )}
           </Grid>
