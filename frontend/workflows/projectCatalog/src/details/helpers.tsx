@@ -57,16 +57,16 @@ const LinkText = ({ text, link }: { text: string; link?: string }) => {
 
 const LastEvent = ({ time, ...props }: { time: number }) => {
   return time ? (
-    <>
+    <Grid item container alignItems="center" wrap="nowrap" columnSpacing={1}>
       <Grid item>
         <FontAwesomeIcon icon={faClock} />
       </Grid>
       <Grid item>
-        <Typography variant="body4">
+        <Typography variant="body4" noWrap>
           <EventTime date={time} {...props} /> ago
         </Typography>
       </Grid>
-    </>
+    </Grid>
   ) : null;
 };
 
