@@ -1,16 +1,20 @@
 import React from "react";
-import { Grid, Tooltip, useTheme } from "@clutch-sh/core";
+import { Grid, Tooltip } from "@clutch-sh/core";
 import CodeOffIcon from "@mui/icons-material/CodeOff";
 import GroupIcon from "@mui/icons-material/Group";
-import { useMediaQuery } from "@mui/material";
 import { capitalize } from "lodash";
 
-import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "../types";
+import type {
+  CatalogDetailsChild,
+  DetailsLayoutOptions,
+  ProjectDetailsWorkflowProps,
+} from "../types";
 
 import { CardType, DynamicCard, MetaCard } from "./components/card";
 import CatalogLayout from "./components/layout";
 import { useProjectDetailsContext } from "./context";
 import ProjectInfoCard from "./info";
+import { defaultsDeep } from "lodash";
 
 const DisabledItem = ({ name }: { name: string }) => (
   <Grid item>
@@ -20,13 +24,31 @@ const DisabledItem = ({ name }: { name: string }) => (
   </Grid>
 );
 
-const Details = ({ children, chips }: ProjectDetailsWorkflowProps) => {
+const defaultLayout: DetailsLayoutOptions = {
+  metadata: {
+    direction: "column",
+    flexWrap: "nowrap",
+    spacing: 2,
+    xs: 12,
+    lg: 4,
+    xl: 3,
+  },
+  dynamic: {
+    direction: "column",
+    flexWrap: "nowrap",
+    spacing: 2,
+    xs: 12,
+    lg: 8,
+    xl: 9,
+  },
+};
+
+const Details = ({ children, chips, layout }: ProjectDetailsWorkflowProps) => {
   const { projectId, projectInfo } = useProjectDetailsContext() || {};
   const [metaCards, setMetaCards] = React.useState<CatalogDetailsChild[]>([]);
   const [dynamicCards, setDynamicCards] = React.useState<CatalogDetailsChild[]>([]);
 
-  const theme = useTheme();
-  const shrink = useMediaQuery(theme.breakpoints.down("lg"));
+  const layoutOptions: DetailsLayoutOptions = defaultsDeep(layout, defaultLayout);
 
   React.useEffect(() => {
     if (children) {
@@ -80,18 +102,7 @@ const Details = ({ children, chips }: ProjectDetailsWorkflowProps) => {
 
   return (
     <>
-      <Grid
-        container
-        item
-        direction={shrink ? "row" : "column"}
-        xs={12}
-        sm={12}
-        md={5}
-        lg={4}
-        xl={3}
-        spacing={2}
-        flexWrap="nowrap"
-      >
+      <Grid container item {...layoutOptions?.metadata}>
         <Grid item>
           {projectInfo && (
             <MetaCard
@@ -110,18 +121,7 @@ const Details = ({ children, chips }: ProjectDetailsWorkflowProps) => {
         </Grid>
         {metaCards.length > 0 && metaCards.map(card => <Grid item>{card}</Grid>)}
       </Grid>
-      <Grid
-        container
-        item
-        direction="column"
-        xs={12}
-        sm={12}
-        md={7}
-        lg={8}
-        xl={9}
-        spacing={2}
-        flexWrap="nowrap"
-      >
+      <Grid container item {...layoutOptions?.dynamic}>
         {dynamicCards.length > 0 && dynamicCards.map(card => <Grid item>{card}</Grid>)}
       </Grid>
     </>
