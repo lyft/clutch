@@ -2,7 +2,7 @@ import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
 import { Error, Grid, Tab, Tabs, useLocation, useNavigate, useParams } from "@clutch-sh/core";
 
-import type { ProjectCatalogProps, WorkflowProps } from "../..";
+import type { ProjectCatalogProps, WorkflowProps } from "../../types";
 import CatalogLayout from "../components/layout";
 
 export interface ProjectConfigProps {
@@ -15,6 +15,7 @@ export type ProjectConfigPage = React.ReactElement<ProjectConfigProps>;
 
 export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps, ProjectCatalogProps {
   children?: ProjectConfigPage | ProjectConfigPage[];
+  // eslint-disable-next-line react/no-unused-prop-types
   description?: string;
   defaultRoute?: string;
 }

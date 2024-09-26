@@ -2,7 +2,6 @@ import React from "react";
 import { Grid, TimeAgo as EventTime, Typography, TypographyProps } from "@clutch-sh/core";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
-import * as _ from "lodash";
 import type { GridProps } from "@mui/material";
 
 interface Size {

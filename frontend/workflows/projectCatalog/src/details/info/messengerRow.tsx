@@ -6,7 +6,7 @@ import { faSlack } from "@fortawesome/free-brands-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { LinkText } from "../..";
+import { LinkText } from "../../helpers";
 
 const MessengerRow = ({ projectData }: { projectData: IClutch.core.project.v1.IProject }) => {
   const [text, setText] = React.useState<string>();

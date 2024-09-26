@@ -1,13 +1,15 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, QuickLinkGroup, styled, useNavigate, useParams } from "@clutch-sh/core";
+
+import type { ProjectDetailsWorkflowProps } from "../../types";
 import { ProjectDetailsContext } from "../context";
-import BreadCrumbs from "./breadcrumbs";
+import fetchProjectInfo from "../resolver";
+
 import type { BreadCrumbsProps } from "./breadcrumbs";
+import BreadCrumbs from "./breadcrumbs";
 import ProjectHeader, { ProjectHeaderProps } from "./header";
 import QuickLinksAndSettings from "./link-settings";
-import { ProjectDetailsWorkflowProps } from "..";
-import fetchProjectInfo from "../resolver";
 
 export interface CatalogLayoutProps
   extends BreadCrumbsProps,
@@ -49,15 +51,14 @@ const CatalogLayout = ({
         setProjectInfo(data as IClutch.core.project.v1.IProject);
       })
       .catch(err => {
+        // eslint-disable-next-line no-console
         console.error(err);
       });
 
   React.useEffect(() => {
-    let interval;
-
     fetchData();
 
-    interval = setInterval(fetchData, 30000);
+    const interval = setInterval(fetchData, 30000);
 
     return () => (interval ? clearInterval(interval) : undefined);
   }, []);

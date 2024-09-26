@@ -15,7 +15,7 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import { isEmpty } from "lodash";
 
-import type { ProjectConfigLink } from "..";
+import type { ProjectConfigLink } from "../../types";
 
 interface QuickLinksAndSettingsProps {
   linkGroups: QuickLinkGroup[];

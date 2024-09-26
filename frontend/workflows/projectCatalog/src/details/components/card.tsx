@@ -1,10 +1,10 @@
 import React from "react";
 import type { TypographyProps } from "@clutch-sh/core";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
-import { LinearProgress, Theme } from "@mui/material";
 import type { GridProps } from "@mui/material";
+import { LinearProgress, Theme } from "@mui/material";
 
-enum CardType {
+export enum CardType {
   DYNAMIC = "Dynamic",
   METADATA = "Metadata",
 }
@@ -185,7 +185,6 @@ const DynamicCard = (props: BaseCardProps) => <BaseCard type={CardType.DYNAMIC} 
 
 const MetaCard = (props: BaseCardProps) => <BaseCard type={CardType.METADATA} {...props} />;
 
-type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
+export type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
 
-export { CardType, DynamicCard, MetaCard };
-export type { DetailCard };
+export { DynamicCard, MetaCard };

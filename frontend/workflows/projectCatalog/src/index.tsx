@@ -1,14 +1,8 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { WorkflowConfiguration } from "@clutch-sh/core";
 
-import Catalog from "./catalog";
 import Config from "./details/config";
+import Catalog from "./catalog";
 import Details from "./details";
-
-export interface ProjectCatalogProps {
-  allowDisabled?: boolean;
-}
-
-export interface WorkflowProps extends BaseWorkflowProps, ProjectCatalogProps {}
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -55,6 +49,6 @@ export { useProjectDetailsContext } from "./details/context";
 export { Details as ProjectDetails, Config as ProjectConfig };
 export type { CatalogDetailsCard } from "./details/components/card";
 export type { ProjectInfoChip } from "./details/info/chipsRow";
-export type { CatalogDetailsChild } from "./details";
+export type { CatalogDetailsChild } from "./types";
 
 export default register;

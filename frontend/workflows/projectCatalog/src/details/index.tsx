@@ -2,28 +2,15 @@ import React from "react";
 import { Grid, Tooltip, useTheme } from "@clutch-sh/core";
 import CodeOffIcon from "@mui/icons-material/CodeOff";
 import GroupIcon from "@mui/icons-material/Group";
+import { useMediaQuery } from "@mui/material";
 import { capitalize } from "lodash";
 
-import { CardType, DetailCard, DynamicCard, MetaCard } from "./components/card";
-import ProjectInfoCard from "./info";
-import { useMediaQuery } from "@mui/material";
-import { type WorkflowProps, type ProjectCatalogProps, useProjectDetailsContext } from "..";
-import type { ProjectInfoChip } from "./info/chipsRow";
+import type { CatalogDetailsChild, ProjectDetailsWorkflowProps } from "../types";
+
+import { CardType, DynamicCard, MetaCard } from "./components/card";
 import CatalogLayout from "./components/layout";
-
-export type CatalogDetailsChild = React.ReactElement<DetailCard>;
-
-export interface ProjectConfigLink {
-  title: string;
-  path: string;
-  icon?: React.ReactElement;
-}
-
-export interface ProjectDetailsWorkflowProps extends WorkflowProps, ProjectCatalogProps {
-  children?: CatalogDetailsChild | CatalogDetailsChild[];
-  chips?: ProjectInfoChip[];
-  configLinks?: ProjectConfigLink[];
-}
+import { useProjectDetailsContext } from "./context";
+import ProjectInfoCard from "./info";
 
 const DisabledItem = ({ name }: { name: string }) => (
   <Grid item>
@@ -107,15 +94,18 @@ const Details = ({ children, chips }: ProjectDetailsWorkflowProps) => {
       >
         <Grid item>
           {projectInfo && (
-          <MetaCard
-            title={getOwner(projectInfo?.owners ?? []) || projectInfo?.name}
-            titleIcon={<GroupIcon />}
-            loadingIndicator={false}
-            endAdornment={projectInfo?.data?.disabled ? <DisabledItem name={projectInfo?.name ?? projectId ?? ""} /> : null}
-          >
-            {projectInfo && <ProjectInfoCard projectData={projectInfo} addtlChips={chips} />}
-          </MetaCard>
-
+            <MetaCard
+              title={getOwner(projectInfo?.owners ?? []) || projectInfo?.name}
+              titleIcon={<GroupIcon />}
+              loadingIndicator={false}
+              endAdornment={
+                projectInfo?.data?.disabled ? (
+                  <DisabledItem name={projectInfo?.name ?? projectId ?? ""} />
+                ) : null
+              }
+            >
+              {projectInfo && <ProjectInfoCard projectData={projectInfo} addtlChips={chips} />}
+            </MetaCard>
           )}
         </Grid>
         {metaCards.length > 0 && metaCards.map(card => <Grid item>{card}</Grid>)}
