@@ -49,6 +49,7 @@ export { useProjectDetailsContext } from "./details/context";
 export { Details as ProjectDetails, Config as ProjectConfig };
 export type { CatalogDetailsCard } from "./details/components/card";
 export type { ProjectInfoChip } from "./details/info/chipsRow";
-export type { CatalogDetailsChild } from "./types";
+export type { CatalogDetailsChild, ProjectConfigLink } from "./types";
+export type { ProjectConfigProps } from "./details/config";
 
 export default register;

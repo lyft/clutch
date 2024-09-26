@@ -13,6 +13,4 @@ export interface ProjectDetailsWorkflowProps extends WorkflowProps, ProjectCatal
   configLinks?: ProjectConfigLink[];
 }
 
-// ((CatalogDetailsChild | CatalogDetailsChild[]) & (boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null)) | undefined
-
 export type CatalogDetailsChild = React.ReactElement<DetailCard>;
