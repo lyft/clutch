@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Tooltip } from "@clutch-sh/core";
 import CodeOffIcon from "@mui/icons-material/CodeOff";
 import GroupIcon from "@mui/icons-material/Group";
-import { capitalize } from "lodash";
+import { capitalize, defaultsDeep } from "lodash";
 
 import type {
   CatalogDetailsChild,
@@ -14,7 +14,6 @@ import { CardType, DynamicCard, MetaCard } from "./components/card";
 import CatalogLayout from "./components/layout";
 import { useProjectDetailsContext } from "./context";
 import ProjectInfoCard from "./info";
-import { defaultsDeep } from "lodash";
 
 const DisabledItem = ({ name }: { name: string }) => (
   <Grid item>
