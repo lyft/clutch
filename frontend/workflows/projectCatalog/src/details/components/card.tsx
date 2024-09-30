@@ -1,9 +1,10 @@
 import React from "react";
 import type { TypographyProps } from "@clutch-sh/core";
 import { Card, ClutchError, Error, Grid, styled, Typography } from "@clutch-sh/core";
+import type { GridProps } from "@mui/material";
 import { LinearProgress, Theme } from "@mui/material";
 
-enum CardType {
+export enum CardType {
   DYNAMIC = "Dynamic",
   METADATA = "Metadata",
 }
@@ -15,7 +16,9 @@ export interface CatalogDetailsCard {
 interface CardTitleProps {
   title?: string | Element | React.ReactNode;
   titleVariant?: TypographyProps["variant"];
+  titleAlign?: GridProps["alignItems"];
   titleIcon?: React.ReactNode;
+  titleIconAlign?: GridProps["alignItems"];
   endAdornment?: React.ReactNode;
 }
 
@@ -46,8 +49,12 @@ interface CardProps extends CatalogDetailsCard, BaseCardProps {}
 
 const StyledCard = styled(Card)({
   width: "100%",
-  height: "fit-content",
+  height: "100%",
   padding: "16px",
+});
+
+const StyledGrid = styled(Grid)({
+  height: "fit-content",
 });
 
 const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
@@ -66,30 +73,35 @@ const StyledTitle = styled(Grid)({
   textTransform: "capitalize",
 });
 
-const StyledTitleContainer = styled(Grid)({
-  marginBottom: "8px",
-});
-
-const BodyContainer = styled("div")({
-  paddingLeft: "4px",
-});
-
-const CardTitle = ({ title, titleVariant = "h4", titleIcon, endAdornment }: CardTitleProps) => (
-  <Grid container item direction="row" alignItems="flex-start" wrap="nowrap">
+const CardTitle = ({
+  title,
+  titleVariant = "h4",
+  titleAlign = "flex-start",
+  titleIcon,
+  titleIconAlign = "center",
+  endAdornment,
+}: CardTitleProps) => (
+  <Grid
+    container
+    direction="row"
+    alignItems={titleAlign}
+    justifyContent="space-between"
+    flexWrap="nowrap"
+  >
     {title && (
-      <StyledTitleContainer container item xs={endAdornment ? 9 : 12} spacing={1}>
+      <Grid container item xs spacing={1} alignItems={titleIconAlign}>
         {titleIcon && <Grid item>{titleIcon}</Grid>}
         <StyledTitle item>
           <Typography variant={titleVariant}>{title}</Typography>
         </StyledTitle>
-      </StyledTitleContainer>
+      </Grid>
     )}
     {endAdornment && (
       <Grid
         container
         item
         direction="row"
-        xs={3}
+        xs
         spacing={1}
         alignItems="center"
         justifyContent="flex-end"
@@ -101,14 +113,18 @@ const CardTitle = ({ title, titleVariant = "h4", titleIcon, endAdornment }: Card
 );
 
 const CardBody = ({ loading, loadingIndicator = true, error, children }: CardBodyProps) => (
-  <>
+  <StyledGrid container direction="column" flexWrap="nowrap">
     {loadingIndicator && loading && (
-      <StyledProgressContainer>
-        <LinearProgress color="secondary" />
-      </StyledProgressContainer>
+      <Grid item>
+        <StyledProgressContainer>
+          <LinearProgress color="secondary" />
+        </StyledProgressContainer>
+      </Grid>
     )}
-    <BodyContainer>{error ? <Error subject={error} /> : children}</BodyContainer>
-  </>
+    <Grid item>
+      <>{error ? <Error subject={error} /> : children}</>
+    </Grid>
+  </StyledGrid>
 );
 
 const BaseCard = ({ loading, error, ...props }: CardProps) => {
@@ -153,8 +169,14 @@ const BaseCard = ({ loading, error, ...props }: CardProps) => {
 
   return (
     <StyledCard>
-      <CardTitle {...props} />
-      <CardBody loading={loading || cardLoading} error={error || cardError} {...props} />
+      <Grid container direction="column" flexWrap="nowrap" spacing={2}>
+        <Grid item>
+          <CardTitle {...props} />
+        </Grid>
+        <Grid item>
+          <CardBody loading={loading || cardLoading} error={error || cardError} {...props} />
+        </Grid>
+      </Grid>
     </StyledCard>
   );
 };
@@ -163,4 +185,6 @@ const DynamicCard = (props: BaseCardProps) => <BaseCard type={CardType.DYNAMIC} 
 
 const MetaCard = (props: BaseCardProps) => <BaseCard type={CardType.METADATA} {...props} />;
 
-export { CardType, DynamicCard, MetaCard };
+export type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
+
+export { DynamicCard, MetaCard };

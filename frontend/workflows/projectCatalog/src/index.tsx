@@ -1,46 +1,8 @@
-import type { BaseWorkflowProps, ClutchError, WorkflowConfiguration } from "@clutch-sh/core";
+import type { WorkflowConfiguration } from "@clutch-sh/core";
 
-import type { CatalogDetailsCard } from "./details/card";
-import { CardType, DynamicCard, MetaCard } from "./details/card";
-import type { ProjectInfoChip } from "./details/info/chipsRow";
+import Config from "./details/config";
 import Catalog from "./catalog";
-import Config from "./config";
 import Details from "./details";
-
-type DetailCard = CatalogDetailsCard | typeof DynamicCard | typeof MetaCard;
-
-interface ProjectCatalogProps {
-  allowDisabled?: boolean;
-}
-
-export interface ProjectConfigLink {
-  title: string;
-  path: string;
-  icon?: React.ReactElement;
-}
-
-export interface ProjectConfigProps {
-  title: string;
-  path: string;
-  onError?: (error: ClutchError) => void;
-}
-
-type CatalogDetailsChild = React.ReactElement<DetailCard>;
-
-export type ProjectConfigPage = React.ReactElement<ProjectConfigProps>;
-
-export interface WorkflowProps extends BaseWorkflowProps, ProjectCatalogProps {}
-
-export interface ProjectDetailsWorkflowProps extends WorkflowProps, ProjectCatalogProps {
-  children?: CatalogDetailsChild | CatalogDetailsChild[];
-  chips?: ProjectInfoChip[];
-  configLinks?: ProjectConfigLink[];
-}
-
-export interface ProjectDetailsConfigWorkflowProps extends WorkflowProps, ProjectCatalogProps {
-  children?: ProjectConfigPage | ProjectConfigPage[];
-  defaultRoute?: string;
-}
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -81,10 +43,13 @@ const register = (): WorkflowConfiguration => {
   };
 };
 
-export { CardType, DynamicCard, MetaCard };
-export { LastEvent } from "./details/helpers";
+export * from "./helpers";
+export { CardType, DynamicCard, MetaCard } from "./details/components/card";
 export { useProjectDetailsContext } from "./details/context";
 export { Details as ProjectDetails, Config as ProjectConfig };
-export type { CatalogDetailsCard, CatalogDetailsChild, ProjectInfoChip };
+export type { CatalogDetailsCard } from "./details/components/card";
+export type { ProjectInfoChip } from "./details/info/chipsRow";
+export type { CatalogDetailsChild, ProjectConfigLink, DetailsLayoutOptions } from "./types";
+export type { ProjectConfigProps } from "./details/config";
 
 export default register;
