@@ -20,6 +20,9 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
   return createMuiTheme({
     colors: clutchColors(variant),
     palette: palette(variant),
+    // `8` is the default scaling factor in MUI, we are setting it again to make it explicit
+    // https://v5.mui.com/material-ui/customization/spacing/
+    spacing: 8,
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
       create: () => "none",
