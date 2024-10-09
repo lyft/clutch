@@ -60,7 +60,7 @@ export { default as TimeAgo } from "./timeago";
 export { Typography } from "./typography";
 export { default as ClutchApp } from "./AppProvider";
 export { useTheme } from "./AppProvider/themes";
-export { ThemeProvider } from "./Theme";
+export { ThemeProvider, ThemeSpacing } from "./Theme";
 export { getDisplayName } from "./utils";
 
 export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";

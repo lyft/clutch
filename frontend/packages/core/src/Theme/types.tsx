@@ -41,3 +41,12 @@ export interface ClutchColors {
 }
 
 export type ComponentState = "hover" | "focused" | "pressed" | "selected" | "disabled";
+
+export enum ThemeSpacing {
+  None = 0,
+  ExtraSmall = 0.5,
+  Small = 1,
+  Base,
+  Medium,
+  Large,
+}
