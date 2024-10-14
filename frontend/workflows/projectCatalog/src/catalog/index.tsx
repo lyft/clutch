@@ -16,7 +16,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import SearchIcon from "@mui/icons-material/Search";
 import { alpha, Box, CircularProgress } from "@mui/material";
 
-import type { WorkflowProps } from "..";
+import type { WorkflowProps } from "../types";
 
 import catalogReducer from "./catalog-reducer";
 import ProjectCard from "./project-card";

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"],
+  "references": [
+    {{- if .IsWizardTemplate}}
+    { "path": "../../packages/core" },
+    { "path": "../../packages/wizard" }
+    {{- else}}
+    { "path": "../../packages/core" }
+    {{- end}}
+  ]
+}
