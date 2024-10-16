@@ -18,12 +18,11 @@ export interface BreadcrumbsProps {
 const StyledBreadcrumbs = styled(MuiBreadcrumbs)(({ theme }: { theme: Theme }) => ({
   margin: "8px 0px",
   "& .MuiBreadcrumbs-separator": {
-    color: alpha(theme.colors.neutral[900], 0.9),
+    color: alpha(theme.colors.neutral[900], 0.6),
   },
 }));
 
 const Breadcrumbs = ({ entries }: BreadcrumbsProps) => {
-  console.log("entries", entries);
   return (
     <StyledBreadcrumbs>
       {entries.map(({ url, label }) => (
