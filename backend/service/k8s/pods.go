@@ -327,9 +327,17 @@ func getPodStatus(pod *corev1.Pod) string {
 	}
 
 	initializing := false
+	totalInitContainers := len(pod.Spec.InitContainers)
 	for i := range pod.Status.InitContainerStatuses {
 		container := pod.Status.InitContainerStatuses[i]
 		restarts += int(container.RestartCount)
+
+		if pod.Spec.InitContainers[i].RestartPolicy != nil {
+			// if the init container has a restart policy, it is native sidecar and should not be counted
+			totalInitContainers--
+			continue
+		}
+
 		switch {
 		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
 			continue
@@ -349,7 +357,7 @@ func getPodStatus(pod *corev1.Pod) string {
 			reason = fmt.Sprintf("Init: %s", container.State.Waiting.Reason)
 			initializing = true
 		default:
-			reason = fmt.Sprintf("Init: %d/%d", i, len(pod.Spec.InitContainers))
+			reason = fmt.Sprintf("Init: %d/%d", i, totalInitContainers)
 			initializing = true
 		}
 		break
