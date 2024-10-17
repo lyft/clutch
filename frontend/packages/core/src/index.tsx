@@ -85,4 +85,4 @@ export type {
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
 export type { StyledComponent } from "@emotion/styled";
-export type { BreadcrumbsProps, BreadcrumbEntry } from "./Breadcrumbs";
+export type { BreadcrumbEntry } from "./Breadcrumbs";

@@ -4,21 +4,19 @@ import { Link } from "../link";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-const StyledLink = styled(Link)({
-  whiteSpace: "nowrap",
-});
+import { BreadcrumbEntry } from "./types";
 
 const StyledTypography = styled(Typography)({
   fontWeight: 500,
 });
 
-const Breadcrumb = ({ label, url }) => {
+const Breadcrumb = ({ label, url }: BreadcrumbEntry) => {
   return url ? (
-    <StyledLink href={url} target="_self">
+    <Link href={url} target="_self" whiteSpace="nowrap">
       <StyledTypography variant="caption2" color="inherit">
         {label}
       </StyledTypography>
-    </StyledLink>
+    </Link>
   ) : (
     <StyledTypography variant="caption2">{label}</StyledTypography>
   );

@@ -5,13 +5,9 @@ import { alpha } from "@mui/system";
 import styled from "../styled";
 
 import Breadcrumb from "./breadcrumb";
+import { BreadcrumbEntry } from "./types";
 
-export interface BreadcrumbEntry {
-  label: string;
-  url?: string;
-}
-
-export interface BreadcrumbsProps {
+interface BreadcrumbsProps {
   entries: BreadcrumbEntry[];
 }
 
@@ -25,11 +21,13 @@ const StyledBreadcrumbs = styled(MuiBreadcrumbs)(({ theme }: { theme: Theme }) =
 const Breadcrumbs = ({ entries }: BreadcrumbsProps) => {
   return (
     <StyledBreadcrumbs>
-      {entries.map(({ url, label }) => (
-        <Breadcrumb key={label} url={url} label={label} />
+      {entries.map((entry: BreadcrumbEntry) => (
+        <Breadcrumb key={entry.label} {...entry} />
       ))}
     </StyledBreadcrumbs>
   );
 };
+
+export * from "./types";
 
 export default Breadcrumbs;
