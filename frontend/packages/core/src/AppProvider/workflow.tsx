@@ -56,7 +56,7 @@ export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkCo
    * this will override the default avatar.
    * { path: string }
    */
-  icon: WorkflowIcon;
+  icon?: WorkflowIcon;
   /**
    * Configured routes allow for the optional properties of `trending` (whether to display
    * on homepage) and `componentProps` which allow the passing of workflow/route

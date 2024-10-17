@@ -44,7 +44,14 @@ interface HeaderProps extends AppConfiguration {
    * Will enable the user information component in the header
    */
   userInfo?: boolean;
+  /**
+   * The banners to render
+   */
   banners?: AppBanners;
+  /**
+   * The children to render
+   */
+  children?: React.ReactNode;
 }
 
 const AppBar = styled(MuiAppBar)(({ theme }: { theme: Theme }) => ({
@@ -72,7 +79,7 @@ const StyledLogo = styled("img")({
   verticalAlign: "middle",
 });
 
-const Header: React.FC<HeaderProps> = ({
+const Header = ({
   title = "clutch",
   logo = <Logo />,
   banners,
@@ -83,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
   notifications = false,
   userInfo = true,
   children = null,
-}) => {
+}: HeaderProps) => {
   return (
     <>
       <AppBar position="fixed" elevation={0}>
@@ -129,3 +136,4 @@ const Header: React.FC<HeaderProps> = ({
 };
 
 export default Header;
+export { Header };

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Theme } from "./../packages/core/src/AppProvider/themes";
 
@@ -28,6 +30,7 @@ export const parameters = {
 const preview = {
   decorators,
   parameters,
+  tags: ["autodocs"],
 };
 
 export default preview;

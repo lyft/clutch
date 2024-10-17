@@ -2,9 +2,9 @@ import React from "react";
 import { MemoryRouter } from "react-router";
 import type { Meta } from "@storybook/react";
 
-import Header from "../../AppLayout/header";
+import { Header } from "../../AppLayout/header";
 import { HappyEmoji, NeutralEmoji, SadEmoji } from "../../Assets/emojis";
-import { ApplicationContext } from "../../Contexts";
+import { ApplicationContext, UserPreferencesProvider } from "../../Contexts";
 import type { HeaderItem, TriggeredHeaderData } from "../../Contexts/app-context";
 import type { FeedbackBannerProps } from "../banner";
 import { Banner } from "../banner";
@@ -65,10 +65,12 @@ const Template = ({ ...props }: FeedbackBannerProps) => {
         triggeredHeaderData,
       }}
     >
-      <MemoryRouter>
-        <Header enableNPS />
-        <Banner {...props} />
-      </MemoryRouter>
+      <UserPreferencesProvider>
+        <MemoryRouter>
+          <Header enableNPS />
+          <Banner {...props} />
+        </MemoryRouter>
+      </UserPreferencesProvider>
     </ApplicationContext.Provider>
   );
 };
