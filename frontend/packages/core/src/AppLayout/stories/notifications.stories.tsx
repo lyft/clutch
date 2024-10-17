@@ -7,7 +7,7 @@ import type { NotificationsProp } from "../notifications";
 import NotificationsComponent from "../notifications";
 
 export default {
-  title: "Core/AppLayout/Notifications",
+  title: "Core/Layout/Header/Notifications",
   component: NotificationsComponent,
 } as Meta;
 

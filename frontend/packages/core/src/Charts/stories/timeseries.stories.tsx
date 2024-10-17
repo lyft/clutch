@@ -9,7 +9,7 @@ import TimeseriesChart from "../timeseries";
 import type { TimeseriesReferenceLineProps } from "../types";
 
 export default {
-  title: "Core/Charts/TimeseriesChart",
+  title: "Core/Charts/Timeseries",
   component: TimeseriesChart,
 } as Meta;
 

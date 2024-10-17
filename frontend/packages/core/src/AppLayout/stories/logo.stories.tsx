@@ -4,7 +4,7 @@ import type { Meta } from "@storybook/react";
 import LogoComponent from "../logo";
 
 export default {
-  title: "Core/AppLayout/Logo",
+  title: "Core/Layout/Header/Logo",
   component: LogoComponent,
 } as Meta;
 

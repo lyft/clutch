@@ -6,7 +6,7 @@ import type { PieChartProps } from "../pie";
 import { PieChart as PieChartComponent } from "..";
 
 export default {
-  title: "Core/Charts/PieChart",
+  title: "Core/Charts/Pie",
   component: PieChartComponent,
 } as Meta;
 

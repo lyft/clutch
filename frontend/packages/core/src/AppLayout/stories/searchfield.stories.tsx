@@ -8,7 +8,7 @@ import { ApplicationContext } from "../../Contexts/app-context";
 import SearchFieldComponent from "../search";
 
 export default {
-  title: "Core/AppLayout/Search Field",
+  title: "Core/Layout/Header/Search Field",
   component: SearchFieldComponent,
   decorators: [
     Search => {

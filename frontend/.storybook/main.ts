@@ -4,7 +4,7 @@ import { dirname, join } from "path";
 import { StorybookConfig } from "@storybook/react-webpack5";
 
 const config: StorybookConfig = {
-  stories: ["../packages/**/*.stories.@(tsx|jsx)"],
+  stories: ["../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 
   typescript: {
     reactDocgen: "react-docgen-typescript",
@@ -50,13 +50,24 @@ const config: StorybookConfig = {
   }),
 
   addons: [
+    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-console"),
     getAbsolutePath("@storybook/addon-essentials"),
     getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-storysource"),
+    getAbsolutePath("@storybook/addon-themes"),
+    getAbsolutePath("@storybook/addon-viewport"),
     getAbsolutePath("@storybook/preset-create-react-app"),
   ],
 
-  docs: {},
+  docs: {
+    defaultName: "Documentation",
+    autodocs: "tag",
+  },
+  staticDirs: ["../packages/app/public"],
+  core: {
+    disableTelemetry: true,
+  },
 };
 
 export default config;
