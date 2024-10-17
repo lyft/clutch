@@ -1,5 +1,5 @@
 import React from "react";
-import { Interpolation } from "@emotion/styled";
+import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 
 import styled from "../styled";
