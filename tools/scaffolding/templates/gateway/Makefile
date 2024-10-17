@@ -35,11 +35,11 @@ backend-with-assets: frontend
 	cd backend && go run $(PRIMARY_MODULE_DIR)/cmd/assets/generate.go ../frontend/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
 .PHONY: frontend
-frontend: yarn-install
+frontend: frontend-install 
 	$(YARN) --cwd frontend build
 
-.PHONY: yarn-install
-yarn-install: yarn-ensure
+.PHONY: frontend-install 
+frontend-install : yarn-ensure
 ifneq ("$(wildcard frontend/yarn.lock)","")
 	$(YARN) --cwd frontend install --immutable
 else
@@ -51,5 +51,5 @@ yarn-ensure:
 	@$(SHELL) $(TOOLS_MODULE_DIR)/install-yarn.sh
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: yarn-ensure yarn-install
+frontend-dev: yarn-ensure frontend-install 
 	$(YARN) --cwd frontend start

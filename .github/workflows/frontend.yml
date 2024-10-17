@@ -48,7 +48,7 @@ jobs:
           key: ${{ runner.os }}-fe-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: make yarn-install
+        run: make frontend-install
       - name: build
         run: make frontend
   lint:
@@ -72,7 +72,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: make yarn-install
+        run: make frontend-install
       - name: Compile packages
         run: yarn run compile:dev
         working-directory: ${{ env.FRONTEND_DIR }}
@@ -135,7 +135,7 @@ jobs:
             ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: make yarn-install
+        run: make frontend-install
       - name: Compile packages
         run: yarn run compile:dev
         working-directory: ${{ env.FRONTEND_DIR }}
@@ -169,7 +169,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: make yarn-install
+        run: make frontend-install
       - name: Compile packages
         run: yarn run compile:dev
         working-directory: ${{ env.FRONTEND_DIR }}
@@ -199,7 +199,7 @@ jobs:
           key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: make yarn-install
+        run: make frontend-install
       - name: Set Publish Auth
         run: yarn config set npmAuthToken $NODE_AUTH_TOKEN
         working-directory: ${{ env.FRONTEND_DIR }}
