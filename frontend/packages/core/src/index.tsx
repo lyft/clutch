@@ -63,6 +63,7 @@ export { useTheme } from "./AppProvider/themes";
 export { ThemeProvider } from "./Theme";
 export { getDisplayName } from "./utils";
 export { default as WorkflowLayout } from "./WorkflowLayout";
+export { default as Breadcrumbs } from "./Breadcrumbs";
 
 export { css as EMOTION_CSS, keyframes as EMOTION_KEYFRAMES } from "@emotion/react";
 
@@ -84,3 +85,4 @@ export type {
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";
 export type { StyledComponent } from "@emotion/styled";
+export type { BreadcrumbEntry } from "./Breadcrumbs";
