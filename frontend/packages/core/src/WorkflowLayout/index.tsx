@@ -7,7 +7,7 @@ import { Typography } from "../typography";
 export type LayoutVariant = "standard" | "wizard" | "custom";
 
 export type LayoutProps = {
-  variant?: LayoutVariant;
+  variant: LayoutVariant;
   heading?: string | React.ReactElement;
   showHeader?: boolean;
 };
@@ -60,7 +60,7 @@ const HeaderTitle = styled(Typography)({
 });
 
 const WorkflowLayout = ({
-  variant = "custom",
+  variant,
   showHeader,
   heading,
   children,
