@@ -4,6 +4,7 @@ import { Alert, Grid, IconButton } from "@mui/material";
 
 import { Dialog, DialogContent } from "../dialog";
 import Code from "../text";
+import type { LayoutProps } from "../WorkflowLayout";
 
 import type { WorkflowIcon } from "./index";
 
@@ -90,6 +91,8 @@ export interface Route {
    * If this is not set the route will always be registered.
    */
   featureFlag?: string;
+
+  layoutProps?: LayoutProps;
 }
 
 export interface ConfiguredRoute extends Route {
