@@ -6,7 +6,7 @@ import type { Meta } from "@storybook/react";
 import { UserPreferencesProvider } from "../../Contexts";
 import { ApplicationContext } from "../../Contexts/app-context";
 import Drawer from "../drawer";
-import Header from "../header";
+import { Header } from "../header";
 
 export default {
   title: "Core/Layout/Drawer",

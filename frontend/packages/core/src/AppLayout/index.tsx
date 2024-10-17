@@ -7,7 +7,7 @@ import Loadable from "../loading";
 import type { AppConfiguration } from "../Types";
 
 import Drawer from "./drawer";
-import Header, { APP_BAR_HEIGHT } from "./header";
+import { APP_BAR_HEIGHT, Header } from "./header";
 
 const AppGrid = styled(MuiGrid)({
   flex: 1,
