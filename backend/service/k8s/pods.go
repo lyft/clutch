@@ -328,11 +328,12 @@ func getPodStatus(pod *corev1.Pod) string {
 
 	initializing := false
 	totalInitContainers := len(pod.Spec.InitContainers)
+	nativeSidecarRestartPolicy := corev1.ContainerRestartPolicyAlways
 	for i := range pod.Status.InitContainerStatuses {
 		container := pod.Status.InitContainerStatuses[i]
 		restarts += int(container.RestartCount)
 
-		if pod.Spec.InitContainers[i].RestartPolicy != nil {
+		if pod.Spec.InitContainers[i].RestartPolicy == &nativeSidecarRestartPolicy {
 			// if the init container has a restart policy, it is native sidecar and should not be counted
 			totalInitContainers--
 			continue
