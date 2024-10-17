@@ -9,7 +9,7 @@ export type LayoutVariant = "standard" | "wizard" | "custom";
 export type LayoutProps = {
   variant: LayoutVariant;
   heading?: string | React.ReactElement;
-  showHeader?: boolean;
+  hideHeader?: boolean;
 };
 
 type StyledVariantComponentProps = {
@@ -61,13 +61,13 @@ const HeaderTitle = styled(Typography)({
 
 const WorkflowLayout = ({
   variant,
-  showHeader,
   heading,
+  hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
   return (
     <LayoutContainer $variant={variant}>
-      {showHeader !== false && (
+      {!hideHeader && (
         <PageHeader $variant={variant}>
           {heading && (
             <>

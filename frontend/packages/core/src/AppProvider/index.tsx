@@ -219,8 +219,8 @@ const ClutchApp = ({
                             // We define these props in order to avoid UI changes before refactoring
                             const workflowLayoutProps: LayoutProps = {
                               variant: "custom",
-                              showHeader: false,
-                              heading: route.layoutProps?.heading || heading,
+                              hideHeader: true,
+                              heading,
                               ...route.layoutProps,
                             };
                             return (
