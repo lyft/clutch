@@ -7,7 +7,7 @@ import type { UserInformationProps } from "../user";
 import { UserInformation as UserInformationComponent } from "../user";
 
 export default {
-  title: "Core/AppLayout/User Information",
+  title: "Core/Layout/Header/User Info",
   component: UserInformationComponent,
 } as Meta;
 

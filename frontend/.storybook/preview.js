@@ -12,6 +12,9 @@ export const decorators = [
 ];
 
 export const parameters = {
+  controls: {
+    expanded: true,
+  },
   backgrounds: {
     default: "clutch",
     values: [

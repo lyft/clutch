@@ -7,7 +7,7 @@ import LinearTimeline from "../linearTimeline";
 import type { LinearTimelineData } from "../types";
 
 export default {
-  title: "Core/Charts/LinearTimeline",
+  title: "Core/Charts/Linear Timeline",
   component: LinearTimeline,
 } as Meta;
 
