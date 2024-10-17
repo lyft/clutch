@@ -67,7 +67,7 @@ const registeredWorkflows = async (
 ): Promise<Workflow[]> => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async resolve => {
-    let validWorkflows = Object.keys(workflows || [])
+    let validWorkflows: Workflow[] = Object.keys(workflows || [])
       .map((workflowId: string) => {
         const workflow = workflows[workflowId]();
         const icon = configuration?.[workflowId]?.icon || { path: "" };
