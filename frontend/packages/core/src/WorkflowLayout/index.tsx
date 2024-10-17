@@ -1,4 +1,5 @@
 import React from "react";
+import { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 
 import styled from "../styled";
@@ -44,7 +45,7 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
 
 const LayoutContainer = styled("div")(
   ({ $variant, theme }: StyledVariantComponentProps) =>
-    getContainerVariantStyles($variant, theme) as any
+    getContainerVariantStyles($variant, theme) as Interpolation<void>
 );
 
 const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentProps) => ({
