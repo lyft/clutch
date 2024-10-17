@@ -326,15 +326,22 @@ func getPodStatus(pod *corev1.Pod) string {
 		reason = pod.Status.Reason
 	}
 
-	initializing := false
 	totalInitContainers := len(pod.Spec.InitContainers)
-	initContainerCount := 0
 	nativeSidecarRestartPolicy := corev1.ContainerRestartPolicyAlways
-	for i := range pod.Status.InitContainerStatuses {
+	for i := range pod.Spec.InitContainers {
 		if pod.Spec.InitContainers[i].RestartPolicy != nil && pod.Spec.InitContainers[i].RestartPolicy == &nativeSidecarRestartPolicy {
 			// if the init container has a restart policy, it is native sidecar and should not be counted
 			// https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/753-sidecar-containers/README.md
 			totalInitContainers--
+		}
+	}
+
+	initializing := false
+	initContainerCount := 0
+	for i := range pod.Status.InitContainerStatuses {
+		if pod.Spec.InitContainers[i].RestartPolicy != nil && pod.Spec.InitContainers[i].RestartPolicy == &nativeSidecarRestartPolicy {
+			// if the init container has a restart policy, it is native sidecar and should not be counted
+			// https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/753-sidecar-containers/README.md
 			continue
 		}
 
