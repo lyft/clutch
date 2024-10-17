@@ -4,9 +4,9 @@ import type { CSSObject, Theme } from "@mui/material";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-type LayoutVariant = "standard" | "wizard";
+export type LayoutVariant = "standard" | "wizard" | "custom";
 
-type LayoutProps = {
+export type LayoutProps = {
   variant: LayoutVariant;
   heading?: string | React.ReactElement;
   showHeader?: boolean;
@@ -36,6 +36,8 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
       padding: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
       margin: theme.spacing(theme.clutch.spacing.none, "auto"),
     },
+    // No styles
+    custom: {},
   };
   return layoutVariantStylesMap[variant];
 };

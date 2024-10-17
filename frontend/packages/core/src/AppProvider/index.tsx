@@ -15,6 +15,7 @@ import Landing from "../landing";
 import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
 import type { AppConfiguration } from "../Types";
+import WorkflowLayout, { LayoutProps } from "../WorkflowLayout";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
@@ -214,21 +215,32 @@ const ClutchApp = ({
                             const heading = route.displayName
                               ? `${workflow.displayName}: ${route.displayName}`
                               : workflow.displayName;
+
+                            // We define these props in order to avoid UI changes before refactoring
+                            const workflowLayoutProps: LayoutProps = {
+                              variant: "custom",
+                              showHeader: false,
+                              heading: route.layoutProps?.heading || heading,
+                              ...route.layoutProps,
+                            };
                             return (
                               <Route
                                 key={workflow.path}
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                                 element={
-                                  <AppNotification
-                                    type="layout"
-                                    workflow={workflow?.displayName}
-                                    banners={appConfiguration?.banners}
-                                  >
-                                    {React.cloneElement(<route.component />, {
-                                      ...route.componentProps,
-                                      heading,
-                                    })}
-                                  </AppNotification>
+                                  <WorkflowLayout {...workflowLayoutProps}>
+                                    <AppNotification
+                                      type="layout"
+                                      workflow={workflow?.displayName}
+                                      banners={appConfiguration?.banners}
+                                    >
+                                      {React.cloneElement(<route.component />, {
+                                        ...route.componentProps,
+                                        // This is going to be removed to be used in the WorkflowLayout only
+                                        heading,
+                                      })}
+                                    </AppNotification>
+                                  </WorkflowLayout>
                                 }
                               />
                             );

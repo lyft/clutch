@@ -1,6 +1,6 @@
 #!/bin/bash
 
-YARN_VERSION="4.3.1"
+YARN_VERSION="4.5.0"
 ROOT_DIR="$PWD"
 ROOT_DEST_DIR="${ROOT_DIR}/frontend"
 
