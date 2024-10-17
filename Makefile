@@ -76,24 +76,24 @@ backend-verify:
 backend-config-validation:
 	cd backend && go run main.go -validate -c clutch-config.yaml
 
-.PHONY: yarn-install # Install frontend dependencies.
-yarn-install: yarn-ensure
-	$(YARN) --cwd frontend install --immutable
-
 .PHONY: backend-integration-test
 backend-integration-test:
 	cd backend/internal/test/integration/chaos && ./do_integration_test.sh
 
+.PHONY: frontend-install # Install frontend dependencies.
+frontend-install: yarn-ensure
+	$(YARN) --cwd frontend install --immutable
+
 .PHONY: frontend # Build production frontend assets.
-frontend: yarn-ensure preflight-checks-frontend yarn-install
+frontend: yarn-ensure preflight-checks-frontend frontend-install
 	$(YARN) --cwd frontend build
 
-.PHONY: frontend-dev-build # Build development frontend assets.
-frontend-dev-build: yarn-install
+.PHONY: frontend-compile # Build development frontend assets.
+frontend-compile: frontend-install
 	$(YARN) --cwd frontend build:dev
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: setup-git-hooks yarn-install
+frontend-dev: setup-git-hooks frontend-install
 	$(YARN) --cwd frontend start
 
 .PHONY: frontend-lint # Lint the frontend code.
@@ -151,11 +151,11 @@ scaffold-workflow:
 	cd tools/scaffolding && go run scaffolder.go -m frontend-plugin
 
 .PHONY: storybook # Start storybook locally.
-storybook: yarn-install
+storybook: frontend-install
 	$(YARN) --cwd frontend storybook
 
 .PHONY: storybook-build # Build storybook assets for deploy.
-storybook-build: yarn-install
+storybook-build: frontend-install
 	$(YARN) --cwd frontend storybook:build
 
 .PHONY: test # Unit test all of the code.

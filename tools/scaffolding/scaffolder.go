@@ -1,306 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
-	"os/user"
 	"path/filepath"
 	"strings"
-	"text/template"
+
+	scaffold "github.com/lyft/clutch/tools/scaffolding/scaffold"
 )
-
-const (
-	defaultSourceControlProvider = "github.com"
-	defaultRepoName              = "clutch-custom-gateway"
-)
-
-// Replace any special characters, that might appear in repository owners or organizations names, but are not supported
-// in proto3 package names.
-var sanitizeProto3Identifier = strings.NewReplacer(
-	"-", "_",
-	"/", "_",
-)
-
-type workflowTemplateValues struct {
-	Name             string
-	PackageName      string
-	Description      string
-	DeveloperName    string
-	DeveloperEmail   string
-	URLRoot          string
-	URLPath          string
-	IsWizardTemplate bool
-}
-
-type gatewayTemplateValues struct {
-	RepoOwner    string
-	RepoName     string
-	RepoProvider string
-}
-
-// SanitizeProto3 identifiers by replacing unsupported characters.
-func (gatewayTemplateValues) SanitizeProto3(s string) string {
-	return sanitizeProto3Identifier.Replace(s)
-}
-
-func promptOrDefault(prompt string, defaultValue string) string {
-	reader := bufio.NewReader(os.Stdin)
-	if defaultValue == "" {
-		fmt.Printf("%s: ", prompt)
-	} else {
-		fmt.Printf("%s [%s]: ", prompt, defaultValue)
-	}
-	text, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal(err)
-	}
-	text = strings.TrimSpace(text)
-
-	if text == "" && defaultValue != "" {
-		return defaultValue
-	}
-	if text == "" {
-		log.Fatal("no input provided")
-	}
-
-	return text
-}
-
-func determineGoPath() string {
-	goPathOut, err := exec.Command("go", "env", "GOPATH").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return strings.TrimSpace(string(goPathOut))
-}
-
-func determineYarnPath() string {
-	path, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	yarnScript := filepath.Join(path, "..", "..", "build", "bin", "yarn.sh")
-	scriptPath, err := exec.LookPath(yarnScript)
-	if err != nil {
-		path, err := exec.LookPath("yarn")
-		if err != nil {
-			log.Fatal("could not find yarn executable to use")
-		}
-		return path
-	}
-	return scriptPath
-}
-
-func determineUsername() string {
-	u, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return u.Username
-}
-
-func determineUserEmail() string {
-	gitEmail, err := exec.Command("git", "config", "user.email").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	email := strings.TrimSpace(string(gitEmail))
-	if email == "" {
-		email = "unknown@example.com"
-	}
-	return email
-}
-
-func getFrontendPluginTemplateValues() (*workflowTemplateValues, string) {
-	log.Println("Welcome!")
-	fmt.Println("*** Analyzing environment...")
-
-	dest := filepath.Join(os.Getenv("OLDPWD"), "frontend", "workflows")
-
-	fmt.Println("\n*** Based on your environment, we've picked the following destination for your new workflow:")
-	fmt.Println(">", dest)
-	okay := promptOrDefault("Is this okay?", "Y/n")
-	if !strings.HasPrefix(strings.ToLower(okay), "y") {
-		dest = promptOrDefault("Enter the destination folder", dest)
-	}
-
-	data := &workflowTemplateValues{}
-
-	data.IsWizardTemplate = true
-
-	wizard := promptOrDefault("Is this a wizard workflow?", "Y/n")
-	if !strings.HasPrefix(strings.ToLower(wizard), "y") {
-		data.IsWizardTemplate = false
-	}
-
-	data.Name = strings.Title(promptOrDefault("Enter the name of this workflow", "Hello World"))
-	description := promptOrDefault("Enter a description of the workflow", "Greet the world")
-	data.Description = strings.ToUpper(description[:1]) + description[1:]
-	data.DeveloperName = promptOrDefault("Enter the developer's name", determineUsername())
-	data.DeveloperEmail = promptOrDefault("Enter the developer's email", determineUserEmail())
-
-	// n.b. transform workflow name into package name, e.g. foo bar baz -> fooBarBaz
-	packageName := strings.ToLower(data.Name[:1]) + strings.Title(data.Name)[1:]
-	data.PackageName = strings.Replace(packageName, " ", "", -1)
-
-	data.URLRoot = strings.Replace(strings.ToLower(data.Name), " ", "", -1)
-	data.URLPath = "/"
-
-	return data, filepath.Join(dest, data.PackageName)
-}
-
-func getGatewayTemplateValues() (*gatewayTemplateValues, string) {
-	// Ask the user if assumptions are correct or a new destination is needed.
-	log.Println("Welcome!")
-	fmt.Println("*** Analyzing environment...")
-
-	gopath := determineGoPath()
-	username := determineUsername()
-
-	fmt.Println("> GOPATH:", gopath)
-	fmt.Println("> User:", username)
-
-	dest := filepath.Join(gopath, "src", defaultSourceControlProvider, username, defaultRepoName)
-	fmt.Println("\n*** Based on your environment, we've picked the following destination for your new repo:")
-	fmt.Println(">", dest)
-	fmt.Println("\nNote: please pay special attention to see if the username matches your provider's username.")
-	okay := promptOrDefault("Is this okay?", "Y/n")
-	data := &gatewayTemplateValues{
-		RepoOwner:    username,
-		RepoName:     defaultRepoName,
-		RepoProvider: defaultSourceControlProvider,
-	}
-	if !strings.HasPrefix(strings.ToLower(okay), "y") {
-		data.RepoProvider = promptOrDefault("Enter the name of the source control provider", data.RepoProvider)
-		data.RepoOwner = promptOrDefault("Enter the name of the repository owner or org", data.RepoOwner)
-		data.RepoName = promptOrDefault("Enter the desired repository name", data.RepoName)
-		dest = promptOrDefault(
-			"Enter the destination folder",
-			filepath.Join(gopath, "src", data.RepoProvider, data.RepoOwner, data.RepoName),
-		)
-	}
-
-	return data, dest
-}
-
-func generateAPI(args *args, tmpFolder, dest string) {
-	log.Println("Adding clutch dependencies to go.mod...")
-	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
-		log.Fatal(err)
-	}
-	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/backend@%s", args.Org, args.GoPin))
-	if out, err := cmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`go get` backend in the destination dir returned the above error")
-	}
-
-	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/tools@%s", args.Org, args.GoPin))
-	if out, err := cmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`go get` tools in the destination dir returned the above error")
-	}
-
-	if err := os.Chdir(tmpFolder); err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Generating API code from protos...")
-	log.Println("cd", tmpFolder, "&& make api")
-	cmd = exec.Command("make", "api")
-	if out, err := cmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`make api` in the destination dir returned the above error")
-	}
-	log.Println("API generation complete")
-
-	fmt.Println("*** All done!")
-	fmt.Println("\n*** Try the following command to get started developing the custom gateway:")
-	fmt.Printf("cd %s && make\n", dest)
-}
-
-func generateFrontend(args *args, tmpFolder, dest string) {
-	yarnInstallVersion := args.YarnPin
-	if len(yarnInstallVersion) == 0 {
-		yarnInstallVersion = "4.5.0"
-	}
-
-	// Update clutch.config.js for new workflow
-	log.Println("Compiling workflow, this may take a few minutes...")
-	yarn := determineYarnPath()
-	log.Println("cd", tmpFolder, "&&", yarn, "install &&", yarn, "tsc && ", yarn, "compile")
-	if err := os.Chdir(tmpFolder); err != nil {
-		log.Fatal(err)
-	}
-
-	installCmd := exec.Command(yarn, "install")
-	if out, err := installCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Println("`yarn install` returned the above error")
-
-		yarnVersionCmd := exec.Command(yarn, "--version")
-		if out, err := yarnVersionCmd.CombinedOutput(); err != nil {
-			fmt.Println(string(out))
-			log.Fatal("`yarn --version` returned the above error")
-		} else if strings.TrimRight(string(out), "\n") != yarnInstallVersion {
-			log.Println("Yarn version is not equal to", yarnInstallVersion)
-			corepack := promptOrDefault("Would you like to attempt installation of Yarn via corepack?", "Y/n")
-			if !strings.HasPrefix(strings.ToLower(corepack), "y") {
-				log.Fatal("Corepack installation not granted, exiting")
-			} else {
-				corepackCmd := exec.Command("corepack", "enable")
-				if out, err := corepackCmd.CombinedOutput(); err != nil {
-					fmt.Println(string(out))
-					log.Fatal("`corepack enable` returned the above error. Please make sure you are on Node > 18")
-				}
-
-				corepackPrepareCmd := exec.Command("corepack", "prepare", "yarn@"+yarnInstallVersion, "--activate")
-				if out, err := corepackPrepareCmd.CombinedOutput(); err != nil {
-					fmt.Println(string(out))
-					log.Fatal("`corepack prepare", "yarn@"+yarnInstallVersion, "--activate` returned the above error. Please correct the error and attempt again.")
-				}
-			}
-		}
-	}
-
-	fmt.Println("Running yarn tsc in", tmpFolder, "with yarn path", yarn)
-	compileTypesCmd := exec.Command(yarn, "tsc")
-	if out, err := compileTypesCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`yarn tsc` returned the above error")
-	}
-
-	compileDevCmd := exec.Command(yarn, "compile")
-	if out, err := compileDevCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`yarn compile` returned the above error")
-	}
-
-	fmt.Println("*** All done!")
-	fmt.Printf("\n*** Your new workflow can be found here: %s\n", dest)
-	fmt.Println("For information on how to register this new workflow see our configuration guide: https://clutch.sh/docs/configuration")
-}
-
-type args struct {
-	Mode    string
-	GoPin   string
-	Org     string
-	YarnPin string
-}
-
-func parseArgs() *args {
-	f := &args{}
-	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
-	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
-	flag.StringVar(&f.Org, "o", "lyft", "overrides the github organization (for use in fork testing)")
-	flag.StringVar(&f.YarnPin, "y", "4.5.0", "version of yarn to use")
-	flag.Parse()
-	return f
-}
 
 func main() {
 	root, err := os.Getwd()
@@ -308,100 +17,48 @@ func main() {
 		log.Fatal(err)
 	}
 
-	flags := parseArgs()
+	flags := scaffold.ParseArgs()
 
 	// Collect info from user based on mode and determine template root.
 	var dest string
 	var templateRoot string
+	var templateOverwrites string
 	var data interface{}
-	var postProcessFunction func(flags *args, tmpFolder, dest string)
+	var postProcessFunction func(flags *scaffold.Args, tmpFolder string, dest string)
 
 	switch flags.Mode {
 	case "gateway":
 		templateRoot = filepath.Join(root, "templates/gateway")
-		data, dest = getGatewayTemplateValues()
-		postProcessFunction = generateAPI
+		data, dest = scaffold.GetGatewayTemplateValues()
+		postProcessFunction = scaffold.PostProcessGateway
 	case "frontend-plugin":
-		templateRoot = filepath.Join(root, "templates/frontend")
-		data, dest = getFrontendPluginTemplateValues()
-		postProcessFunction = generateFrontend
+		templateRoot = filepath.Join(root, "templates/frontend/workflow/internal")
+		data, dest = scaffold.GetFrontendPluginTemplateValues()
+		if strings.Contains(dest, "/clutch/frontend/workflows/") || flags.Internal {
+			postProcessFunction = scaffold.PostProcessFrontendInternal
+		} else {
+			templateOverwrites = filepath.Join(root, "templates/frontend/workflow/external")
+			postProcessFunction = scaffold.PostProcessFrontend
+		}
 	default:
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	// Fix tilde HOME path.
-	if strings.HasPrefix(dest, "~/") {
-		homeUser, err := user.Current()
-		if err != nil {
-			log.Fatal("could not get user's information", err)
-		}
-		dest = filepath.Join(homeUser.HomeDir, dest[2:])
-	}
-
-	// Check if dest exists.
-	if _, err := os.Stat(dest); !os.IsNotExist(err) {
-		log.Fatal("ERROR destination folder exists")
-	}
-
-	fmt.Println("\n*** Generating...")
-	log.Println("Using templates in", templateRoot)
+	scaffold.FixDestDir(dest)
 
 	// Make a tmpdir for output.
-	tmpout, err := ioutil.TempDir(os.TempDir(), "clutch-scaffolding-")
-	if err != nil {
-		log.Fatal("could not create temp dir", err)
+	fmt.Println("\n*** Generating...")
+	fmt.Println("Using templates in", templateRoot)
+	tmpout := scaffold.TemplateTempDir(templateRoot, data)
+	if flags.TemplateOverwrite != "" {
+		fmt.Println("\n*** Overwriting files with custom templates...", tmpout)
+		scaffold.TemplateFiles(flags.TemplateOverwrite, tmpout, data)
+	} else if templateOverwrites != "" {
+		fmt.Println("\n*** Overwriting files with custom templates...", tmpout)
+		scaffold.TemplateFiles(templateOverwrites, tmpout, data)
 	}
 	defer os.RemoveAll(tmpout)
-	log.Println("Using tmpdir", tmpout)
-
-	// Walk files and template them.
-	err = filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		relpath, err := filepath.Rel(templateRoot, path)
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			if relpath != "." {
-				err := os.MkdirAll(filepath.Join(tmpout, relpath), 0755)
-				return err
-			}
-			return nil
-		}
-
-		log.Println(relpath)
-
-		t, err := template.ParseFiles(path)
-		if err != nil {
-			return err
-		}
-
-		out := strings.TrimSuffix(filepath.Join(tmpout, relpath), ".tmpl")
-		fh, err := os.Create(out)
-		if err != nil {
-			return err
-		}
-
-		return t.Execute(fh, data)
-	})
-
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	postProcessFunction(flags, tmpout, dest)
-
-	// Move tmpdir contents to destination.
-	if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
-		log.Fatal(err)
-	}
-	if err := os.Rename(tmpout, dest); err != nil {
-		if os.IsExist(err) {
-			log.Fatal(fmt.Sprintf("Failed moving %s to %s destination folder already exists", tmpout, dest))
-		}
-		log.Fatal(err)
-	}
 }
