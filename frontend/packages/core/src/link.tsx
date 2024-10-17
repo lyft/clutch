@@ -8,6 +8,7 @@ type TextTransform = "none" | "capitalize" | "uppercase" | "lowercase" | "initia
 
 const StyledLink = styled(MuiLink)<{
   $textTransform: LinkProps["textTransform"];
+  $whiteSpace: LinkProps["whiteSpace"];
 }>(
   ({ theme }: { theme: Theme }) => ({
     display: "flex",
@@ -20,11 +21,13 @@ const StyledLink = styled(MuiLink)<{
   }),
   props => ({
     textTransform: props.$textTransform,
+    ...(props.$whiteSpace ? { whiteSpace: props.$whiteSpace } : {}),
   })
 );
 
 export interface LinkProps extends Pick<MuiLinkProps, "href" | "children"> {
   textTransform?: TextTransform;
+  whiteSpace?: React.CSSProperties["whiteSpace"];
   target?: React.AnchorHTMLAttributes<HTMLAnchorElement>["target"];
 }
 
@@ -33,6 +36,7 @@ export const Link = ({
   textTransform = "none",
   target = "_blank",
   children,
+  whiteSpace,
   ...props
 }: LinkProps) => (
   <StyledLink
@@ -40,6 +44,7 @@ export const Link = ({
     target={target}
     rel="noopener noreferrer"
     $textTransform={textTransform}
+    $whiteSpace={whiteSpace}
     {...props}
   >
     {children}

@@ -5,7 +5,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCode, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { LinkText } from "../helpers";
+import { LinkText } from "../../helpers";
 
 interface ProjectPullRequests {
   number: number;
