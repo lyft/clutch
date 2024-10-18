@@ -1,14 +1,19 @@
 import React from "react";
+import { matchPath } from "react-router";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 
+import { Workflow } from "../AppProvider/workflow";
+import Breadcrumbs, { BreadcrumbEntry } from "../Breadcrumbs";
+import { useLocation } from "../navigation";
 import styled from "../styled";
 import { Typography } from "../typography";
 
 export type LayoutVariant = "standard" | "wizard" | "custom";
 
 export type LayoutProps = {
-  variant: LayoutVariant;
+  workflow: Workflow;
+  variant?: LayoutVariant;
   heading?: string | React.ReactElement;
   hideHeader?: boolean;
 };
@@ -61,15 +66,43 @@ const HeaderTitle = styled(Typography)({
 });
 
 const WorkflowLayout = ({
-  variant,
-  heading,
+  workflow,
+  variant = "standard",
+  heading = null,
   hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
+  const location = useLocation();
+  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
+
+  const labels = location.pathname
+    .split("/")
+    .slice(1, location.pathname.endsWith("/") ? -1 : undefined);
+
+  const breadcrumbsEntries: Array<BreadcrumbEntry> = [{ label: "Home", url: "/" }].concat(
+    labels.map((label, index) => {
+      let url = `/${labels.slice(0, index + 1).join("/")}`;
+      const isInvalidUrl =
+        `/${workflow.path}` !== url &&
+        !workflowPaths.includes(url) &&
+        !workflowPaths.find(path => !!matchPath({ path }, url));
+
+      if (isInvalidUrl) {
+        url = undefined;
+      }
+
+      return {
+        label,
+        url,
+      };
+    })
+  );
+
   return (
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
+          <Breadcrumbs entries={breadcrumbsEntries} />
           {heading && (
             <>
               {React.isValidElement(heading) ? (
