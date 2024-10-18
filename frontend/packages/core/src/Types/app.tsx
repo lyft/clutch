@@ -6,4 +6,5 @@ export interface AppConfiguration {
   /** Supports a react node or a string representing a public assets path */
   logo?: React.ReactNode | string;
   banners?: AppBanners;
+  enableWorkflowLayout?: boolean;
 }
