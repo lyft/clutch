@@ -326,10 +326,30 @@ func getPodStatus(pod *corev1.Pod) string {
 		reason = pod.Status.Reason
 	}
 
+	totalInitContainers := len(pod.Spec.InitContainers)
+	nativeSidecarRestartPolicy := corev1.ContainerRestartPolicyAlways
+	nativeSidecarContainerId := map[int]struct{}{}
+
+	for i := range pod.Spec.InitContainers {
+		if pod.Spec.InitContainers[i].RestartPolicy != nil && pod.Spec.InitContainers[i].RestartPolicy == &nativeSidecarRestartPolicy {
+			// if the init container has a restart policy, it is native sidecar and should not be counted
+			// https://github.com/kubernetes/enhancements/blob/master/keps/sig-node/753-sidecar-containers/README.md
+			totalInitContainers--
+			nativeSidecarContainerId[i] = struct{}{}
+		}
+	}
+
 	initializing := false
+	initContainerCount := 0
 	for i := range pod.Status.InitContainerStatuses {
+		if _, ok := nativeSidecarContainerId[i]; ok {
+			continue
+		}
+
 		container := pod.Status.InitContainerStatuses[i]
 		restarts += int(container.RestartCount)
+		initContainerCount++
+
 		switch {
 		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
 			continue
@@ -349,7 +369,7 @@ func getPodStatus(pod *corev1.Pod) string {
 			reason = fmt.Sprintf("Init: %s", container.State.Waiting.Reason)
 			initializing = true
 		default:
-			reason = fmt.Sprintf("Init: %d/%d", i, len(pod.Spec.InitContainers))
+			reason = fmt.Sprintf("Init: %d/%d", initContainerCount, totalInitContainers)
 			initializing = true
 		}
 		break
