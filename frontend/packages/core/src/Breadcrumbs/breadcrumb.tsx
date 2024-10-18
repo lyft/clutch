@@ -4,7 +4,7 @@ import { Link } from "../link";
 import styled from "../styled";
 import { Typography } from "../typography";
 
-import { BreadcrumbEntry } from "./types";
+import type { BreadcrumbEntry } from "./types";
 
 const StyledTypography = styled(Typography)({
   fontWeight: 500,
