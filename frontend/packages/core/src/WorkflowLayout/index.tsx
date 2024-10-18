@@ -1,4 +1,5 @@
 import React from "react";
+import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 
 import styled from "../styled";
@@ -9,7 +10,7 @@ export type LayoutVariant = "standard" | "wizard" | "custom";
 export type LayoutProps = {
   variant: LayoutVariant;
   heading?: string | React.ReactElement;
-  showHeader?: boolean;
+  hideHeader?: boolean;
 };
 
 type StyledVariantComponentProps = {
@@ -44,7 +45,7 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
 
 const LayoutContainer = styled("div")(
   ({ $variant, theme }: StyledVariantComponentProps) =>
-    getContainerVariantStyles($variant, theme) as any
+    getContainerVariantStyles($variant, theme) as Interpolation<void>
 );
 
 const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentProps) => ({
@@ -61,13 +62,13 @@ const HeaderTitle = styled(Typography)({
 
 const WorkflowLayout = ({
   variant,
-  showHeader,
   heading,
+  hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
   return (
     <LayoutContainer $variant={variant}>
-      {showHeader !== false && (
+      {!hideHeader && (
         <PageHeader $variant={variant}>
           {heading && (
             <>

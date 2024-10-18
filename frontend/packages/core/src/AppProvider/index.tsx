@@ -219,28 +219,37 @@ const ClutchApp = ({
                             // We define these props in order to avoid UI changes before refactoring
                             const workflowLayoutProps: LayoutProps = {
                               variant: "custom",
-                              showHeader: false,
-                              heading: route.layoutProps?.heading || heading,
+                              hideHeader: true,
+                              heading,
                               ...route.layoutProps,
                             };
+
+                            const workflowRouteComponent = (
+                              <AppNotification
+                                type="layout"
+                                workflow={workflow?.displayName}
+                                banners={appConfiguration?.banners}
+                              >
+                                {React.cloneElement(<route.component />, {
+                                  ...route.componentProps,
+                                  // This is going to be removed to be used in the WorkflowLayout only
+                                  heading,
+                                })}
+                              </AppNotification>
+                            );
+
                             return (
                               <Route
                                 key={workflow.path}
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                                 element={
-                                  <WorkflowLayout {...workflowLayoutProps}>
-                                    <AppNotification
-                                      type="layout"
-                                      workflow={workflow?.displayName}
-                                      banners={appConfiguration?.banners}
-                                    >
-                                      {React.cloneElement(<route.component />, {
-                                        ...route.componentProps,
-                                        // This is going to be removed to be used in the WorkflowLayout only
-                                        heading,
-                                      })}
-                                    </AppNotification>
-                                  </WorkflowLayout>
+                                  appConfiguration?.enableWorkflowLayout ? (
+                                    <WorkflowLayout {...workflowLayoutProps}>
+                                      {workflowRouteComponent}
+                                    </WorkflowLayout>
+                                  ) : (
+                                    workflowRouteComponent
+                                  )
                                 }
                               />
                             );
