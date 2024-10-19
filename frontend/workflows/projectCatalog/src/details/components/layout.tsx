@@ -32,7 +32,7 @@ const CatalogLayout = ({
   allowDisabled,
   quickLinkSettings = true,
 }: CatalogLayoutProps) => {
-  const { projectId } = useParams();
+  const { projectId = "" } = useParams();
   const navigate = useNavigate();
   const [projectInfo, setProjectInfo] = React.useState<IClutch.core.project.v1.IProject | null>(
     null
@@ -56,12 +56,16 @@ const CatalogLayout = ({
       });
 
   React.useEffect(() => {
-    fetchData();
+    if (projectId) {
+      fetchData();
 
-    const interval = setInterval(fetchData, 30000);
+      const interval = setInterval(fetchData, 30000);
 
-    return () => (interval ? clearInterval(interval) : undefined);
-  }, []);
+      return () => (interval ? clearInterval(interval) : undefined);
+    }
+
+    return () => {};
+  }, [projectId]);
 
   return (
     <ProjectDetailsContext.Provider value={projInfo}>

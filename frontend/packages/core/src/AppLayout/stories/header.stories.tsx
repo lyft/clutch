@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter } from "react-router-dom";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { ApplicationContext, UserPreferencesProvider } from "../../Contexts";

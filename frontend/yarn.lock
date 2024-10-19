@@ -1909,8 +1909,7 @@ __metadata:
     material-table: "npm:^2.0.3"
     react-hook-form: "npm:^7.25.3"
     react-is: "npm:^17.0.2"
-    react-router: "npm:^6.0.0-beta.0"
-    react-router-dom: "npm:^6.0.0-beta.0"
+    react-router-dom: "npm:6.0.0"
     react-test-renderer: "npm:^17.0.2"
     react-timeago: "npm:^7.0.0"
     recharts: "npm:^2.1.9"
@@ -2087,7 +2086,6 @@ __metadata:
     "@mui/material": ^5.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-router-dom: 6.0.0-beta.0
     typescript: ^4.2.3
   languageName: unknown
   linkType: soft
@@ -10745,6 +10743,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"history@npm:^5.0.3":
+  version: 5.3.0
+  resolution: "history@npm:5.3.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.7.6"
+  checksum: 10c0/812ec839386222d6437bd78d9f05db32e47d105ada0ad8834b32626919dd2fee7a10001bc489510f93a8069d02f118214bd8d42a82f7cf9daf8e84fbcbbb2016
+  languageName: node
+  linkType: hard
+
 "hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
@@ -15802,29 +15809,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:6.0.0-beta.0":
-  version: 6.0.0-beta.0
-  resolution: "react-router-dom@npm:6.0.0-beta.0"
+"react-router-dom@npm:6.0.0":
+  version: 6.0.0
+  resolution: "react-router-dom@npm:6.0.0"
   dependencies:
-    prop-types: "npm:^15.7.2"
-    react-router: "npm:6.0.0-beta.0"
+    react-router: "npm:6.0.0"
   peerDependencies:
-    history: ">=5"
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10c0/7eaedbca246fbfbc46b3354b2893144d93c882900d4902023cd89d0969a4c610a33ebd621951221ac0c70b01ecf1925b2edd6b478773133ac4a8164bf5277611
+  checksum: 10c0/1420d6963dcf280e3275810f2ba8a803c9c885820d0186f7443a1c8701fc666c24b06b89abb1e3888a50539a6f11ee2f83472a2c54979770f4acaec41be99406
   languageName: node
   linkType: hard
 
-"react-router@npm:6.0.0-beta.0":
-  version: 6.0.0-beta.0
-  resolution: "react-router@npm:6.0.0-beta.0"
+"react-router@npm:6.0.0":
+  version: 6.0.0
+  resolution: "react-router@npm:6.0.0"
   dependencies:
-    prop-types: "npm:^15.7.2"
+    history: "npm:^5.0.3"
   peerDependencies:
-    history: ">=5"
     react: ">=16.8"
-  checksum: 10c0/5b08018ea1d77f04d39041fa271ad9c4267715bc930f3f6fe69b59e6a141309aa017578aa648113d864b9ccb39487f43637edfc7b52542dbc1838fbf42a61c7c
+  checksum: 10c0/eb4ee497ab8609ebd0c940dbd85c31c67d9ee5290d5cbf6e99eec9ac3e8c49192152afcf6c91e007547e78f491b92d673964b21fda83b0fc5f774eed6f47d8f5
   languageName: node
   linkType: hard
 
