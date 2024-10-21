@@ -2,8 +2,8 @@ import React from "react";
 import { MemoryRouter } from "react-router";
 import type { Meta } from "@storybook/react";
 
-import Header from "../../AppLayout/header";
-import { ApplicationContext } from "../../Contexts";
+import { Header } from "../../AppLayout/header";
+import { ApplicationContext, UserPreferencesProvider } from "../../Contexts";
 import { NPSHeader } from "..";
 
 export default {
@@ -46,9 +46,11 @@ const Template = () => (
       ],
     }}
   >
-    <MemoryRouter>
-      <Header enableNPS />
-    </MemoryRouter>
+    <UserPreferencesProvider>
+      <MemoryRouter>
+        <Header enableNPS />
+      </MemoryRouter>
+    </UserPreferencesProvider>
   </ApplicationContext.Provider>
 );
 
