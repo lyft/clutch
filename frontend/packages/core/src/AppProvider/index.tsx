@@ -230,7 +230,6 @@ const ClutchApp = ({
                               >
                                 {React.cloneElement(<route.component />, {
                                   ...route.componentProps,
-                                  // This is going to be removed to be used in the WorkflowLayout only
                                   heading,
                                 })}
                               </AppNotification>

@@ -15,7 +15,7 @@ export type LayoutVariant = "standard" | "wizard" | "custom";
 
 // TODO: Define valid type variants
 export type LayoutProps = {
-  workflow?: Workflow;
+  workflow: Workflow;
   variant?: LayoutVariant;
   title?: string | ((params: Params) => string);
   subtitle?: string;
@@ -62,6 +62,7 @@ const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentPro
     theme.clutch.spacing.none,
     $variant === "wizard" ? theme.clutch.spacing.md : theme.clutch.spacing.none
   ),
+  paddingBottom: theme.spacing(theme.clutch.spacing.base),
   width: "100%",
 }));
 
@@ -102,11 +103,11 @@ const WorkflowLayout = ({
 }: React.PropsWithChildren<LayoutProps>) => {
   const params = useParams();
   const location = useLocation();
-  const workflowPaths = workflow?.routes.map(({ path }) => `/${workflow?.path}/${path}`);
+  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
   const breadcrumbsEntries = generateBreadcrumbsEntries(
     location,
     (url: string) =>
-      `/${workflow?.path}` !== url &&
+      `/${workflow.path}` !== url &&
       !workflowPaths.includes(url) &&
       !workflowPaths.find(path => !!matchPath({ path }, url))
   );
