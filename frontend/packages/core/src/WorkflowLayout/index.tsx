@@ -112,7 +112,7 @@ const WorkflowLayout = ({
   );
 
   if (variant === "custom") {
-    return children;
+    return <>{children}</>;
   }
 
   return (
