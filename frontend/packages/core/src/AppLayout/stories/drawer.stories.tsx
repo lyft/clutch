@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter } from "react-router-dom";
 import { Grid } from "@mui/material";
 import type { Meta } from "@storybook/react";
 
