@@ -13,7 +13,7 @@ import { generateBreadcrumbsEntries } from "../utils";
 export type LayoutVariant = "standard" | "wizard" | "custom";
 
 export type LayoutProps = {
-  workflow?: Workflow;
+  workflow: Workflow;
   variant?: LayoutVariant;
   heading?: string | React.ReactElement;
   hideHeader?: boolean;
@@ -81,11 +81,11 @@ const WorkflowLayout = ({
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
   const location = useLocation();
-  const workflowPaths = workflow?.routes.map(({ path }) => `/${workflow?.path}/${path}`);
+  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
   const breadcrumbsEntries = generateBreadcrumbsEntries(
     location,
     (url: string) =>
-      `/${workflow?.path}` !== url &&
+      `/${workflow.path}` !== url &&
       !workflowPaths.includes(url) &&
       !workflowPaths.find(path => !!matchPath({ path }, url))
   );
