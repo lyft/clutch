@@ -1,7 +1,7 @@
 import React from "react";
 import ReactJson from "react-json-view";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, ClutchError, Error, Loadable, Typography, useParams } from "@clutch-sh/core";
+import { client, ClutchError, Error, Loadable, useParams } from "@clutch-sh/core";
 import { Stack } from "@mui/material";
 
 import type { WorkflowProps } from ".";
