@@ -12,7 +12,6 @@ interface BreadcrumbsProps {
 }
 
 const StyledBreadcrumbs = styled(MuiBreadcrumbs)(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
   "& .MuiBreadcrumbs-separator": {
     color: alpha(theme.colors.neutral[900], 0.6),
   },

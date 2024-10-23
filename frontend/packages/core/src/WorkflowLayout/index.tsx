@@ -56,13 +56,20 @@ const LayoutContainer = styled("div")(
 
 const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentProps) => ({
   padding: theme.spacing(
-    theme.clutch.spacing.base,
+    theme.clutch.spacing.none,
     $variant === "wizard" ? theme.clutch.spacing.md : theme.clutch.spacing.none
   ),
+  paddingBottom: theme.spacing(theme.clutch.spacing.base),
   width: "100%",
 }));
 
-const HeaderTitle = styled(Typography)({
+const PageHeaderMainContainer = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  height: "70px",
+});
+
+const Heading = styled(Typography)({
   lineHeight: 1,
 });
 
@@ -88,15 +95,17 @@ const WorkflowLayout = ({
       {!hideHeader && (
         <PageHeader $variant={variant}>
           <Breadcrumbs entries={breadcrumbsEntries} />
-          {heading && (
-            <>
-              {React.isValidElement(heading) ? (
-                heading
-              ) : (
-                <HeaderTitle variant="h2">{heading}</HeaderTitle>
-              )}
-            </>
-          )}
+          <PageHeaderMainContainer>
+            {heading && (
+              <>
+                {React.isValidElement(heading) ? (
+                  heading
+                ) : (
+                  <Heading variant="h2">{heading}</Heading>
+                )}
+              </>
+            )}
+          </PageHeaderMainContainer>
         </PageHeader>
       )}
       {children}
