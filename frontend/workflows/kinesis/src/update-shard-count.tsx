@@ -130,7 +130,7 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const UpdateShardCount: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const UpdateShardCount: React.FC<WorkflowProps> = ({ resolverType }) => {
   const dataLayout = {
     resourceData: {},
     streamData: {
@@ -152,7 +152,7 @@ const UpdateShardCount: React.FC<WorkflowProps> = ({ heading, resolverType }) =>
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout}>
       <StreamIdentifier name="Lookup" resolverType={resolverType} />
       <StreamDetails name="Modify" />
       <Confirm name="Result" />

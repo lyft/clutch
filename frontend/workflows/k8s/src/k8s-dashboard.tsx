@@ -11,14 +11,12 @@ import { alpha, Theme } from "@mui/material";
 import type { WorkflowProps } from ".";
 import CronTable from "./crons-table";
 import DeploymentTable from "./deployments-table";
-import K8sDashHeader from "./k8s-dash-header";
 import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
 import StatefulSetTable from "./stateful-sets-table";
 
 const Container = styled("div")({
   flex: 1,
-  margin: "32px",
   display: "flex",
   flexDirection: "column",
   "> *:first-child": {
@@ -177,7 +175,6 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
   return (
     <DataLayoutContext.Provider value={dataLayoutManager}>
       <Container>
-        <K8sDashHeader />
         <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
         <Content>
           {error !== undefined ? (

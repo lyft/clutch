@@ -37,8 +37,7 @@ const AuditEvent: React.FC<WorkflowProps> = ({ heading }) => {
   React.useEffect(() => fetch(), []);
 
   return (
-    <Stack spacing={2} direction="column" style={{ padding: "32px" }}>
-      <Typography variant="h2">{heading}</Typography>
+    <Stack spacing={2} direction="column">
       <Loadable isLoading={isLoading}>
         {error && <Error subject={error} />}
         <ReactJson

@@ -25,6 +25,9 @@ const register = (): WorkflowConfiguration => {
         displayName: "Logs",
         description: "View audit log",
         component: AuditLog,
+        layoutProps: {
+          variant: "standard",
+        },
       },
       event: {
         path: "/event/:id",
@@ -32,6 +35,9 @@ const register = (): WorkflowConfiguration => {
         description: "View audit event",
         component: AuditEvent,
         hideNav: true,
+        layoutProps: {
+          variant: "standard",
+        },
       },
     },
   };

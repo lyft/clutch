@@ -17,6 +17,9 @@ const register = (): WorkflowConfiguration => {
         displayName: "Start Experiment",
         description: "Start Server Experiment.",
         component: StartExperiment,
+        layoutProps: {
+          variant: "standard",
+        },
       },
     },
   };

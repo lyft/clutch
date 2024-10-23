@@ -20,6 +20,9 @@ const register = (): WorkflowConfiguration => {
         displayName: "Manage Experiments",
         description: "Manage experiments.",
         component: ListExperiments,
+        layoutProps: {
+          variant: "standard",
+        },
       },
       viewExperimentRun: {
         path: "run/:runID",
@@ -27,6 +30,9 @@ const register = (): WorkflowConfiguration => {
         description: "View Experiment Run.",
         hideNav: true,
         component: ViewExperimentRun,
+        layoutProps: {
+          variant: "standard",
+        },
       },
     },
   };

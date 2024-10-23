@@ -116,7 +116,7 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const CreateRepository: React.FC<WorkflowProps> = ({ heading }) => {
+const CreateRepository: React.FC<WorkflowProps> = () => {
   const dataLayout = {
     repositoryData: {
       cache: false,
@@ -139,7 +139,7 @@ const CreateRepository: React.FC<WorkflowProps> = ({ heading }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout}>
       <RepositoryDetails name="Repository Details" />
       <Confirm name="Result" />
     </Wizard>

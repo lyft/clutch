@@ -20,24 +20,41 @@ const register = (): WorkflowConfiguration => {
         description: "A searchable catalog of services",
         component: Catalog,
         featureFlag: "projectCatalog",
+        layoutProps: {
+          variant: "standard",
+          title: "Project Catalog",
+          subtitle: "A catalog of all projects.",
+        },
       },
       details: {
         path: "/:projectId",
         description: "Service Detail View",
         component: Details,
         featureFlag: "projectCatalog",
+        layoutProps: {
+          variant: "standard",
+          onlyBreadcrumbs: true,
+        },
       },
       configLanding: {
         path: "/:projectId/config",
         description: "Project Configuration Landing",
         component: Config,
         featureFlag: "projectCatalog",
+        layoutProps: {
+          variant: "standard",
+          onlyBreadcrumbs: true,
+        },
       },
       configPage: {
         path: "/:projectId/config/:configType",
         description: "Project Configuration Page",
         component: Config,
         featureFlag: "projectCatalog",
+        layoutProps: {
+          variant: "standard",
+          onlyBreadcrumbs: true,
+        },
       },
     },
   };

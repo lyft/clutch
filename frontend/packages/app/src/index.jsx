@@ -9,6 +9,10 @@ import "./index.css";
 const config = require("./clutch.config");
 
 ReactDOM.render(
-  <ClutchApp availableWorkflows={registeredWorkflows} configuration={config} />,
+  <ClutchApp
+    availableWorkflows={registeredWorkflows}
+    configuration={config}
+    appConfiguration={{ enableWorkflowLayout: true }}
+  />,
   document.getElementById("root")
 );

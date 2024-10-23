@@ -216,10 +216,9 @@ const ClutchApp = ({
                               ? `${workflow.displayName}: ${route.displayName}`
                               : workflow.displayName;
 
-                            // We define these props in order to avoid UI changes before refactoring
                             const workflowLayoutProps: LayoutProps = {
                               ...route.layoutProps,
-                              heading: route.layoutProps?.heading || heading,
+                              title: route.layoutProps?.title || heading,
                               workflow,
                             };
 
