@@ -1,7 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, styled } from "@clutch-sh/core";
-import { Theme } from "@mui/material";
+import type { Theme } from "@mui/material";
 
 import type { ProjectInfoChip } from "./chipsRow";
 import ChipsRow from "./chipsRow";

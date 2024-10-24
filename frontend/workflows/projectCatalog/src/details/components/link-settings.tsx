@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@clutch-sh/core";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Theme } from "@mui/material";
+import type { Theme } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import type { ProjectConfigLink } from "../../types";
