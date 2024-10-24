@@ -38,6 +38,9 @@ const register = (): WorkflowConfiguration => {
         description: "Delete a K8s pod.",
         component: DeletePod,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       resizeHPA: {
         path: "hpa/resize",
@@ -45,6 +48,9 @@ const register = (): WorkflowConfiguration => {
         description: "Resize a horizontal autoscaler.",
         component: ResizeHPA,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       scaleResources: {
         path: "resources/scale",
@@ -52,6 +58,9 @@ const register = (): WorkflowConfiguration => {
         description: "Scale CPU and memory requests and limits.",
         component: ScaleResources,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       kubeDashboard: {
         path: "dashboard",
@@ -59,6 +68,9 @@ const register = (): WorkflowConfiguration => {
         description: "Dashboard for Kubernetes Resources.",
         component: KubeDashboard,
         requiredConfigProps: [],
+        layoutProps: {
+          variant: "standard",
+        },
       },
       cordonNode: {
         path: "node/cordon",
@@ -66,6 +78,9 @@ const register = (): WorkflowConfiguration => {
         description: "Cordon or uncordon a node",
         component: CordonNode,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       updateLiveness: {
         path: "probe/update",
@@ -73,6 +88,9 @@ const register = (): WorkflowConfiguration => {
         description: "Update Probes on deployments",
         component: UpdateLiveness,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
     },
   };

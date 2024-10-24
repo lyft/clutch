@@ -27,6 +27,9 @@ const register = (): WorkflowConfiguration => {
         component: CreateRepository,
         displayName: "Create Repository",
         description: "Create a new repository.",
+        layoutProps: {
+          variant: "wizard",
+        },
       },
     },
   };

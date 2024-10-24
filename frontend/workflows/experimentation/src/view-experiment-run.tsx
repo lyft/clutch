@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { ClutchError } from "@clutch-sh/core";
 import {
-  BaseWorkflowProps,
   Button,
   ButtonGroup,
   client,
@@ -16,7 +15,7 @@ import {
 import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
 
-const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
+const ViewExperimentRun: React.FC = () => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
@@ -83,7 +82,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   }
 
   return (
-    <PageLayout heading={heading} error={error}>
+    <PageLayout error={error}>
       <Form>
         {experiment && (
           <>

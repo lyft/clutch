@@ -26,6 +26,9 @@ const register = (): WorkflowConfiguration => {
         displayName: "Shard Count",
         description: "Update Kinesis stream shard count.",
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
     },
   };

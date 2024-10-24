@@ -244,7 +244,6 @@ interface StartExperimentProps extends BaseWorkflowProps {
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
-  heading,
   upstreamClusterTemplates,
   downstreamClusterTemplate,
   upstreamClusterTypeSelectionEnabled,
@@ -338,7 +337,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   };
 
   return (
-    <PageLayout heading={heading} error={error}>
+    <PageLayout error={error}>
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled ?? false}
         environments={environments ?? []}

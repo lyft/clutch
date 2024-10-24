@@ -89,7 +89,7 @@ const RebootInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes 
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Verify" />
       <Confirm name="Result" notes={notes} />

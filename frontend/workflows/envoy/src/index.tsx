@@ -25,6 +25,9 @@ const register = (): WorkflowConfiguration => {
         component: RemoteTriage,
         displayName: "Remote Triage",
         description: "Triage Envoy configurations.",
+        layoutProps: {
+          variant: "wizard",
+        },
       },
     },
   };

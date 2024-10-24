@@ -3,7 +3,7 @@ import type { Location } from "history";
 import type { BreadcrumbEntry } from "../Breadcrumbs";
 
 const generateBreadcrumbsEntries = (location: Location, validateUrl: (url: string) => boolean) => {
-  const labels = location.pathname
+  const labels = decodeURIComponent(location.pathname)
     .split("/")
     .slice(1, location.pathname.endsWith("/") ? -1 : undefined);
 

@@ -55,12 +55,7 @@ const ProjectCard = ({ project, onRemove }: ProjectCardProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid
-        container
-        item
-        style={{ marginTop: "8px", paddingRight: "16px", flex: "1", overflow: "hidden" }}
-        zeroMinWidth
-      >
+      <Grid container item flex={1} marginTop={1} paddingRight={2} overflow="hidden" zeroMinWidth>
         <Typography variant="body2" color={alpha(theme.palette.secondary[900], 0.65)}>
           {project?.data?.description}
         </Typography>

@@ -3,11 +3,11 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { MetadataTable, styled } from "@clutch-sh/core";
 import type { Theme } from "@mui/material";
 
-const Container = styled("div")({
+const Container = styled("div")(({ theme }: { theme: Theme }) => ({
   "> *": {
-    padding: "8px 0",
+    padding: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
   },
-});
+}));
 
 const Title = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: "bold",

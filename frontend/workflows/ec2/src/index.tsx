@@ -33,6 +33,9 @@ const register = (): WorkflowConfiguration => {
         description: "Terminate an EC2 instance.",
         component: TerminateInstance,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       rebootInstance: {
         path: "instance/reboot",
@@ -40,6 +43,9 @@ const register = (): WorkflowConfiguration => {
         description: "Reboot an EC2 Instance",
         component: RebootInstance,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
       resizeAutoscalingGroup: {
         path: "asg/resize",
@@ -47,6 +53,9 @@ const register = (): WorkflowConfiguration => {
         description: "Resize an autoscaling group.",
         component: ResizeAutoscalingGroup,
         requiredConfigProps: ["resolverType"],
+        layoutProps: {
+          variant: "wizard",
+        },
       },
     },
   };
