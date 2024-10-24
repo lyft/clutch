@@ -33,7 +33,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
       configLanding: {
@@ -43,7 +43,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
       configPage: {
@@ -53,7 +53,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
     },

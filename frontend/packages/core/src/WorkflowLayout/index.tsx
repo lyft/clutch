@@ -19,7 +19,7 @@ export type LayoutProps = {
   variant?: LayoutVariant;
   title?: string | ((params: Params) => string);
   subtitle?: string;
-  onlyBreadcrumbs?: boolean;
+  breadcrumbsOnly?: boolean;
   hideHeader?: boolean;
 };
 
@@ -97,7 +97,7 @@ const WorkflowLayout = ({
   variant = "standard",
   title = null,
   subtitle = null,
-  onlyBreadcrumbs = false,
+  breadcrumbsOnly = false,
   hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
@@ -120,10 +120,10 @@ const WorkflowLayout = ({
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
-          <PageHeaderBreadcrumbsWrapper $onlyBreadcrumbs={onlyBreadcrumbs}>
+          <PageHeaderBreadcrumbsWrapper>
             <Breadcrumbs entries={breadcrumbsEntries} />
           </PageHeaderBreadcrumbsWrapper>
-          {!onlyBreadcrumbs && (
+          {!breadcrumbsOnly && (title || subtitle) && (
             <PageHeaderMainContainer>
               <PageHeaderInformation>
                 {title && (
