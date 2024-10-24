@@ -8,7 +8,7 @@ import type { WorkflowProps } from ".";
 
 const ENDPOINT = "/v1/audit/getEvent";
 
-const AuditEvent: React.FC<WorkflowProps> = ({ heading }) => {
+const AuditEvent: React.FC<WorkflowProps> = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [event, setEvent] = React.useState<IClutch.audit.v1.IEvent>();

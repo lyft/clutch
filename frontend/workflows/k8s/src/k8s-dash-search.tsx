@@ -14,20 +14,21 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SearchIcon from "@mui/icons-material/Search";
+import type { Theme } from "@mui/material";
 import * as yup from "yup";
 
-const Container = styled.div({
-  margin: "32px 0",
-});
+const Container = styled.div(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+}));
 
 const schema = yup.object().shape({
   namespace: yup.string().required("Namespace is required"),
   clientset: yup.string().required("Clientset is required"),
 });
 
-const Content = styled.div({
-  margin: "32px 0",
-});
+const Content = styled.div(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+}));
 
 const K8sDashSearch = ({ onSubmit }) => {
   const {

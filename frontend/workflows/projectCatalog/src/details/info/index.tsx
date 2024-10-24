@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import { Grid, styled } from "@clutch-sh/core";
+import { Theme } from "@mui/material";
 
 import type { ProjectInfoChip } from "./chipsRow";
 import ChipsRow from "./chipsRow";
@@ -13,11 +14,11 @@ interface ProjectInfoProps {
   addtlChips?: ProjectInfoChip[];
 }
 
-const StyledRow = styled(Grid)({
-  marginBottom: "16px",
+const StyledRow = styled(Grid)(({ theme }: { theme: Theme }) => ({
+  marginBottom: theme.spacing(theme.clutch.spacing.base),
   whiteSpace: "nowrap",
   width: "100%",
-});
+}));
 
 const ProjectInfoCard = ({ projectData, addtlChips }: ProjectInfoProps) => {
   const [chips, setChips] = React.useState<ProjectInfoChip[]>([]);

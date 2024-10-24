@@ -17,20 +17,20 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
-import { Grid } from "@mui/material";
+import { Grid, Theme } from "@mui/material";
 import _ from "lodash";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
-const Form = styled.form({
+const Form = styled.form(({ theme }: { theme: Theme }) => ({
   alignItems: "center",
   display: "flex",
   flexDirection: "column",
   justifyItems: "space-evenly",
   "> *": {
-    padding: "8px 0",
+    padding: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
   },
-});
+}));
 
 const StreamIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -74,7 +74,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
         <TextField readOnly label="Stream Name" name="streamName" value={stream.streamName} />
         <TextField readOnly label="Region" name="region" value={stream.region} />
         <Grid container alignItems="stretch" wrap="nowrap">
-          <Grid item style={{ flexBasis: "50%", paddingRight: "8px" }}>
+          <Grid item flexBasis="50%" paddingRight={1}>
             <TextField
               readOnly
               label="Current Shard Count"
@@ -83,7 +83,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
               disabled
             />
           </Grid>
-          <Grid item style={{ flexBasis: "50%", paddingLeft: "8px" }}>
+          <Grid item flexBasis="50%" paddingLeft={1}>
             <Select
               label="Target Shard Count"
               name="targetShardCount"
