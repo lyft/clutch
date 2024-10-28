@@ -1,14 +1,20 @@
 import React from "react";
+import { matchPath } from "react-router";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 
+import type { Workflow } from "../AppProvider/workflow";
+import Breadcrumbs from "../Breadcrumbs";
+import { useLocation } from "../navigation";
 import styled from "../styled";
 import { Typography } from "../typography";
+import { generateBreadcrumbsEntries } from "../utils";
 
 export type LayoutVariant = "standard" | "wizard" | "custom";
 
 export type LayoutProps = {
-  variant: LayoutVariant;
+  workflow: Workflow;
+  variant?: LayoutVariant;
   heading?: string | React.ReactElement;
   hideHeader?: boolean;
 };
@@ -50,35 +56,56 @@ const LayoutContainer = styled("div")(
 
 const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentProps) => ({
   padding: theme.spacing(
-    theme.clutch.spacing.base,
+    theme.clutch.spacing.none,
     $variant === "wizard" ? theme.clutch.spacing.md : theme.clutch.spacing.none
   ),
+  paddingBottom: theme.spacing(theme.clutch.spacing.base),
   width: "100%",
 }));
 
-const HeaderTitle = styled(Typography)({
+const PageHeaderMainContainer = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  height: "70px",
+});
+
+const Heading = styled(Typography)({
   lineHeight: 1,
 });
 
 const WorkflowLayout = ({
-  variant,
-  heading,
+  workflow,
+  variant = "standard",
+  heading = null,
   hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
+  const location = useLocation();
+  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
+  const breadcrumbsEntries = generateBreadcrumbsEntries(
+    location,
+    (url: string) =>
+      `/${workflow.path}` !== url &&
+      !workflowPaths.includes(url) &&
+      !workflowPaths.find(path => !!matchPath({ path }, url))
+  );
+
   return (
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
-          {heading && (
-            <>
-              {React.isValidElement(heading) ? (
-                heading
-              ) : (
-                <HeaderTitle variant="h2">{heading}</HeaderTitle>
-              )}
-            </>
-          )}
+          <Breadcrumbs entries={breadcrumbsEntries} />
+          <PageHeaderMainContainer>
+            {heading && (
+              <>
+                {React.isValidElement(heading) ? (
+                  heading
+                ) : (
+                  <Heading variant="h2">{heading}</Heading>
+                )}
+              </>
+            )}
+          </PageHeaderMainContainer>
         </PageHeader>
       )}
       {children}

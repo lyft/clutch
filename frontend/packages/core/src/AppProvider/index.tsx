@@ -216,12 +216,10 @@ const ClutchApp = ({
                               ? `${workflow.displayName}: ${route.displayName}`
                               : workflow.displayName;
 
-                            // We define these props in order to avoid UI changes before refactoring
                             const workflowLayoutProps: LayoutProps = {
-                              variant: "custom",
-                              hideHeader: true,
-                              heading,
                               ...route.layoutProps,
+                              heading: route.layoutProps?.heading || heading,
+                              workflow,
                             };
 
                             const workflowRouteComponent = (
@@ -232,7 +230,6 @@ const ClutchApp = ({
                               >
                                 {React.cloneElement(<route.component />, {
                                   ...route.componentProps,
-                                  // This is going to be removed to be used in the WorkflowLayout only
                                   heading,
                                 })}
                               </AppNotification>
