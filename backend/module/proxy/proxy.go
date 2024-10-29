@@ -22,11 +22,14 @@ import (
 	proxyv1cfg "github.com/lyft/clutch/backend/api/config/module/proxy/v1"
 	proxyv1 "github.com/lyft/clutch/backend/api/proxy/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const (
 	Name          = "clutch.module.proxy"
 	HostHeaderKey = "Host"
+	// checked for in the headers map so it can be replaced with the claims.Subject from the request context
+	ClutchUser = "$clutch_user"
 )
 
 func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -85,6 +88,9 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	// Set all additional headers if specified
 	headers := http.Header{}
 	for k, v := range service.Headers {
+		if v == ClutchUser {
+			v = getUserID(ctx)
+		}
 		headers.Add(k, v)
 	}
 
@@ -268,4 +274,14 @@ func validateConfigPaths(config *proxyv1cfg.Config) error {
 		}
 	}
 	return nil
+}
+
+func getUserID(ctx context.Context) string {
+	// Used if auth is disabled or it's an actual anonymous user.
+	userID := "Anonymous User"
+	claims, err := authn.ClaimsFromContext(ctx)
+	if err != nil {
+		return userID
+	}
+	return claims.Subject
 }
