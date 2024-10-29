@@ -13,7 +13,7 @@ import {
 import styled from "@emotion/styled";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Theme } from "@mui/material";
 
 import type { WorkflowProps } from "../types";
 
@@ -30,12 +30,16 @@ const initialState: CatalogState = {
   error: undefined,
 };
 
+const PlaceholderContainer = styled("div")(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.lg),
+}));
+
 const Placeholder = () => (
   <Paper>
-    <div style={{ margin: "32px", textAlign: "center" }}>
+    <PlaceholderContainer>
       <Typography variant="h5">There is nothing to display here</Typography>
       <Typography variant="body3">Please enter a project to proceed.</Typography>
-    </div>
+    </PlaceholderContainer>
   </Paper>
 );
 
@@ -55,7 +59,22 @@ const autoComplete = async (search: string): Promise<any> => {
   return { results: response?.data?.results || [] };
 };
 
+const FormWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.base),
+}));
+
 const Form = styled.form({});
+
+const MainContentWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: theme.spacing(theme.clutch.spacing.base),
+  marginTop: theme.spacing(theme.clutch.spacing.lg),
+}));
+
+const PlaceholderWrapper = styled(Grid)(({ theme }: { theme: Theme }) => ({
+  paddingTop: theme.spacing(theme.clutch.spacing.lg),
+}));
 
 const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
   const navigate = useNavigate();
@@ -122,7 +141,7 @@ const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
   return (
     <Box>
       <Paper>
-        <div style={{ margin: "16px" }}>
+        <FormWrapper>
           <Form noValidate onSubmit={handleSubmit(triggerProjectAdd)}>
             <TextField
               label="Search"
@@ -135,16 +154,9 @@ const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
               helperText={state?.error}
             />
           </Form>
-        </div>
+        </FormWrapper>
       </Paper>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "16px",
-          marginTop: "32px",
-        }}
-      >
+      <MainContentWrapper>
         <Typography variant="h3">My Projects</Typography>
         <Tooltip title="Restore to owned projects only">
           <IconButton
@@ -163,7 +175,7 @@ const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
             <RestoreIcon />
           </IconButton>
         </Tooltip>
-      </div>
+      </MainContentWrapper>
       {state.projects.length ? (
         <Grid container direction="row" spacing={3}>
           {state.projects.map(p => (
@@ -173,9 +185,9 @@ const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
           ))}
         </Grid>
       ) : (
-        <Grid container justifyContent="center" style={{ paddingTop: "35px" }}>
+        <PlaceholderWrapper container justifyContent="center">
           <Placeholder />
-        </Grid>
+        </PlaceholderWrapper>
       )}
     </Box>
   );

@@ -15,21 +15,21 @@ import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
 import StatefulSetTable from "./stateful-sets-table";
 
-const Container = styled("div")({
+const Container = styled("div")(({ theme }: { theme: Theme }) => ({
   flex: 1,
   display: "flex",
   flexDirection: "column",
   "> *:first-child": {
-    margin: "0",
+    margin: theme.spacing(theme.clutch.spacing.none),
   },
-});
+}));
 
-const Content = styled("div")({
-  margin: "32px 0",
-});
+const Content = styled("div")(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+}));
 
 const PlaceholderTitle = styled("div")(({ theme }: { theme: Theme }) => ({
-  paddingBottom: "16px",
+  paddingBottom: theme.spacing(theme.clutch.spacing.base),
   fontWeight: 700,
   fontSize: "22px",
   lineHeight: "28px",
@@ -43,12 +43,17 @@ const PlaceholderText = styled("div")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.6),
 }));
 
+const PlaceholderWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing(theme.clutch.spacing.lg),
+  textAlign: "center",
+}));
+
 const Placeholder = () => (
   <Paper>
-    <div style={{ margin: "32px", textAlign: "center" }}>
+    <PlaceholderWrapper>
       <PlaceholderTitle>There is nothing to display here</PlaceholderTitle>
       <PlaceholderText>Please enter a namespace and clientset to proceed.</PlaceholderText>
-    </div>
+    </PlaceholderWrapper>
   </Paper>
 );
 
