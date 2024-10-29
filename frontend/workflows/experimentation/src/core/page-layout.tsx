@@ -1,7 +1,6 @@
 import React from "react";
 import type { ClutchError } from "@clutch-sh/core";
-import { Error } from "@clutch-sh/core";
-import { Grid } from "@mui/material";
+import { Error, Grid } from "@clutch-sh/core";
 
 interface PageLayoutProps {
   error?: ClutchError;

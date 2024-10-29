@@ -11,7 +11,7 @@ const generateBreadcrumbsEntries = (location: Location, validateUrl: (url: strin
     labels.map((label, index) => {
       let url = `/${labels.slice(0, index + 1).join("/")}`;
 
-      if (validateUrl(url)) {
+      if (!validateUrl(url)) {
         url = undefined;
       }
 

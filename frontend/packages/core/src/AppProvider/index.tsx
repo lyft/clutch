@@ -217,9 +217,12 @@ const ClutchApp = ({
                               : workflow.displayName;
 
                             const workflowLayoutProps: LayoutProps = {
-                              ...route.layoutProps,
-                              title: route.layoutProps?.title || heading,
                               workflow,
+                              title: heading,
+                              subtitle: route.description,
+                              variant: route.layoutProps ? route.layoutProps.variant : null,
+                              breadcrumbsOnly: route.layoutProps?.breadcrumbsOnly || false,
+                              hideHeader: route.layoutProps?.hideHeader || false,
                             };
 
                             const workflowRouteComponent = (

@@ -11,12 +11,11 @@ import styled from "../styled";
 import { Typography } from "../typography";
 import { generateBreadcrumbsEntries } from "../utils";
 
-export type LayoutVariant = "standard" | "wizard" | "custom";
+export type LayoutVariant = "standard" | "wizard";
 
-// TODO: Define valid type variants
 export type LayoutProps = {
   workflow: Workflow;
-  variant?: LayoutVariant;
+  variant: LayoutVariant | null;
   title?: string | ((params: Params) => string);
   subtitle?: string;
   breadcrumbsOnly?: boolean;
@@ -47,7 +46,6 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
       padding: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
       margin: theme.spacing(theme.clutch.spacing.none, "auto"),
     },
-    custom: {}, // No styles,
   };
   return layoutVariantStylesMap[variant];
 };
@@ -94,7 +92,7 @@ const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 
 const WorkflowLayout = ({
   workflow,
-  variant = "standard",
+  variant,
   title = null,
   subtitle = null,
   breadcrumbsOnly = false,
@@ -103,18 +101,16 @@ const WorkflowLayout = ({
 }: React.PropsWithChildren<LayoutProps>) => {
   const params = useParams();
   const location = useLocation();
+
+  if (variant === null) {
+    return <>{children}</>;
+  }
+
   const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
   const breadcrumbsEntries = generateBreadcrumbsEntries(
     location,
-    (url: string) =>
-      `/${workflow.path}` !== url &&
-      !workflowPaths.includes(url) &&
-      !workflowPaths.find(path => !!matchPath({ path }, url))
+    url => !!workflowPaths.find(path => !!matchPath({ path }, url))
   );
-
-  if (variant === "custom") {
-    return <>{children}</>;
-  }
 
   return (
     <LayoutContainer $variant={variant}>

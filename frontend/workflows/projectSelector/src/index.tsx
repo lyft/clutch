@@ -30,7 +30,7 @@ const register = (): WorkflowConfiguration => {
         description: "Display helpful information for multiple services.",
         component: Dash,
         layoutProps: {
-          variant: "custom",
+          variant: null,
         },
       },
     },

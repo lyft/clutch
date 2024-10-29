@@ -15,7 +15,7 @@ import {
 import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
 
-const ViewExperimentRun: React.FC = () => {
+const ViewExperimentRun = () => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);

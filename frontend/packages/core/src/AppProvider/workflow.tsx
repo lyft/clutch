@@ -92,7 +92,7 @@ export interface Route {
    */
   featureFlag?: string;
 
-  layoutProps?: Omit<LayoutProps, "workflow">;
+  layoutProps?: Omit<LayoutProps, "workflow" | "title" | "subtitle">;
 }
 
 export interface ConfiguredRoute extends Route {

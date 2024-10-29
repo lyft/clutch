@@ -22,8 +22,6 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          title: "Project Catalog",
-          subtitle: "A catalog of all projects.",
         },
       },
       details: {
@@ -33,7 +31,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
       configLanding: {
@@ -43,7 +41,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
       configPage: {
@@ -53,7 +51,7 @@ const register = (): WorkflowConfiguration => {
         featureFlag: "projectCatalog",
         layoutProps: {
           variant: "standard",
-          onlyBreadcrumbs: true,
+          breadcrumbsOnly: true,
         },
       },
     },
