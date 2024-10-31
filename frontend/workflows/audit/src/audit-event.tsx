@@ -4,11 +4,9 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { client, ClutchError, Error, Loadable, useParams } from "@clutch-sh/core";
 import { Stack } from "@mui/material";
 
-import type { WorkflowProps } from ".";
-
 const ENDPOINT = "/v1/audit/getEvent";
 
-const AuditEvent: React.FC<WorkflowProps> = ({ heading }) => {
+const AuditEvent = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [event, setEvent] = React.useState<IClutch.audit.v1.IEvent>();

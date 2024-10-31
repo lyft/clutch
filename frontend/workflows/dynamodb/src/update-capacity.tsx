@@ -230,10 +230,10 @@ const Confirm: React.FC<WizardChild> = () => {
 };
 
 const UpdateCapacity: React.FC<WorkflowProps> = ({
+  heading,
   resolverType,
   notes = [],
   enableOverride,
-  heading,
 }) => {
   const dataLayout = {
     resourceData: {},
@@ -282,7 +282,7 @@ const UpdateCapacity: React.FC<WorkflowProps> = ({
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <TableIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
       <TableDetails name="Modify" enableOverride={enableOverride} notes={notes} />
       <Confirm name="Results" />

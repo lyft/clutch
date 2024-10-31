@@ -250,7 +250,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const UpdateLiveness: React.FC<WorkflowProps> = ({ resolverType }) => {
   interface BodyRequest {
     clientset: any;
     cluster: string;

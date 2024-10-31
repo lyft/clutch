@@ -72,7 +72,7 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   {
-    height: "calc(100% - 56px)",
+    height: "100%",
   },
   props => ({
     width: props.$width === "full" ? "100%" : "800px",

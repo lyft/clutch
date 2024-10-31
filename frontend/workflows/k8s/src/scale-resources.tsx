@@ -224,7 +224,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const ScaleResources: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const ScaleResources: React.FC<WorkflowProps> = ({ resolverType }) => {
   const dataLayout = {
     inputData: {},
     deploymentData: {},

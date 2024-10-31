@@ -14,15 +14,15 @@ const register = (): WorkflowConfiguration => {
     path: "experimentation",
     group: "Chaos Experimentation",
     displayName: "Chaos Experimentation",
+    defaultLayoutProps: {
+      variant: "standard",
+    },
     routes: {
       listExperiments: {
         path: "list",
         displayName: "Manage Experiments",
         description: "Manage experiments.",
         component: ListExperiments,
-        layoutProps: {
-          variant: "standard",
-        },
       },
       viewExperimentRun: {
         path: "run/:runID",
@@ -30,9 +30,6 @@ const register = (): WorkflowConfiguration => {
         description: "View Experiment Run.",
         hideNav: true,
         component: ViewExperimentRun,
-        layoutProps: {
-          variant: "standard",
-        },
       },
     },
   };

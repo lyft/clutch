@@ -11,15 +11,15 @@ const register = (): WorkflowConfiguration => {
     path: "server-experimentation",
     group: "Chaos Experimentation",
     displayName: "Server Fault Injection",
+    defaultLayoutProps: {
+      variant: "standard",
+    },
     routes: {
       startExperiment: {
         path: "start",
         displayName: "Start Experiment",
         description: "Start Server Experiment.",
         component: StartExperiment,
-        layoutProps: {
-          variant: "standard",
-        },
       },
     },
   };

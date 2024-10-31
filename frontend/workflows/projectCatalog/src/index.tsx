@@ -13,6 +13,10 @@ const register = (): WorkflowConfiguration => {
     path: "catalog",
     group: "Catalog",
     displayName: "Catalog",
+    defaultLayoutProps: {
+      variant: "standard",
+      breadcrumbsOnly: true,
+    },
     routes: {
       catalog: {
         path: "/",
@@ -21,7 +25,7 @@ const register = (): WorkflowConfiguration => {
         component: Catalog,
         featureFlag: "projectCatalog",
         layoutProps: {
-          variant: "standard",
+          breadcrumbsOnly: false,
         },
       },
       details: {
@@ -29,30 +33,18 @@ const register = (): WorkflowConfiguration => {
         description: "Service Detail View",
         component: Details,
         featureFlag: "projectCatalog",
-        layoutProps: {
-          variant: "standard",
-          breadcrumbsOnly: true,
-        },
       },
       configLanding: {
         path: "/:projectId/config",
         description: "Project Configuration Landing",
         component: Config,
         featureFlag: "projectCatalog",
-        layoutProps: {
-          variant: "standard",
-          breadcrumbsOnly: true,
-        },
       },
       configPage: {
         path: "/:projectId/config/:configType",
         description: "Project Configuration Page",
         component: Config,
         featureFlag: "projectCatalog",
-        layoutProps: {
-          variant: "standard",
-          breadcrumbsOnly: true,
-        },
       },
     },
   };

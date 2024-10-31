@@ -92,7 +92,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {

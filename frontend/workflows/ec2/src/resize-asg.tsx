@@ -117,7 +117,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ resolverType, notes = [] }) => {
   const dataLayout = {
     groupData: {},
     resizeData: {

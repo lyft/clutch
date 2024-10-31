@@ -73,7 +73,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
-const RebootInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const RebootInstance: React.FC<WorkflowProps> = ({ resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     rebootData: {

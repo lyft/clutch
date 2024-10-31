@@ -146,7 +146,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
+const RemoteTriage = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const hostParam = urlParams.get("_q");
 
