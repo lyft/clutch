@@ -62,6 +62,7 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
         lg: 4,
         xl: 5,
       },
+      // TODO: add default layout variant styles, check the enableWorkflowLayout app config prop
     },
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally

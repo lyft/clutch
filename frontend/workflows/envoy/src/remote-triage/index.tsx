@@ -16,7 +16,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import FileSaver from "file-saver";
 
-import type { TriageChild, WorkflowProps } from "../index";
+import type { TriageChild } from "../index";
 
 import Clusters from "./clusters";
 import Dashboard from "./dashboard";
