@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, QuickLinkGroup, styled, useNavigate, useParams, useTheme } from "@clutch-sh/core";
+import { Grid, QuickLinkGroup, useNavigate, useParams, useTheme } from "@clutch-sh/core";
 
 import type { ProjectDetailsWorkflowProps } from "../../types";
 import { ProjectDetailsContext } from "../context";
