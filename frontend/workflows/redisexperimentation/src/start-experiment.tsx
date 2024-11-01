@@ -157,6 +157,7 @@ interface StartExperimentProps extends BaseWorkflowProps {
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
+  heading,
   upstreamRedisClusterTemplate,
   downstreamClusterTemplate,
   environments,
@@ -230,7 +231,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   };
 
   return (
-    <PageLayout error={error}>
+    <PageLayout heading={heading} error={error}>
       <ExperimentDetails
         environments={environments ?? []}
         onStart={experimentDetails => setExperimentData(experimentDetails)}

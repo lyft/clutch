@@ -13,9 +13,6 @@ const register = (): WorkflowConfiguration => {
     path: "redis-experimentation",
     group: "Chaos Experimentation",
     displayName: "Redis Fault Injection",
-    defaultLayoutProps: {
-      variant: "standard",
-    },
     routes: {
       startExperiment: {
         path: "/start",

@@ -250,7 +250,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const UpdateLiveness: React.FC<WorkflowProps> = ({ resolverType }) => {
+const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   interface BodyRequest {
     clientset: any;
     cluster: string;
@@ -324,7 +324,7 @@ const UpdateLiveness: React.FC<WorkflowProps> = ({ resolverType }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <DeploymentIdentifier name="Lookup" resolverType={resolverType} />
       <DeploymentDetails name="Modify" />
       <Confirm name="Confirmation" />

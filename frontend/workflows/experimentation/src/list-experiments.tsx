@@ -17,7 +17,7 @@ interface ListExperimentsProps extends BaseWorkflowProps {
   links: ExperimentTypeLinkProps[];
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => {
+const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, links }) => {
   const [experiments, setExperiments] = useState<
     IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
   >(undefined);
@@ -45,7 +45,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
   ));
 
   return (
-    <PageLayout error={error}>
+    <PageLayout heading={heading} error={error}>
       <ButtonGroup justify="center" border="bottom">
         {buttons}
       </ButtonGroup>

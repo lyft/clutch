@@ -1,22 +1,26 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, QuickLinkGroup, useNavigate, useParams } from "@clutch-sh/core";
+import { Grid, QuickLinkGroup, styled, useNavigate, useParams, useTheme } from "@clutch-sh/core";
 
 import type { ProjectDetailsWorkflowProps } from "../../types";
 import { ProjectDetailsContext } from "../context";
 import fetchProjectInfo from "../resolver";
 
+import type { BreadCrumbsProps } from "./breadcrumbs";
+import BreadCrumbs from "./breadcrumbs";
 import ProjectHeader, { ProjectHeaderProps } from "./header";
 import QuickLinksAndSettings from "./link-settings";
 
 export interface CatalogLayoutProps
-  extends ProjectHeaderProps,
+  extends BreadCrumbsProps,
+    ProjectHeaderProps,
     Pick<ProjectDetailsWorkflowProps, "configLinks" | "allowDisabled"> {
   children?: React.ReactNode;
   quickLinkSettings?: boolean;
 }
 
 const CatalogLayout = ({
+  routes = [],
   title,
   description,
   configLinks = [],
@@ -30,6 +34,7 @@ const CatalogLayout = ({
     null
   );
   const projInfo = React.useMemo(() => ({ projectId, projectInfo }), [projectId, projectInfo]);
+  const theme = useTheme();
 
   const redirectNotFound = () => navigate(`/${projectId}/notFound`, { replace: true });
 
@@ -57,7 +62,14 @@ const CatalogLayout = ({
 
   return (
     <ProjectDetailsContext.Provider value={projInfo}>
-      <Grid container>
+      <Grid container padding={theme.clutch.layout.gutter}>
+        {!theme.clutch.useWorkflowLayout && (
+          <Grid container item direction="column">
+            <Grid item>
+              <BreadCrumbs routes={[{ title: projectId, path: `${projectId}` }, ...routes]} />
+            </Grid>
+          </Grid>
+        )}
         <Grid container item spacing={1}>
           <Grid
             container

@@ -22,14 +22,21 @@ declare module "@mui/material/styles" {
 
 const useTheme = () => useMuiTheme() as MuiTheme;
 
-const Theme: React.FC = ({ children }) => {
+interface ThemeProps {
+  useWorkflowLayout?: boolean;
+}
+
+const Theme: React.FC<ThemeProps> = ({ useWorkflowLayout = false, children }) => {
   // Uncomment to use dark mode
   /* // Detect system color mode
   const prefersDarkMode =
     window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; */
   const prefersDarkMode = false;
   return (
-    <ThemeProvider variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}>
+    <ThemeProvider
+      variant={prefersDarkMode ? THEME_VARIANTS.dark : THEME_VARIANTS.light}
+      useWorkflowLayout={useWorkflowLayout}
+    >
       {children}
     </ThemeProvider>
   );

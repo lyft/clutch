@@ -157,7 +157,7 @@ const ClutchApp = ({
 
   return (
     <Router>
-      <Theme>
+      <Theme useWorkflowLayout={appConfiguration?.useWorkflowLayout}>
         <div id="App">
           <ApplicationContext.Provider value={appContextValue}>
             <UserPreferencesProvider>
@@ -252,7 +252,7 @@ const ClutchApp = ({
                                 key={workflow.path}
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                                 element={
-                                  appConfiguration?.enableWorkflowLayout ? (
+                                  appConfiguration?.useWorkflowLayout ? (
                                     <WorkflowLayout {...workflowLayoutProps}>
                                       {workflowRouteComponent}
                                     </WorkflowLayout>

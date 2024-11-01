@@ -18,6 +18,7 @@ declare module "@emotion/react" {
 declare module "@mui/material/styles" {
   interface Theme {
     clutch: {
+      useWorkflowLayout: boolean;
       spacing: {
         none: number;
         xs: number;
@@ -27,10 +28,14 @@ declare module "@mui/material/styles" {
         lg: number;
         xl: number;
       };
+      layout: {
+        gutter: string;
+      };
     };
   }
   interface ThemeOptions {
     clutch: {
+      useWorkflowLayout: boolean;
       spacing: {
         none: number;
         xs: number;
@@ -39,13 +44,16 @@ declare module "@mui/material/styles" {
         md: number;
         lg: number;
         xl: number;
+      };
+      layout: {
+        gutter: string;
       };
     };
   }
 }
 
 // Create a Material UI theme is propagated to all children.
-const createTheme = (variant: ThemeVariant): MuiTheme => {
+const createTheme = (variant: ThemeVariant, useWorkflowLayout: boolean): MuiTheme => {
   return createMuiTheme({
     colors: clutchColors(variant),
     palette: palette(variant),
@@ -53,6 +61,7 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
     // https://v5.mui.com/material-ui/customization/spacing/
     spacing: 8,
     clutch: {
+      useWorkflowLayout,
       spacing: {
         none: 0,
         xs: 0.5,
@@ -62,7 +71,9 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
         lg: 4,
         xl: 5,
       },
-      // TODO: add default layout variant styles, check the enableWorkflowLayout app config prop
+      layout: {
+        gutter: useWorkflowLayout ? "0px" : "24px",
+      },
     },
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
@@ -115,12 +126,17 @@ const createTheme = (variant: ThemeVariant): MuiTheme => {
 
 interface ThemeProps {
   variant?: ThemeVariant;
+  useWorkflowLayout?: boolean;
   children: React.ReactNode;
 }
 
-const ThemeProvider = ({ children, variant = THEME_VARIANTS.light }: ThemeProps) => (
+const ThemeProvider = ({
+  children,
+  useWorkflowLayout = false,
+  variant = THEME_VARIANTS.light,
+}: ThemeProps) => (
   <StyledEngineProvider injectFirst>
-    <MuiThemeProvider theme={createTheme(variant)}>
+    <MuiThemeProvider theme={createTheme(variant, useWorkflowLayout)}>
       <CssBaseline />
       {children}
     </MuiThemeProvider>

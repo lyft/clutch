@@ -224,7 +224,7 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
-const ScaleResources: React.FC<WorkflowProps> = ({ resolverType }) => {
+const ScaleResources: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   const dataLayout = {
     inputData: {},
     deploymentData: {},
@@ -274,7 +274,7 @@ const ScaleResources: React.FC<WorkflowProps> = ({ resolverType }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <DeploymentIdentifier name="Lookup" resolverType={resolverType} />
       <DeploymentDetails name="Modify" />
       <Confirm name="Confirmation" />

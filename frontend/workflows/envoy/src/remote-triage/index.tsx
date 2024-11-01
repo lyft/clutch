@@ -16,7 +16,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import FileSaver from "file-saver";
 
-import type { TriageChild } from "../index";
+import type { TriageChild, WorkflowProps } from "../index";
 
 import Clusters from "./clusters";
 import Dashboard from "./dashboard";
@@ -146,7 +146,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const RemoteTriage = () => {
+const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const hostParam = urlParams.get("_q");
 
@@ -172,7 +172,7 @@ const RemoteTriage = () => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <TriageIdentifier name="Lookup" host={hostParam} />
       <TriageDetails name="Details" />
     </Wizard>
