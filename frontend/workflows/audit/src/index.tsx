@@ -19,15 +19,15 @@ const register = (): WorkflowConfiguration => {
     path: "audit",
     group: "Audit",
     displayName: "Audit Trail",
+    defaultLayoutProps: {
+      variant: "standard",
+    },
     routes: {
       landing: {
         path: "/",
         displayName: "Logs",
         description: "View audit log",
         component: AuditLog,
-        layoutProps: {
-          variant: "standard",
-        },
       },
       event: {
         path: "/event/:id",
@@ -35,9 +35,6 @@ const register = (): WorkflowConfiguration => {
         description: "View audit event",
         component: AuditEvent,
         hideNav: true,
-        layoutProps: {
-          variant: "standard",
-        },
       },
     },
   };

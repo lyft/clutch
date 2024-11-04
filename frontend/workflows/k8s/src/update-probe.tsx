@@ -324,7 +324,7 @@ const UpdateLiveness: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <DeploymentIdentifier name="Lookup" resolverType={resolverType} />
       <DeploymentDetails name="Modify" />
       <Confirm name="Confirmation" />

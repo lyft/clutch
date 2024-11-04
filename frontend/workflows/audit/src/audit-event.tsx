@@ -1,14 +1,15 @@
 import React from "react";
 import ReactJson from "react-json-view";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, ClutchError, Error, Loadable, useParams } from "@clutch-sh/core";
-import { Stack } from "@mui/material";
+import { client, ClutchError, Error, Loadable, Typography, useParams } from "@clutch-sh/core";
+import { Stack, useTheme } from "@mui/material";
 
 import type { WorkflowProps } from ".";
 
 const ENDPOINT = "/v1/audit/getEvent";
 
-const AuditEvent: React.FC<WorkflowProps> = () => {
+const AuditEvent: React.FC<WorkflowProps> = ({ heading }) => {
+  const theme = useTheme();
   const params = useParams();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [event, setEvent] = React.useState<IClutch.audit.v1.IEvent>();
@@ -37,7 +38,8 @@ const AuditEvent: React.FC<WorkflowProps> = () => {
   React.useEffect(() => fetch(), []);
 
   return (
-    <Stack spacing={2} direction="column">
+    <Stack spacing={2} direction="column" style={{ padding: theme.clutch.layout.gutter }}>
+      {!theme.clutch.useWorkflowLayout && <Typography variant="h2">{heading}</Typography>}
       <Loadable isLoading={isLoading}>
         {error && <Error subject={error} />}
         <ReactJson

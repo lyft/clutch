@@ -157,7 +157,7 @@ const ClutchApp = ({
 
   return (
     <Router>
-      <Theme>
+      <Theme useWorkflowLayout={appConfiguration?.useWorkflowLayout}>
         <div id="App">
           <ApplicationContext.Provider value={appContextValue}>
             <UserPreferencesProvider>
@@ -220,9 +220,18 @@ const ClutchApp = ({
                               workflow,
                               title: heading,
                               subtitle: route.description,
-                              variant: route.layoutProps ? route.layoutProps.variant : null,
-                              breadcrumbsOnly: route.layoutProps?.breadcrumbsOnly || false,
-                              hideHeader: route.layoutProps?.hideHeader || false,
+                              variant:
+                                route.layoutProps?.variant === null
+                                  ? route.layoutProps?.variant
+                                  : workflow.defaultLayoutProps?.variant,
+                              breadcrumbsOnly:
+                                route.layoutProps?.breadcrumbsOnly ??
+                                workflow.defaultLayoutProps?.breadcrumbsOnly ??
+                                false,
+                              hideHeader:
+                                route.layoutProps?.hideHeader ??
+                                workflow.defaultLayoutProps?.hideHeader ??
+                                false,
                             };
 
                             const workflowRouteComponent = (
@@ -243,7 +252,7 @@ const ClutchApp = ({
                                 key={workflow.path}
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                                 element={
-                                  appConfiguration?.enableWorkflowLayout ? (
+                                  appConfiguration?.useWorkflowLayout ? (
                                     <WorkflowLayout {...workflowLayoutProps}>
                                       {workflowRouteComponent}
                                     </WorkflowLayout>

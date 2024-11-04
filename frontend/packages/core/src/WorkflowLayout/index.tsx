@@ -1,8 +1,8 @@
 import React from "react";
-import { matchPath, Params, useParams } from "react-router";
+import { matchPath, useParams } from "react-router-dom";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
-import { alpha } from "@mui/system";
+import { alpha } from "@mui/material";
 
 import type { Workflow } from "../AppProvider/workflow";
 import Breadcrumbs from "../Breadcrumbs";
@@ -15,8 +15,8 @@ export type LayoutVariant = "standard" | "wizard";
 
 export type LayoutProps = {
   workflow: Workflow;
-  variant: LayoutVariant | null;
-  title?: string | ((params: Params) => string);
+  variant?: LayoutVariant | null;
+  title?: string | ((params: Record<string, string>) => string);
   subtitle?: string;
   breadcrumbsOnly?: boolean;
   hideHeader?: boolean;
@@ -92,7 +92,7 @@ const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 
 const WorkflowLayout = ({
   workflow,
-  variant,
+  variant = null,
   title = null,
   subtitle = null,
   breadcrumbsOnly = false,

@@ -29,9 +29,6 @@ const register = (): WorkflowConfiguration => {
         displayName: "Dash",
         description: "Display helpful information for multiple services.",
         component: Dash,
-        layoutProps: {
-          variant: null,
-        },
       },
     },
   };

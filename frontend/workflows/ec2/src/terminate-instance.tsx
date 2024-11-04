@@ -108,7 +108,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
   };
 
   return (
-    <Wizard dataLayout={dataLayout}>
+    <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Verify" />
       <Confirm name="Result" notes={notes} />

@@ -6,6 +6,7 @@ import {
   IconButton,
   styled,
   Table,
+  Typography,
   useSearchParams,
   useTheme,
 } from "@clutch-sh/core";
@@ -37,7 +38,7 @@ const LoadingSpinner = styled(CircularProgress)(({ theme }: { theme: Theme }) =>
   position: "absolute",
 }));
 
-const AuditLog: React.FC<AuditLogProps> = ({ detailsPathPrefix, downloadPrefix }) => {
+const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloadPrefix }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [now] = React.useState<Date>(new Date());
   const [timeRangeKey, setTimeRangeKey] = React.useState<string>("");
@@ -71,7 +72,8 @@ const AuditLog: React.FC<AuditLogProps> = ({ detailsPathPrefix, downloadPrefix }
 
   const genTimeRangeKey = () => `${startTime}-${endTime}-${new Date().toString()}`;
   return (
-    <RootContainer spacing={2} direction="column">
+    <RootContainer spacing={2} direction="column" padding={theme.clutch.layout.gutter}>
+      {!theme.clutch.useWorkflowLayout && <Typography variant="h2">{heading}</Typography>}
       <Stack direction="column" spacing={2}>
         <Stack
           direction={shrink ? "column" : "row"}

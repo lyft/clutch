@@ -19,9 +19,6 @@ const register = (): WorkflowConfiguration => {
         displayName: "Start Experiment",
         description: "Start Redis Experiment.",
         component: StartExperiment,
-        layoutProps: {
-          variant: "standard",
-        },
       },
     },
   };

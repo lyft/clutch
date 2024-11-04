@@ -26,6 +26,9 @@ const register = (): WorkflowConfiguration => {
     path: "dynamodb",
     group: "AWS",
     displayName: "DynamoDB",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       updateCapacity: {
         path: "/capacity",
@@ -33,9 +36,6 @@ const register = (): WorkflowConfiguration => {
         displayName: "Update Capacity",
         description: "Update the table or GSI provisioned capacity.",
         requiredConfigProps: ["resolverType"],
-        layoutProps: {
-          variant: "wizard",
-        },
       },
     },
   };

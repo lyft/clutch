@@ -19,6 +19,13 @@ const register = (): WorkflowConfiguration => {
         displayName: "{{ .Name }}",
         description: "{{ .Description }}.",
         component: HelloWorld,
+        layoutProps: {
+          {{- if .IsWizardTemplate}}
+          variant: "wizard",
+          {{- else}}
+          variant: "standard",
+          {{- end}}
+        },
       },
     },
   };
