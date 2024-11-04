@@ -3,14 +3,23 @@
 exports[`renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiGrid-root css-vj1n65-MuiGrid-root"
+    class="css-hvdth0"
   >
     <div
-      class="MuiGrid-root css-vj1n65-MuiGrid-root"
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"
     >
-      <form
-        class="css-1dkqlr9"
-      />
+      <h5
+        class="MuiTypography-root MuiTypography-h5 css-q2f0a7-MuiTypography-root"
+      >
+        <strong />
+      </h5>
+      <div
+        class="MuiGrid-root css-vj1n65-MuiGrid-root"
+      >
+        <form
+          class="css-1dkqlr9"
+        />
+      </div>
     </div>
   </div>
 </DocumentFragment>
