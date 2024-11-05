@@ -11,16 +11,16 @@ import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
 
+type SpacingUnit = "xs" | "sm" | "base" | "md" | "lg" | "xl";
+
+// NOTE: `string & {}` allows `SpacingUnit` to be autocompleted
+type SpacingArg = SpacingUnit | number | (string & {});
+
 declare module "@emotion/react" {
   export interface Theme extends MuiTheme {}
 }
 
 declare module "@mui/material/styles" {
-  type SpacingUnit = "xs" | "sm" | "base" | "md" | "lg" | "xl";
-
-  // NOTE: `string & {}` allows `SpacingUnit` to be autocompleted
-  type SpacingArg = SpacingUnit | number | (string & {});
-
   interface Spacing {
     (value: SpacingArg): string;
     (topBottom: SpacingArg, rightLeft: SpacingArg): string;
@@ -32,6 +32,7 @@ declare module "@mui/material/styles" {
     spacing: Spacing;
     clutch: {
       useWorkflowLayout: boolean;
+      spacing: Record<SpacingUnit, string>;
       layout: {
         gutter: string;
       };
@@ -40,6 +41,7 @@ declare module "@mui/material/styles" {
   interface ThemeOptions {
     clutch: {
       useWorkflowLayout: boolean;
+      spacing: Record<SpacingUnit, string>;
       layout: {
         gutter: string;
       };
@@ -52,7 +54,7 @@ declare module "@mui/material/styles" {
 // https://v5.mui.com/material-ui/customization/spacing/
 const DEFAULT_SCALING_FACTOR = 8;
 
-const CLUTCH_CUSTOM_SPACING = {
+const CLUTCH_CUSTOM_SPACING: Record<SpacingUnit, string> = {
   xs: "4px",
   sm: "8px",
   base: "16px",
@@ -83,6 +85,7 @@ const createTheme = (variant: ThemeVariant, useWorkflowLayout: boolean): MuiThem
     },
     clutch: {
       useWorkflowLayout,
+      spacing: { ...CLUTCH_CUSTOM_SPACING },
       layout: {
         gutter: useWorkflowLayout ? "0px" : "24px",
       },
