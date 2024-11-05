@@ -50,7 +50,7 @@ interface CardProps extends CatalogDetailsCard, BaseCardProps {}
 const StyledCard = styled(Card)(({ theme }: { theme: Theme }) => ({
   width: "100%",
   height: "100%",
-  padding: theme.spacing(theme.clutch.spacing.base),
+  padding: theme.spacing("base"),
 }));
 
 const StyledGrid = styled(Grid)({
@@ -58,8 +58,8 @@ const StyledGrid = styled(Grid)({
 });
 
 const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
-  marginBottom: theme.spacing(theme.clutch.spacing.sm),
-  marginTop: theme.spacing(-theme.clutch.spacing.base),
+  marginBottom: theme.spacing("sm"),
+  marginTop: theme.spacing("-16px"),
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: theme.palette.primary[400],

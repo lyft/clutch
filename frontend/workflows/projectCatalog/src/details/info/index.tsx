@@ -15,7 +15,7 @@ interface ProjectInfoProps {
 }
 
 const StyledRow = styled(Grid)(({ theme }: { theme: Theme }) => ({
-  marginBottom: theme.spacing(theme.clutch.spacing.base),
+  marginBottom: theme.spacing("base"),
   whiteSpace: "nowrap",
   width: "100%",
 }));

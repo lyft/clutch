@@ -29,10 +29,10 @@ const StyledPopperItem = styled(PopperItem)(({ theme }: { theme: Theme }) => ({
     height: "auto",
   },
   "& span.MuiTypography-root": {
-    padding: theme.spacing(theme.clutch.spacing.none),
+    padding: theme.spacing("none"),
   },
   "& a.MuiTypography-root": {
-    padding: theme.spacing(theme.clutch.spacing.xs, theme.clutch.spacing.base),
+    padding: theme.spacing("xs", "base"),
   },
 }));
 

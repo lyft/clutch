@@ -94,7 +94,7 @@ const SummariesContainer = styled(Grid)({
 });
 
 const InformationContainer = styled("div")(({ theme }: { theme: Theme }) => ({
-  padding: theme.spacing(theme.clutch.spacing.base, theme.clutch.spacing.none),
+  padding: theme.spacing("base", "none"),
 }));
 
 interface DashboardProps {

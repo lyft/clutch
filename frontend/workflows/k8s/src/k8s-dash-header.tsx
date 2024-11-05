@@ -8,7 +8,7 @@ const Category = styled("div")(({ theme }: { theme: Theme }) => ({
   lineHeight: "16px",
   color: alpha(theme.palette.secondary[900], 0.38),
   textTransform: "uppercase",
-  paddingBottom: theme.spacing(theme.clutch.spacing.sm),
+  paddingBottom: theme.spacing("sm"),
 }));
 
 const HeaderText = styled("div")(({ theme }: { theme: Theme }) => ({
