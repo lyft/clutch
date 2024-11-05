@@ -12,13 +12,13 @@ import type { Group } from "./types";
 
 const StyledGroup = styled("div")(({ theme }: { theme: Theme }) => ({
   fontWeight: 500,
-  marginLeft: theme.spacing(theme.clutch.spacing.xs),
-  marginTop: theme.spacing(theme.clutch.spacing.sm),
+  marginLeft: theme.spacing("xs"),
+  marginTop: theme.spacing("sm"),
   display: "block",
 }));
 
 const StyledGroupTitle = styled("span")(({ theme }: { theme: Theme }) => ({
-  marginRight: theme.spacing(theme.clutch.spacing.xs),
+  marginRight: theme.spacing("xs"),
   display: "inline-block",
 }));
 
@@ -29,10 +29,10 @@ const StyledCount = styled("span")(({ theme }: { theme: Theme }) => ({
   borderRadius: "4px",
   fontWeight: "bold",
   fontSize: "12px",
-  padding: theme.spacing(theme.clutch.spacing.none, theme.clutch.spacing.xs),
-  marginRight: theme.spacing(theme.clutch.spacing.xs),
-  marginBottom: theme.spacing(theme.clutch.spacing.sm),
-  marginTop: theme.spacing(theme.clutch.spacing.xs),
+  padding: theme.spacing("none", "xs"),
+  marginRight: theme.spacing("xs"),
+  marginBottom: theme.spacing("sm"),
+  marginTop: theme.spacing("xs"),
   display: "inline-block",
 }));
 
@@ -56,7 +56,7 @@ const StyledProjectHeader = styled("div")(({ theme }: { theme: Theme }) => ({
   alignItems: "flex-start",
   justifyContent: "space-between",
   minHeight: "40px",
-  padding: theme.spacing(theme.clutch.spacing.none, theme.clutch.spacing.base),
+  padding: theme.spacing("none", "base"),
 }));
 
 const StyledHeaderColumn = styled("div")((props: { grow?: boolean }) => ({
@@ -70,7 +70,7 @@ const StyledNoProjectsText = styled("div")(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.palette.secondary[900], 0.38),
   textAlign: "center",
   fontSize: "12px",
-  marginBottom: theme.spacing(theme.clutch.spacing.base),
+  marginBottom: theme.spacing("base"),
 }));
 
 const StyledAllText = styled("div")(({ theme }: { theme: Theme }) => ({
@@ -82,15 +82,15 @@ const StyledMenuItemName = styled("span")(({ theme }: { theme: Theme }) => ({
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
   overflow: "hidden",
-  marginLeft: theme.spacing(theme.clutch.spacing.xs),
-  marginRight: theme.spacing(theme.clutch.spacing.none),
+  marginLeft: theme.spacing("xs"),
+  marginRight: theme.spacing("none"),
   display: "block",
   maxWidth: "160px",
 }));
 
 const StyledClearIcon = styled("span")(({ theme }: { theme: Theme }) => ({
   ".MuiIconButton-root": {
-    padding: theme.spacing(theme.clutch.spacing.sm),
+    padding: theme.spacing("sm"),
     color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiIconButton-root:hover": {
@@ -106,8 +106,8 @@ const StyledOnlyButton = styled("button")(({ theme }: { theme: Theme }) => ({
   cursor: "pointer",
   borderRadius: "4px",
   fontSize: "14px",
-  padding: theme.spacing(theme.clutch.spacing.xs),
-  marginRight: theme.spacing(theme.clutch.spacing.xs),
+  padding: theme.spacing("xs"),
+  marginRight: theme.spacing("xs"),
   color: alpha(theme.palette.primary[600], 1),
   backgroundColor: "unset",
   fontFamily: "inherit",

@@ -22,16 +22,16 @@ const Container = styled("div")(({ theme }: { theme: Theme }) => ({
   display: "flex",
   flexDirection: "column",
   "> *:first-child": {
-    margin: theme.spacing(theme.clutch.spacing.none),
+    margin: theme.spacing("none"),
   },
 }));
 
 const Content = styled("div")(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+  margin: theme.spacing("lg", "none"),
 }));
 
 const PlaceholderTitle = styled("div")(({ theme }: { theme: Theme }) => ({
-  paddingBottom: theme.spacing(theme.clutch.spacing.base),
+  paddingBottom: theme.spacing("base"),
   fontWeight: 700,
   fontSize: "22px",
   lineHeight: "28px",
@@ -46,7 +46,7 @@ const PlaceholderText = styled("div")(({ theme }: { theme: Theme }) => ({
 }));
 
 const PlaceholderWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.lg),
+  margin: theme.spacing("lg"),
   textAlign: "center",
 }));
 

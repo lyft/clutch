@@ -18,7 +18,7 @@ const ENDPOINT = "/v1/audit/getEvents";
 const COLUMN_COUNT = 6;
 const MonospaceText = styled("div")(({ theme }: { theme: Theme }) => ({
   fontFamily: "monospace",
-  padding: theme.spacing(theme.clutch.spacing.sm),
+  padding: theme.spacing("sm"),
   border: "1px solid lightgray",
   borderRadius: "8px",
   background: theme.palette.secondary[200],
@@ -29,7 +29,7 @@ const MonospaceText = styled("div")(({ theme }: { theme: Theme }) => ({
 }));
 
 const ReactJsonWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
-  padding: theme.spacing(theme.clutch.spacing.sm),
+  padding: theme.spacing("sm"),
 }));
 
 interface EventRowAction {

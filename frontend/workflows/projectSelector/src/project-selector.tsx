@@ -75,12 +75,7 @@ const StyledSelectorContainer = styled("div")(({ theme }: { theme: Theme }) => (
 }));
 
 const StyledWorkflowHeader = styled("div")(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(
-    theme.clutch.spacing.base,
-    theme.clutch.spacing.base,
-    theme.clutch.spacing.sm,
-    theme.clutch.spacing.base
-  ),
+  margin: theme.spacing("base", "base", "sm", "base"),
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -91,16 +86,11 @@ const StyledWorkflowTitle = styled("span")(({ theme }: { theme: Theme }) => ({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
-  margin: theme.spacing(theme.clutch.spacing.none, theme.clutch.spacing.base),
+  margin: theme.spacing("none", "base"),
 }));
 
 const StyledProjectTextField = styled(TextField)(({ theme }: { theme: Theme }) => ({
-  padding: theme.spacing(
-    theme.clutch.spacing.base,
-    theme.clutch.spacing.base,
-    theme.clutch.spacing.sm,
-    theme.clutch.spacing.base
-  ),
+  padding: theme.spacing("base", "base", "sm", "base"),
 }));
 
 const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({

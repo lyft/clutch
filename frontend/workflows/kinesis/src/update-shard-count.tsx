@@ -28,7 +28,7 @@ const Form = styled.form(({ theme }: { theme: Theme }) => ({
   flexDirection: "column",
   justifyItems: "space-evenly",
   "> *": {
-    padding: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
+    padding: theme.spacing("sm", "none"),
   },
 }));
 

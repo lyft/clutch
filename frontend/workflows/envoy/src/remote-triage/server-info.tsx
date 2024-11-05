@@ -5,7 +5,7 @@ import type { Theme } from "@mui/material";
 
 const Container = styled("div")(({ theme }: { theme: Theme }) => ({
   "> *": {
-    padding: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
+    padding: theme.spacing("sm", "none"),
   },
 }));
 

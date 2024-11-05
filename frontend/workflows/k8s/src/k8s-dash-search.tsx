@@ -18,7 +18,7 @@ import type { Theme } from "@mui/material";
 import * as yup from "yup";
 
 const Container = styled.div(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+  margin: theme.spacing("lg", "none"),
 }));
 
 const schema = yup.object().shape({
@@ -27,7 +27,7 @@ const schema = yup.object().shape({
 });
 
 const Content = styled.div(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
+  margin: theme.spacing("lg", "none"),
 }));
 
 const K8sDashSearch = ({ onSubmit }) => {

@@ -14,7 +14,7 @@ const ICON_SIZE = "16px";
 
 const StyledMoreVertIcon = styled("span")(({ theme }: { theme: Theme }) => ({
   ".MuiIconButton-root": {
-    padding: theme.spacing(theme.clutch.spacing.sm),
+    padding: theme.spacing("sm"),
     color: alpha(theme.palette.secondary[900], 0.38),
   },
   ".MuiIconButton-root:hover": {
@@ -26,7 +26,7 @@ const StyledMoreVertIcon = styled("span")(({ theme }: { theme: Theme }) => ({
 }));
 
 const StyledLinkTitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
-  padding: theme.spacing(theme.clutch.spacing.sm, theme.clutch.spacing.none),
+  padding: theme.spacing("sm", "none"),
 }));
 
 const StyledLinkBox = styled("div")({
@@ -36,7 +36,7 @@ const StyledLinkBox = styled("div")({
 
 const StyledMultilinkImage = styled("div")(({ theme }: { theme: Theme }) => ({
   display: "flex",
-  padding: theme.spacing(theme.clutch.spacing.sm),
+  padding: theme.spacing("sm"),
 }));
 
 const StyledMultilinkHeader = styled("div")({
@@ -47,7 +47,7 @@ const StyledMultilinkHeader = styled("div")({
 const StyledCenterImgSpan = styled("span")(({ theme }: { theme: Theme }) => ({
   display: "flex",
   alignItems: "center",
-  padding: theme.spacing(theme.clutch.spacing.sm),
+  padding: theme.spacing("sm"),
 }));
 interface QuickLinkGroupProps extends LinkGroupProps {
   links: IClutch.core.project.v1.ILink[];
@@ -70,9 +70,9 @@ const QuickLinkGroup = ({ linkGroupName, linkGroupImage, links }: QuickLinkGroup
 
   const StyledSubLink = styled("div")({
     ...itemHoverStyle,
-    paddingBottom: theme.spacing(theme.clutch.spacing.sm),
-    paddingTop: theme.spacing(theme.clutch.spacing.sm),
-    paddingLeft: theme.spacing(theme.clutch.spacing.xl),
+    paddingBottom: theme.spacing("sm"),
+    paddingTop: theme.spacing("sm"),
+    paddingLeft: theme.spacing("xl"),
   });
 
   const [validLinks, setValidLinks] = React.useState<IClutch.core.project.v1.ILink[]>([]);

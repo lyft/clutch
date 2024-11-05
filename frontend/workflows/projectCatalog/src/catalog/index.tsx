@@ -32,7 +32,7 @@ const initialState: CatalogState = {
 };
 
 const PlaceholderContainer = styled("div")(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.lg),
+  margin: theme.spacing("lg"),
 }));
 
 const Placeholder = () => (
@@ -61,7 +61,7 @@ const autoComplete = async (search: string): Promise<any> => {
 };
 
 const FormWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
-  margin: theme.spacing(theme.clutch.spacing.base),
+  margin: theme.spacing("base"),
 }));
 
 const Form = styled.form({});
@@ -69,12 +69,12 @@ const Form = styled.form({});
 const MainContentWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
   display: "flex",
   justifyContent: "space-between",
-  marginBottom: theme.spacing(theme.clutch.spacing.base),
-  marginTop: theme.spacing(theme.clutch.spacing.lg),
+  marginBottom: theme.spacing("base"),
+  marginTop: theme.spacing("lg"),
 }));
 
 const PlaceholderWrapper = styled(Grid)(({ theme }: { theme: Theme }) => ({
-  paddingTop: theme.spacing(theme.clutch.spacing.lg),
+  paddingTop: theme.spacing("lg"),
 }));
 
 const Catalog: React.FC<WorkflowProps> = ({ allowDisabled }) => {
