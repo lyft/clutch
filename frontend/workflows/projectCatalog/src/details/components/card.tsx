@@ -59,7 +59,7 @@ const StyledGrid = styled(Grid)({
 
 const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   marginBottom: theme.spacing("sm"),
-  marginTop: theme.spacing("-16px"),
+  marginTop: theme.spacing(-2),
   height: "4px",
   ".MuiLinearProgress-root": {
     backgroundColor: theme.palette.primary[400],
