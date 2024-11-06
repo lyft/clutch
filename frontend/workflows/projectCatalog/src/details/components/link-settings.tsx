@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import {
   checkFeatureEnabled,
   Grid,
@@ -11,6 +10,7 @@ import {
   QuickLinksCard,
   styled,
   Typography,
+  useParams,
 } from "@clutch-sh/core";
 import SettingsIcon from "@mui/icons-material/Settings";
 import type { Theme } from "@mui/material";

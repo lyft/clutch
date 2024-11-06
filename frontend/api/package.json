@@ -7,6 +7,7 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
+    "clean": "yarn run package:clean",
     "publishBeta": "../../tools/publish-frontend.sh api"
   },
   "dependencies": {
