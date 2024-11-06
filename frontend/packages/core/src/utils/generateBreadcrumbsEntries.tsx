@@ -3,7 +3,7 @@ import type { Location } from "react-router-dom";
 import type { BreadcrumbEntry } from "../Breadcrumbs";
 
 const generateBreadcrumbsEntries = (location: Location, validateUrl: (url: string) => boolean) => {
-  const labels = location.pathname
+  const labels = decodeURIComponent(location.pathname)
     .split("/")
     .slice(1, location.pathname.endsWith("/") ? -1 : undefined);
 
@@ -11,7 +11,7 @@ const generateBreadcrumbsEntries = (location: Location, validateUrl: (url: strin
     labels.map((label, index) => {
       let url = `/${labels.slice(0, index + 1).join("/")}`;
 
-      if (validateUrl(url)) {
+      if (!validateUrl(url)) {
         url = undefined;
       }
 

@@ -19,6 +19,9 @@ const register = (): WorkflowConfiguration => {
     path: "audit",
     group: "Audit",
     displayName: "Audit Trail",
+    defaultLayoutProps: {
+      variant: "standard",
+    },
     routes: {
       landing: {
         path: "/",

@@ -19,6 +19,9 @@ const register = (): WorkflowConfiguration => {
     path: "envoy",
     group: "Envoy",
     displayName: "Envoy",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       remoteTriage: {
         path: "triage",

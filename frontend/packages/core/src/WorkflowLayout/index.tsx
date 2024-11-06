@@ -1,7 +1,8 @@
 import React from "react";
-import { matchPath } from "react-router-dom";
+import { matchPath, useParams } from "react-router-dom";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
+import { alpha } from "@mui/material";
 
 import type { Workflow } from "../AppProvider/workflow";
 import Breadcrumbs from "../Breadcrumbs";
@@ -10,12 +11,14 @@ import styled from "../styled";
 import { Typography } from "../typography";
 import { generateBreadcrumbsEntries } from "../utils";
 
-export type LayoutVariant = "standard" | "wizard" | "custom";
+export type LayoutVariant = "standard" | "wizard";
 
 export type LayoutProps = {
   workflow: Workflow;
-  variant?: LayoutVariant;
-  heading?: string | React.ReactElement;
+  variant?: LayoutVariant | null;
+  title?: string | ((params: Record<string, string>) => string);
+  subtitle?: string;
+  breadcrumbsOnly?: boolean;
   hideHeader?: boolean;
 };
 
@@ -43,8 +46,6 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
       padding: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
       margin: theme.spacing(theme.clutch.spacing.none, "auto"),
     },
-    // No styles
-    custom: {},
   };
   return layoutVariantStylesMap[variant];
 };
@@ -63,49 +64,73 @@ const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentPro
   width: "100%",
 }));
 
-const PageHeaderMainContainer = styled("div")({
+const PageHeaderBreadcrumbsWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
+  marginBottom: theme.spacing(theme.clutch.spacing.xs),
+}));
+
+const PageHeaderMainContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   display: "flex",
   alignItems: "center",
   height: "70px",
+  marginBottom: theme.spacing(theme.clutch.spacing.sm),
+}));
+
+const PageHeaderInformation = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-evenly",
+  height: "100%",
 });
 
-const Heading = styled(Typography)({
+const Title = styled(Typography)({
   lineHeight: 1,
 });
 
+const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
+  color: alpha(theme.colors.neutral[900], 0.45),
+}));
+
 const WorkflowLayout = ({
   workflow,
-  variant = "standard",
-  heading = null,
+  variant = null,
+  title = null,
+  subtitle = null,
+  breadcrumbsOnly = false,
   hideHeader = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
+  const params = useParams();
   const location = useLocation();
+
+  if (variant === null) {
+    return <>{children}</>;
+  }
+
   const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
   const breadcrumbsEntries = generateBreadcrumbsEntries(
     location,
-    (url: string) =>
-      `/${workflow.path}` !== url &&
-      !workflowPaths.includes(url) &&
-      !workflowPaths.find(path => !!matchPath({ path }, url))
+    url => !!workflowPaths.find(path => !!matchPath({ path }, url))
   );
 
   return (
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
-          <Breadcrumbs entries={breadcrumbsEntries} />
-          <PageHeaderMainContainer>
-            {heading && (
-              <>
-                {React.isValidElement(heading) ? (
-                  heading
-                ) : (
-                  <Heading variant="h2">{heading}</Heading>
+          <PageHeaderBreadcrumbsWrapper>
+            <Breadcrumbs entries={breadcrumbsEntries} />
+          </PageHeaderBreadcrumbsWrapper>
+          {!breadcrumbsOnly && (title || subtitle) && (
+            <PageHeaderMainContainer>
+              <PageHeaderInformation>
+                {title && (
+                  <Title variant="h2" textTransform="capitalize">
+                    {typeof title === "function" ? title(params) : title}
+                  </Title>
                 )}
-              </>
-            )}
-          </PageHeaderMainContainer>
+                {subtitle && <Subtitle variant="subtitle2">{subtitle}</Subtitle>}
+              </PageHeaderInformation>
+            </PageHeaderMainContainer>
+          )}
         </PageHeader>
       )}
       {children}

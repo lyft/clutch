@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-hbp9t2"
+    class="css-hvdth0"
   >
     <div
       class="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"
@@ -265,7 +265,7 @@ exports[`renders correctly 1`] = `
 exports[`renders correctly with upstream cluster type selection enabled 1`] = `
 <DocumentFragment>
   <div
-    class="css-hbp9t2"
+    class="css-hvdth0"
   >
     <div
       class="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"

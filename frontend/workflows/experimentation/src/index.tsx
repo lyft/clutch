@@ -14,6 +14,9 @@ const register = (): WorkflowConfiguration => {
     path: "experimentation",
     group: "Chaos Experimentation",
     displayName: "Chaos Experimentation",
+    defaultLayoutProps: {
+      variant: "standard",
+    },
     routes: {
       listExperiments: {
         path: "list",

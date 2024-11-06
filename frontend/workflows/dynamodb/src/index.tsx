@@ -26,6 +26,9 @@ const register = (): WorkflowConfiguration => {
     path: "dynamodb",
     group: "AWS",
     displayName: "DynamoDB",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       updateCapacity: {
         path: "/capacity",

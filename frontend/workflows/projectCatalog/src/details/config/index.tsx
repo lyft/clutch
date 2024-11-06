@@ -117,13 +117,10 @@ const CatalogConfigPage = ({
   description = "",
   ...props
 }: ProjectDetailsConfigWorkflowProps) => {
-  const { configType = defaultRoute } = useParams();
-
   return (
     <CatalogLayout
       title="Configuration"
       description={description}
-      routes={[{ title: "Configuration" }, { title: configType || defaultRoute }]}
       allowDisabled={false}
       quickLinkSettings={false}
       configLinks={[]}

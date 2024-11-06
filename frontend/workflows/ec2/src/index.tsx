@@ -26,6 +26,9 @@ const register = (): WorkflowConfiguration => {
     path: "ec2",
     group: "AWS",
     displayName: "EC2",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       terminateInstance: {
         path: "instance/terminate",

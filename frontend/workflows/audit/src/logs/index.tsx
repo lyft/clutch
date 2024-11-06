@@ -19,7 +19,6 @@ import { DateTimeRangeSelector, QUICK_TIME_OPTIONS } from "./date-selector";
 import EventRows from "./event-row";
 
 const RootContainer = styled(Stack)({
-  padding: "32px",
   height: "100%",
 });
 
@@ -73,8 +72,8 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
 
   const genTimeRangeKey = () => `${startTime}-${endTime}-${new Date().toString()}`;
   return (
-    <RootContainer spacing={2} direction="column">
-      <Typography variant="h2">{heading}</Typography>
+    <RootContainer spacing={2} direction="column" padding={theme.clutch.layout.gutter}>
+      {!theme.clutch.useWorkflowLayout && <Typography variant="h2">{heading}</Typography>}
       <Stack direction="column" spacing={2}>
         <Stack
           direction={shrink ? "column" : "row"}

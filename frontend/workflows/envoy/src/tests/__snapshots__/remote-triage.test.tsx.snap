@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root css-1s2y8jy-MuiContainer-root"
+    class="MuiContainer-root css-d4rst-MuiContainer-root"
   >
     <div
       class="MuiGrid-root MuiGrid-container css-1yw6yql-MuiGrid-root"

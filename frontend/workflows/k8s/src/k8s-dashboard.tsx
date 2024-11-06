@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { client, ClutchError, Error, Paper, styled, Tab, Tabs } from "@clutch-sh/core";
+import { client, ClutchError, Error, Paper, styled, Tab, Tabs, useTheme } from "@clutch-sh/core";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import AppsIcon from "@mui/icons-material/Apps";
 import CropFreeIcon from "@mui/icons-material/CropFree";
@@ -16,15 +16,15 @@ import K8sDashSearch from "./k8s-dash-search";
 import PodTable from "./pods-table";
 import StatefulSetTable from "./stateful-sets-table";
 
-const Container = styled("div")({
+const Container = styled("div")(({ theme }: { theme: Theme }) => ({
   flex: 1,
-  margin: "32px",
+  padding: theme.clutch.layout.gutter,
   display: "flex",
   flexDirection: "column",
   "> *:first-child": {
     margin: "0",
   },
-});
+}));
 
 const Content = styled("div")({
   margin: "32px 0",
@@ -63,6 +63,7 @@ const defaultRequestData = inputData => {
 };
 
 const KubeDashboard: React.FC<WorkflowProps> = () => {
+  const theme = useTheme();
   const [error, setError] = React.useState<ClutchError | undefined>(undefined);
 
   const dataLayout = {
@@ -177,7 +178,7 @@ const KubeDashboard: React.FC<WorkflowProps> = () => {
   return (
     <DataLayoutContext.Provider value={dataLayoutManager}>
       <Container>
-        <K8sDashHeader />
+        {!theme.clutch.useWorkflowLayout && <K8sDashHeader />}
         <K8sDashSearch onSubmit={(namespace, clientset) => handleSubmit(namespace, clientset)} />
         <Content>
           {error !== undefined ? (

@@ -51,7 +51,17 @@ interface WorkflowShortlinkConfiguration {
   shortLink?: boolean;
 }
 
-export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkConfiguration {
+interface WorkflowLayoutConfiguration {
+  /**
+   * (Optional) property to pass the defined layout properties to all of its defined routes
+   */
+  defaultLayoutProps?: Omit<LayoutProps, "workflow" | "title" | "subtitle">;
+}
+
+export interface Workflow
+  extends BaseWorkflowConfiguration,
+    WorkflowShortlinkConfiguration,
+    WorkflowLayoutConfiguration {
   /**
    * An optional property that is set via the config and allows for the display of an icon given a path,
    * this will override the default avatar.
@@ -68,7 +78,8 @@ export interface Workflow extends BaseWorkflowConfiguration, WorkflowShortlinkCo
 
 export interface WorkflowConfiguration
   extends BaseWorkflowConfiguration,
-    WorkflowShortlinkConfiguration {
+    WorkflowShortlinkConfiguration,
+    WorkflowLayoutConfiguration {
   shortLink?: boolean;
   routes: {
     [key: string]: Route;
@@ -91,8 +102,10 @@ export interface Route {
    * If this is not set the route will always be registered.
    */
   featureFlag?: string;
-
-  layoutProps?: Omit<LayoutProps, "workflow">;
+  /**
+   * (Optional) property to define layout properties for a single route
+   */
+  layoutProps?: Omit<LayoutProps, "workflow" | "title" | "subtitle">;
 }
 
 export interface ConfiguredRoute extends Route {

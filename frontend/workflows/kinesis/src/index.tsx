@@ -19,6 +19,9 @@ const register = (): WorkflowConfiguration => {
     path: "kinesis",
     group: "AWS",
     displayName: "Kinesis",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       updateShardCount: {
         path: "shards",

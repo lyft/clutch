@@ -16,6 +16,7 @@ import {
   useLocation,
   useNavigate,
   useSearchParams,
+  useTheme,
   WizardContext,
 } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
@@ -71,10 +72,10 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 );
 
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
-  {
-    paddingBlock: "24px 32px",
-    height: "calc(100% - 56px)",
-  },
+  ({ theme }: { theme: Theme }) => ({
+    padding: theme.clutch.layout.gutter,
+    height: "100%",
+  }),
   props => ({
     width: props.$width === "full" ? "100%" : "800px",
   })
@@ -126,6 +127,7 @@ const Wizard = ({
   const locationState = useLocation().state as { origin?: string };
   const navigate = useNavigate();
   const [origin] = React.useState(locationState?.origin);
+  const theme = useTheme();
 
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
@@ -253,7 +255,7 @@ const Wizard = ({
   return (
     <Container $width={width} maxWidth={false} className={className}>
       <MaxHeightGrid container alignItems="stretch">
-        {heading && (
+        {!theme.clutch.useWorkflowLayout && heading && (
           <Header item $orientation={orientation}>
             {React.isValidElement(heading) ? (
               heading

@@ -13,6 +13,10 @@ const register = (): WorkflowConfiguration => {
     path: "catalog",
     group: "Catalog",
     displayName: "Catalog",
+    defaultLayoutProps: {
+      variant: "standard",
+      breadcrumbsOnly: true,
+    },
     routes: {
       catalog: {
         path: "/",
@@ -20,6 +24,9 @@ const register = (): WorkflowConfiguration => {
         description: "A searchable catalog of services",
         component: Catalog,
         featureFlag: "projectCatalog",
+        layoutProps: {
+          breadcrumbsOnly: false,
+        },
       },
       details: {
         path: "/:projectId",

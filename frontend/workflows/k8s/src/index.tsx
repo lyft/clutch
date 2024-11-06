@@ -31,6 +31,9 @@ const register = (): WorkflowConfiguration => {
     path: "k8s",
     group: "K8s",
     displayName: "K8s",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       deletePod: {
         path: "pod/delete",
@@ -59,6 +62,9 @@ const register = (): WorkflowConfiguration => {
         description: "Dashboard for Kubernetes Resources.",
         component: KubeDashboard,
         requiredConfigProps: [],
+        layoutProps: {
+          variant: "standard",
+        },
       },
       cordonNode: {
         path: "node/cordon",

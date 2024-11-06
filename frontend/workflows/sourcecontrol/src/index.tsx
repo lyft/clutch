@@ -21,6 +21,9 @@ const register = (): WorkflowConfiguration => {
     path: "scm",
     group: "Source Control",
     displayName: "Source Control",
+    defaultLayoutProps: {
+      variant: "wizard",
+    },
     routes: {
       createRepository: {
         path: "createRepository",

@@ -15,10 +15,10 @@ const WelcomeStep: React.FC<WizardChild> = () => (
   </WizardStep>
 );
 
-const HelloWorld: React.FC<WorkflowProps> = ({ heading }) => {
+const HelloWorld: React.FC<WorkflowProps> = () => {
   const dataLayout = {};
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout}>
       <WelcomeStep name="Welcome" />
     </Wizard>
   );
