@@ -38,13 +38,13 @@ const getContainerVariantStyles = (variant: LayoutVariant, theme: Theme) => {
   const layoutVariantStylesMap: { [key in LayoutVariant]: CSSObject } = {
     standard: {
       ...BASE_CONTAINER_STYLES,
-      padding: theme.spacing(theme.clutch.spacing.md),
+      padding: theme.spacing("md"),
     },
     wizard: {
       ...BASE_CONTAINER_STYLES,
       width: "800px", // Taken from the Wizard Component default width
-      padding: theme.spacing(theme.clutch.spacing.lg, theme.clutch.spacing.none),
-      margin: theme.spacing(theme.clutch.spacing.none, "auto"),
+      padding: theme.spacing("lg", "none"),
+      margin: theme.spacing("none", "auto"),
     },
   };
   return layoutVariantStylesMap[variant];
@@ -56,23 +56,20 @@ const LayoutContainer = styled("div")(
 );
 
 const PageHeader = styled("div")(({ $variant, theme }: StyledVariantComponentProps) => ({
-  padding: theme.spacing(
-    theme.clutch.spacing.none,
-    $variant === "wizard" ? theme.clutch.spacing.md : theme.clutch.spacing.none
-  ),
-  paddingBottom: theme.spacing(theme.clutch.spacing.base),
+  padding: theme.spacing("none", $variant === "wizard" ? "md" : "none"),
+  paddingBottom: theme.spacing("base"),
   width: "100%",
 }));
 
 const PageHeaderBreadcrumbsWrapper = styled("div")(({ theme }: { theme: Theme }) => ({
-  marginBottom: theme.spacing(theme.clutch.spacing.xs),
+  marginBottom: theme.spacing("xs"),
 }));
 
 const PageHeaderMainContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   display: "flex",
   alignItems: "center",
   height: "70px",
-  marginBottom: theme.spacing(theme.clutch.spacing.sm),
+  marginBottom: theme.spacing("sm"),
 }));
 
 const PageHeaderInformation = styled("div")({

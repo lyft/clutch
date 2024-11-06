@@ -75,13 +75,7 @@ const CatalogLayout = ({
           </Grid>
         )}
         <Grid container item spacing={1}>
-          <Grid
-            container
-            item
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom="16px"
-          >
+          <Grid container item justifyContent="space-between" alignItems="center" marginBottom={2}>
             <Grid item>
               <ProjectHeader
                 title={`${projectInfo?.name ?? projectId}${title ? ` ${title}` : ""}`}

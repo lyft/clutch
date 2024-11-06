@@ -93,9 +93,9 @@ const SummariesContainer = styled(Grid)({
   flexBasis: "40%",
 });
 
-const InformationContainer = styled("div")({
-  padding: "16px 0",
-});
+const InformationContainer = styled("div")(({ theme }: { theme: Theme }) => ({
+  padding: theme.spacing("base", "none"),
+}));
 
 interface DashboardProps {
   serverInfo: IClutch.envoytriage.v1.IServerInfo;

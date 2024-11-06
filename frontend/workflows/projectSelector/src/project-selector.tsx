@@ -74,24 +74,24 @@ const StyledSelectorContainer = styled("div")(({ theme }: { theme: Theme }) => (
   maxHeight: "100%",
 }));
 
-const StyledWorkflowHeader = styled("div")({
-  margin: "16px 16px 12px 16px",
+const StyledWorkflowHeader = styled("div")(({ theme }: { theme: Theme }) => ({
+  margin: theme.spacing("base", "base", "sm", "base"),
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   height: "24px",
-});
+}));
 
-const StyledWorkflowTitle = styled("span")({
+const StyledWorkflowTitle = styled("span")(({ theme }: { theme: Theme }) => ({
   fontWeight: "bold",
   fontSize: "20px",
   lineHeight: "24px",
-  margin: "0px 8px",
-});
+  margin: theme.spacing("none", "base"),
+}));
 
-const StyledProjectTextField = styled(TextField)({
-  padding: "16px 16px 8px 16px",
-});
+const StyledProjectTextField = styled(TextField)(({ theme }: { theme: Theme }) => ({
+  padding: theme.spacing("base", "base", "sm", "base"),
+}));
 
 const StyledProgressContainer = styled("div")(({ theme }: { theme: Theme }) => ({
   height: "4px",

@@ -13,6 +13,7 @@ import {
   useParams,
 } from "@clutch-sh/core";
 import SettingsIcon from "@mui/icons-material/Settings";
+import type { Theme } from "@mui/material";
 import { isEmpty } from "lodash";
 
 import type { ProjectConfigLink } from "../../types";
@@ -23,17 +24,17 @@ interface QuickLinksAndSettingsProps {
   showSettings: boolean;
 }
 
-const StyledPopperItem = styled(PopperItem)({
+const StyledPopperItem = styled(PopperItem)(({ theme }: { theme: Theme }) => ({
   "&&&": {
     height: "auto",
   },
   "& span.MuiTypography-root": {
-    padding: "0",
+    padding: theme.spacing("none"),
   },
   "& a.MuiTypography-root": {
-    padding: "4px 16px",
+    padding: theme.spacing("xs", "base"),
   },
-});
+}));
 
 const QuickLinksAndSettings = ({
   linkGroups,
@@ -66,9 +67,7 @@ const QuickLinksAndSettings = ({
       alignItems="center"
       justifyContent="flex-end"
       spacing={1}
-      style={{
-        padding: "8px 0px 0px 0px",
-      }}
+      paddingTop={1}
     >
       {!isEmpty(linkGroups) && (
         <Grid item>
