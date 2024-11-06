@@ -11,7 +11,7 @@ import { clutchColors, THEME_VARIANTS } from "./colors";
 import palette from "./palette";
 import type { ThemeVariant } from "./types";
 
-type SpacingUnit = "xs" | "sm" | "base" | "md" | "lg" | "xl";
+type SpacingUnit = "none" | "xs" | "sm" | "base" | "md" | "lg" | "xl";
 
 // NOTE: `string & {}` allows `SpacingUnit` to be autocompleted
 type SpacingArg = SpacingUnit | number | (string & {});
@@ -55,6 +55,7 @@ declare module "@mui/material/styles" {
 const DEFAULT_SCALING_FACTOR = 8;
 
 const CLUTCH_CUSTOM_SPACING: Record<SpacingUnit, string> = {
+  none: "0px",
   xs: "4px",
   sm: "8px",
   base: "16px",
