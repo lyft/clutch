@@ -326,11 +326,22 @@ func getPodStatus(pod *corev1.Pod) string {
 		reason = pod.Status.Reason
 	}
 
+	nativeSidecarContainer := make(map[string]bool)
+	for _, container := range pod.Spec.InitContainers {
+		// https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/
+		if container.RestartPolicy != nil && *container.RestartPolicy == corev1.ContainerRestartPolicyAlways {
+			nativeSidecarContainer[container.Name] = true
+		}
+	}
+
 	initializing := false
 	for i := range pod.Status.InitContainerStatuses {
 		container := pod.Status.InitContainerStatuses[i]
 		restarts += int(container.RestartCount)
 		switch {
+		case nativeSidecarContainer[container.Name] && container.Started != nil && *container.Started && container.Ready:
+			// https://github.com/kubernetes/kubernetes/blob/66e34012255abf1bbd0956a712817dad77c69c41/pkg/printers/internalversion/printers.go#L908
+			continue
 		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
 			continue
 		case container.State.Terminated != nil:
