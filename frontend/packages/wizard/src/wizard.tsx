@@ -73,7 +73,9 @@ const Header = styled(Grid)<{ $orientation: MuiStepperProps["orientation"] }>(
 
 const Container = styled(MuiContainer)<{ $width: ContainerProps["width"] }>(
   ({ theme }: { theme: Theme }) => ({
-    padding: theme.clutch.layout.gutter,
+    padding: theme.clutch.useWorkflowLayout
+      ? theme.spacing("none", "md")
+      : theme.clutch.layout.gutter,
     height: "100%",
   }),
   props => ({
