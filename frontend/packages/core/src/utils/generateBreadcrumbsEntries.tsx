@@ -37,7 +37,7 @@ const generateBreadcrumbsEntries = (workflowsInPath: Array<Workflow>, location: 
         ? allRoutes.find(r =>
             r.path.startsWith("/")
               ? r.path
-              : // Done in case of an empty path or missing a facing `/`
+              : // Done in case of an empty path or missing a leading `/`
                 `/${r.path}` === `/${path.split("/").slice(2).join("/")}`
           )
         : null;
