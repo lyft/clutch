@@ -226,10 +226,6 @@ const ClutchApp = ({
                                 route.layoutProps?.variant !== undefined
                                   ? route.layoutProps?.variant
                                   : workflow.defaultLayoutProps?.variant,
-                              breadcrumbsOnly:
-                                route.layoutProps?.breadcrumbsOnly ??
-                                workflow.defaultLayoutProps?.breadcrumbsOnly ??
-                                false,
                               hideHeader:
                                 route.layoutProps?.hideHeader ??
                                 workflow.defaultLayoutProps?.hideHeader ??
