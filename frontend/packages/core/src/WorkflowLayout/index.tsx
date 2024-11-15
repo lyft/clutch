@@ -1,12 +1,11 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 import { alpha } from "@mui/material";
 
 import type { Workflow } from "../AppProvider/workflow";
 import Breadcrumbs from "../Breadcrumbs";
-import { useLocation } from "../navigation";
+import { useLocation, useParams } from "../navigation";
 import styled from "../styled";
 import { Typography } from "../typography";
 import { generateBreadcrumbsEntries } from "../utils";
