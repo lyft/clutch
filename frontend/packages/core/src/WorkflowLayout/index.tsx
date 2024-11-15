@@ -21,7 +21,6 @@ export type LayoutProps = {
   variant?: LayoutVariant | null;
   title?: string;
   subtitle?: string;
-  breadcrumbsOnly?: boolean;
   hideHeader?: boolean;
   usesContext?: boolean;
 };
@@ -106,7 +105,6 @@ const WorkflowLayout = ({
   variant = null,
   title = null,
   subtitle = null,
-  breadcrumbsOnly = false,
   hideHeader = false,
   usesContext = false,
   children,
@@ -143,7 +141,7 @@ const WorkflowLayout = ({
           <PageHeaderBreadcrumbsWrapper>
             <Breadcrumbs entries={breadcrumbsEntries} />
           </PageHeaderBreadcrumbsWrapper>
-          {!breadcrumbsOnly && (headerTitle || headerSubtitle) && (
+          {(headerTitle || headerSubtitle) && (
             <PageHeaderMainContainer>
               <Loadable isLoading={headerLoading}>
                 <PageHeaderInformation>
