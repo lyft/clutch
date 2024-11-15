@@ -9,6 +9,7 @@ import {
   Typography,
   useSearchParams,
   useTheme,
+  useWorkflowLayoutContext,
 } from "@clutch-sh/core";
 import SearchIcon from "@mui/icons-material/Search";
 import { CircularProgress, Stack, Theme, useMediaQuery } from "@mui/material";
@@ -69,12 +70,13 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
 
   const theme = useTheme();
   const shrink = useMediaQuery(theme.breakpoints.down("md"));
+  const workflowLayoutContent = useWorkflowLayoutContext();
 
   const genTimeRangeKey = () => `${startTime}-${endTime}-${new Date().toString()}`;
-  return (
-    <RootContainer spacing={2} direction="column" padding={theme.clutch.layout.gutter}>
-      {!theme.clutch.useWorkflowLayout && <Typography variant="h2">{heading}</Typography>}
-      <Stack direction="column" spacing={2}>
+
+  React.useEffect(() => {
+    if (theme.clutch.useWorkflowLayout) {
+      workflowLayoutContent.setHeaderContent(
         <Stack
           direction={shrink ? "column" : "row"}
           spacing={1}
@@ -109,6 +111,50 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
             </IconButton>
           )}
         </Stack>
+      );
+    }
+  }, [isLoading, shrink]);
+
+  return (
+    <RootContainer spacing={2} direction="column" padding={theme.clutch.layout.gutter}>
+      {!theme.clutch.useWorkflowLayout && <Typography variant="h2">{heading}</Typography>}
+      <Stack direction="column" spacing={2}>
+        {!theme.clutch.useWorkflowLayout && (
+          <Stack
+            direction={shrink ? "column" : "row"}
+            spacing={1}
+            sx={{
+              alignSelf: shrink ? "center" : "flex-end",
+              width: shrink ? "100%" : "inherit",
+            }}
+          >
+            {isLoading && (
+              <LoadingContainer>
+                <LoadingSpinner />
+              </LoadingContainer>
+            )}
+            <DateTimeRangeSelector
+              shrink={shrink}
+              disabled={isLoading}
+              start={startTime}
+              end={endTime}
+              onStartChange={setStartTime}
+              onEndChange={setEndTime}
+              onQuickSelect={(start, end) => {
+                setStartTime(start);
+                setEndTime(end);
+                setTimeRangeKey(genTimeRangeKey());
+              }}
+            />
+            {shrink ? (
+              <Button text="Search" onClick={() => setTimeRangeKey(genTimeRangeKey())} />
+            ) : (
+              <IconButton onClick={() => setTimeRangeKey(genTimeRangeKey())}>
+                <SearchIcon />
+              </IconButton>
+            )}
+          </Stack>
+        )}
         {error && <Error subject={error} />}
       </Stack>
       <TableContainer>

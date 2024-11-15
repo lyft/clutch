@@ -16,6 +16,7 @@ import type { ClutchError } from "../Network/errors";
 import NotFound from "../not-found";
 import type { AppConfiguration } from "../Types";
 import WorkflowLayout, { LayoutProps } from "../WorkflowLayout";
+import { WorkflowLayoutContextProvider } from "../WorkflowLayout/context";
 
 import { registeredWorkflows } from "./registrar";
 import ShortLinkProxy, { ShortLinkBaseRoute } from "./short-link-proxy";
@@ -233,6 +234,10 @@ const ClutchApp = ({
                                 route.layoutProps?.hideHeader ??
                                 workflow.defaultLayoutProps?.hideHeader ??
                                 false,
+                              usesContext:
+                                route.layoutProps?.usesContext ??
+                                workflow.defaultLayoutProps?.usesContext ??
+                                false,
                             };
 
                             const workflowRouteComponent = (
@@ -254,9 +259,11 @@ const ClutchApp = ({
                                 path={`${route.path.replace(/^\/+/, "").replace(/\/+$/, "")}`}
                                 element={
                                   appConfiguration?.useWorkflowLayout ? (
-                                    <WorkflowLayout {...workflowLayoutProps}>
-                                      {workflowRouteComponent}
-                                    </WorkflowLayout>
+                                    <WorkflowLayoutContextProvider>
+                                      <WorkflowLayout {...workflowLayoutProps}>
+                                        {workflowRouteComponent}
+                                      </WorkflowLayout>
+                                    </WorkflowLayoutContextProvider>
                                   ) : (
                                     workflowRouteComponent
                                   )
