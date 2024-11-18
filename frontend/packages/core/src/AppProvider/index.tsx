@@ -217,7 +217,7 @@ const ClutchApp = ({
                               : workflow.displayName;
 
                             const workflowLayoutProps: LayoutProps = {
-                              workflow,
+                              workflowsInPath: workflows.filter(w => w.path === workflow.path),
                               title: route.displayName || workflow.displayName,
                               subtitle: route.description,
                               variant:

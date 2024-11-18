@@ -1,12 +1,11 @@
 import React from "react";
-import { matchPath, useParams } from "react-router-dom";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 import { alpha } from "@mui/material";
 
 import type { Workflow } from "../AppProvider/workflow";
 import Breadcrumbs from "../Breadcrumbs";
-import { useLocation } from "../navigation";
+import { useLocation, useParams } from "../navigation";
 import styled from "../styled";
 import { Typography } from "../typography";
 import { generateBreadcrumbsEntries } from "../utils";
@@ -14,7 +13,7 @@ import { generateBreadcrumbsEntries } from "../utils";
 export type LayoutVariant = "standard" | "wizard";
 
 export type LayoutProps = {
-  workflow: Workflow;
+  workflowsInPath: Array<Workflow>;
   variant?: LayoutVariant | null;
   title?: string | ((params: Record<string, string>) => string);
   subtitle?: string;
@@ -88,7 +87,7 @@ const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 }));
 
 const WorkflowLayout = ({
-  workflow,
+  workflowsInPath,
   variant = null,
   title = null,
   subtitle = null,
@@ -99,22 +98,18 @@ const WorkflowLayout = ({
   const params = useParams();
   const location = useLocation();
 
+  const entries = generateBreadcrumbsEntries(workflowsInPath, location);
+
   if (variant === null) {
     return <>{children}</>;
   }
-
-  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
-  const breadcrumbsEntries = generateBreadcrumbsEntries(
-    location,
-    url => !!workflowPaths.find(path => !!matchPath({ path }, url))
-  );
 
   return (
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
           <PageHeaderBreadcrumbsWrapper>
-            <Breadcrumbs entries={breadcrumbsEntries} />
+            <Breadcrumbs entries={entries} />
           </PageHeaderBreadcrumbsWrapper>
           {!breadcrumbsOnly && (title || subtitle) && (
             <PageHeaderMainContainer>
