@@ -5,20 +5,23 @@ import { alpha } from "@mui/material";
 
 import type { Workflow } from "../AppProvider/workflow";
 import Breadcrumbs from "../Breadcrumbs";
-import { useLocation, useParams } from "../navigation";
+import Loadable from "../loading";
+import { useLocation } from "../navigation";
 import styled from "../styled";
 import { Typography } from "../typography";
 import { generateBreadcrumbsEntries } from "../utils";
+
+import { useWorkflowLayoutContext } from "./context";
 
 export type LayoutVariant = "standard" | "wizard";
 
 export type LayoutProps = {
   workflowsInPath: Array<Workflow>;
   variant?: LayoutVariant | null;
-  title?: string | ((params: Record<string, string>) => string);
+  title?: string;
   subtitle?: string;
-  breadcrumbsOnly?: boolean;
   hideHeader?: boolean;
+  usesContext?: boolean;
 };
 
 type StyledVariantComponentProps = {
@@ -64,26 +67,36 @@ const PageHeaderBreadcrumbsWrapper = styled("div")(({ theme }: { theme: Theme })
   marginBottom: theme.spacing("xs"),
 }));
 
-const PageHeaderMainContainer = styled("div")(({ theme }: { theme: Theme }) => ({
+const PageHeaderMainContainer = styled("div")({
   display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "space-between",
   alignItems: "center",
-  height: "70px",
-  marginBottom: theme.spacing("sm"),
-}));
+  minHeight: "70px",
+});
 
 const PageHeaderInformation = styled("div")({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
-  height: "100%",
+  height: "70px",
+});
+
+const PageHeaderSideContent = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-evenly",
+  height: "70px",
 });
 
 const Title = styled(Typography)({
   lineHeight: 1,
+  textTransform: "capitalize",
 });
 
 const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
   color: alpha(theme.colors.neutral[900], 0.45),
+  whiteSpace: "nowrap",
 }));
 
 const WorkflowLayout = ({
@@ -91,12 +104,24 @@ const WorkflowLayout = ({
   variant = null,
   title = null,
   subtitle = null,
-  breadcrumbsOnly = false,
   hideHeader = false,
+  usesContext = false,
   children,
 }: React.PropsWithChildren<LayoutProps>) => {
-  const params = useParams();
+  const [headerLoading, setHeaderLoading] = React.useState(usesContext);
+
   const location = useLocation();
+  const context = useWorkflowLayoutContext();
+
+  const headerTitle = context?.title || title;
+  const headerSubtitle = context?.subtitle || subtitle;
+
+  React.useEffect(() => {
+    if (context) {
+      // Done to avoid a flash of the default title and subtitle
+      setTimeout(() => setHeaderLoading(false), 750);
+    }
+  }, [context]);
 
   const entries = generateBreadcrumbsEntries(workflowsInPath, location);
 
@@ -111,16 +136,17 @@ const WorkflowLayout = ({
           <PageHeaderBreadcrumbsWrapper>
             <Breadcrumbs entries={entries} />
           </PageHeaderBreadcrumbsWrapper>
-          {!breadcrumbsOnly && (title || subtitle) && (
+          {(headerTitle || headerSubtitle) && (
             <PageHeaderMainContainer>
-              <PageHeaderInformation>
-                {title && (
-                  <Title variant="h2" textTransform="capitalize">
-                    {typeof title === "function" ? title(params) : title}
-                  </Title>
+              <Loadable isLoading={headerLoading}>
+                <PageHeaderInformation>
+                  {headerTitle && <Title variant="h2">{headerTitle}</Title>}
+                  {headerSubtitle && <Subtitle variant="subtitle2">{headerSubtitle}</Subtitle>}
+                </PageHeaderInformation>
+                {context?.headerContent && (
+                  <PageHeaderSideContent>{context.headerContent}</PageHeaderSideContent>
                 )}
-                {subtitle && <Subtitle variant="subtitle2">{subtitle}</Subtitle>}
-              </PageHeaderInformation>
+              </Loadable>
             </PageHeaderMainContainer>
           )}
         </PageHeader>

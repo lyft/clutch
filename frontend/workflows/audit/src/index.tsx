@@ -21,6 +21,7 @@ const register = (): WorkflowConfiguration => {
     displayName: "Audit Trail",
     defaultLayoutProps: {
       variant: "standard",
+      usesContext: true,
     },
     routes: {
       landing: {
@@ -35,6 +36,9 @@ const register = (): WorkflowConfiguration => {
         description: "View audit event",
         component: AuditEvent,
         hideNav: true,
+        layoutProps: {
+          usesContext: false,
+        },
       },
     },
   };

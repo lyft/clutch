@@ -1,6 +1,13 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { Grid, QuickLinkGroup, useNavigate, useParams, useTheme } from "@clutch-sh/core";
+import {
+  Grid,
+  QuickLinkGroup,
+  useNavigate,
+  useParams,
+  useTheme,
+  useWorkflowLayoutContext,
+} from "@clutch-sh/core";
 
 import type { ProjectDetailsWorkflowProps } from "../../types";
 import { ProjectDetailsContext } from "../context";
@@ -35,6 +42,7 @@ const CatalogLayout = ({
   );
   const projInfo = React.useMemo(() => ({ projectId, projectInfo }), [projectId, projectInfo]);
   const theme = useTheme();
+  const workflowLayoutContent = useWorkflowLayoutContext();
 
   const redirectNotFound = () => navigate(`/${projectId}/notFound`, { replace: true });
 
@@ -64,35 +72,63 @@ const CatalogLayout = ({
     return () => {};
   }, [projectId]);
 
+  React.useEffect(() => {
+    if (theme.clutch.useWorkflowLayout) {
+      workflowLayoutContent.setTitle(
+        `${projectInfo?.name ?? projectId}${title ? ` ${title}` : ""}`
+      );
+
+      workflowLayoutContent.setSubtitle(description ?? (projectInfo?.data?.description as string));
+
+      workflowLayoutContent.setHeaderContent(
+        projectInfo ? (
+          <QuickLinksAndSettings
+            linkGroups={(projectInfo.linkGroups as QuickLinkGroup[]) || []}
+            configLinks={configLinks ?? []}
+            showSettings={quickLinkSettings}
+          />
+        ) : null
+      );
+    }
+  }, [description, projectInfo, title]);
+
   return (
     <ProjectDetailsContext.Provider value={projInfo}>
       <Grid container padding={theme.clutch.layout.gutter}>
         {!theme.clutch.useWorkflowLayout && (
-          <Grid container item direction="column">
-            <Grid item>
-              <BreadCrumbs routes={[{ title: projectId, path: `${projectId}` }, ...routes]} />
+          <>
+            <Grid container item direction="column">
+              <Grid item>
+                <BreadCrumbs routes={[{ title: projectId, path: `${projectId}` }, ...routes]} />
+              </Grid>
             </Grid>
-          </Grid>
+            <Grid container item spacing={1}>
+              <Grid
+                container
+                item
+                justifyContent="space-between"
+                alignItems="center"
+                marginBottom={2}
+              >
+                <Grid item>
+                  <ProjectHeader
+                    title={`${projectInfo?.name ?? projectId}${title ? ` ${title}` : ""}`}
+                    description={description ?? (projectInfo?.data?.description as string)}
+                  />
+                </Grid>
+                <Grid item>
+                  {projectInfo && (
+                    <QuickLinksAndSettings
+                      linkGroups={(projectInfo.linkGroups as QuickLinkGroup[]) || []}
+                      configLinks={configLinks ?? []}
+                      showSettings={quickLinkSettings}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+          </>
         )}
-        <Grid container item spacing={1}>
-          <Grid container item justifyContent="space-between" alignItems="center" marginBottom={2}>
-            <Grid item>
-              <ProjectHeader
-                title={`${projectInfo?.name ?? projectId}${title ? ` ${title}` : ""}`}
-                description={description ?? (projectInfo?.data?.description as string)}
-              />
-            </Grid>
-            <Grid item>
-              {projectInfo && (
-                <QuickLinksAndSettings
-                  linkGroups={(projectInfo.linkGroups as QuickLinkGroup[]) || []}
-                  configLinks={configLinks ?? []}
-                  showSettings={quickLinkSettings}
-                />
-              )}
-            </Grid>
-          </Grid>
-        </Grid>
         <Grid container item spacing={2}>
           {children && children}
         </Grid>
