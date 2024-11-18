@@ -1,5 +1,4 @@
 import React from "react";
-import { matchPath } from "react-router-dom";
 import type { Interpolation } from "@emotion/styled";
 import type { CSSObject, Theme } from "@mui/material";
 import { alpha } from "@mui/material";
@@ -17,7 +16,7 @@ import { useWorkflowLayoutContext } from "./context";
 export type LayoutVariant = "standard" | "wizard";
 
 export type LayoutProps = {
-  workflow: Workflow;
+  workflowsInPath: Array<Workflow>;
   variant?: LayoutVariant | null;
   title?: string;
   subtitle?: string;
@@ -101,7 +100,7 @@ const Subtitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 }));
 
 const WorkflowLayout = ({
-  workflow,
+  workflowsInPath,
   variant = null,
   title = null,
   subtitle = null,
@@ -124,22 +123,18 @@ const WorkflowLayout = ({
     }
   }, [context]);
 
+  const entries = generateBreadcrumbsEntries(workflowsInPath, location);
+
   if (variant === null) {
     return <>{children}</>;
   }
-
-  const workflowPaths = workflow.routes.map(({ path }) => `/${workflow.path}/${path}`);
-  const breadcrumbsEntries = generateBreadcrumbsEntries(
-    location,
-    url => !!workflowPaths.find(path => !!matchPath({ path }, url))
-  );
 
   return (
     <LayoutContainer $variant={variant}>
       {!hideHeader && (
         <PageHeader $variant={variant}>
           <PageHeaderBreadcrumbsWrapper>
-            <Breadcrumbs entries={breadcrumbsEntries} />
+            <Breadcrumbs entries={entries} />
           </PageHeaderBreadcrumbsWrapper>
           {(headerTitle || headerSubtitle) && (
             <PageHeaderMainContainer>

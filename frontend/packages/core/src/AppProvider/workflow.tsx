@@ -55,7 +55,7 @@ interface WorkflowLayoutConfiguration {
   /**
    * (Optional) property to pass the defined layout properties to all of its defined routes
    */
-  defaultLayoutProps?: Omit<LayoutProps, "workflow" | "title" | "subtitle">;
+  defaultLayoutProps?: Omit<LayoutProps, "workflowsInPath" | "title" | "subtitle">;
 }
 
 export interface Workflow
@@ -105,7 +105,7 @@ export interface Route {
   /**
    * (Optional) property to define layout properties for a single route
    */
-  layoutProps?: Omit<LayoutProps, "workflow" | "title" | "subtitle">;
+  layoutProps?: Omit<LayoutProps, "workflowsInPath" | "title" | "subtitle">;
 }
 
 export interface ConfiguredRoute extends Route {
