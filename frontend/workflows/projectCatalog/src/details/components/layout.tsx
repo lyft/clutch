@@ -42,7 +42,7 @@ const CatalogLayout = ({
   );
   const projInfo = React.useMemo(() => ({ projectId, projectInfo }), [projectId, projectInfo]);
   const theme = useTheme();
-  const workflowLayoutContent = useWorkflowLayoutContext();
+  const workflowLayoutContext = useWorkflowLayoutContext();
 
   const redirectNotFound = () => navigate(`/${projectId}/notFound`, { replace: true });
 
@@ -74,13 +74,13 @@ const CatalogLayout = ({
 
   React.useEffect(() => {
     if (theme.clutch.useWorkflowLayout) {
-      workflowLayoutContent.setTitle(
+      workflowLayoutContext.setTitle(
         `${projectInfo?.name ?? projectId}${title ? ` ${title}` : ""}`
       );
 
-      workflowLayoutContent.setSubtitle(description ?? (projectInfo?.data?.description as string));
+      workflowLayoutContext.setSubtitle(description ?? (projectInfo?.data?.description as string));
 
-      workflowLayoutContent.setHeaderContent(
+      workflowLayoutContext.setHeaderContent(
         projectInfo ? (
           <QuickLinksAndSettings
             linkGroups={(projectInfo.linkGroups as QuickLinkGroup[]) || []}
@@ -90,7 +90,7 @@ const CatalogLayout = ({
         ) : null
       );
     }
-  }, [description, projectInfo, title]);
+  }, [projectInfo, projectId, title, description, configLinks, quickLinkSettings]);
 
   return (
     <ProjectDetailsContext.Provider value={projInfo}>
