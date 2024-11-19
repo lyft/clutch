@@ -70,13 +70,13 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
 
   const theme = useTheme();
   const shrink = useMediaQuery(theme.breakpoints.down("md"));
-  const workflowLayoutContent = useWorkflowLayoutContext();
+  const workflowLayoutContext = useWorkflowLayoutContext();
 
   const genTimeRangeKey = () => `${startTime}-${endTime}-${new Date().toString()}`;
 
   React.useEffect(() => {
     if (theme.clutch.useWorkflowLayout) {
-      workflowLayoutContent.setHeaderContent(
+      workflowLayoutContext.setHeaderContent(
         <Stack
           direction={shrink ? "column" : "row"}
           spacing={1}
@@ -113,7 +113,7 @@ const AuditLog: React.FC<AuditLogProps> = ({ heading, detailsPathPrefix, downloa
         </Stack>
       );
     }
-  }, [isLoading, shrink]);
+  }, [isLoading, shrink, startTime, endTime]);
 
   return (
     <RootContainer spacing={2} direction="column" padding={theme.clutch.layout.gutter}>
