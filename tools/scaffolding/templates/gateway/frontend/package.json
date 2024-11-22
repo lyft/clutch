@@ -32,7 +32,7 @@
   },
   "resolutions": {
     "@types/react": "17.0.50",
-    "react-hook-form": "7.25.3"
+    "react-hook-form": "7.53.2"
   },
   "workspaces": [
     "workflows/*"
