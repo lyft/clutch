@@ -44,7 +44,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20230722043721-ed46e5a46466
 	github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92
 	github.com/slack-go/slack v0.14.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/uber-go/tally/v4 v4.1.6
 	go.temporal.io/sdk v1.26.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
