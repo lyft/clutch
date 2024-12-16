@@ -47,6 +47,6 @@
     "node": ">=18 <19",
     "yarn": "^4.5.0"
   },
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.5.3",
   "stableVersion": "3.0.0-beta"
 }
