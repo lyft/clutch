@@ -84,7 +84,7 @@ Clutch has extensive documentation that can be found on our site [clutch.sh](htt
 If you're looking for the source of the hosted documentation both the content and the code
 for the website live within the [docs/](docs/) directory.
 
-## Contributing
+## Contributing 
 
 Thinking of contributing back to Clutch? Awesome! We love and welcome all contributions.
 
