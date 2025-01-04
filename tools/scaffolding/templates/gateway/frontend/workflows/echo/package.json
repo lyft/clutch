@@ -26,7 +26,7 @@
     "react-is": "^17.0.2"
   },
   "resolutions": {
-    "react-hook-form": "7.25.3"
+    "react-hook-form": "7.54.2"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^4.0.0-beta",
