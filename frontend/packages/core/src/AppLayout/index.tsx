@@ -33,14 +33,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   return (
     <AppGrid container direction="column" data-testid="app-layout-component">
-      {header && React.cloneElement(header, { ...configuration, ...header.props })}
-      {!header && <Header {...configuration} />}
+      {!configuration?.useFullScreenLayout &&
+        header &&
+        React.cloneElement(header, { ...configuration, ...header.props })}
+      {!configuration?.useFullScreenLayout && !header && <Header {...configuration} />}
       <ContentGrid container wrap="nowrap">
         {isLoading ? (
           <Loadable isLoading={isLoading} variant="overlay" />
         ) : (
           <>
-            <Drawer />
+            {!configuration?.useFullScreenLayout && <Drawer />}
             <MainContent>
               <Outlet />
             </MainContent>

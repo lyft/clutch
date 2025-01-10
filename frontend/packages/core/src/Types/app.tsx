@@ -7,4 +7,5 @@ export interface AppConfiguration {
   logo?: React.ReactNode | string;
   banners?: AppBanners;
   useWorkflowLayout?: boolean;
+  useFullScreenLayout?: boolean;
 }
