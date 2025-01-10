@@ -342,6 +342,9 @@ func getPodStatus(pod *corev1.Pod) string {
 		case nativeSidecarContainer[container.Name] && container.Started != nil && *container.Started && container.Ready:
 			// https://github.com/kubernetes/kubernetes/blob/66e34012255abf1bbd0956a712817dad77c69c41/pkg/printers/internalversion/printers.go#L908
 			continue
+			// the below is for completed cronjob after all containers exit correctly
+		case nativeSidecarContainer[container.Name] && container.Started != nil && container.State.Terminated != nil:
+			continue
 		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
 			continue
 		case container.State.Terminated != nil:
