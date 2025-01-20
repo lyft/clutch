@@ -7,6 +7,7 @@ export {
 } from "./accordion";
 export { default as Header } from "./AppLayout/header";
 export { UserInformation, userId } from "./AppLayout/user";
+export { default as Logo } from "./AppLayout/logo";
 export * from "./Assets/emojis";
 export * from "./Assets/icons";
 export { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
