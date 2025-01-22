@@ -17,6 +17,7 @@ type v3client struct {
 	Repositories  v3repositories
 	Search        v3search
 	Users         v3users
+	Checks        v3checks
 }
 
 type v4client interface {
@@ -102,4 +103,11 @@ type v3search interface {
 type v3users interface {
 	// Get fetches a user. Passing the empty string will fetch the authenticated user.
 	Get(ctx context.Context, user string) (*githubv3.User, *githubv3.Response, error)
+}
+
+// Interface for struct defined in https://github.com/google/go-github/blob/master/github/checks.go
+// Method comments below reproduced directly from original definition linked above.
+type v3checks interface {
+	// Lists check runs for a specific ref.
+	ListCheckRunsForRef(ctx context.Context, owner, repo, ref string, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, *githubv3.Response, error)
 }
