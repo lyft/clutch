@@ -35,7 +35,7 @@
     "node": ">=18 <19",
     "yarn": "^4.5.0"
   },
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.6.0",
   "proxy": "http://localhost:8080",
   "stableVersion": "3.0.0-beta"
 }
