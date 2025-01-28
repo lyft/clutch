@@ -7,6 +7,7 @@ export {
 } from "./accordion";
 export { default as Header } from "./AppLayout/header";
 export { UserInformation, userId } from "./AppLayout/user";
+export { filterHiddenRoutes, searchIndexes } from "./AppLayout/utils";
 export { default as Logo } from "./AppLayout/logo";
 export * from "./Assets/emojis";
 export * from "./Assets/icons";
@@ -20,6 +21,7 @@ export {
   useWizardContext,
   WizardContext,
   useUserPreferences,
+  useAppContext,
 } from "./Contexts";
 export { Dialog, DialogActions, DialogContent } from "./dialog";
 export * from "./Feedback";
