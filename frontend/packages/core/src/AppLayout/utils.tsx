@@ -134,6 +134,7 @@ const searchIndexes = (workflows: Workflow[]): SearchIndex[] => {
           category,
           label,
           path: `${workflow.path}/${route.path}`,
+          icon: workflow?.icon,
         };
       }),
     ];
