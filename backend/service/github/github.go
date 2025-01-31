@@ -5,12 +5,15 @@ package github
 // <!-- END clutchdoc -->
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -42,17 +45,69 @@ const (
 	CurrentUser = ""
 )
 
+// RegEx only for Repositories.GetContents
+// must match something like `/repos/lyft/clutch-private/contents/manifest.yaml`
+var getRepositoryContentRegex = regexp.MustCompile(`^\/repos\/[\w-]+\/[\w-]+\/contents\/[\w-.\/]+$`)
+
 type FileMap map[string]io.ReadCloser
 
 type StatsRoundTripper struct {
-	Wrapped http.RoundTripper
-	scope   tally.Scope
+	Wrapped   http.RoundTripper
+	scope     tally.Scope
+	AcceptRaw bool
 }
 
 func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	if st.AcceptRaw && getRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+		// From https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#media-types
+		// and https://docs2.lfe.io/v3/media/
+		req.Header.Set("accept", "application/vnd.github.v3.raw+json")
+	}
+
 	resp, err := st.Wrapped.RoundTrip(req)
 
 	if resp != nil {
+		if st.AcceptRaw && getRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+			// Repositories.GetContents method cannot process a raw response, so we intercept it
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			defer resp.Body.Close()
+
+			var fileContentBytes []byte
+			var fileContent *githubv3.RepositoryContent
+
+			// Sometimes we get a githubv3.RepositoryContent body and we have to check
+			err = json.Unmarshal(body, &fileContent)
+			if err != nil {
+				if !strings.HasPrefix(err.Error(), "invalid character") {
+					return nil, err
+				}
+				// Recreate the body as a githubv3.RepositoryContent
+				fileContentBytes, err = json.Marshal(&githubv3.RepositoryContent{
+					Content:  githubv3.String(string(body)),
+					Encoding: githubv3.String(""), // The content is not encoded
+				})
+				// Double check the Unmarshal, because all fields are pointers
+			} else if fileContent.Content != nil && fileContent.Encoding != nil && fileContent.Path != nil && fileContent.GitURL != nil {
+				fileContentBytes = body
+			} else {
+				fileContentBytes, err = json.Marshal(&githubv3.RepositoryContent{
+					Content:  githubv3.String(string(body)),
+					Encoding: githubv3.String(""),
+				})
+			}
+
+			if err != nil {
+				return nil, err
+			}
+
+			// Recreate the response body
+			resp.Body = io.NopCloser(bytes.NewReader(fileContentBytes))
+			resp.ContentLength = int64(len(fileContentBytes))
+		}
+
 		if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
 			if v, err := strconv.Atoi(hdr); err == nil {
 				st.scope.Gauge("rate_limit_remaining").Update(float64(v))
@@ -129,6 +184,7 @@ type Client interface {
 	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
 	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
 	SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error)
+	GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -154,6 +210,7 @@ type svc struct {
 	rest    v3client
 
 	appTransport        *ghinstallation.Transport
+	httpTransport       *StatsRoundTripper
 	personalAccessToken string
 }
 
@@ -350,6 +407,7 @@ func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.Com
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
+	println("\n\n\n\n>>>>> CreateBranch service")
 	_, err := s.createWorktreeCommit(ctx, req.Ref, req.CommitMessage, req.Files, &req.BranchName, &req.SingleBranch)
 	if err != nil {
 		return err
@@ -398,7 +456,7 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 	default:
 		return nil, fmt.Errorf("did not recognize auth config type '%T'", auth)
 	}
-	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
+	transport := &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope, AcceptRaw: false}
 
 	restClient := githubv3.NewClient(httpClient)
 	ret.rest = v3client{
@@ -409,6 +467,9 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 		Search:        restClient.Search,
 		Users:         restClient.Users,
 	}
+
+	httpClient.Transport = transport
+	ret.httpTransport = transport
 
 	ret.graphQL = githubv4.NewClient(httpClient)
 
@@ -672,4 +733,28 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 	}
 
 	return results, nil
+}
+
+func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error) {
+	options := &githubv3.RepositoryContentGetOptions{Ref: ref.Ref}
+	file, _, _, err := s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, path, options)
+	if err != nil {
+		return nil, err
+	}
+
+	// From https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+	// Only the raw or object custom media types are supported.  Both will work as normal, except that
+	// when using the object media type, the content field will be an empty string and the encoding field
+	// will be "none". To get the contents of these larger files, use the raw media type.
+	if file.Content != nil && *file.Content == "" && file.GetEncoding() == "none" {
+		s.httpTransport.AcceptRaw = true
+		file, _, _, err = s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, path, options)
+		s.httpTransport.AcceptRaw = false
+		if err != nil {
+			return nil, err
+		}
+		return file, err
+	}
+
+	return file, nil
 }
