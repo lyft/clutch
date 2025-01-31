@@ -46,7 +46,7 @@ const (
 )
 
 // RegEx only for Repositories.GetContents
-// must match something like `/repos/lyft/clutch-private/contents/manifest.yaml`
+// must match something like `/repos/lyft/clutch/contents/README.md`
 var getRepositoryContentRegex = regexp.MustCompile(`^\/repos\/[\w-]+\/[\w-]+\/contents\/[\w-.\/]+$`)
 
 type FileMap map[string]io.ReadCloser
@@ -407,7 +407,6 @@ func commitOptionsFromClaims(ctx context.Context, commitTime time.Time) *git.Com
 
 // Creates a new branch with a commit containing files and pushes it to the remote.
 func (s *svc) CreateBranch(ctx context.Context, req *CreateBranchRequest) error {
-	println("\n\n\n\n>>>>> CreateBranch service")
 	_, err := s.createWorktreeCommit(ctx, req.Ref, req.CommitMessage, req.Files, &req.BranchName, &req.SingleBranch)
 	if err != nil {
 		return err
