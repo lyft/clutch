@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -80,27 +81,27 @@ func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 
 			// Sometimes we get a githubv3.RepositoryContent body and we have to check
 			err = json.Unmarshal(body, &fileContent)
-			if err != nil {
+			switch {
+			case fileContent != nil &&
+				fileContent.Content != nil &&
+				fileContent.Encoding != nil &&
+				fileContent.Path != nil &&
+				fileContent.GitURL != nil:
+				fileContentBytes = body
+			case err != nil:
 				if !strings.HasPrefix(err.Error(), "invalid character") {
 					return nil, err
 				}
+				fallthrough
+			default:
 				// Recreate the body as a githubv3.RepositoryContent
 				fileContentBytes, err = json.Marshal(&githubv3.RepositoryContent{
 					Content:  githubv3.String(string(body)),
 					Encoding: githubv3.String(""), // The content is not encoded
 				})
-				// Double check the Unmarshal, because all fields are pointers
-			} else if fileContent.Content != nil && fileContent.Encoding != nil && fileContent.Path != nil && fileContent.GitURL != nil {
-				fileContentBytes = body
-			} else {
-				fileContentBytes, err = json.Marshal(&githubv3.RepositoryContent{
-					Content:  githubv3.String(string(body)),
-					Encoding: githubv3.String(""),
-				})
-			}
-
-			if err != nil {
-				return nil, err
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			// Recreate the response body
@@ -734,9 +735,9 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 	return results, nil
 }
 
-func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error) {
+func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, filePath string) (*githubv3.RepositoryContent, error) {
 	options := &githubv3.RepositoryContentGetOptions{Ref: ref.Ref}
-	file, _, _, err := s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, path, options)
+	file, _, _, err := s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, filePath, options)
 	if err != nil {
 		return nil, err
 	}
@@ -747,11 +748,15 @@ func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, path string) 
 	// will be "none". To get the contents of these larger files, use the raw media type.
 	if file.Content != nil && *file.Content == "" && file.GetEncoding() == "none" {
 		s.httpTransport.AcceptRaw = true
-		file, _, _, err = s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, path, options)
+		file, _, _, err = s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, filePath, options)
 		s.httpTransport.AcceptRaw = false
 		if err != nil {
 			return nil, err
 		}
+
+		file.Path = &filePath
+		file.Name = githubv3.String(path.Base(filePath))
+
 		return file, err
 	}
 
