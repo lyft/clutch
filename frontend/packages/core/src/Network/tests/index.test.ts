@@ -39,7 +39,7 @@ describe("error interceptor", () => {
 
     beforeAll(() => {
       window = global.window;
-      global.window = Object.create(window);
+      global.window ??= Object.create(window);
       Object.defineProperty(window, "location", {
         value: {
           href: "/example?foo=bar",
@@ -53,7 +53,7 @@ describe("error interceptor", () => {
     });
 
     afterAll(() => {
-      global.window = window;
+      global.window ??= window;
     });
 
     it("redirects to provided url", () => {
@@ -94,7 +94,7 @@ describe("error interceptor", () => {
     let err: Promise<ClutchError>;
     beforeAll(() => {
       window = global.window;
-      global.window = Object.create(window);
+      global.window ??= Object.create(window);
       Object.defineProperty(window, "location", {
         value: {
           href: "/example?foo=bar",
@@ -122,7 +122,7 @@ describe("error interceptor", () => {
     });
 
     afterAll(() => {
-      global.window = window;
+      global.window ??= window;
     });
 
     it("returns a ClutchError", () => {
