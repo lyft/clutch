@@ -53,7 +53,7 @@ type StatsRoundTripper struct {
 
 func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	if st.AcceptRaw && GetRepositoryContentRegex.Match([]byte(req.URL.Path)) {
-		req.Header.Set("accept", AcceptRawMediaTypeGithub)
+		req.Header.Set("accept", AcceptGithubRawMediaType)
 	}
 
 	resp, err := st.Wrapped.RoundTrip(req)

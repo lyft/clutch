@@ -14,7 +14,7 @@ import (
 const (
 	// From https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#media-types
 	// and https://docs2.lfe.io/v3/media/
-	AcceptRawMediaTypeGithub = "application/vnd.github.v3.raw+json"
+	AcceptGithubRawMediaType = "application/vnd.github.v3.raw+json"
 	// From https://cs.opensource.google/go/go/+/master:src/encoding/json/scanner.go;l=593?q=scanner.go&ss=go%2Fgo
 	JSONSyntaxErrorPrefix = "invalid character"
 )
