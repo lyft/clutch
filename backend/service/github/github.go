@@ -5,16 +5,13 @@ package github
 // <!-- END clutchdoc -->
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"path"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -46,10 +43,6 @@ const (
 	CurrentUser = ""
 )
 
-// RegEx only for Repositories.GetContents
-// must match something like `/repos/lyft/clutch/contents/README.md`
-var getRepositoryContentRegex = regexp.MustCompile(`^\/repos\/[\w-]+\/[\w-]+\/contents\/[\w-.\/]+$`)
-
 type FileMap map[string]io.ReadCloser
 
 type StatsRoundTripper struct {
@@ -59,54 +52,17 @@ type StatsRoundTripper struct {
 }
 
 func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	if st.AcceptRaw && getRepositoryContentRegex.Match([]byte(req.URL.Path)) {
-		// From https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#media-types
-		// and https://docs2.lfe.io/v3/media/
-		req.Header.Set("accept", "application/vnd.github.v3.raw+json")
+	if st.AcceptRaw && GetRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+		req.Header.Set("accept", AcceptRawMediaTypeGithub)
 	}
 
 	resp, err := st.Wrapped.RoundTrip(req)
-
 	if resp != nil {
-		if st.AcceptRaw && getRepositoryContentRegex.Match([]byte(req.URL.Path)) {
-			// Repositories.GetContents method cannot process a raw response, so we intercept it
-			body, err := io.ReadAll(resp.Body)
+		if st.AcceptRaw && GetRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+			err = InterceptGetRepositoryContentResponse(resp)
 			if err != nil {
 				return nil, err
 			}
-			defer resp.Body.Close()
-
-			var fileContentBytes []byte
-			var fileContent *githubv3.RepositoryContent
-
-			// Sometimes we get a githubv3.RepositoryContent body and we have to check
-			err = json.Unmarshal(body, &fileContent)
-			switch {
-			case fileContent != nil &&
-				fileContent.Content != nil &&
-				fileContent.Encoding != nil &&
-				fileContent.Path != nil &&
-				fileContent.GitURL != nil:
-				fileContentBytes = body
-			case err != nil:
-				if !strings.HasPrefix(err.Error(), "invalid character") {
-					return nil, err
-				}
-				fallthrough
-			default:
-				// Recreate the body as a githubv3.RepositoryContent
-				fileContentBytes, err = json.Marshal(&githubv3.RepositoryContent{
-					Content:  githubv3.String(string(body)),
-					Encoding: githubv3.String(""), // The content is not encoded
-				})
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			// Recreate the response body
-			resp.Body = io.NopCloser(bytes.NewReader(fileContentBytes))
-			resp.ContentLength = int64(len(fileContentBytes))
 		}
 
 		if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
@@ -743,6 +699,7 @@ func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, filePath stri
 	}
 
 	// From https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+	// If the requested file's size is between 1-100 MB:
 	// Only the raw or object custom media types are supported.  Both will work as normal, except that
 	// when using the object media type, the content field will be an empty string and the encoding field
 	// will be "none". To get the contents of these larger files, use the raw media type.
