@@ -128,6 +128,15 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 	}, nil
 }
 
+func (s *svc) GetFileContents(ctx context.Context, ref *github.RemoteRef, path string) (*githubv3.RepositoryContent, error) {
+	return &githubv3.RepositoryContent{
+		Name:     githubv3.String("README.md"),
+		Path:     githubv3.String("README.md"),
+		Content:  githubv3.String("# Hello World"),
+		Encoding: githubv3.String(""),
+	}, nil
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
