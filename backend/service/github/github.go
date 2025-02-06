@@ -677,7 +677,7 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 }
 
 func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error) {
-	results, _, err := s.rest.Checks.ListCheckRunsForRef(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, nil)
+	results, _, err := s.rest.Checks.ListCheckRunsForRef(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, opts)
 
 	if err != nil {
 		return nil, err
