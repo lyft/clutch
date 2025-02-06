@@ -128,6 +128,20 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 	}, nil
 }
 
+func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *github.RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error) {
+	var checkRuns []*githubv3.CheckRun
+
+	checkRuns = append(checkRuns, &githubv3.CheckRun{
+		Status:     githubv3.String("completed"),
+		Conclusion: githubv3.String("success"),
+	})
+
+	return &githubv3.ListCheckRunsResults{
+		Total:     githubv3.Int(1),
+		CheckRuns: checkRuns,
+	}, nil
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
