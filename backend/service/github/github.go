@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -45,14 +46,25 @@ const (
 type FileMap map[string]io.ReadCloser
 
 type StatsRoundTripper struct {
-	Wrapped http.RoundTripper
-	scope   tally.Scope
+	Wrapped   http.RoundTripper
+	scope     tally.Scope
+	AcceptRaw bool
 }
 
 func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	resp, err := st.Wrapped.RoundTrip(req)
+	if st.AcceptRaw && GetRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+		req.Header.Set("accept", AcceptGithubRawMediaType)
+	}
 
+	resp, err := st.Wrapped.RoundTrip(req)
 	if resp != nil {
+		if st.AcceptRaw && GetRepositoryContentRegex.Match([]byte(req.URL.Path)) {
+			err = InterceptGetRepositoryContentResponse(resp)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		if hdr := resp.Header.Get("X-RateLimit-Remaining"); hdr != "" {
 			if v, err := strconv.Atoi(hdr); err == nil {
 				st.scope.Gauge("rate_limit_remaining").Update(float64(v))
@@ -129,6 +141,7 @@ type Client interface {
 	DeleteFile(ctx context.Context, ref *RemoteRef, path, sha, message string) (*githubv3.RepositoryContentResponse, error)
 	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
 	SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error)
+	GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error)
 	ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error)
 }
 
@@ -155,6 +168,7 @@ type svc struct {
 	rest    v3client
 
 	appTransport        *ghinstallation.Transport
+	httpTransport       *StatsRoundTripper
 	personalAccessToken string
 }
 
@@ -399,7 +413,7 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 	default:
 		return nil, fmt.Errorf("did not recognize auth config type '%T'", auth)
 	}
-	httpClient.Transport = &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope}
+	transport := &StatsRoundTripper{Wrapped: httpClient.Transport, scope: scope, AcceptRaw: false}
 
 	restClient := githubv3.NewClient(httpClient)
 	ret.rest = v3client{
@@ -411,6 +425,9 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 		Users:         restClient.Users,
 		Checks:        restClient.Checks,
 	}
+
+	httpClient.Transport = transport
+	ret.httpTransport = transport
 
 	ret.graphQL = githubv4.NewClient(httpClient)
 
@@ -676,12 +693,36 @@ func (s *svc) SearchCode(ctx context.Context, query string, opts *githubv3.Searc
 	return results, nil
 }
 
-func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error) {
-	results, _, err := s.rest.Checks.ListCheckRunsForRef(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, opts)
-
+func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, filePath string) (*githubv3.RepositoryContent, error) {
+	options := &githubv3.RepositoryContentGetOptions{Ref: ref.Ref}
+	file, _, _, err := s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, filePath, options)
 	if err != nil {
 		return nil, err
 	}
 
+	// From https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+	// If the requested file's size is between 1-100 MB:
+	// Only the raw or object custom media types are supported.  Both will work as normal, except that
+	// when using the object media type, the content field will be an empty string and the encoding field
+	// will be "none". To get the contents of these larger files, use the raw media type.
+	if file.Content != nil && *file.Content == "" && file.GetEncoding() == "none" {
+		s.httpTransport.AcceptRaw = true
+		file, _, _, err = s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, filePath, options)
+		s.httpTransport.AcceptRaw = false
+
+		file.Path = &filePath
+		file.Name = githubv3.String(path.Base(filePath))
+
+		return file, err
+	}
+
+	return file, nil
+}
+
+func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error) {
+	results, _, err := s.rest.Checks.ListCheckRunsForRef(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, opts)
+	if err != nil {
+		return nil, err
+	}
 	return results, nil
 }
