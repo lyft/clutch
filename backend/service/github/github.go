@@ -142,6 +142,7 @@ type Client interface {
 	CreateCommit(ctx context.Context, ref *RemoteRef, message string, files FileMap) (*Commit, error)
 	SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error)
 	GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error)
+	ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -422,6 +423,7 @@ func newService(config *githubv1.Config, scope tally.Scope, logger *zap.Logger) 
 		Repositories:  restClient.Repositories,
 		Search:        restClient.Search,
 		Users:         restClient.Users,
+		Checks:        restClient.Checks,
 	}
 
 	httpClient.Transport = transport
@@ -707,9 +709,6 @@ func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, filePath stri
 		s.httpTransport.AcceptRaw = true
 		file, _, _, err = s.rest.Repositories.GetContents(ctx, ref.RepoOwner, ref.RepoName, filePath, options)
 		s.httpTransport.AcceptRaw = false
-		if err != nil {
-			return nil, err
-		}
 
 		file.Path = &filePath
 		file.Name = githubv3.String(path.Base(filePath))
@@ -718,4 +717,12 @@ func (s *svc) GetFileContents(ctx context.Context, ref *RemoteRef, filePath stri
 	}
 
 	return file, nil
+}
+
+func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error) {
+	results, _, err := s.rest.Checks.ListCheckRunsForRef(ctx, ref.RepoOwner, ref.RepoName, ref.Ref, opts)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }
