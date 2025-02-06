@@ -13,10 +13,14 @@ const AppGrid = styled(MuiGrid)({
   flex: 1,
 });
 
-const ContentGrid = styled(MuiGrid)({
-  flex: 1,
-  maxHeight: `calc(100vh - ${APP_BAR_HEIGHT})`,
-});
+const ContentGrid = styled(MuiGrid)<{ $isFullScreen: boolean }>(
+  {
+    flex: 1,
+  },
+  props => ({
+    maxHeight: props.$isFullScreen ? "100vh" : `calc(100vh - ${APP_BAR_HEIGHT})`,
+  })
+);
 
 const MainContent = styled.div({ overflowY: "auto", width: "100%" });
 
@@ -37,7 +41,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         header &&
         React.cloneElement(header, { ...configuration, ...header.props })}
       {!configuration?.useFullScreenLayout && !header && <Header {...configuration} />}
-      <ContentGrid container wrap="nowrap">
+      <ContentGrid container wrap="nowrap" $isFullScreen={configuration?.useFullScreenLayout}>
         {isLoading ? (
           <Loadable isLoading={isLoading} variant="overlay" />
         ) : (
