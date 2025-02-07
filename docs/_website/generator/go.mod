@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/Masterminds/sprig/v3 v3.2.3
-	github.com/yoheimuta/go-protoparser/v4 v4.10.0
+	github.com/yoheimuta/go-protoparser/v4 v4.14.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
