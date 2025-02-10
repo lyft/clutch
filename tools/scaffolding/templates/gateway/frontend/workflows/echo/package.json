@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@clutch-sh/tools": "^4.0.0-beta",
-    "esbuild": "^0.18.0",
+    "esbuild": "^0.24.0",
     "eslint": "^8.3.0",
     "jest": "^27.0.0"
   },
