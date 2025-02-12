@@ -131,7 +131,7 @@ const Wizard = ({
     description: "",
     confirmationText: "",
     onConfirm: () => {},
-  });
+  } as ConfirmActionProps);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
   const locationState = useLocation().state as { origin?: string };

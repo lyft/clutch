@@ -34,7 +34,11 @@ const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
   return (
     <Dialog title={title} open={open} onClose={onCancel}>
       <DialogContent>
-        <Typography variant="body1">{description}</Typography>
+        {typeof description === "string" ? (
+          <Typography variant="body1">{description}</Typography>
+        ) : (
+          description
+        )}
         <TextField
           label="Confirmation"
           value={input}

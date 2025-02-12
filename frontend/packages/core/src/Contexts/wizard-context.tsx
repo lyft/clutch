@@ -7,7 +7,7 @@ export interface WizardNavigationProps {
 
 export interface ConfirmActionProps {
   title: string;
-  description: string;
+  description: React.ReactNode | string;
   actionLabel?: string;
   confirmationText: string;
   onConfirm: () => void;
