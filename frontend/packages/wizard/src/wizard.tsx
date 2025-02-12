@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { WizardNavigationProps } from "@clutch-sh/core";
+import type { ConfirmActionProps, WizardNavigationProps } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
@@ -194,13 +194,8 @@ const Wizard = ({
       onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
       },
-      showConfirmAction: (
-        title: string,
-        description: string,
-        confirmationText: string,
-        onConfirm: () => void
-      ) => {
-        setConfirmActionConfig({ title, description, confirmationText, onConfirm });
+      showConfirmAction: (props: ConfirmActionProps) => {
+        setConfirmActionConfig(props);
         setConfirmActionOpen(true);
       },
     };

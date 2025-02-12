@@ -84,6 +84,7 @@ export type {
   WorkflowRetrieveDataFn,
   WorkflowStoreDataFn,
   WizardNavigationProps,
+  ConfirmActionProps,
 } from "./Contexts";
 export type { ClutchError } from "./Network/errors";
 export type { TypographyProps } from "./typography";

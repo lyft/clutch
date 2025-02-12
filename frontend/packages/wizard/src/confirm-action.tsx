@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Button,
+  ConfirmActionProps,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,16 +9,12 @@ import {
   Typography,
 } from "@clutch-sh/core";
 
-interface ConfirmActionProps {
+interface ConfirmActionDialogProps extends ConfirmActionProps {
   open: boolean;
-  title: string;
-  description: string;
-  confirmationText: string;
-  onConfirm: () => void;
   onCancel: () => void;
 }
 
-const ConfirmAction: React.FC<ConfirmActionProps> = ({
+const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
   open,
   title,
   description,
