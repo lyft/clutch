@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { WizardNavigationProps } from "@clutch-sh/core";
 import {
   Button,
@@ -27,6 +27,7 @@ import type {
 } from "@mui/material";
 import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
+import ConfirmAction from "./confirm-action";
 import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
@@ -124,6 +125,13 @@ const Wizard = ({
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
+  const [confirmActionOpen, setConfirmActionOpen] = useState(false);
+  const [confirmActionConfig, setConfirmActionConfig] = useState({
+    title: "",
+    description: "",
+    confirmationText: "",
+    onConfirm: () => {},
+  });
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
   const locationState = useLocation().state as { origin?: string };
@@ -185,6 +193,15 @@ const Wizard = ({
       },
       onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
+      },
+      showConfirmAction: (
+        title: string,
+        description: string,
+        confirmationText: string,
+        onConfirm: () => void
+      ) => {
+        setConfirmActionConfig({ title, description, confirmationText, onConfirm });
+        setConfirmActionOpen(true);
       },
     };
   };
@@ -299,6 +316,17 @@ const Wizard = ({
           {error}
         </Toast>
       ))}
+      <ConfirmAction
+        open={confirmActionOpen}
+        title={confirmActionConfig.title}
+        description={confirmActionConfig.description}
+        confirmationText={confirmActionConfig.confirmationText}
+        onConfirm={() => {
+          setConfirmActionOpen(false);
+          confirmActionConfig.onConfirm();
+        }}
+        onCancel={() => setConfirmActionOpen(false)}
+      />
     </Container>
   );
 };
