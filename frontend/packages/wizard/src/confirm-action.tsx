@@ -19,6 +19,7 @@ const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
   title,
   description,
   confirmationText,
+  actionLabel,
   onConfirm,
   onCancel,
 }) => {
@@ -42,9 +43,9 @@ const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button text="Cancel" onClick={onCancel} variant="secondary" />
+        <Button text="Cancel" onClick={onCancel} variant="neutral" />
         <Button
-          text="Confirm"
+          text={actionLabel || "Confirm"}
           onClick={handleConfirm}
           variant="danger"
           disabled={input !== confirmationText}

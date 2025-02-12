@@ -8,6 +8,7 @@ export interface WizardNavigationProps {
 export interface ConfirmActionProps {
   title: string;
   description: string;
+  actionLabel?: string;
   confirmationText: string;
   onConfirm: () => void;
 }
