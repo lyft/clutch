@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@mui/material";
 
 import Loadable from "../loading";
+import styled from "../styled";
 import type { AppConfiguration } from "../Types";
 
 import Drawer from "./drawer";
@@ -22,7 +22,7 @@ const ContentGrid = styled(MuiGrid)<{ $isFullScreen: boolean }>(
   })
 );
 
-const MainContent = styled.div({ overflowY: "auto", width: "100%" });
+const MainContent = styled("div")({ overflowY: "auto", width: "100%" });
 
 interface AppLayoutProps {
   isLoading?: boolean;

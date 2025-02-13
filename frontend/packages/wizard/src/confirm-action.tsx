@@ -25,11 +25,7 @@ const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
 }) => {
   const [input, setInput] = React.useState("");
 
-  React.useEffect(() => {
-    if (open) {
-      setInput("");
-    }
-  }, [open]);
+  React.useEffect(() => setInput(""), []);
 
   const handleConfirm = () => {
     if (input === confirmationText) {
