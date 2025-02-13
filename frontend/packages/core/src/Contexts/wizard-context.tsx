@@ -22,7 +22,7 @@ export interface ContextProps {
   setIsLoading: (isLoading: boolean) => void;
   setHasError: (hasError: boolean) => void;
   setIsComplete?: (isComplete: boolean) => void;
-  showConfirmAction: (props: ConfirmActionProps) => void;
+  showConfirmAction?: (props: ConfirmActionProps) => void;
 }
 
 const WizardContext = React.createContext<() => ContextProps>(undefined);
