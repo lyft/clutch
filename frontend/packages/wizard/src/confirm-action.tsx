@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   ConfirmActionProps,
@@ -23,7 +23,13 @@ const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
   onConfirm,
   onCancel,
 }) => {
-  const [input, setInput] = useState("");
+  const [input, setInput] = React.useState("");
+
+  React.useEffect(() => {
+    if (open) {
+      setInput("");
+    }
+  }, [open]);
 
   const handleConfirm = () => {
     if (input === confirmationText) {
