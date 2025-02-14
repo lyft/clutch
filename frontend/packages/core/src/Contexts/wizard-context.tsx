@@ -5,14 +5,6 @@ export interface WizardNavigationProps {
   keepSearch?: boolean;
 }
 
-export interface ConfirmActionProps {
-  title: string;
-  description: React.ReactNode | string;
-  actionLabel?: string;
-  confirmationText: string;
-  onConfirm: () => void;
-}
-
 export interface ContextProps {
   displayWarnings: (warnings: string[]) => void;
   onBack: (params?: WizardNavigationProps) => void;
@@ -22,7 +14,8 @@ export interface ContextProps {
   setIsLoading: (isLoading: boolean) => void;
   setHasError: (hasError: boolean) => void;
   setIsComplete?: (isComplete: boolean) => void;
-  showConfirmAction?: (props: ConfirmActionProps) => void;
+  confirmActionOpen?: boolean;
+  setConfirmActionOpen?: (open: boolean) => void;
 }
 
 const WizardContext = React.createContext<() => ContextProps>(undefined);

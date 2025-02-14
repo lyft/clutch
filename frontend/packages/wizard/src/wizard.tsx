@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import type { ConfirmActionProps, WizardNavigationProps } from "@clutch-sh/core";
+import React from "react";
+import type { WizardNavigationProps } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
@@ -27,7 +27,7 @@ import type {
 } from "@mui/material";
 import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
-import ConfirmAction from "./confirm-action";
+import ConfirmAction, { ConfirmActionProps } from "./confirm-action";
 import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
@@ -49,6 +49,7 @@ export interface WizardChild {
     startOver: boolean;
     startOverText?: string;
   };
+  confirmActionSettings?: ConfirmActionProps;
 }
 
 interface WizardChildren extends JSX.Element {
@@ -125,13 +126,7 @@ const Wizard = ({
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
-  const [confirmActionOpen, setConfirmActionOpen] = useState(false);
-  const [confirmActionConfig, setConfirmActionConfig] = useState({
-    title: "",
-    description: "",
-    confirmationText: "",
-    onConfirm: () => {},
-  } as ConfirmActionProps);
+  const [confirmActionOpen, setConfirmActionOpen] = React.useState(false);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
   const locationState = useLocation().state as { origin?: string };
@@ -171,8 +166,13 @@ const Wizard = ({
   };
 
   const context = (child: JSX.Element) => {
+    const confirmActionSettings = child.props?.confirmActionSettings;
+
     return {
-      onSubmit: wizardStepData?.[child.type.name]?.onSubmit || handleNext,
+      onSubmit:
+        confirmActionSettings && !confirmActionOpen
+          ? () => setConfirmActionOpen(true)
+          : wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
       },
@@ -194,9 +194,9 @@ const Wizard = ({
       onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
       },
-      showConfirmAction: (props: ConfirmActionProps) => {
-        setConfirmActionConfig(props);
-        setConfirmActionOpen(true);
+      confirmActionOpen,
+      setConfirmActionOpen: (open: boolean) => {
+        setConfirmActionOpen(open);
       },
     };
   };
@@ -227,6 +227,14 @@ const Wizard = ({
           <WizardContext.Provider value={() => context(child)}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {child}
+              {child.props?.confirmActionSettings && (
+                <ConfirmAction
+                  title={child.props?.confirmActionSettings.title}
+                  description={child.props?.confirmActionSettings.description}
+                  onConfirm={child.props?.confirmActionSettings.onConfirm}
+                  onCancel={child.props?.confirmActionSettings.onCancel}
+                />
+              )}
             </Grid>
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
@@ -311,17 +319,6 @@ const Wizard = ({
           {error}
         </Toast>
       ))}
-      <ConfirmAction
-        open={confirmActionOpen}
-        title={confirmActionConfig.title}
-        description={confirmActionConfig.description}
-        confirmationText={confirmActionConfig.confirmationText}
-        onConfirm={() => {
-          setConfirmActionOpen(false);
-          confirmActionConfig.onConfirm();
-        }}
-        onCancel={() => setConfirmActionOpen(false)}
-      />
     </Container>
   );
 };

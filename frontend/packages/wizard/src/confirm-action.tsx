@@ -1,60 +1,63 @@
 import React from "react";
 import {
   Button,
-  ConfirmActionProps,
   Dialog,
   DialogActions,
   DialogContent,
-  TextField,
   Typography,
+  useWizardContext,
 } from "@clutch-sh/core";
 
-interface ConfirmActionDialogProps extends ConfirmActionProps {
-  open: boolean;
-  onCancel: () => void;
+export interface ConfirmActionProps {
+  title: string;
+  description: React.ReactNode | string;
+  actionLabel?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  submitDisabled?: boolean;
 }
 
-const ConfirmAction: React.FC<ConfirmActionDialogProps> = ({
-  open,
+const ConfirmAction: React.FC<ConfirmActionProps> = ({
   title,
   description,
-  confirmationText,
   actionLabel,
   onConfirm,
   onCancel,
+  submitDisabled = false,
 }) => {
-  const [input, setInput] = React.useState("");
-
-  React.useEffect(() => setInput(""), [open]);
+  const { confirmActionOpen: open, setConfirmActionOpen: setOpen, onSubmit } = useWizardContext();
 
   const handleConfirm = () => {
-    if (input === confirmationText) {
+    onSubmit();
+    setOpen(false);
+    if (onConfirm) {
       onConfirm();
     }
   };
 
+  const handleCancel = () => {
+    setOpen(false);
+    if (onCancel) {
+      onCancel();
+    }
+  };
+
   return (
-    <Dialog title={title} open={open} onClose={onCancel}>
+    <Dialog title={title} open={open} onClose={handleCancel}>
       <DialogContent>
         {typeof description === "string" ? (
           <Typography variant="body1">{description}</Typography>
         ) : (
           description
         )}
-        <TextField
-          label="Confirmation"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          fullWidth
-        />
       </DialogContent>
       <DialogActions>
-        <Button text="Cancel" onClick={onCancel} variant="neutral" />
+        <Button text="Cancel" onClick={handleCancel} variant="neutral" />
         <Button
           text={actionLabel || "Confirm"}
           onClick={handleConfirm}
           variant="danger"
-          disabled={input !== confirmationText}
+          disabled={submitDisabled}
         />
       </DialogActions>
     </Dialog>

@@ -173,7 +173,14 @@ const RemoteTriage: React.FC<WorkflowProps> = ({ heading }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <TriageIdentifier name="Lookup" host={hostParam} />
+      <TriageIdentifier
+        name="Lookup"
+        host={hostParam}
+        confirmActionSettings={{
+          title: "Confirm Action",
+          description: "Are you sure you want to perform this action?",
+        }}
+      />
       <TriageDetails name="Details" />
     </Wizard>
   );
