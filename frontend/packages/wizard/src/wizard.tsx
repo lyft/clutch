@@ -126,7 +126,7 @@ const Wizard = ({
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
-  const [confirmActionOpen, setConfirmActionOpen] = React.useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
   const locationState = useLocation().state as { origin?: string };
@@ -170,8 +170,8 @@ const Wizard = ({
 
     return {
       onSubmit:
-        confirmActionSettings && !confirmActionOpen
-          ? () => setConfirmActionOpen(true)
+        confirmActionSettings && !confirmDialogOpen
+          ? () => setConfirmDialogOpen(true)
           : wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
@@ -194,9 +194,9 @@ const Wizard = ({
       onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
       },
-      confirmActionOpen,
+      confirmActionOpen: confirmDialogOpen,
       setConfirmActionOpen: (open: boolean) => {
-        setConfirmActionOpen(open);
+        setConfirmDialogOpen(open);
       },
     };
   };
@@ -228,12 +228,7 @@ const Wizard = ({
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {child}
               {child.props?.confirmActionSettings && (
-                <ConfirmAction
-                  title={child.props?.confirmActionSettings.title}
-                  description={child.props?.confirmActionSettings.description}
-                  onConfirm={child.props?.confirmActionSettings.onConfirm}
-                  onCancel={child.props?.confirmActionSettings.onCancel}
-                />
+                <ConfirmAction {...(child.props.confirmActionSettings as ConfirmActionProps)} />
               )}
             </Grid>
           </WizardContext.Provider>
