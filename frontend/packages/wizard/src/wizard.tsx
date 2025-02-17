@@ -27,6 +27,7 @@ import type {
 } from "@mui/material";
 import { alpha, Container as MuiContainer, Theme } from "@mui/material";
 
+import ConfirmAction, { ConfirmActionProps } from "./confirm-action";
 import { useWizardState, WizardActionType } from "./state";
 import type { WizardStepProps } from "./step";
 
@@ -48,6 +49,7 @@ export interface WizardChild {
     startOver: boolean;
     startOverText?: string;
   };
+  confirmActionSettings?: ConfirmActionProps;
 }
 
 interface WizardChildren extends JSX.Element {
@@ -124,6 +126,7 @@ const Wizard = ({
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
   const [, setSearchParams] = useSearchParams();
   const locationState = useLocation().state as { origin?: string };
@@ -163,8 +166,13 @@ const Wizard = ({
   };
 
   const context = (child: JSX.Element) => {
+    const confirmActionSettings = child.props?.confirmActionSettings;
+
     return {
-      onSubmit: wizardStepData?.[child.type.name]?.onSubmit || handleNext,
+      onSubmit:
+        confirmActionSettings && !confirmDialogOpen
+          ? () => setConfirmDialogOpen(true)
+          : wizardStepData?.[child.type.name]?.onSubmit || handleNext,
       setOnSubmit: (f: (...args: any[]) => void) => {
         updateStepData(child.type.name, { onSubmit: f(handleNext) });
       },
@@ -185,6 +193,10 @@ const Wizard = ({
       },
       onNext: (params: WizardNavigationProps) => {
         handleNavigation(params, WizardActionType.NEXT);
+      },
+      confirmActionOpen: confirmDialogOpen,
+      setConfirmActionOpen: (open: boolean) => {
+        setConfirmDialogOpen(open);
       },
     };
   };
@@ -215,6 +227,9 @@ const Wizard = ({
           <WizardContext.Provider value={() => context(child)}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {child}
+              {child.props?.confirmActionSettings && (
+                <ConfirmAction {...(child.props.confirmActionSettings as ConfirmActionProps)} />
+              )}
             </Grid>
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
