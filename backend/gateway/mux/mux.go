@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
@@ -60,6 +61,19 @@ func copyHTTPResponse(resp *http.Response, w http.ResponseWriter) {
 }
 
 func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if strings.HasSuffix(r.URL.Path, ".ico") ||
+		strings.HasSuffix(r.URL.Path, ".svg") ||
+		strings.HasSuffix(r.URL.Path, ".webp") {
+		if !strings.Contains(r.URL.Path[1:], "/") {
+			if f, err := a.fileSystem.Open(r.URL.Path); err == nil {
+				defer f.Close()
+				w.Header().Set("Cache-Control", "public, max-age=86400")
+				http.ServeContent(w, r, r.URL.Path, time.Time{}, f)
+				return
+			}
+		}
+	}
+
 	if apiPattern.MatchString(r.URL.Path) || r.URL.Path == "/healthcheck" {
 		// Serve from the embedded API handler.
 		a.next.ServeHTTP(w, r)
