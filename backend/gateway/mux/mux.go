@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
@@ -23,8 +24,6 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -62,8 +61,8 @@ func copyHTTPResponse(resp *http.Response, w http.ResponseWriter) {
 }
 
 func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if strings.HasSuffix(r.URL.Path, ".ico") || 
-		strings.HasSuffix(r.URL.Path, ".svg") || 
+	if strings.HasSuffix(r.URL.Path, ".ico") ||
+		strings.HasSuffix(r.URL.Path, ".svg") ||
 		strings.HasSuffix(r.URL.Path, ".webp") {
 		if !strings.Contains(r.URL.Path[1:], "/") {
 			if f, err := a.fileSystem.Open(r.URL.Path); err == nil {
