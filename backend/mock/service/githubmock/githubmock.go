@@ -154,3 +154,108 @@ func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *github.RemoteRef, op
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
+
+func (s *SearchService) SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error) {
+	var issuesResults []*githubv3.Issues
+
+	issuesResults = append(issuesResults, &githubv3.Issues{
+		URL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit/issues/132"),
+		RepositoryURL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit"),
+		LabelsURL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit/issues/132/labels{/name}"),
+		CommentsURL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit/issues/132/comments"),
+		EventsURL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit/issues/132/events"),
+		HTMLURL: githubv3.String("https://github.com/batterseapower/pinyin-toolkit/issues/132"),
+		ID: githubv3.Int(35802),
+		NodeID: githubv3.String("MDU6SXNzdWUzNTgwMg=="),
+		Number: githubv3.Int(132),
+		Title: githubv3.String("Line Number Indexes Beyond 20 Not Displayed"),
+		User: githubv3.User({
+			Login: githubv3.String("Nick3C"),
+			ID: githubv3.Int(90254),
+			NodeID: githubv3.String("MDQ6VXNlcjkwMjU0"),
+			AvatarURL: githubv3.String("https://secure.gravatar.com/avatar/934442aadfe3b2f4630510de416c5718?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"),
+			GravatarID: githubv3.String(""),
+			URL: githubv3.String("https://api.github.com/users/Nick3C"),
+			HTMLURL: githubv3.String("https://github.com/Nick3C"),
+			FollowersURL: githubv3.String("https://api.github.com/users/Nick3C/followers"),
+			FollowingURL: githubv3.String("https://api.github.com/users/Nick3C/following{/other_user}"),
+			GistsURL: githubv3.String("https://api.github.com/users/Nick3C/gists{/gist_id}"),
+			StarredURL: githubv3.String("https://api.github.com/users/Nick3C/starred{/owner}{/repo}"),
+			SubscriptionsURL: githubv3.String("https://api.github.com/users/Nick3C/subscriptions"),
+			OrganizationsURL: githubv3.String("https://api.github.com/users/Nick3C/orgs"),
+			ReposURL: githubv3.String("https://api.github.com/users/Nick3C/repos"),
+			EventsURL: githubv3.String("https://api.github.com/users/Nick3C/events{/privacy}"),
+			ReceivedEventsURL: githubv3.String("https://api.github.com/users/Nick3C/received_events"),
+			Type: githubv3.String("User"),
+			SiteAdmin: githubv3.Bool(true)
+		}),
+		Labels: []*githubv3.Label([
+			{
+				ID: githubv3.Int(4),
+				NodeID: githubv3.String("MDU6TGFiZWw0"),
+				URL: githubv3.String("https://api.github.com/repos/batterseapower/pinyin-toolkit/labels/bug"),
+				Name: githubv3.String("bug"),
+				Color: githubv3.String("ff0000")
+			}
+		],
+		State: githubv3.String("open"),
+		Assignee: nil,
+		Milestone: githubv3.Milestone({
+			URL: githubv3.String("https://api.github.com/repos/octocat/Hello-World/milestones/1"),
+			HTMLURL: githubv3.String("https://github.com/octocat/Hello-World/milestones/v1.0"),
+			LabelsURL: githubv3.String("https://api.github.com/repos/octocat/Hello-World/milestones/1/labels"),
+			ID: githubv3.Int(1002604),
+			NodeID: githubv3.String("MDk6TWlsZXN0b25lMTAwMjYwNA=="),
+			Number: githubv3.Int(1),
+			State: githubv3.String("open"),
+			Title: githubv3.String("v1.0"),
+			Description: githubv3.String("Tracking milestone for version 1.0"),
+			Creator: githubv3.User({
+				Login: githubv3.String("octocat"),
+				ID: githubv3.Int(1),
+				NodeID: githubv3.String("MDQ6VXNlcjE="),
+				AvatarURL: githubv3.String("https://github.com/images/error/octocat_happy.gif"),
+				GravatarID: githubv3.String(""),
+				URL: githubv3.String("https://api.github.com/users/octocat"),
+				HTMLURL: githubv3.String("https://github.com/octocat"),
+				FollowersURL: githubv3.String("https://api.github.com/users/octocat/followers"),
+				FollowingURL: githubv3.String("https://api.github.com/users/octocat/following{/other_user}"),
+				GistsURL: githubv3.String("https://api.github.com/users/octocat/gists{/gist_id}"),
+				StarredURL: githubv3.String("https://api.github.com/users/octocat/starred{/owner}{/repo}"),
+				SubscriptionsURL: githubv3.String("https://api.github.com/users/octocat/subscriptions"),
+				OrganizationsURL: githubv3.String("https://api.github.com/users/octocat/orgs"),
+				ReposURL: githubv3.String("https://api.github.com/users/octocat/repos"),
+				EventsURL: githubv3.String("https://api.github.com/users/octocat/events{/privacy}"),
+				ReceivedEventsURL: githubv3.String("https://api.github.com/users/octocat/received_events"),
+				Type: githubv3.String("User"),
+				SiteAdmin: githubv3.Bool(false)
+			}),
+			OpenIssues: githubv3.Int(4),
+			ClosedIssues: githubv3.Int(8)
+			CreatedAt: githubv3.Timestamp("2011-04-10T20:09:31Z"),
+			UpdatedAt: githubv3.Timestamp("2014-03-03T18:58:10Z"),
+			ClosedAt:githubv3.Timestamp( "2013-02-12T13:22:01Z"),
+			DueOn: githubv3.Timestamp("2012-10-09T23:39:01Z")
+		}),
+		Comments: githubv3.Int(15),
+		CreatedAt: githubv3.Timestamp("2009-07-12T20:10:41Z"),
+		UpdatedAt: githubv3.Timestamp("2009-07-19T09:23:43Z"),
+		ClosedAt: nil,
+		PullRequestLinks: githubv3.PullRequestLinks({
+			URL: githubv3.String("https://api/github.com/repos/octocat/Hello-World/pull/1347"),
+			HTMLURL: githubv3.String("https://github.com/octocat/Hello-World/pull/1347"),
+			DiffURL: githubv3.String("https://github.com/octocat/Hello-World/pull/1347.diff"),
+			PatchURL: githubv3.String("https://api.github.com/repos/octocat/Hello-World/pulls/1347")
+		}),
+		Body: githubv3.String("..."),
+		Locked: githubv3.Bool(true),
+		AuthorAssociation: githubv3.String("COLLABORATOR"),
+		StateReason: githubv3.String("completed")
+	})
+	
+	return &githubv3.IssuesSearchResult{
+		Total: githubv3.Int(280),
+		IncompleteResults: githubv3.Bool(false),
+		Issues: issuesResults,
+	}, nil
+}
