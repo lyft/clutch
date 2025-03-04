@@ -728,12 +728,12 @@ func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *git
 	return results, nil
 }
 
-func (s *SearchService) SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error) {
-	result := new(githubv3.IssuesSearchResult)
-	resp, err := s.search(ctx, "issues", &searchParameters{Query: query}, opts, result)
+func (s *svc) SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error) {
+	results, _, err := s.rest.Search.Issues(ctx, query, opts)
+
 	if err != nil {
-		return nil, resp, err
+		return nil, err
 	}
 
-	return result, resp, nil
+	return results, nil
 }
