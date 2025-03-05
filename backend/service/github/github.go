@@ -143,6 +143,7 @@ type Client interface {
 	SearchCode(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, error)
 	GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error)
 	ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error)
+	SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -724,5 +725,15 @@ func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *git
 	if err != nil {
 		return nil, err
 	}
+	return results, nil
+}
+
+func (s *svc) SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error) {
+	results, _, err := s.rest.Search.Issues(ctx, query, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return results, nil
 }

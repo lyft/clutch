@@ -96,6 +96,8 @@ type v3repositories interface {
 type v3search interface {
 	// Code searches code via various criteria.
 	Code(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.CodeSearchResult, *githubv3.Response, error)
+	// Issues searches issues via various criteria.
+	Issues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/users.go.
