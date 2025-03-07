@@ -23,7 +23,7 @@ Clutch is primarily geared towards the development of **Workflows**. Workflows u
 
 ## API Definitions
 
-Development of most features in Clutch starts with an API definition. All Clutch APIs are written in Google's `proto3` format. See the [Protocol Buffer's Language Guide](https://developers.google.com/protocol-buffers/docs/proto).
+Development of most features in Clutch starts with an API definition. All Clutch APIs are written in Google's `proto3` format. See the [Protocol Buffer's Language Guide](https://protobuf.dev/programming-guides/proto3/).
 
 Protobuf has a rich tooling ecosystem. Clutch uses protobuf tooling for:
 - JSON <-> gRPC transcoding from a single API definition

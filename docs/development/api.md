@@ -3,7 +3,7 @@ title: API Definitions
 {{ .EditURL }}
 ---
 
-Clutch uses `proto3` to define API endpoints and objects in addition to backend configuration schemas. Protobuf is an interface definition language (IDL) from Google. See the [Protocol Buffer's Language Guide](https://developers.google.com/protocol-buffers/docs/proto) for more information.
+Clutch uses `proto3` to define API endpoints and objects in addition to backend configuration schemas. Protobuf is an interface definition language (IDL) from Google. See the [Protocol Buffer's Language Guide](https://protobuf.dev/programming-guides/proto3/) for more information.
 
 Protobuf was chosen because it has a rich tooling ecosystem, and can generate clients or server implementation stubs for nearly any target language. Clutch uses protobuf tooling for:
 - JSON <-> gRPC transcoding from a single API definition
