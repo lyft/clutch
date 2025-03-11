@@ -79,6 +79,7 @@ Then `realpath` might not be in your `$PATH` (you can check via `which realpath`
 
 :::info
 If you receive an error message related to the yarn version outdated run `make yarn-ensure` to download the latest version from your computer into the build environment.
+:::
 
 #### 3. Run
 Launch Clutch with back-end configuration [clutch-config.yaml](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml).

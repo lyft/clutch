@@ -511,10 +511,10 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
   },
   "dependencies": {
     // highlight-start
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/core": "workspace:^",
+    "@clutch-sh/data-layout": "workspace:^",
     // highlight-end
-    "@clutch-sh/wizard": "^3.0.0-beta",
+    "@clutch-sh/wizard": "workspace:^",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -528,6 +528,10 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
 }
 
 ```
+
+:::info
+
+:::
 
 This will present a text field which updates a data layout called `userInput` on changes and a button for users to click when they are ready to search.
 
