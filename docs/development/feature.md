@@ -530,12 +530,38 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
 ```
 
 :::info
-
+To properly install the dependencies and avoid the following error message:
+```
+➤ YN0000: │ 
+➤ YN0000: │ @@ -1809,8 +1809,9 @@
+➤ YN0000: │    version: 0.0.0-use.local
+➤ YN0000: │    resolution: "@clutch-sh/amiibo@workspace:workflows/amiibo"
+➤ YN0000: │    dependencies:
+➤ YN0000: │      "@clutch-sh/core": "workspace:^"
+➤ YN0028: │ +    "@clutch-sh/data-layout": "workspace:^"
+➤ YN0000: │      "@clutch-sh/tools": "workspace:^"
+➤ YN0000: │      "@clutch-sh/wizard": "workspace:^"
+➤ YN0000: │    peerDependencies:
+➤ YN0000: │      react: ^17.0.2
+➤ YN0000: │ 
+➤ YN0028: │ The lockfile would have been modified by this install, which is explicitly forbidden.
+➤ YN0000: └ Completed
+➤ YN0000: · Failed with errors in 0s 182ms
+```
+You'll need to run the following commands 
+```
+cd frontend
+yarn workspace @clutch-sh/amiibo install
+```
 :::
 
 This will present a text field which updates a data layout called `userInput` on changes and a button for users to click when they are ready to search.
 
 <img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/lookup-panel.png ')} width="75%" variant="centered"/>
+
+:::info
+This will only be visible once you finish the entire guide
+:::
 
 Now let's build a way to display the details panel.
 
