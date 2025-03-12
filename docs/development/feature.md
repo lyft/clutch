@@ -560,7 +560,7 @@ This will present a text field which updates a data layout called `userInput` on
 <img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/lookup-panel.png ')} width="75%" variant="centered"/>
 
 :::info
-This will only be visible once you finish the entire guide
+This will only be visible once you register the workflow in the `clutch.config.js` file, this is done in the Configuration section of this guide.
 :::
 
 Now let's build a way to display the details panel.
@@ -830,6 +830,10 @@ module.exports = {
 ```
 
 If everything is in order you should see an Amiibo card on the homepage that you can use to access your workflow!
+
+:::info
+If you're working with Clutch core the directory to register the workflow is: `clutch/frontend/packages/app/src`. Before registering it make sure to take out the `"private": true,` key-value from the `package.json` file of your amiibo workflow
+:::
 
 <img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/landing-page.png ')} width="50%" variant="centered" />
 
