@@ -59,6 +59,33 @@ Build the Docker image locally. The frontend will build followed by the backend.
 docker build -t clutch:latest .
 ```
 
+:::info
+If you encounter this error:
+```
+ => ERROR [gobuild 7/7] RUN make backend-with-assets                                                                            0.3s
+------
+ > [gobuild 7/7] RUN make backend-with-assets:
+0.196 /go/src/github.com/lyft/clutch
+0.196 Running pre-flight checks...
+0.212 Pre-flight checks satisfied!
+0.213 cd backend && go run cmd/assets/generate.go ../frontend/packages/app/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=0.0.0"
+0.218 go: errors parsing go.mod:
+0.218 /go/src/github.com/lyft/clutch/backend/go.mod:3: invalid go version '1.23.0': must match format 1.23
+0.219 make: *** [Makefile:47: backend-with-assets] Error 1
+------
+Dockerfile:19
+--------------------
+  17 |     COPY --from=nodebuild ./frontend/packages/app/build ./frontend/packages/app/build/
+  18 |     
+  19 | >>> RUN make backend-with-assets
+  20 |     
+  21 |     # Copy binary to final image.
+--------------------
+ERROR: failed to solve: process "/bin/sh -c make backend-with-assets" did not complete successfully: exit code: 2
+```
+As mentioned in this [Github Issue](https://github.com/lyft/clutch/issues/3173), if clutch won't build after running that command you'll need to modify the golang version to `1.23.0-bookworm` and the grc.io image version to `distroless/base-debian12`
+:::
+
 
 ## Running the Image
 
