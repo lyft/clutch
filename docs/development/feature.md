@@ -511,10 +511,10 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
   },
   "dependencies": {
     // highlight-start
-    "@clutch-sh/core": "^3.0.0-beta",
-    "@clutch-sh/data-layout": "^3.0.0-beta",
+    "@clutch-sh/core": "workspace:^",
+    "@clutch-sh/data-layout": "workspace:^",
     // highlight-end
-    "@clutch-sh/wizard": "^3.0.0-beta",
+    "@clutch-sh/wizard": "workspace:^",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -529,9 +529,39 @@ There are two new imports (`@clutch-sh/core` and `@clutch-sh/data-layout`) added
 
 ```
 
+:::info
+To properly install the dependencies and avoid the following error message:
+```
+➤ YN0000: │ 
+➤ YN0000: │ @@ -1809,8 +1809,9 @@
+➤ YN0000: │    version: 0.0.0-use.local
+➤ YN0000: │    resolution: "@clutch-sh/amiibo@workspace:workflows/amiibo"
+➤ YN0000: │    dependencies:
+➤ YN0000: │      "@clutch-sh/core": "workspace:^"
+➤ YN0028: │ +    "@clutch-sh/data-layout": "workspace:^"
+➤ YN0000: │      "@clutch-sh/tools": "workspace:^"
+➤ YN0000: │      "@clutch-sh/wizard": "workspace:^"
+➤ YN0000: │    peerDependencies:
+➤ YN0000: │      react: ^17.0.2
+➤ YN0000: │ 
+➤ YN0028: │ The lockfile would have been modified by this install, which is explicitly forbidden.
+➤ YN0000: └ Completed
+➤ YN0000: · Failed with errors in 0s 182ms
+```
+You'll need to run the following commands 
+```
+cd frontend
+yarn workspace @clutch-sh/amiibo install
+```
+:::
+
 This will present a text field which updates a data layout called `userInput` on changes and a button for users to click when they are ready to search.
 
 <img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/lookup-panel.png ')} width="75%" variant="centered"/>
+
+:::info
+This will only be visible once you register the workflow in the `clutch.config.js` file, this is done in the Configuration section of this guide.
+:::
 
 Now let's build a way to display the details panel.
 
@@ -800,6 +830,10 @@ module.exports = {
 ```
 
 If everything is in order you should see an Amiibo card on the homepage that you can use to access your workflow!
+
+:::info
+If you're working with Clutch core the directory to register the workflow is: `clutch/frontend/packages/app/src`. Before registering it make sure to take out the `"private": true,` key-value from the `package.json` file of your amiibo workflow
+:::
 
 <img alt="Amiibo Lookup Panel" src={useBaseUrl('img/docs/feature-development/landing-page.png ')} width="50%" variant="centered" />
 
