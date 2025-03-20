@@ -55,6 +55,8 @@ type v3organizations interface {
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/pulls.go.
+// ,&&
+// https://github.com/google/go-github/blob/master/github/pulls_reviews.go
 // Method comments below reproduced directly from original definition linked above.
 type v3pullrequests interface {
 	// Create a new pull request on the specified repository.
@@ -63,6 +65,8 @@ type v3pullrequests interface {
 	Get(ctx context.Context, owner string, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error)
 	// ListPullRequestsWithCommit returns pull requests associated with a commit SHA.
 	ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error)
+	// ListReviews lists all reviews on the specified pull request.
+	ListReviews(ctx context.Context, owner, repo string, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, *githubv3.Response, error)
 }
 
 // Interface for structs defined in
@@ -71,6 +75,8 @@ type v3pullrequests interface {
 // https://github.com/google/go-github/blob/master/github/repos_commits.go
 // &&
 // https://github.com/google/go-github/blob/master/github/repos_contents.go
+// &&
+// https://github.com/google/go-github/blob/master/github/repos_statuses.go
 // Method comments below reproduced directly from original definition(s) linked above.
 type v3repositories interface {
 	// Create a new repository. If an org is specified, the new repository will be created under that org. If the empty string is specified, it will be created for the authenticated user.
@@ -89,6 +95,9 @@ type v3repositories interface {
 	// DeleteFile deletes a file from a repository and returns the commit.
 	// Requires the blob SHA of the file to be deleted.
 	DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error)
+	// GetCombinedStatus returns the combined status of a repository at the specified
+	// reference. ref can be a SHA, a branch name, or a tag name.
+	GetCombinedStatus(ctx context.Context, owner, repo, ref string, opts *githubv3.ListOptions) (*githubv3.CombinedStatus, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/search.go.

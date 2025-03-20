@@ -251,3 +251,58 @@ func (s *svc) SearchIssues(ctx context.Context, query string, opts *githubv3.Sea
 		Issues:            issuesResults,
 	}, nil
 }
+
+func (s *svc) ListReviews(ctx context.Context, ref *github.RemoteRef, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, error) {
+	var pullRequestReviewsResults []*githubv3.PullRequestReview
+
+	pullRequestReviewsResults = append(pullRequestReviewsResults, &githubv3.PullRequestReview{
+		ID: githubv3.Int64(80),
+		User: &githubv3.User{
+			Login:             githubv3.String("Nick3C"),
+			ID:                githubv3.Int64(90254),
+			NodeID:            githubv3.String("MDQ6VXNlcjkwMjU0"),
+			AvatarURL:         githubv3.String("https://secure.gravatar.com/avatar/934442aadfe3b2f4630510de416c5718?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"),
+			GravatarID:        githubv3.String(""),
+			URL:               githubv3.String("https://api.github.com/users/Nick3C"),
+			HTMLURL:           githubv3.String("https://github.com/Nick3C"),
+			FollowersURL:      githubv3.String("https://api.github.com/users/Nick3C/followers"),
+			FollowingURL:      githubv3.String("https://api.github.com/users/Nick3C/following{/other_user}"),
+			GistsURL:          githubv3.String("https://api.github.com/users/Nick3C/gists{/gist_id}"),
+			StarredURL:        githubv3.String("https://api.github.com/users/Nick3C/starred{/owner}{/repo}"),
+			SubscriptionsURL:  githubv3.String("https://api.github.com/users/Nick3C/subscriptions"),
+			OrganizationsURL:  githubv3.String("https://api.github.com/users/Nick3C/orgs"),
+			ReposURL:          githubv3.String("https://api.github.com/users/Nick3C/repos"),
+			EventsURL:         githubv3.String("https://api.github.com/users/Nick3C/events{/privacy}"),
+			ReceivedEventsURL: githubv3.String("https://api.github.com/users/Nick3C/received_events"),
+			Type:              githubv3.String("User"),
+			SiteAdmin:         githubv3.Bool(true),
+		},
+		Body:              githubv3.String("Here is the body for the review"),
+		State:             githubv3.String("APPROVED"),
+		HTMLURL:           githubv3.String("https://github.com/octocat/Hello-World/pull/12#pullrequestreview-80"),
+		SubmittedAt:       nil,
+		CommitID:          githubv3.String("ecdd80bb57125d7ba9641ffaa4d7d2c19d3f3091"),
+		AuthorAssociation: githubv3.String("COLLABORATOR"),
+	})
+
+	return pullRequestReviewsResults, nil
+}
+
+func (s *svc) GetCombinedStatus(ctx context.Context, reference *github.RemoteRef, ref string, opts *githubv3.ListOptions) (*githubv3.CombinedStatus, error) {
+	var statusesResults []*githubv3.RepoStatus
+
+	statusesResults = append(statusesResults, &githubv3.RepoStatus{
+		ID:          githubv3.Int64(1),
+		NodeID:      githubv3.String("MDY6U3RhdHVzMQ"),
+		State:       githubv3.String("success"),
+		Description: githubv3.String("Build has completed successfully"),
+		AvatarURL:   githubv3.String("https://github.com/images/error/hubot_happy.gif"),
+	})
+
+	return &githubv3.CombinedStatus{
+		State:      githubv3.String("success"),
+		Statuses:   statusesResults,
+		SHA:        githubv3.String("6dcb09b5b57875f334f61aebed695e2e4193db5e"),
+		TotalCount: githubv3.Int(2),
+	}, nil
+}
