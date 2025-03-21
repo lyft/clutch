@@ -75,8 +75,6 @@ type v3pullrequests interface {
 // https://github.com/google/go-github/blob/master/github/repos_commits.go
 // &&
 // https://github.com/google/go-github/blob/master/github/repos_contents.go
-// &&
-// https://github.com/google/go-github/blob/master/github/repos_statuses.go
 // Method comments below reproduced directly from original definition(s) linked above.
 type v3repositories interface {
 	// Create a new repository. If an org is specified, the new repository will be created under that org. If the empty string is specified, it will be created for the authenticated user.
@@ -95,9 +93,6 @@ type v3repositories interface {
 	// DeleteFile deletes a file from a repository and returns the commit.
 	// Requires the blob SHA of the file to be deleted.
 	DeleteFile(ctx context.Context, owner, repo, path string, opts *githubv3.RepositoryContentFileOptions) (*githubv3.RepositoryContentResponse, *githubv3.Response, error)
-	// GetCombinedStatus returns the combined status of a repository at the specified
-	// reference. ref can be a SHA, a branch name, or a tag name.
-	GetCombinedStatus(ctx context.Context, owner, repo, ref string, opts *githubv3.ListOptions) (*githubv3.CombinedStatus, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/search.go.

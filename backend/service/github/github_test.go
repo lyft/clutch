@@ -418,29 +418,6 @@ func (m *mockRepositories) DeleteFile(ctx context.Context, owner, repo, path str
 	}, nil, nil
 }
 
-func (m *mockRepositories) GetCombinedStatus(ctx context.Context, owner, repo, ref string, opts *githubv3.ListOptions) (*githubv3.CombinedStatus, *githubv3.Response, error) {
-	if m.generalError {
-		return nil, nil, errors.New(problem)
-	}
-
-	var statusesResults []*githubv3.RepoStatus
-
-	statusesResults = append(statusesResults, &githubv3.RepoStatus{
-		ID:          githubv3.Int64(1),
-		NodeID:      githubv3.String("MDY6U3RhdHVzMQ"),
-		State:       githubv3.String("success"),
-		Description: githubv3.String("Build has completed successfully"),
-		AvatarURL:   githubv3.String("https://github.com/images/error/hubot_happy.gif"),
-	})
-
-	return &githubv3.CombinedStatus{
-		State:      githubv3.String("success"),
-		Statuses:   statusesResults,
-		SHA:        githubv3.String("6dcb09b5b57875f334f61aebed695e2e4193db5e"),
-		TotalCount: githubv3.Int(2),
-	}, nil, nil
-}
-
 type mockUsers struct {
 	user        githubv3.User
 	defaultUser string
