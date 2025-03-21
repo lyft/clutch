@@ -18,7 +18,7 @@ const BarContainer = styled("rect")<{ $fill: string; $width: string }>(
 
 const Bar = ({ fill, width }) => (
   <svg width={width} height="12px">
-    <BarContainer $fill={fill} $width={width} />
+                  <BarContainer $fill={fill} $width={width} />
   </svg>
 );
 
