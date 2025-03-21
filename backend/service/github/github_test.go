@@ -1004,6 +1004,22 @@ func TestListPullRequestsWithCommit(t *testing.T) {
 	}
 }
 
+// Mock of ListReviews API
+func (m *mockPullRequests) ListReviews(ctx context.Context, owner, repo string, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, *githubv3.Response, error) {
+	if m.generalError {
+		return nil, nil, errors.New(problem)
+	}
+
+	m.actualNumber = 3256
+	m.actualHTMLURL = fmt.Sprintf("https://github.com/%s/%s/pull/%s", owner, repo, strconv.Itoa(m.actualNumber))
+
+	return []*githubv3.PullRequestReview{
+		{
+			HTMLURL: strPtr(m.actualHTMLURL),
+		},
+	}, nil, nil
+}
+
 var getPullRequestTests = []struct {
 	name        string
 	errorText   string
