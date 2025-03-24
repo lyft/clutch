@@ -55,6 +55,8 @@ type v3organizations interface {
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/pulls.go.
+// ,&&
+// https://github.com/google/go-github/blob/master/github/pulls_reviews.go
 // Method comments below reproduced directly from original definition linked above.
 type v3pullrequests interface {
 	// Create a new pull request on the specified repository.
@@ -63,6 +65,8 @@ type v3pullrequests interface {
 	Get(ctx context.Context, owner string, repo string, number int) (*githubv3.PullRequest, *githubv3.Response, error)
 	// ListPullRequestsWithCommit returns pull requests associated with a commit SHA.
 	ListPullRequestsWithCommit(ctx context.Context, owner, repo, sha string, opts *githubv3.ListOptions) ([]*githubv3.PullRequest, *githubv3.Response, error)
+	// ListReviews lists all reviews on the specified pull request.
+	ListReviews(ctx context.Context, owner, repo string, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, *githubv3.Response, error)
 }
 
 // Interface for structs defined in

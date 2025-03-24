@@ -144,6 +144,7 @@ type Client interface {
 	GetFileContents(ctx context.Context, ref *RemoteRef, path string) (*githubv3.RepositoryContent, error)
 	ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *githubv3.ListCheckRunsOptions) (*githubv3.ListCheckRunsResults, error)
 	SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error)
+	ListReviews(ctx context.Context, ref *RemoteRef, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -730,6 +731,16 @@ func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *RemoteRef, opts *git
 
 func (s *svc) SearchIssues(ctx context.Context, query string, opts *githubv3.SearchOptions) (*githubv3.IssuesSearchResult, error) {
 	results, _, err := s.rest.Search.Issues(ctx, query, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func (s *svc) ListReviews(ctx context.Context, ref *RemoteRef, number int, opts *githubv3.ListOptions) ([]*githubv3.PullRequestReview, error) {
+	results, _, err := s.rest.PullRequests.ListReviews(ctx, ref.RepoOwner, ref.RepoName, number, opts)
 
 	if err != nil {
 		return nil, err
