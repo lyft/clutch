@@ -1,5 +1,5 @@
 # Frontend build.
-FROM node:18.19.0-buster as nodebuild
+FROM node:18.19.0-buster AS nodebuild
 COPY ./frontend ./frontend
 COPY ./tools/install-yarn.sh ./tools/install-yarn.sh
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh
@@ -8,7 +8,7 @@ COPY Makefile .
 RUN make frontend
 
 # Backend build.
-FROM golang:1.20.5-buster as gobuild
+FROM golang:1.23.0-bookworm AS gobuild
 WORKDIR /go/src/github.com/lyft/clutch
 COPY ./backend ./backend
 COPY ./tools/preflight-checks.sh ./tools/preflight-checks.sh
@@ -19,7 +19,7 @@ COPY --from=nodebuild ./frontend/packages/app/build ./frontend/packages/app/buil
 RUN make backend-with-assets
 
 # Copy binary to final image.
-FROM gcr.io/distroless/base-debian10
+FROM gcr.io/distroless/base-debian12
 COPY --from=gobuild /go/src/github.com/lyft/clutch/build/clutch /
 COPY backend/clutch-config.yaml /
 CMD ["/clutch"]
