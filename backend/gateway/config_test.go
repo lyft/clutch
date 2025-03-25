@@ -239,7 +239,6 @@ func TestNewLogger(t *testing.T) {
 	}
 
 	for idx, tc := range testConfigs {
-		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			l, err := newLogger(tc)
@@ -319,7 +318,7 @@ func TestComputeMaximumTimeout(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt // Pin!
+		// Pin!
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			result := computeMaximumTimeout(tt.c)

@@ -211,7 +211,6 @@ func TestProtoForConfigMap(t *testing.T) {
 	}
 
 	for _, tt := range configMapTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

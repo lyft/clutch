@@ -77,7 +77,6 @@ func TestFilter(t *testing.T) {
 	}
 
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			c := &client{filter: tt.filter}
 			actual := c.Filter(tt.event)
@@ -156,7 +155,6 @@ func TestReadEvents(t *testing.T) {
 	}
 
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			cfg, _ := anypb.New(&auditconfigv1.Config{
 				StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},

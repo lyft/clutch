@@ -112,7 +112,6 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			ced := &experimentationv1.CreateExperimentData{RunId: tt.runId, StartTime: tt.startTime, EndTime: tt.endTime, Config: tt.Config}

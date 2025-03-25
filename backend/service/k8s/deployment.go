@@ -93,7 +93,6 @@ func processObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
 	if objProbe.ProbeHandler.HTTPGet != nil {
 		ObjProbeHTTPHeaders := make([]*k8sapiv1.HTTPHeader, 0, len(objProbe.ProbeHandler.HTTPGet.HTTPHeaders))
 		for _, value := range objProbe.ProbeHandler.HTTPGet.HTTPHeaders {
-			value := value
 			UniqueLivenessHeader := &k8sapiv1.HTTPHeader{
 				Name:  &value.Name,
 				Value: &value.Value,
@@ -147,7 +146,6 @@ func processObjProbe(objProbe *v1.Probe) *k8sapiv1.Probe {
 func ProtoForDeploymentSpec(deploymentSpec appsv1.DeploymentSpec) *k8sapiv1.Deployment_DeploymentSpec {
 	deploymentContainers := make([]*k8sapiv1.Deployment_DeploymentSpec_PodTemplateSpec_PodSpec_Container, 0, len(deploymentSpec.Template.Spec.Containers))
 	for _, container := range deploymentSpec.Template.Spec.Containers {
-		container := container
 		resourceLimits := make(map[string]string, len(container.Resources.Limits))
 		resourceRequests := make(map[string]string, len(container.Resources.Requests))
 
@@ -346,7 +344,6 @@ func setOptionalValue(source *int32, target *int32) {
 func updateContainerProbes(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
 	for _, containerProbes := range fields.ContainerProbes {
 		for _, container := range deployment.Spec.Template.Spec.Containers {
-			container := container
 			if container.Name == containerProbes.ContainerName {
 				if containerProbes.LivenessProbe != nil {
 					resourceProbe := containerProbes.LivenessProbe

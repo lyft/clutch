@@ -74,7 +74,6 @@ func TestNormalizeChanges(t *testing.T) {
 	}
 
 	for _, tt := range applyScalingTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -163,7 +162,6 @@ func TestProtoForHPAClusterName(t *testing.T) {
 	}
 
 	for _, tt := range hpaTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

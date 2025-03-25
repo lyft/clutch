@@ -38,7 +38,6 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 	}
 
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			id := convertLockIdToAdvisoryLockId(tt.input)
@@ -133,7 +132,6 @@ func TestPrepareBulkCacheInsert(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			queryArgs, queryParams := topology.prepareBulkCacheInsert(tt.input)
@@ -179,7 +177,6 @@ func TestConvertBatchInsertToSlice(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

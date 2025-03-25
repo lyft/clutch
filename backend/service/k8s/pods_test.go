@@ -297,7 +297,6 @@ func TestPodDescription(t *testing.T) {
 	}
 
 	for _, tt := range podTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -523,7 +522,6 @@ func TestMakeContainers(t *testing.T) {
 	}
 
 	for _, tt := range podTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			containers := makeContainers(tt.statuses)
@@ -679,7 +677,6 @@ func TestPodStatus(t *testing.T) {
 	}
 
 	for _, tt := range podTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

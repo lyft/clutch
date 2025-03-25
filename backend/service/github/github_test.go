@@ -170,7 +170,6 @@ func TestRoundTrip(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -243,7 +242,6 @@ var getFileTests = []struct {
 
 func TestGetFile(t *testing.T) {
 	for _, tt := range getFileTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
@@ -308,7 +306,6 @@ var getDirectoryTests = []struct {
 
 func TestGetDirectory(t *testing.T) {
 	for _, tt := range getDirectoryTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
@@ -467,7 +464,6 @@ var createRepoTests = []struct {
 
 func TestCreateRepository(t *testing.T) {
 	for idx, tt := range createRepoTests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -512,7 +508,6 @@ var getUserTests = []struct {
 
 func TestGetUser(t *testing.T) {
 	for idx, tt := range getUserTests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -553,7 +548,6 @@ func TestCompareCommits(t *testing.T) {
 	t.Parallel()
 
 	for _, tt := range compareCommitsTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
@@ -618,7 +612,6 @@ var getCommitsTests = []struct {
 func TestGetCommit(t *testing.T) {
 	t.Parallel()
 	for _, tt := range getCommitsTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
@@ -724,7 +717,6 @@ var getOrganizationTests = []struct {
 
 func TestGetOrganization(t *testing.T) {
 	for idx, tt := range getOrganizationTests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -767,7 +759,6 @@ var listOrganizationsTests = []struct {
 
 func TestListOrganizations(t *testing.T) {
 	for idx, tt := range listOrganizationsTests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -813,7 +804,6 @@ var getOrgMembershipTests = []struct {
 
 func TestGetOrgMembership(t *testing.T) {
 	for idx, tt := range getOrgMembershipTests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -870,7 +860,6 @@ var getDefaultBranchTests = []struct {
 func TestGetRepository(t *testing.T) {
 	t.Parallel()
 	for _, tt := range getDefaultBranchTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			a := assert.New(t)
@@ -973,7 +962,6 @@ var listPullRequestsWithCommitTests = []struct {
 
 func TestListPullRequestsWithCommit(t *testing.T) {
 	for _, tt := range listPullRequestsWithCommitTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -1031,7 +1019,6 @@ var getPullRequestTests = []struct {
 
 func TestGetPullRequest(t *testing.T) {
 	for _, tt := range getPullRequestTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -1089,7 +1076,6 @@ var deleteFileTests = []struct {
 
 func TestDeleteFile(t *testing.T) {
 	for _, tt := range deleteFileTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 

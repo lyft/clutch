@@ -81,7 +81,6 @@ func TestBufferToResponse(t *testing.T) {
 	}
 
 	for idx, tc := range tcs {
-		tc := tc
 		t.Run(strconv.Itoa(idx), func(t *testing.T) {
 			rdr := strings.NewReader(tc.input)
 			resp, err := bufferToResponse(rdr)

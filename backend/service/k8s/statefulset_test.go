@@ -150,7 +150,6 @@ func TestMergeStatefulSetLabelsAndAnnotations(t *testing.T) {
 	}
 
 	for _, tt := range mergeLabelAnnotationsTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -203,7 +202,6 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 	}
 
 	for _, tt := range statefulSetTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -277,7 +275,6 @@ func TestProtoForStatus(t *testing.T) {
 	}
 
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

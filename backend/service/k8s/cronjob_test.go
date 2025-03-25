@@ -121,7 +121,6 @@ func TestProtoForCron(t *testing.T) {
 	}
 
 	for _, tt := range cronTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

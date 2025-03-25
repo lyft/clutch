@@ -195,7 +195,6 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 	}
 
 	for _, tt := range mergeDeploymentLabelAnnotationsTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -248,7 +247,6 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 	}
 
 	for _, tt := range deploymentTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -293,7 +291,6 @@ func TestProtoForDeploymentSpec(t *testing.T) {
 	}
 
 	for _, tt := range deploymentTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -354,7 +351,6 @@ func TestProtoForDeploymentStatus(t *testing.T) {
 	}
 
 	for _, tt := range deploymentTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
