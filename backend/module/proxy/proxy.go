@@ -144,7 +144,7 @@ func (m *mod) RequestProxy(ctx context.Context, req *proxyv1.RequestProxyRequest
 	}
 
 	proxyResponse := &proxyv1.RequestProxyResponse{
-		HttpStatus: int32(response.StatusCode),
+		HttpStatus: int32(response.StatusCode), //nolint
 		Headers:    resHeaders,
 	}
 

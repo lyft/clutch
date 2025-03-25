@@ -12,7 +12,7 @@ func AllProtoCodesMatch(c codes.Code, spb []*statuspb.Status) bool {
 	}
 
 	for _, s := range spb {
-		if s.Code != int32(c) {
+		if s.Code != int32(c) { //nolint
 			return false
 		}
 	}

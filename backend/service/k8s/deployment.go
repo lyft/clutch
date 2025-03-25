@@ -240,11 +240,11 @@ func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv
 	}
 
 	return &k8sapiv1.Deployment_DeploymentStatus{
-		Replicas:             uint32(deploymentStatus.Replicas),
-		UpdatedReplicas:      uint32(deploymentStatus.UpdatedReplicas),
-		ReadyReplicas:        uint32(deploymentStatus.ReadyReplicas),
-		AvailableReplicas:    uint32(deploymentStatus.AvailableReplicas),
-		UnavailableReplicas:  uint32(deploymentStatus.UnavailableReplicas),
+		Replicas:             uint32(deploymentStatus.Replicas), //nolint
+		UpdatedReplicas:      uint32(deploymentStatus.UpdatedReplicas), //nolint
+		ReadyReplicas:        uint32(deploymentStatus.ReadyReplicas), //nolint
+		AvailableReplicas:    uint32(deploymentStatus.AvailableReplicas), //nolint
+		UnavailableReplicas:  uint32(deploymentStatus.UnavailableReplicas), //nolint
 		DeploymentConditions: deploymentConditions,
 	}
 }

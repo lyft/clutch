@@ -210,7 +210,7 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 
 		proto := &auditv1.Event{
 			// n.b. this is a safe casting since BIGSERIAL can only reach the max value for signed int64.
-			Id:         int64(row.Id),
+			Id:         int64(row.Id), //nolint
 			OccurredAt: occurred,
 			EventType: &auditv1.Event_Event{
 				Event: requestEventProto(c.logger, row),
@@ -283,7 +283,7 @@ type status struct {
 
 func (s *status) Status() *rpcstatus.Status {
 	return &rpcstatus.Status{
-		Code:    int32(s.Code),
+		Code:    int32(s.Code), //nolint
 		Message: s.Message,
 	}
 }

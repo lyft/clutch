@@ -24,10 +24,6 @@ linters-settings:
     - standard
     - default
     - prefix(github.com/lyft/clutch/backend)
-  gosec:
-    excludes:
-      # Flags for potentially-unsafe casting of ints, similar problem to globally-disabled G103
-      - G115
 issues:
   max-per-linter: 0
   max-same-issues: 0
