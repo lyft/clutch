@@ -1,13 +1,40 @@
 package scaffold
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
+
+type GitUpstream struct {
+	RepoProvider string
+	RepoOwner    string
+	RepoName     string
+}
+
+func determineGitUpstream() *GitUpstream {
+	url, err := exec.Command("git", "config", "--get", "remote.origin.url").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	urlStr := strings.TrimSpace(string(url))
+	// This assumes SSH format
+	r := regexp.MustCompile(`^git@(?<RepoProvider>[A-Za-z.]+):(?<RepoOwner>.+)/(?<RepoName>.+)\.git$`)
+	matches := r.FindStringSubmatch(urlStr)
+	if r == nil || len(matches) != 4 {
+		log.Fatal(fmt.Errorf("unable to determine git upstream from %s", urlStr))
+	}
+	return &GitUpstream{
+		RepoProvider: matches[1],
+		RepoOwner:    matches[2],
+		RepoName:     matches[3],
+	}
+}
 
 func determineGoPath() string {
 	goPathOut, err := exec.Command("go", "env", "GOPATH").Output()

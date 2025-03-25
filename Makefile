@@ -142,6 +142,10 @@ lint: api-lint backend-lint frontend-lint
 .PHONY: lint-fix # Lint and fix all of the code.
 lint-fix: api-lint-fix backend-lint-fix frontend-lint-fix
 
+.PHONY: scaffold-service # Generate a new service.
+scaffold-service:
+	cd tools/scaffolding && go run scaffolder.go -m service
+
 .PHONY: scaffold-gateway # Generate a new gateway.
 scaffold-gateway:
 	cd tools/scaffolding && go run scaffolder.go -m gateway -p $(shell git rev-parse --short HEAD)

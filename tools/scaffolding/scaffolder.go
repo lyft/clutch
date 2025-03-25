@@ -25,12 +25,19 @@ func main() {
 	var templateOverwrites string
 	var data interface{}
 	var postProcessFunction func(flags *scaffold.Args, tmpFolder string, dest string)
+	var registrationData *scaffold.RegistrationParams
+	var newComponent bool = false
 
 	switch flags.Mode {
 	case "gateway":
 		templateRoot = filepath.Join(root, "templates/gateway")
 		data, dest = scaffold.GetGatewayTemplateValues()
 		postProcessFunction = scaffold.PostProcessGateway
+	case "service":
+		newComponent = true
+		templateRoot = filepath.Join(root, "templates/backend/service")
+		data, dest, registrationData = scaffold.GetServiceTemplateValues()
+		postProcessFunction = scaffold.PostProcessService
 	case "frontend-plugin":
 		templateRoot = filepath.Join(root, "templates/frontend/workflow/internal")
 		data, dest = scaffold.GetFrontendPluginTemplateValues()
@@ -59,6 +66,10 @@ func main() {
 		scaffold.TemplateFiles(templateOverwrites, tmpout, data)
 	}
 	defer os.RemoveAll(tmpout)
+
+	if newComponent {
+		scaffold.RegisterNewComponent(registrationData)
+	}
 
 	postProcessFunction(flags, tmpout, dest)
 }
