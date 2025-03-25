@@ -49,7 +49,7 @@ const ServerInfo: React.FC<{ info: IClutch.envoytriage.v1.IServerInfo }> = ({ in
   return (
     <Container>
       <Title>{status}</Title>
-      <Title>Stats</Title>
+      <Title>This is a test</Title>
       <MetadataTable data={serverData} />
       <Title>Command Line Options</Title>
       <MetadataTable maxHeight="400px" data={cliOptionMetadata} />
