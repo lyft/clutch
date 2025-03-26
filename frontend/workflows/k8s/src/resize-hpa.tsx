@@ -11,6 +11,7 @@ import {
   NoteConfig,
   NotePanel,
   Resolver,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -221,6 +222,14 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
+const ConfirmResizeHPA = () => {
+  const hpaData = useDataLayout("hpaData").value;
+
+  return (
+    <Typography variant="body1">{`You are about to resize HPA ${hpaData.name}, are you sure to proceed?`}</Typography>
+  );
+};
+
 const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     hpaData: {},
@@ -261,7 +270,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
         notes={notes}
         confirmActionSettings={{
           title: "Resize HPA",
-          description: `You are about to resize HPA, are you sure to proceed?`,
+          description: <ConfirmResizeHPA />,
         }}
       />
       <Confirm name="Result" notes={notes} />
