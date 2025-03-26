@@ -88,10 +88,11 @@ const Confirm: React.FC<ConfirmChild> = () => {
 };
 
 const ConfirmDeletePod = () => {
-  const deletionData = useDataLayout("deletionData").value;
+  const podData = useDataLayout("resourceData");
+  const { name } = podData.displayValue();
 
   return (
-    <Typography variant="body1">{`You are about to delete pod ${deletionData.pod.name}, are you sure to proceed?`}</Typography>
+    <Typography variant="body1">{`You are about to delete pod ${name}, are you sure to proceed?`}</Typography>
   );
 };
 

@@ -79,12 +79,12 @@ const Confirm: React.FC<ConfirmChild> = () => {
 };
 
 const ConfirmCordonNode = () => {
-  const resourceData = useDataLayout("resourceData").value;
+  const node = useDataLayout("resourceData").displayValue() as IClutch.k8s.v1.Node;
 
   return (
-    <Typography variant="body1">{`You are about to ${
-      resourceData.node.unschedulable ? "uncordon" : "cordon"
-    } ${resourceData.node.name}, are you sure to proceed?`}</Typography>
+    <Typography variant="body1">{`You are about to ${node.unschedulable ? "uncordon" : "cordon"} ${
+      node.name
+    }, are you sure to proceed?`}</Typography>
   );
 };
 
