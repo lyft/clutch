@@ -86,9 +86,9 @@ func ProtoForStatefulSet(cluster string, statefulSet *appsv1.StatefulSet) *k8sap
 
 func ProtoForStatus(status appsv1.StatefulSetStatus) *k8sapiv1.StatefulSet_Status {
 	return &k8sapiv1.StatefulSet_Status{
-		Replicas:        uint32(status.Replicas),
-		UpdatedReplicas: uint32(status.UpdatedReplicas),
-		ReadyReplicas:   uint32(status.ReadyReplicas),
+		Replicas:        uint32(status.Replicas), //nolint
+		UpdatedReplicas: uint32(status.UpdatedReplicas), //nolint
+		ReadyReplicas:   uint32(status.ReadyReplicas), //nolint
 	}
 }
 

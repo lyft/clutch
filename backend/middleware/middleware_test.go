@@ -26,7 +26,6 @@ func TestSplitFullMethod(t *testing.T) {
 	}
 
 	for _, tt := range splitFullMethodTests {
-		tt := tt
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
 
@@ -68,7 +67,6 @@ func TestMatchFullMethod(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			result := MatchMethodOrResource(tt.pattern, input)
@@ -93,7 +91,6 @@ func TestMatchResource(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			result := MatchMethodOrResource(tt.pattern, input)
@@ -117,7 +114,6 @@ func TestDeeplyNestedMatching(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			result := MatchMethodOrResource(tt.pattern, input)

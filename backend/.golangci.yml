@@ -3,7 +3,7 @@ linters:
   disable-all: true
   enable:
   - errcheck
-  - exportloopref
+  - copyloopvar
   - gci
   - gocritic
   - gofmt

@@ -125,7 +125,6 @@ func TestProtoForServiceClusterName(t *testing.T) {
 	}
 
 	for _, tt := range serviceTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

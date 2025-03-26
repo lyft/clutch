@@ -107,7 +107,6 @@ func TestCompareCommits(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			srv := httptest.NewServer(http.HandlerFunc(tt.handler))
 			defer srv.Close()

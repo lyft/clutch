@@ -72,7 +72,7 @@ func NewID() ID { return NewIDWithTime(time.Now()) }
 
 // NewIDWithTime creates a new Lyft ID with the specified time.
 func NewIDWithTime(t time.Time) ID {
-	id := uint64(t.Unix()-idEpoch.Unix()) << timestampShift
+	id := uint64(t.Unix()-idEpoch.Unix()) << timestampShift //nolint
 	id |= workerID
 	id |= (atomic.AddUint64(&sequence, 1) << 1) & sequenceMask
 	return ID(id)
@@ -107,21 +107,21 @@ func (id ID) Validate() error {
 
 // Time returns the timestamp encoded into the ID. The returned value has
 // second precision.
-func (id ID) Time() time.Time { return time.Unix(int64(id>>timestampShift)+idEpoch.Unix(), 0) }
+func (id ID) Time() time.Time { return time.Unix(int64(id>>timestampShift)+idEpoch.Unix(), 0) } //nolint
 
 // Worker returns the worker ID associated with the ID.
-func (id ID) Worker() uint32 { return uint32(id&workerIDMask) >> workerShift }
+func (id ID) Worker() uint32 { return uint32(id&workerIDMask) >> workerShift } //nolint
 
 // Sequence returns the sequence number associated with the ID.
-func (id ID) Sequence() uint32 { return uint32(id>>sequenceShift) & sequenceMask }
+func (id ID) Sequence() uint32 { return uint32(id>>sequenceShift) & sequenceMask } //nolint
 
 // Version returns the version number identifying the Lyft ID format. The only
 // valid value currently is `0`.
-func (id ID) Version() uint8 { return uint8(id & versionMask) }
+func (id ID) Version() uint8 { return uint8(id & versionMask) } //nolint
 
 // String satisfies the fmt.Stringer interface. IDs are represented as base-10
 // 64-bit unsigned strings.
-func (id ID) String() string { return strconv.FormatUint(uint64(id), 10) }
+func (id ID) String() string { return strconv.FormatUint(uint64(id), 10) } //nolint
 
 // MarshalJSON satisfies the json.Marshaler interface. Since IDs are up to
 // 64-bit values, IDs are encoded as strings.
@@ -153,7 +153,7 @@ func initWorkerID() uint64 {
 	}
 
 	pid := make([]byte, 2)
-	binary.BigEndian.PutUint16(pid, uint16(os.Getpid()))
+	binary.BigEndian.PutUint16(pid, uint16(os.Getpid())) //nolint
 
 	hash := sha256.New()
 

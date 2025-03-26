@@ -114,7 +114,7 @@ func (s *svc) ListNamespaceEvents(ctx context.Context, clientset, cluster, names
 	var events []*k8sapiv1.Event
 	for _, ev := range totalEventList {
 		// scopelint
-		ev := ev
+
 		events = append(events, ProtoForEvent(cs.Cluster(), &ev))
 	}
 

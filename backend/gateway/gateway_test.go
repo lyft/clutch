@@ -52,7 +52,6 @@ func TestLoadEnv(t *testing.T) {
 		},
 	}
 	for idx, tc := range testCases {
-		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			tmpVar := os.Getenv(tc.envVar)

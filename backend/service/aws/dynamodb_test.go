@@ -617,7 +617,6 @@ func TestCustomScaleFactor(t *testing.T) {
 	}
 
 	for _, tt := range successTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  int64(tt.targetTableRCU),
@@ -645,7 +644,6 @@ func TestCustomScaleFactor(t *testing.T) {
 	}
 
 	for _, tt := range errorTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  int64(tt.targetTableRCU),
@@ -722,7 +720,7 @@ func TestIncreaseTableCapacityErrors(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt // capture range variable
+		// capture range variable
 		t.Run(tt.name, func(t *testing.T) {
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  tt.targetRCU,
@@ -798,7 +796,7 @@ func TestMaxTableUpdates(t *testing.T) {
 	emptyIndexUpdates := make([]*dynamodbv1.IndexUpdateAction, 0)
 
 	for _, tt := range errorTests {
-		tt := tt // capture range variable
+		// capture range variable
 		t.Run(tt.name, func(t *testing.T) {
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  tt.targetRCU,
@@ -814,7 +812,6 @@ func TestMaxTableUpdates(t *testing.T) {
 	}
 
 	for _, tt := range successTests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			targetTableCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  tt.targetRCU,
@@ -888,7 +885,7 @@ func TestUpdateGSICapacityErrors(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt // capture range variable
+		// capture range variable
 		t.Run(tt.name, func(t *testing.T) {
 			targetIndexCapacity := &dynamodbv1.Throughput{
 				ReadCapacityUnits:  tt.targetRCU,

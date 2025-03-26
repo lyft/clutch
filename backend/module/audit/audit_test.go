@@ -151,7 +151,6 @@ func TestGetEvents(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.id, func(t *testing.T) {
 			t.Parallel()
 			m := &mod{
@@ -198,7 +197,6 @@ func TestGetEvent(t *testing.T) {
 	}
 
 	for idx, test := range testCases {
-		test := test
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 			m := &mod{

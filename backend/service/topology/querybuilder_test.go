@@ -106,7 +106,6 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 		},
 	}
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			output, _, err := paginatedQueryBuilder(tt.filter, tt.sort, tt.pageToken, tt.limit)
 			assert.NoError(t, err)

@@ -105,7 +105,6 @@ func TestResourceNames(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			resolvedNames := ResourceNames(tt.message)
@@ -181,7 +180,6 @@ func TestAPIBodyRedaction(t *testing.T) {
 	}
 
 	for idx, tc := range testcases {
-		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			b, err := APIBody(tc.message)
 			assert.NoError(t, err)
@@ -289,7 +287,6 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -364,7 +361,6 @@ func TestPatternValueMapping(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
@@ -406,7 +402,6 @@ func TestExtractProtoPatternFieldNames(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

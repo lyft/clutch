@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"k8s.io/api/batch/v1"
+	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -92,7 +92,7 @@ func ProtoForCronJob(cluster string, k8scronJob *v1.CronJob) *k8sapiv1.CronJob {
 			k8sapiv1.CronJob_ConcurrencyPolicy_value[strings.ToUpper(string(k8scronJob.Spec.ConcurrencyPolicy))])
 	}
 	if k8scronJob.Status.Active != nil {
-		ret.NumActiveJobs = int32(len(k8scronJob.Status.Active))
+		ret.NumActiveJobs = int32(len(k8scronJob.Status.Active)) //nolint
 	}
 	if k8scronJob.Spec.StartingDeadlineSeconds != nil {
 		ret.StartingDeadlineSeconds = &wrappers.Int64Value{Value: *k8scronJob.Spec.StartingDeadlineSeconds}

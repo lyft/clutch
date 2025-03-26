@@ -61,7 +61,6 @@ func TestAssertPolicy(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			result := assertPolicy(tt.pol, req)
 			assert.Equal(t, tt.match, result)

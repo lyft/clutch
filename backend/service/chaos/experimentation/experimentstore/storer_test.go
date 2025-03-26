@@ -132,7 +132,6 @@ func TestCreateExperiment(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -239,7 +238,6 @@ func TestCreateOrGetExperiment(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
@@ -350,7 +348,6 @@ func TestGetExperiments(t *testing.T) {
 	}
 
 	for idx, tt := range tests {
-		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 

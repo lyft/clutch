@@ -190,7 +190,7 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 
 	limit := resolver.DefaultAutocompleteLimit
 	if req.Limit > 0 {
-		limit = int(req.Limit)
+		limit = int(req.Limit) //nolint
 	}
 
 	// Iterate through all of the available resolvers & schemas to find the one requested

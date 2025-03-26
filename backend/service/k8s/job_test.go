@@ -205,7 +205,6 @@ func TestProtoForJob(t *testing.T) {
 	}
 
 	for _, tt := range jobTestCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

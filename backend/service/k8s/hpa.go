@@ -44,10 +44,10 @@ func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscal
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
-			MinReplicas:     uint32(*autoscaler.Spec.MinReplicas),
-			MaxReplicas:     uint32(autoscaler.Spec.MaxReplicas),
-			CurrentReplicas: uint32(autoscaler.Status.CurrentReplicas),
-			DesiredReplicas: uint32(autoscaler.Status.DesiredReplicas),
+			MinReplicas:     uint32(*autoscaler.Spec.MinReplicas), //nolint
+			MaxReplicas:     uint32(autoscaler.Spec.MaxReplicas), //nolint
+			CurrentReplicas: uint32(autoscaler.Status.CurrentReplicas), //nolint
+			DesiredReplicas: uint32(autoscaler.Status.DesiredReplicas), //nolint
 		},
 		Labels:      autoscaler.Labels,
 		Annotations: autoscaler.Annotations,
@@ -80,9 +80,9 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 		return
 	}
 
-	min := int32(sizing.Min)
+	min := int32(sizing.Min) //nolint
 	hpa.Spec.MinReplicas = &min
-	hpa.Spec.MaxReplicas = int32(sizing.Max)
+	hpa.Spec.MaxReplicas = int32(sizing.Max) //nolint
 
 	if *hpa.Spec.MinReplicas > hpa.Spec.MaxReplicas {
 		hpa.Spec.MaxReplicas = *hpa.Spec.MinReplicas

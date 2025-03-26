@@ -174,7 +174,6 @@ func TestFilter(t *testing.T) {
 	t.Parallel()
 
 	for _, tt := range filterTests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			actual := Filter(tt.filter, tt.event)

@@ -46,7 +46,6 @@ func TestConvertError(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.err.Error(), func(t *testing.T) {
 			result := ConvertError(tc.err)
 

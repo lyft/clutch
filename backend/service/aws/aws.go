@@ -312,9 +312,9 @@ func (c *client) ResizeAutoscalingGroup(ctx context.Context, account, region, na
 
 	input := &autoscaling.UpdateAutoScalingGroupInput{
 		AutoScalingGroupName: aws.String(name),
-		DesiredCapacity:      aws.Int32(int32(size.Desired)),
-		MaxSize:              aws.Int32(int32(size.Max)),
-		MinSize:              aws.Int32(int32(size.Min)),
+		DesiredCapacity:      aws.Int32(int32(size.Desired)), //nolint
+		MaxSize:              aws.Int32(int32(size.Max)), //nolint
+		MinSize:              aws.Int32(int32(size.Min)), //nolint
 	}
 
 	_, err = cl.autoscaling.UpdateAutoScalingGroup(ctx, input)
@@ -385,9 +385,9 @@ func newProtoForAutoscalingGroup(account string, group astypes.AutoScalingGroup)
 		Account: account,
 		Zones:   group.AvailabilityZones,
 		Size: &ec2v1.AutoscalingGroupSize{
-			Min:     uint32(aws.ToInt32(group.MinSize)),
-			Max:     uint32(aws.ToInt32(group.MaxSize)),
-			Desired: uint32(aws.ToInt32(group.DesiredCapacity)),
+			Min:     uint32(aws.ToInt32(group.MinSize)), //nolint
+			Max:     uint32(aws.ToInt32(group.MaxSize)), //nolint
+			Desired: uint32(aws.ToInt32(group.DesiredCapacity)), //nolint
 		},
 	}
 

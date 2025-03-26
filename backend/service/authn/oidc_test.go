@@ -67,7 +67,7 @@ func TestStateNonceRejections(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt // pin!
+		// pin!
 		t.Run(tt, func(t *testing.T) {
 			_, err := p.GetStateNonce(tt)
 			assert.Error(t, err)
@@ -385,7 +385,6 @@ oidc:
 	}
 
 	for idx, tc := range testcases {
-		tc := tc
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			mockprovider := authnmock.NewMockOIDCProviderServer(email, nil, nil)
 			defer mockprovider.Close()

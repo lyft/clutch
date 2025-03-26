@@ -86,7 +86,6 @@ func TestGenerateStrategicPatch(t *testing.T) {
 		},
 	}
 	for _, tt := range strategicPatchTest {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 

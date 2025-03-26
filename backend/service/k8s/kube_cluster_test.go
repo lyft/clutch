@@ -36,7 +36,6 @@ func TestGetKubeClusterName(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, tt.expect, GetKubeClusterName(tt.obj))
@@ -74,7 +73,6 @@ func TestApplyClusterLabels(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			err := ApplyClusterLabels(tt.cluster, tt.obj)
 			if !tt.shouldError {

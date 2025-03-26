@@ -213,7 +213,7 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 		delay = &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
 				FixedDelay: &duration.Duration{
-					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000),
+					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000), //nolint
 				},
 			},
 			Percentage: percentage,

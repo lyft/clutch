@@ -119,7 +119,6 @@ func TestReadEvents(t *testing.T) {
 		},
 	}
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			cfg := &auditconfigv1.Config{
 				StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},
@@ -160,7 +159,6 @@ func TestReadEvent(t *testing.T) {
 		},
 	}
 	for _, tt := range testCases {
-		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			cfg := &auditconfigv1.Config{
 				StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},

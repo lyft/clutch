@@ -163,6 +163,6 @@ func (c *client) GetQueryResultsCount(ctx context.Context, req *sourcegraphv1.Ge
 	}
 
 	return &sourcegraphv1.GetQueryResultsCountResponse{
-		Count: uint32(query.Search.Results.ResultCount),
+		Count: uint32(query.Search.Results.ResultCount), //nolint
 	}, nil
 }
