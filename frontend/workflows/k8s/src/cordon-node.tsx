@@ -98,7 +98,13 @@ const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, notes = []
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <NodeIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <NodeDetails name="Verify" />
+      <NodeDetails
+        name="Verify"
+        confirmActionSettings={{
+          title: "Cordon/Uncordon Node",
+          description: `You are about to cordon/uncordon a Node, are you sure to proceed?`,
+        }}
+      />
       <Confirm name="Result" />
     </Wizard>
   );

@@ -256,7 +256,14 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
-      <HPADetails name="Modify" notes={notes} />
+      <HPADetails
+        name="Modify"
+        notes={notes}
+        confirmActionSettings={{
+          title: "Resize HPA",
+          description: `You are about to resize HPA, are you sure to proceed?`,
+        }}
+      />
       <Confirm name="Result" notes={notes} />
     </Wizard>
   );

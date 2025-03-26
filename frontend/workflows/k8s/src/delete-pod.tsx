@@ -107,7 +107,14 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <PodIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <PodDetails name="Verify" notes={notes} />
+      <PodDetails
+        name="Verify"
+        notes={notes}
+        confirmActionSettings={{
+          title: "Delete pod",
+          description: `You are about to delete a pod, are you sure to proceed?`,
+        }}
+      />
       <Confirm name="Result" />
     </Wizard>
   );
