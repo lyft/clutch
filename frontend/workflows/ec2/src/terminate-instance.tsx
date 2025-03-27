@@ -10,6 +10,7 @@ import {
   MetadataTable,
   NotePanel,
   Resolver,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -92,6 +93,15 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
+const ConfirmTerminateInstance = () => {
+  const resourceData = useDataLayout("resourceData");
+  const instance = resourceData.displayValue() as IClutch.aws.ec2.v1.Instance;
+
+  return (
+    <Typography variant="body1">{`You are about to terminate instance ${instance?.tags?.Name}, are you sure to proceed?`}</Typography>
+  );
+};
+
 const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
@@ -110,7 +120,13 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
-      <InstanceDetails name="Verify" />
+      <InstanceDetails
+        name="Verify"
+        confirmActionSettings={{
+          title: "Terminate Instance",
+          description: <ConfirmTerminateInstance />,
+        }}
+      />
       <Confirm name="Result" notes={notes} />
     </Wizard>
   );

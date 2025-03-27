@@ -8,6 +8,7 @@ import {
   MetadataTable,
   NotePanel,
   Resolver,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -117,6 +118,14 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   );
 };
 
+const ConfirmResizeAutoscalingGroup = () => {
+  const group = useDataLayout("groupData").displayValue() as IClutch.aws.ec2.v1.AutoscalingGroup;
+
+  return (
+    <Typography variant="body1">{`You are about to resize autoscaling group ${group.name}, are you sure to proceed?`}</Typography>
+  );
+};
+
 const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     groupData: {},
@@ -136,7 +145,13 @@ const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <GroupIdentifier name="Lookup" resolverType={resolverType} />
-      <GroupDetails name="Modify" />
+      <GroupDetails
+        name="Modify"
+        confirmActionSettings={{
+          title: "Resize Autoscaling Group",
+          description: <ConfirmResizeAutoscalingGroup />,
+        }}
+      />
       <Confirm name="Result" notes={notes} />
     </Wizard>
   );
