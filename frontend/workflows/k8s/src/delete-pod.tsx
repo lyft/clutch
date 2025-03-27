@@ -11,6 +11,7 @@ import {
   NotePanel,
   Resolver,
   SimpleFeatureFlag,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -86,6 +87,15 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
+const ConfirmDeletePod = () => {
+  const podData = useDataLayout("resourceData");
+  const { name } = podData.displayValue();
+
+  return (
+    <Typography variant="body1">{`You are about to delete pod ${name}, are you sure to proceed?`}</Typography>
+  );
+};
+
 const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resolverInput: {},
@@ -107,7 +117,14 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <PodIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <PodDetails name="Verify" notes={notes} />
+      <PodDetails
+        name="Verify"
+        notes={notes}
+        confirmActionSettings={{
+          title: "Delete pod",
+          description: <ConfirmDeletePod />,
+        }}
+      />
       <Confirm name="Result" />
     </Wizard>
   );

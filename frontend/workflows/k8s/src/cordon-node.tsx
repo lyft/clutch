@@ -8,6 +8,7 @@ import {
   MetadataTable,
   Resolver,
   Switch,
+  Typography,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -77,6 +78,16 @@ const Confirm: React.FC<ConfirmChild> = () => {
   );
 };
 
+const ConfirmCordonNode = () => {
+  const node = useDataLayout("resourceData").displayValue() as IClutch.k8s.v1.Node;
+
+  return (
+    <Typography variant="body1">{`You are about to ${node.unschedulable ? "uncordon" : "cordon"} ${
+      node.name
+    }, are you sure to proceed?`}</Typography>
+  );
+};
+
 const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resolverInput: {},
@@ -98,7 +109,13 @@ const CordonNode: React.FC<WorkflowProps> = ({ heading, resolverType, notes = []
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <NodeIdentifier name="Lookup" resolverType={resolverType} notes={notes} />
-      <NodeDetails name="Verify" />
+      <NodeDetails
+        name="Verify"
+        confirmActionSettings={{
+          title: "Cordon/Uncordon Node",
+          description: <ConfirmCordonNode />,
+        }}
+      />
       <Confirm name="Result" />
     </Wizard>
   );
