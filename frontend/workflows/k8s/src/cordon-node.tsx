@@ -82,7 +82,7 @@ const ConfirmCordonNode = () => {
   const node = useDataLayout("resourceData").displayValue() as IClutch.k8s.v1.Node;
 
   return (
-    <Typography variant="body1">{`You are about to ${node.unschedulable ? "uncordon" : "cordon"} ${
+    <Typography variant="body1">{`You are about to ${node.unschedulable ? "cordon" : "uncordon"} ${
       node.name
     }, are you sure to proceed?`}</Typography>
   );
