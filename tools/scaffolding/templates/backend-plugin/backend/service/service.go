@@ -1,3 +1,5 @@
+// {{ .ServiceName }}:
+//     {{ .Description }}
 package {{ .ServiceName }}
 
 import (

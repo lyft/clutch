@@ -18,6 +18,33 @@ type gatewayTemplateValues struct {
 	RepoProvider string
 }
 
+type GatewayScaffoldWorkflow struct {
+	Destination string
+	Data        *gatewayTemplateValues
+}
+
+func (g *GatewayScaffoldWorkflow) PromptValues() {
+	templateValues, dest := GetGatewayTemplateValues()
+	g.Destination = dest
+	g.Data = templateValues
+}
+
+func (g *GatewayScaffoldWorkflow) GetTemplateDirectory() string {
+	return "templates/gateway"
+}
+
+func (g *GatewayScaffoldWorkflow) GetDestinationDirectories() []string {
+	return []string{g.Destination}
+}
+
+func (g *GatewayScaffoldWorkflow) GetTemplateValues() interface{} {
+	return g.Data
+}
+
+func (g *GatewayScaffoldWorkflow) PostProcess(flags *Args, tmpFolder string) {
+	PostProcessGateway(flags, tmpFolder, g.Destination)
+}
+
 func GetGatewayTemplateValues() (*gatewayTemplateValues, string) {
 	// Ask the user if assumptions are correct or a new destination is needed.
 	log.Println("Welcome!")

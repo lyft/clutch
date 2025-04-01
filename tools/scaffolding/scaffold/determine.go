@@ -17,7 +17,17 @@ type GitUpstream struct {
 	RepoName     string
 }
 
-func determineGitUpstream() *GitUpstream {
+func determineGitUpstream(root string) *GitUpstream {
+	oldDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Chdir(root)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	url, err := exec.Command("git", "config", "--get", "remote.origin.url").Output()
 	if err != nil {
 		log.Fatal(err)
@@ -29,11 +39,40 @@ func determineGitUpstream() *GitUpstream {
 	if r == nil || len(matches) != 4 {
 		log.Fatal(fmt.Errorf("unable to determine git upstream from %s", urlStr))
 	}
+
+	err = os.Chdir(oldDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return &GitUpstream{
 		RepoProvider: matches[1],
 		RepoOwner:    matches[2],
 		RepoName:     matches[3],
 	}
+}
+
+func determineGoPackage(workdir string) string {
+	oldDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Chdir(workdir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	goPackageOut, err := exec.Command("go", "list", "-m").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Chdir(oldDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return strings.TrimSpace(string(goPackageOut))
 }
 
 func determineGoPath() string {

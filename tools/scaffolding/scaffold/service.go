@@ -11,16 +11,30 @@ import (
 type serviceTemplateValues struct {
 	ServiceName string
 	Description string
-	ModuleName  string
 	RepoOwner   string
 }
 
-func GetServiceTemplateValues() (*serviceTemplateValues, string, *RegistrationParams) {
+type ServiceScaffoldWorkflow struct {
+	ServiceName      string
+	Destination      string
+	RegistrationData *RegistrationParams
+	Data             *serviceTemplateValues
+}
+
+func (s *ServiceScaffoldWorkflow) GetTemplateDirectory() string {
+	return "templates/backend-plugin/backend/service"
+}
+
+func (s *ServiceScaffoldWorkflow) GetDestinationDirectories() []string {
+	return []string{s.Destination}
+}
+
+func (s *ServiceScaffoldWorkflow) PromptValues() {
 	log.Println("Welcome!")
 	fmt.Println("*** Analyzing environment...")
 
-	dest := filepath.Join(os.Getenv("OLDPWD"), "backend", "service")
-
+	repositoryRoot := os.Getenv("OLDPWD")
+	dest := filepath.Join(repositoryRoot, "backend", "service")
 	fmt.Println("\n*** Based on your environment, we've picked the following destination for your new service:")
 	fmt.Println(">", dest)
 	okay := promptOrDefault("Is this okay?", "Y/n")
@@ -28,28 +42,38 @@ func GetServiceTemplateValues() (*serviceTemplateValues, string, *RegistrationPa
 		dest = promptOrDefault("Enter the destination folder", dest)
 	}
 
-	data := &serviceTemplateValues{}
+	s.Data = &serviceTemplateValues{}
 
-	data.ServiceName = strings.ToLower(promptOrDefault("Enter the name of this service", "helloworld"))
+	s.Data.ServiceName = strings.ToLower(promptOrDefault("Enter the name of this service", "helloworld"))
 	description := promptOrDefault("Enter a description of the service", "Greet the world")
-	data.Description = strings.ToUpper(description[:1]) + description[1:]
-	gitUpstream := determineGitUpstream()
-	data.RepoOwner = promptOrDefault("Enter the name of the organization", gitUpstream.RepoOwner)
-
-	destPrefix := filepath.Join(dest, data.ServiceName, data.ServiceName)
+	s.Data.Description = strings.ToUpper(description[:1]) + description[1:]
+	gitUpstream := determineGitUpstream(repositoryRoot)
+	s.Data.RepoOwner = gitUpstream.RepoOwner
+	if determineGoPackage(filepath.Join(repositoryRoot, "backend")) == "github.com/lyft/clutch/backend" {
+		s.Data.RepoOwner = "clutch"
+	}
+	s.Data.RepoOwner = promptOrDefault("Enter the name of the service owner", s.Data.RepoOwner)
+	s.ServiceName = s.Data.ServiceName
+	s.Destination = filepath.Join(dest, s.Data.ServiceName)
 
 	registrationData := &RegistrationParams{}
 
-	registrationData.BackendMainPath = filepath.Join(os.Getenv("OLDPWD"), "backend", "main.go")
+	registrationData.BackendMainPath = filepath.Join(repositoryRoot, "backend", "main.go")
 	registrationData.ComponentType = "service"
-	registrationData.ComponentName = data.ServiceName
-	svcPath := filepath.Join(gitUpstream.RepoProvider, gitUpstream.RepoOwner, gitUpstream.RepoName, "backend/service", data.ServiceName)
+	registrationData.ComponentName = s.Data.ServiceName
+	svcPath := filepath.Join(gitUpstream.RepoProvider, gitUpstream.RepoOwner, gitUpstream.RepoName, "backend/service", s.Data.ServiceName)
 	registrationData.ComponentPath = svcPath
-
-	return data, destPrefix, registrationData
+	s.RegistrationData = registrationData
 }
 
-func PostProcessService(flags *Args, tmpFolder string, destPrefix string) {
+func (s *ServiceScaffoldWorkflow) GetTemplateValues() interface{} {
+	return s.Data
+}
+
+func (s *ServiceScaffoldWorkflow) PostProcess(_ *Args, tmpFolder string) {
+	destPrefix := filepath.Join(s.Destination, s.ServiceName)
 	MoveTempFilesToDest(filepath.Join(tmpFolder, "service.go"), destPrefix+".go")
 	MoveTempFilesToDest(filepath.Join(tmpFolder, "service_test.go"), destPrefix+"_test.go")
+
+	RegisterNewComponent(s.RegistrationData)
 }

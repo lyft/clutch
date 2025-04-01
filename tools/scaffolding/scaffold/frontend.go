@@ -20,6 +20,37 @@ type workflowTemplateValues struct {
 	IsWizardTemplate bool
 }
 
+type FrontendPluginScaffoldWorkflow struct {
+	Destination string
+	Data        *workflowTemplateValues
+}
+
+func (f *FrontendPluginScaffoldWorkflow) PromptValues() {
+	templateValues, dest := GetFrontendPluginTemplateValues()
+	f.Destination = dest
+	f.Data = templateValues
+}
+
+func (f *FrontendPluginScaffoldWorkflow) GetTemplateDirectory() string {
+	return "templates/frontend/workflow/external"
+}
+
+func (f *FrontendPluginScaffoldWorkflow) GetTemplateValues() interface{} {
+	return f.Data
+}
+
+func (f *FrontendPluginScaffoldWorkflow) GetDestinationDirectories() []string {
+	return []string{f.Destination}
+}
+
+func (f *FrontendPluginScaffoldWorkflow) PostProcess(flags *Args, tmpFolder string) {
+	if strings.Contains(f.Destination, "/clutch/frontend/workflows/") || flags.Internal {
+		PostProcessFrontendInternal(flags, tmpFolder, f.Destination)
+	} else {
+		PostProcessFrontend(flags, tmpFolder, f.Destination)
+	}
+}
+
 func GetFrontendPluginTemplateValues() (*workflowTemplateValues, string) {
 	log.Println("Welcome!")
 	fmt.Println("*** Analyzing environment...")
