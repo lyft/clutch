@@ -16,6 +16,8 @@ type RegistrationParams struct {
 }
 
 func RegisterNewComponent(params *RegistrationParams) {
+	log.Printf("Adding new %s into %s: %s\n", params.ComponentType, params.BackendMainPath, params.ComponentName)
+
 	importLine := generateImportLine(params)
 	registrationLine := generateRegistrationLine(params)
 

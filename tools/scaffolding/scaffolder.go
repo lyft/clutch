@@ -33,6 +33,9 @@ func main() {
 	case "service":
 		scaffoldWorkflow = &scaffold.ServiceScaffoldWorkflow{}
 		scaffoldWorkflow.PromptValues()
+	case "backend-api":
+		scaffoldWorkflow = &scaffold.BackendApiScaffoldWorkflow{}
+		scaffoldWorkflow.PromptValues()
 	case "frontend-plugin":
 		feWorkflow := &scaffold.FrontendPluginScaffoldWorkflow{}
 		feWorkflow.PromptValues()

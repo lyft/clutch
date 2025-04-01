@@ -146,6 +146,10 @@ lint-fix: api-lint-fix backend-lint-fix frontend-lint-fix
 scaffold-service:
 	cd tools/scaffolding && go run scaffolder.go -m service
 
+.PHONY: scaffold-api # Generate a new backend api (proto, module, service).
+scaffold-api:
+	cd tools/scaffolding && go run scaffolder.go -m backend-api
+
 .PHONY: scaffold-gateway # Generate a new gateway.
 scaffold-gateway:
 	cd tools/scaffolding && go run scaffolder.go -m gateway -p $(shell git rev-parse --short HEAD)

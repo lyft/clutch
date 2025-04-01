@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package {{ .RepoOwner }}.{{ .ModuleName }}.{{ .ApiVersion }};
+
+option go_package = "{{ .BackendGoPackage }}/api/{{ .ModuleName }}/{{ .ApiVersion }};{{ .ModuleName }}{{ .ApiVersion }}";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+import "validate/validate.proto";
+
+service {{ .ApiName }}API {
+  rpc Greet(GreetRequest) returns (GreetResponse) {
+    option (google.api.http) = {
+      post : "/{{ .ApiVersion }}/{{ .ModuleName }}/greet"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message GreetRequest {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message GreetResponse {
+  string message = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
