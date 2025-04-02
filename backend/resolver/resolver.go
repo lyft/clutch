@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"reflect"
 
-	protodeprecated "github.com/golang/protobuf/proto"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
+	protodeprecated "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
@@ -57,7 +57,7 @@ const TypePrefix = "type.googleapis.com/"
 
 // Deprecated: use meta.TypeURL instead, will require moving to new proto APIs.
 func TypeURL(m protodeprecated.Message) string {
-	return TypePrefix + string(protodeprecated.MessageReflect(m).Descriptor().FullName())
+	return TypePrefix + string(m.ProtoReflect().Descriptor().FullName())
 }
 
 func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {

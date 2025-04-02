@@ -23,7 +23,6 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/object"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
-	"github.com/golang/protobuf/ptypes/any"
 	githubv3 "github.com/google/go-github/v54/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally/v4"
@@ -31,6 +30,7 @@ import (
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
@@ -74,7 +74,7 @@ func (st *StatsRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 	return resp, err
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &githubv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err

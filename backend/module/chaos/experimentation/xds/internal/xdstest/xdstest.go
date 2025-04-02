@@ -3,7 +3,6 @@ package xdstest
 import (
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -24,7 +23,7 @@ type TestModuleServer struct {
 	Storer *experimentstoremock.SimpleStorer
 }
 
-func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool, config *xdsconfigv1.Config) (*TestModuleServer, error) {
+func NewTestModuleServer(c func(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool, config *xdsconfigv1.Config) (*TestModuleServer, error) {
 	// Set up a test server listening to :9000.
 	if ttl {
 		config.ResourceTtl = &durationpb.Duration{

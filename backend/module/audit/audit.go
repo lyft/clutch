@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -23,7 +23,7 @@ import (
 
 const Name = "clutch.module.audit"
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	auditClient, ok := service.Registry["clutch.service.audit"]
 	if !ok {
 		return nil, errors.New("could not find service")

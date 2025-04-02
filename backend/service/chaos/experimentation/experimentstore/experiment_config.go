@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"github.com/golang/protobuf/ptypes/any"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -12,12 +11,12 @@ import (
 type ExperimentConfig struct {
 	Id string
 	// TODO(Augustyniak): Remove Config property once all of its existing usages are removed. Use Message property instead.
-	Config  *any.Any
+	Config  *anypb.Any
 	Message proto.Message
 }
 
 func NewExperimentConfig(id string, stringifedData string) (*ExperimentConfig, error) {
-	data := &any.Any{}
+	data := &anypb.Any{}
 	if err := protojson.Unmarshal([]byte(stringifedData), data); err != nil {
 		return nil, err
 	}

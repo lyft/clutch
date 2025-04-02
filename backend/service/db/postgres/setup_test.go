@@ -3,7 +3,6 @@ package postgres
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
@@ -17,7 +16,7 @@ func TestNew(t *testing.T) {
 
 	scope := tally.NewTestScope("", nil)
 	logger := zaptest.NewLogger(t)
-	cfg := &any.Any{TypeUrl: "type.googleapis.com/clutch.config.service.db.postgres.v1.Config"}
+	cfg := &anypb.Any{TypeUrl: "type.googleapis.com/clutch.config.service.db.postgres.v1.Config"}
 
 	svc, err := New(cfg, logger, scope)
 	assert.Error(t, err)

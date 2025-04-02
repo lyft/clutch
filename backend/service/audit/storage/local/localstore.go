@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -73,7 +73,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 	}
 
 	event := c.events[id].GetEvent()
-	proto.Merge(proto.MessageV1(event), proto.MessageV1(update))
+	proto.Merge(event, update)
 	return nil
 }
 

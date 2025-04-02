@@ -7,9 +7,9 @@ package aws
 import (
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -21,7 +21,7 @@ const (
 	Name = "clutch.module.aws"
 )
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	awsClient, ok := service.Registry["clutch.service.aws"]
 	if !ok {
 		return nil, errors.New("could not find service")

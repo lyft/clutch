@@ -8,10 +8,10 @@ import (
 	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
-	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -51,7 +51,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 			expectedAbort:        nil,
 			expectedDelay: &gcpFilterCommon.FaultDelay{
 				FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-					FixedDelay: &duration.Duration{
+					FixedDelay: &durationpb.Duration{
 						Nanos: 100000000, // 0.001 second
 					},
 				},
@@ -86,7 +86,7 @@ func TestECDSFaultsGeneration(t *testing.T) {
 			expectedAbort:        nil,
 			expectedDelay: &gcpFilterCommon.FaultDelay{
 				FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-					FixedDelay: &duration.Duration{
+					FixedDelay: &durationpb.Duration{
 						Nanos: 200000000, // 0.001 second
 					},
 				},

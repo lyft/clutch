@@ -1,3 +1,4 @@
+//go:build integration_only
 // +build integration_only
 
 package serverexperimentation
@@ -5,11 +6,12 @@ package serverexperimentation
 import (
 	"context"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"

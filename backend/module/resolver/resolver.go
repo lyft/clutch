@@ -8,12 +8,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -24,7 +24,7 @@ import (
 
 const Name = "clutch.module.resolver"
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	m := &mod{
 		api: newAPI(),
 	}
@@ -67,7 +67,7 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 					return nil, err
 				}
 
-				results, err := res.Resolve(ctx, req.Want, proto.MessageV1(pb), req.Limit)
+				results, err := res.Resolve(ctx, req.Want, pb, req.Limit)
 				if err != nil {
 					return nil, err
 				}

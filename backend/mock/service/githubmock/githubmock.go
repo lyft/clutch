@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/golang/protobuf/ptypes/any"
 	githubv3 "github.com/google/go-github/v54/github"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -151,7 +151,7 @@ func (s *svc) ListCheckRunsForRef(ctx context.Context, ref *github.RemoteRef, op
 	}, nil
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
 

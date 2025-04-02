@@ -7,11 +7,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/shurcooL/graphql"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	sourcegraphv1cfg "github.com/lyft/clutch/backend/api/config/service/sourcegraph/v1"
 	sourcegraphv1 "github.com/lyft/clutch/backend/api/sourcegraph/v1"
@@ -60,7 +60,7 @@ var getQueryResultsCountQuery struct {
 	} `graphql:"search(query: $query)"`
 }
 
-func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, log *zap.Logger, scope tally.Scope) (service.Service, error) {
 	sgConfig := &sourcegraphv1cfg.Config{}
 	err := cfg.UnmarshalTo(sgConfig)
 	if err != nil {

@@ -4,13 +4,13 @@ import (
 	"strings"
 
 	"github.com/gobwas/glob"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
-type Factory map[string]func(*any.Any, *zap.Logger, tally.Scope) (Middleware, error)
+type Factory map[string]func(*anypb.Any, *zap.Logger, tally.Scope) (Middleware, error)
 
 type Middleware interface {
 	UnaryInterceptor() grpc.UnaryServerInterceptor

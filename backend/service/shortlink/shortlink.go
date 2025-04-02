@@ -7,11 +7,11 @@ import (
 	"errors"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/lib/pq"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	shortlinkv1cfg "github.com/lyft/clutch/backend/api/config/service/shortlink/v1"
 	shortlinkv1 "github.com/lyft/clutch/backend/api/shortlink/v1"
@@ -45,7 +45,7 @@ type client struct {
 	scope tally.Scope
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	slConfig := &shortlinkv1cfg.Config{}
 	err := cfg.UnmarshalTo(slConfig)
 	if err != nil {

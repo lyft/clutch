@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -79,7 +79,7 @@ func TestExperimentRunDetailsStatus(t *testing.T) {
 				CancellationTime: tt.cancellationTime,
 				CreationTime:     tt.creationTime,
 			}
-			config := &ExperimentConfig{Id: "2", Config: &any.Any{}}
+			config := &ExperimentConfig{Id: "2", Config: &anypb.Any{}}
 			tr := NewTransformer(zaptest.NewLogger(t).Sugar())
 			rd, err := NewRunDetails(run, config, &tr, tt.now)
 			assert.NoError(t, err)

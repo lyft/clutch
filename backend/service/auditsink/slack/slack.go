@@ -12,11 +12,11 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/slack-go/slack"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -31,7 +31,7 @@ const (
 	defaultNone = "None"
 )
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &configv1.SlackConfig{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err

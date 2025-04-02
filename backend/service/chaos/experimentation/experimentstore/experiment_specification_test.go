@@ -5,11 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -25,10 +24,10 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 
 	tests := []struct {
 		runId             string
-		startTime         *timestamp.Timestamp
-		endTime           *timestamp.Timestamp
+		startTime         *timestamppb.Timestamp
+		endTime           *timestamppb.Timestamp
 		now               time.Time
-		Config            *any.Any
+		Config            *anypb.Any
 		expectedError     error
 		expectedStartTime time.Time
 	}{
@@ -37,7 +36,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:         futureTimestamp,
 			endTime:           nil,
 			now:               now,
-			Config:            &any.Any{},
+			Config:            &anypb.Any{},
 			expectedError:     nil,
 			expectedStartTime: future,
 		},
@@ -46,7 +45,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:         futureTimestamp,
 			endTime:           nil,
 			now:               now,
-			Config:            &any.Any{},
+			Config:            &anypb.Any{},
 			expectedError:     nil,
 			expectedStartTime: future,
 		},
@@ -55,7 +54,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:         futureTimestamp,
 			endTime:           farFutureTimestamp,
 			now:               now,
-			Config:            &any.Any{},
+			Config:            &anypb.Any{},
 			expectedError:     status.Error(codes.InvalidArgument, "provided experiment runId (1231231231^) contained forbidden characters and was not matched by \"^[A-Za-z0-9-._~]+$\" regular expresion"),
 			expectedStartTime: future,
 		},
@@ -64,7 +63,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:         futureTimestamp,
 			endTime:           farFutureTimestamp,
 			now:               now,
-			Config:            &any.Any{},
+			Config:            &anypb.Any{},
 			expectedError:     nil,
 			expectedStartTime: future,
 		},
@@ -82,7 +81,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:     pastTimestamp,
 			endTime:       futureTimestamp,
 			now:           now,
-			Config:        &any.Any{},
+			Config:        &anypb.Any{},
 			expectedError: status.Error(codes.InvalidArgument, "experiment start time (2010-11-29 23:00:00 +0000 UTC) cannot be before current time (2010-11-30 00:00:00 +0000 UTC)"),
 		},
 		{
@@ -90,7 +89,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:     futureTimestamp,
 			endTime:       pastTimestamp,
 			now:           now,
-			Config:        &any.Any{},
+			Config:        &anypb.Any{},
 			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-29 23:00:00 +0000 UTC) must be after experiment start time (2010-11-30 01:00:00 +0000 UTC)"),
 		},
 		{
@@ -98,7 +97,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:     futureTimestamp,
 			endTime:       futureTimestamp,
 			now:           now,
-			Config:        &any.Any{},
+			Config:        &anypb.Any{},
 			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-30 01:00:00 +0000 UTC) must be after experiment start time (2010-11-30 01:00:00 +0000 UTC)"),
 		},
 		{
@@ -106,7 +105,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			startTime:     farFutureTimestamp,
 			endTime:       futureTimestamp,
 			now:           now,
-			Config:        &any.Any{},
+			Config:        &anypb.Any{},
 			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-30 01:00:00 +0000 UTC) must be after experiment start time (2010-11-30 02:00:00 +0000 UTC)"),
 		},
 	}

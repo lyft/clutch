@@ -10,11 +10,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
@@ -56,7 +56,7 @@ type CacheableTopology interface {
 	StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error)
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	topologyConfig := &topologyv1cfg.Config{}
 	err := cfg.UnmarshalTo(topologyConfig)
 	if err != nil {
@@ -153,7 +153,7 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 			return nil, "", err
 		}
 
-		var dataAny any.Any
+		var dataAny anypb.Any
 		if err := protojson.Unmarshal(data, &dataAny); err != nil {
 			c.log.Error("Error unmarshaling data field", zap.Error(err))
 			return nil, "", err
