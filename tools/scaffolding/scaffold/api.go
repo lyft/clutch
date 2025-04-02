@@ -25,20 +25,25 @@ func GenerateAPI(args *Args, tmpFolder string, dest string) {
 		log.Fatal("`go get` tools in the destination dir returned the above error")
 	}
 
-	if err := os.Chdir(tmpFolder); err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Generating API code from protos...")
-	log.Println("cd", tmpFolder, "&& make api")
-	cmd = exec.Command("make", "api")
-	if out, err := cmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("`make api` in the destination dir returned the above error")
-	}
-	log.Println("API generation complete")
+	MakeAPI(tmpFolder)
 
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the custom gateway:")
 	fmt.Printf("cd %s && make\n", dest)
+}
+
+func MakeAPI(folder string) {
+	log.Println("Generating API code from protos...")
+	log.Println("cd", folder, "&& make api")
+
+	if err := os.Chdir(folder); err != nil {
+		log.Fatal(err)
+	}
+	cmd := exec.Command("make", "api")
+	if out, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(string(out))
+		log.Fatal("`make api` in the destination dir returned the above error")
+	}
+
+	log.Println("API generation complete")
 }

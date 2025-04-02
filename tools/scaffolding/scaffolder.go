@@ -20,32 +20,41 @@ func main() {
 	flags := scaffold.ParseArgs()
 
 	// Collect info from user based on mode and determine template root.
-	var dest string
+	var destinations []string
 	var templateRoot string
 	var templateOverwrites string
 	var data interface{}
-	var postProcessFunction func(flags *scaffold.Args, tmpFolder string, dest string)
+	var scaffoldWorkflow scaffold.ScaffoldWorkflow
 
 	switch flags.Mode {
 	case "gateway":
-		templateRoot = filepath.Join(root, "templates/gateway")
-		data, dest = scaffold.GetGatewayTemplateValues()
-		postProcessFunction = scaffold.PostProcessGateway
+		scaffoldWorkflow = &scaffold.GatewayScaffoldWorkflow{}
+		scaffoldWorkflow.PromptValues()
+	case "service":
+		scaffoldWorkflow = &scaffold.ServiceScaffoldWorkflow{}
+		scaffoldWorkflow.PromptValues()
+	case "backend-api":
+		scaffoldWorkflow = &scaffold.BackendApiScaffoldWorkflow{}
+		scaffoldWorkflow.PromptValues()
 	case "frontend-plugin":
-		templateRoot = filepath.Join(root, "templates/frontend/workflow/internal")
-		data, dest = scaffold.GetFrontendPluginTemplateValues()
-		if strings.Contains(dest, "/clutch/frontend/workflows/") || flags.Internal {
-			postProcessFunction = scaffold.PostProcessFrontendInternal
-		} else {
+		feWorkflow := &scaffold.FrontendPluginScaffoldWorkflow{}
+		feWorkflow.PromptValues()
+		if !strings.Contains(feWorkflow.Destination, "/clutch/frontend/workflows/") && !flags.Internal {
 			templateOverwrites = filepath.Join(root, "templates/frontend/workflow/external")
-			postProcessFunction = scaffold.PostProcessFrontend
 		}
+		scaffoldWorkflow = feWorkflow
 	default:
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	scaffold.FixDestDir(dest)
+	data = scaffoldWorkflow.GetTemplateValues()
+	destinations = scaffoldWorkflow.GetDestinationDirectories()
+	templateRoot = filepath.Join(root, scaffoldWorkflow.GetTemplateDirectory())
+
+	for _, dest := range destinations {
+		scaffold.FixDestDir(dest)
+	}
 
 	// Make a tmpdir for output.
 	fmt.Println("\n*** Generating...")
@@ -60,5 +69,5 @@ func main() {
 	}
 	defer os.RemoveAll(tmpout)
 
-	postProcessFunction(flags, tmpout, dest)
+	scaffoldWorkflow.PostProcess(flags, tmpout)
 }
