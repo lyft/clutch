@@ -7,9 +7,6 @@
 package gatewayv1
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	v1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -17,6 +14,8 @@ import (
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (

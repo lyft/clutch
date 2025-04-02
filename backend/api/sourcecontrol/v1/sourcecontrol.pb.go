@@ -7,9 +7,6 @@
 package sourcecontrolv1
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	v1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
@@ -17,6 +14,8 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (
