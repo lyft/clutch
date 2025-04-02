@@ -47,6 +47,11 @@ export interface SiteConfig extends DocusaurusConfig {
     };
     tagDescription: string;
     hero: HeroConfig;
+    archivalNotice?: {
+      enabled: boolean;
+      title: string;
+      message: string;
+    };
   };
 }
 

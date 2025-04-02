@@ -26,6 +26,8 @@
   </a>
 </p>
 
+> **Archival Announcement:** Please be advised that this repository is slated to be deprecated and will be marked as archived and read-only. While all existing code will remain accessible, we will no longer accept new pull requests or issues after the archiving date and no new features or updates will be developed. If you have any questions or concerns, please reach out to clutch@lyft.com.
+
 <p align="center">
   <a href="#key-features">Key Features</a> •
   <a href="#getting-started">Getting Started</a> •
