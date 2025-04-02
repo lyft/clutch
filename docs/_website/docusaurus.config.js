@@ -13,6 +13,12 @@ module.exports = {
   plugins: [],
   customFields: {
     tagDescription: "An extensible platform for infrastructure management.",
+    archivalNotice: {
+      enabled: true,
+      title: "Archival Announcement",
+      message:
+        "Please be advised that the Clutch repository is slated to be deprecated and will be marked as archived and read-only. While all existing code will remain accessible, we will no longer accept new pull requests or issues after the archiving date and no new features or updates will be developed. If you have any questions or concerns, please reach out to clutch@lyft.com.",
+    },
     hero: {
       description:
         "Clutch provides everything you need to improve your developers' experience and operational capabilities. It comes with several out-of-the-box features for managing cloud-native infrastructure, but is easily configured or extended to interact with whatever you run, wherever you run it.",

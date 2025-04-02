@@ -187,3 +187,16 @@
     text-align: center;
   }
 }
+
+.archivalNotice {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  color: #856404;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+.archivalNotice h4 {
+  color: #856404;
+  font-weight: 600;
+}

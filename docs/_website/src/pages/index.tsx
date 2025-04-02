@@ -14,6 +14,25 @@ import {
   SiteConfig,
 } from "../theme/types";
 
+function ArchivalNotice(): JSX.Element | null {
+  const context = useDocusaurusContext();
+  const siteConfig = context.siteConfig as SiteConfig;
+  const notice = siteConfig.customFields.archivalNotice;
+
+  if (notice === undefined || notice === null || !notice.enabled) {
+    return null;
+  }
+
+  return (
+    <div className={classnames("alert alert--warning", styles.archivalNotice)}>
+      <div className="container">
+        <h4 style={{ marginBottom: "0.5rem" }}>{notice.title}</h4>
+        <p style={{ marginBottom: 0 }}>{notice.message}</p>
+      </div>
+    </div>
+  );
+}
+
 interface HeroProps extends Pick<SiteConfig, "tagline"> {
   config: HeroConfig;
 }
@@ -191,6 +210,7 @@ function Home(): JSX.Element {
       title={siteConfig.title}
       description={siteConfig.customFields.tagDescription}
     >
+      <ArchivalNotice />
       <Hero
         tagline={siteConfig.tagline}
         config={siteConfig.customFields.hero}
