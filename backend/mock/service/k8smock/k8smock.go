@@ -4,9 +4,9 @@ import (
 	"context"
 	"math/rand"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 	batchv1 "k8s.io/api/batch/v1"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -62,7 +62,7 @@ func (s *svc) DescribePod(_ context.Context, clientset, cluster, namespace, name
 		NodeIp:    "10.0.0.1",
 		PodIp:     "8.1.1.8",
 		State:     k8sv1.Pod_State(rand.Intn(len(k8sv1.Pod_State_value))),
-		//StartTime:   ptypes.TimestampNow(),
+		//StartTime:   timestamppb.Now(),
 		Labels:      map[string]string{"Key": "value"},
 		Annotations: map[string]string{"Key": "value"},
 	}
@@ -382,7 +382,7 @@ func New() k8sservice.Service {
 	return &svc{}
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
 

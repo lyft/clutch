@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	authzcfgv1 "github.com/lyft/clutch/backend/api/config/service/authz/v1"
@@ -24,7 +24,7 @@ type Client interface {
 	Check(ctx context.Context, request *authzv1.CheckRequest) (*authzv1.CheckResponse, error)
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &authzcfgv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err

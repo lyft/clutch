@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap/zaptest"
@@ -70,7 +69,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithWrongConfig(t *testing.T) {
-	_, err := New(&any.Any{TypeUrl: "foobar"}, nil, nil)
+	_, err := New(&anypb.Any{TypeUrl: "foobar"}, nil, nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "mismatched message")
 }

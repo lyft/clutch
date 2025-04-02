@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	sourcecontrolconfigv1 "github.com/lyft/clutch/backend/api/config/module/sourcecontrol/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
@@ -23,7 +23,7 @@ import (
 
 const Name = "clutch.module.sourcecontrol"
 
-func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, _ *zap.Logger, _ tally.Scope) (module.Module, error) {
 	config := &sourcecontrolconfigv1.Config{}
 	if cfg != nil {
 		if err := cfg.UnmarshalTo(config); err != nil {

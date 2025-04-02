@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	envoyv1 "github.com/lyft/clutch/backend/api/core/envoy/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/core/project/v1"
@@ -30,7 +30,7 @@ var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLProject:      {},
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	var topologyService topology.Service
 	if svc, ok := service.Registry[topology.Name]; ok {
 		topologyService, ok = svc.(topology.Service)

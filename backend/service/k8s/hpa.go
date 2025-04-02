@@ -44,8 +44,8 @@ func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscal
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
-			MinReplicas:     uint32(*autoscaler.Spec.MinReplicas), //nolint
-			MaxReplicas:     uint32(autoscaler.Spec.MaxReplicas), //nolint
+			MinReplicas:     uint32(*autoscaler.Spec.MinReplicas),      //nolint
+			MaxReplicas:     uint32(autoscaler.Spec.MaxReplicas),       //nolint
 			CurrentReplicas: uint32(autoscaler.Status.CurrentReplicas), //nolint
 			DesiredReplicas: uint32(autoscaler.Status.DesiredReplicas), //nolint
 		},

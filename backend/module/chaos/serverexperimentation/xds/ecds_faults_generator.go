@@ -9,9 +9,9 @@ import (
 	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
-	proto "github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/duration"
+	proto "google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module/chaos/experimentation/xds"
@@ -43,7 +43,7 @@ var DefaultAbortFaultConfig = &gcpFilterFault.FaultAbort{
 
 var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 	FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-		FixedDelay: &duration.Duration{
+		FixedDelay: &durationpb.Duration{
 			Nanos: 1000000, // 0.001 second
 		},
 	},
@@ -141,7 +141,7 @@ func (g ECDSFaultsGenerator) GenerateResource(experiment *experimentstore.Experi
 
 	config := &gcpCoreV3.TypedExtensionConfig{
 		Name: faultFilterName,
-		TypedConfig: &any.Any{
+		TypedConfig: &anypb.Any{
 			TypeUrl: faultFilterTypeURL,
 			Value:   serializedFaultFilter,
 		},
@@ -157,7 +157,7 @@ func (g *ECDSFaultsGenerator) GenerateDefaultResource(cluster string, resourceNa
 
 	config := &gcpCoreV3.TypedExtensionConfig{
 		Name: resourceName,
-		TypedConfig: &any.Any{
+		TypedConfig: &anypb.Any{
 			TypeUrl: faultFilterTypeURL,
 			Value:   g.serializedDefaultFaultFilter,
 		},
@@ -212,7 +212,7 @@ func (g ECDSFaultsGenerator) createAbortDelayConfig(httpFaultConfig *serverexper
 
 		delay = &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
+				FixedDelay: &durationpb.Duration{
 					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000), //nolint
 				},
 			},

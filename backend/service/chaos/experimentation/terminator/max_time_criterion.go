@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -26,7 +26,7 @@ func (m maxTimeTerminationCriterion) ShouldTerminate(experiment *experimentstore
 
 type maxTimeTerminationFactory struct{}
 
-func (maxTimeTerminationFactory) Create(cfg *any.Any) (TerminationCriterion, error) {
+func (maxTimeTerminationFactory) Create(cfg *anypb.Any) (TerminationCriterion, error) {
 	typedConfig := &terminatorv1.MaxTimeTerminationCriterion{}
 	err := cfg.UnmarshalTo(typedConfig)
 	if err != nil {

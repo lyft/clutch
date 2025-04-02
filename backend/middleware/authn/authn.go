@@ -9,13 +9,13 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/middleware"
@@ -25,7 +25,7 @@ import (
 
 const Name = "clutch.middleware.authn"
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	svc, ok := service.Registry["clutch.service.authn"]
 	if !ok {
 		return nil, errors.New("unable to get authn service")

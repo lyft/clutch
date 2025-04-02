@@ -3,9 +3,9 @@ package projectmock
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	projectv1core "github.com/lyft/clutch/backend/api/core/project/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
@@ -19,7 +19,7 @@ func New() projectservice.Service {
 	return &svc{}
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
 

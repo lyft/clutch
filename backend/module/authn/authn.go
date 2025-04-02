@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
@@ -27,7 +27,7 @@ import (
 
 const Name = "clutch.module.authn"
 
-func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	svc, ok := service.Registry["clutch.service.authn"]
 	if !ok {
 		return nil, errors.New("unable to get authn service")

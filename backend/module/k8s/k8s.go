@@ -7,9 +7,9 @@ package k8s
 import (
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -21,7 +21,7 @@ const (
 	Name = "clutch.module.k8s"
 )
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	client, ok := service.Registry["clutch.service.k8s"]
 	if !ok {
 		return nil, errors.New("could not find service")

@@ -3,9 +3,9 @@ package experimentstore
 import (
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
@@ -16,7 +16,7 @@ type ExperimentSpecification struct {
 	ConfigId  string
 	StartTime time.Time
 	EndTime   *time.Time
-	Config    *any.Any
+	Config    *anypb.Any
 }
 
 // New returns a new experimentationSpecification instance.

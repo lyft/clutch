@@ -10,12 +10,12 @@ import (
 	"errors"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -46,7 +46,7 @@ type storer struct {
 var _ Storer = (*storer)(nil)
 
 // New returns a new NewExperimentStore instance.
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
@@ -369,7 +369,7 @@ func (s *storer) RegisterTransformation(transformation Transformation) error {
 	return err
 }
 
-func marshalConfig(config *any.Any) (string, error) {
+func marshalConfig(config *anypb.Any) (string, error) {
 	b, err := protojson.Marshal(config)
 	if err != nil {
 		return "", err

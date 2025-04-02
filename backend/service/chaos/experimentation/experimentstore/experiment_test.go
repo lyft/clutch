@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -74,7 +74,7 @@ func TestExperimentRunConfigToExperiment(t *testing.T) {
 			t.Parallel()
 
 			run := &ExperimentRun{Id: "1", StartTime: tt.startTime, EndTime: tt.endTime, CancellationTime: tt.cancellationTime}
-			config := &ExperimentConfig{Id: "2", Config: &any.Any{}}
+			config := &ExperimentConfig{Id: "2", Config: &anypb.Any{}}
 			e := Experiment{Run: run, Config: config}
 			proto, err := e.Proto(tt.now)
 			assert.NoError(t, err)

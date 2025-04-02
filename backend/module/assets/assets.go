@@ -7,9 +7,9 @@ package assets
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	assetsv1 "github.com/lyft/clutch/backend/api/assets/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -19,7 +19,7 @@ const (
 	Name = "clutch.module.assets"
 )
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	mod := &mod{
 		api: newAPI(),
 	}

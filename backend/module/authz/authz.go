@@ -8,9 +8,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -20,7 +20,7 @@ import (
 
 const Name = "clutch.module.authz"
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	svc, ok := service.Registry["clutch.service.authz"]
 	if !ok {
 		return nil, errors.New("unable to get authz service")

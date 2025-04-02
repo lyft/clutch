@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	projectv1cfg "github.com/lyft/clutch/backend/api/config/module/project/v1"
 	projectv1 "github.com/lyft/clutch/backend/api/project/v1"
@@ -20,7 +20,7 @@ const (
 	defaultProjectService = "clutch.service.project"
 )
 
-func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &projectv1cfg.Config{}
 	err := cfg.UnmarshalTo(config)
 	if err != nil {

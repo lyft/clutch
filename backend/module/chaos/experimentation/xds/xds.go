@@ -15,11 +15,11 @@ import (
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -56,7 +56,7 @@ func (ClusterHashV3) ID(node *gcpCoreV3.Node) string {
 	return node.Cluster
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &xdsconfigv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err

@@ -1,3 +1,4 @@
+//go:build integration_only
 // +build integration_only
 
 package xds
@@ -31,8 +32,8 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	t.Skip("flaky")
 
 	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      durationpb.New(time.Second),
+		RtdsLayerName:        "rtds",
+		CacheRefreshInterval: durationpb.New(time.Second),
 	}
 
 	ts, err := xdstest.NewTestModuleServer(New, true, xdsConfig)

@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sv1api "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -65,7 +65,7 @@ func makeClientsetOptions(clientsets []string) []*resolverv1.Option {
 	return ret
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	k8sRegistered, ok := service.Registry["clutch.service.k8s"]
 	if !ok {
 		return nil, errors.New("could not find service")

@@ -10,10 +10,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes/any"
 	_ "github.com/lib/pq"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	postgresv1 "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -33,7 +33,7 @@ type Client interface {
 
 func (c *client) DB() *sql.DB { return c.sqlDB }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	pgcfg := &postgresv1.Config{}
 	err := cfg.UnmarshalTo(pgcfg)
 	if err != nil {

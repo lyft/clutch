@@ -8,11 +8,11 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	feedbackv1cfg "github.com/lyft/clutch/backend/api/config/module/feedback/v1"
 	feedbackv1 "github.com/lyft/clutch/backend/api/feedback/v1"
@@ -25,7 +25,7 @@ const (
 	Name = "clutch.module.feedback"
 )
 
-func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &feedbackv1cfg.Config{}
 	err := cfg.UnmarshalTo(config)
 	if err != nil {

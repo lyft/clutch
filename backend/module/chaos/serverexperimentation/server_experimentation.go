@@ -8,9 +8,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -31,7 +31,7 @@ type Service struct {
 }
 
 // New instantiates a Service object.
-func New(untypedConfig *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(untypedConfig *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &configv1.Config{}
 	if err := untypedConfig.UnmarshalTo(config); err != nil {
 		return nil, err

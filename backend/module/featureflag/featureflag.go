@@ -3,9 +3,9 @@ package featureflag
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	featureflagcfgv1 "github.com/lyft/clutch/backend/api/config/module/featureflag/v1"
 	featureflagv1 "github.com/lyft/clutch/backend/api/featureflag/v1"
@@ -16,7 +16,7 @@ const (
 	Name = "clutch.module.featureflag"
 )
 
-func New(cfg *any.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(cfg *anypb.Any, log *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &featureflagcfgv1.Config{}
 
 	if cfg != nil {

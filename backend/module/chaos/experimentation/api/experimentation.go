@@ -8,10 +8,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -36,7 +36,7 @@ type Service struct {
 }
 
 // New instantiates a Service object.
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
+func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
 		return nil, errors.New("could not find experiment store service")

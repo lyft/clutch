@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -114,6 +114,6 @@ func New() audit.Auditor {
 	return &svc{}
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }

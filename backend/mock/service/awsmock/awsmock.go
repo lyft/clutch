@@ -16,9 +16,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go/middleware"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	dynamodbv1 "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
@@ -345,6 +345,6 @@ func New() clutchawsclient.Client {
 	return &svc{}
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }

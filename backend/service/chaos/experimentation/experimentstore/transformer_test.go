@@ -3,9 +3,9 @@ package experimentstore
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -13,7 +13,7 @@ import (
 func TestNoRegisteredTransformation(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 	transformer := NewTransformer(logger)
-	config := &ExperimentConfig{Id: "1", Config: &any.Any{}}
+	config := &ExperimentConfig{Id: "1", Config: &anypb.Any{}}
 	_, err := transformer.CreateProperties(&ExperimentRun{Id: "123"}, config)
 
 	assert.NoError(t, err)
@@ -23,7 +23,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 	transformer := NewTransformer(logger)
 
-	underlyingConfig := &any.Any{TypeUrl: "foo"}
+	underlyingConfig := &anypb.Any{TypeUrl: "foo"}
 	config := &ExperimentConfig{Id: "1", Config: underlyingConfig}
 
 	transform := func(run *ExperimentRun, config *ExperimentConfig) ([]*experimentation.Property, error) {
@@ -42,7 +42,7 @@ func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
 	run := &ExperimentRun{Id: "123"}
-	config := &ExperimentConfig{Id: "1", Config: &any.Any{TypeUrl: "test"}}
+	config := &ExperimentConfig{Id: "1", Config: &anypb.Any{TypeUrl: "test"}}
 
 	transformation := Transformation{ConfigTypeUrl: "test"}
 	transformer := NewTransformer(logger)
@@ -57,7 +57,7 @@ func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
 	expectedRun := &ExperimentRun{Id: "123"}
-	expectedConfig := &ExperimentConfig{Id: "1", Config: &any.Any{TypeUrl: "test"}}
+	expectedConfig := &ExperimentConfig{Id: "1", Config: &anypb.Any{TypeUrl: "test"}}
 	expectedProperty := &experimentation.Property{
 		Id:    "foo",
 		Label: "bar",
@@ -83,7 +83,7 @@ func TestMatchingMultipleRegisteredRunConfigTransforms(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
 	expectedRun := &ExperimentRun{Id: "123"}
-	expectedConfig := &ExperimentConfig{Id: "1", Config: &any.Any{TypeUrl: "foo"}}
+	expectedConfig := &ExperimentConfig{Id: "1", Config: &anypb.Any{TypeUrl: "foo"}}
 	expectedProperty1 := &experimentation.Property{
 		Id:    "foo1",
 		Label: "bar1",

@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -18,7 +18,7 @@ const (
 	Name = "clutch.module.topology"
 )
 
-func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
+func New(*anypb.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 	client, ok := service.Registry["clutch.service.topology"]
 	if !ok {
 		return nil, errors.New("could not find topology service")

@@ -12,13 +12,12 @@ import (
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
-	"github.com/golang/protobuf/ptypes/any"
-	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	pstruct "google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
@@ -239,7 +238,7 @@ func TestECDSResourcesRefresh(t *testing.T) {
 				Cluster: "bar",
 				ExtensionConfig: &gcpCoreV3.TypedExtensionConfig{
 					Name: "filter2",
-					TypedConfig: &any.Any{
+					TypedConfig: &anypb.Any{
 						TypeUrl: TypeUrl(configString),
 						Value:   serializedFilter,
 					},

@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/structpb"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -20,7 +20,7 @@ func New() topologyservice.Service {
 	return &svc{}
 }
 
-func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
+func NewAsService(*anypb.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
 
@@ -32,7 +32,7 @@ func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.
 	return []*topologyv1.Resource{
 		{
 			Id: "pod-123",
-			Pb: &any.Any{},
+			Pb: &anypb.Any{},
 			Metadata: map[string]*structpb.Value{
 				"label": {},
 			},
@@ -44,7 +44,7 @@ func (s *svc) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 	return []*topologyv1.Resource{
 		{
 			Id: "autocomplete-result",
-			Pb: &any.Any{},
+			Pb: &anypb.Any{},
 			Metadata: map[string]*structpb.Value{
 				"label": {},
 			},

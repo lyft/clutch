@@ -7,18 +7,18 @@ package stats
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/lyft/clutch/backend/middleware"
 )
 
 const Name = "clutch.middleware.stats"
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	return &mid{
 		logger: logger,
 		scope:  scope.SubScope("module"),

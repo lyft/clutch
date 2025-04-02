@@ -3,9 +3,9 @@ package aws
 import (
 	"context"
 
-	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 
 	awsv1 "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	"github.com/lyft/clutch/backend/resolver"

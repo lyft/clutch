@@ -10,10 +10,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	envoyadminv1 "github.com/lyft/clutch/backend/api/config/service/envoyadmin/v1"
 	envoytriagev1 "github.com/lyft/clutch/backend/api/envoytriage/v1"
@@ -22,11 +22,11 @@ import (
 
 const Name = "clutch.service.envoyadmin"
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	return NewWithHTTPClient(cfg, logger, scope, &http.Client{})
 }
 
-func NewWithHTTPClient(cfg *any.Any, logger *zap.Logger, scope tally.Scope, httpClient *http.Client) (service.Service, error) {
+func NewWithHTTPClient(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope, httpClient *http.Client) (service.Service, error) {
 	config := &envoyadminv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err

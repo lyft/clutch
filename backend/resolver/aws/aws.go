@@ -8,12 +8,12 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	dynamodbv1api "github.com/lyft/clutch/backend/api/aws/dynamodb/v1"
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
@@ -84,7 +84,7 @@ func makeAccountOptions(accounts []string) []*resolverv1.Option {
 	return ret
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver, error) {
 	awsClient, ok := service.Registry["clutch.service.aws"]
 	if !ok {
 		return nil, errors.New("could not find service")

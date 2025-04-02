@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -14,7 +14,7 @@ import (
 func TestListViewRunningExperimentRunProperties(t *testing.T) {
 	now := time.Now()
 	expectedRun := &ExperimentRun{Id: "1", StartTime: now, EndTime: nil, CancellationTime: nil, CreationTime: now}
-	expectedConfig := &ExperimentConfig{Id: "2", Config: &any.Any{TypeUrl: "foo"}}
+	expectedConfig := &ExperimentConfig{Id: "2", Config: &anypb.Any{TypeUrl: "foo"}}
 
 	expectedProperty := &experimentation.Property{
 		Id:    "foo",

@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally/v4"
 	"go.uber.org/zap"
@@ -24,7 +23,7 @@ import (
 
 type experimentConfigTestData struct {
 	stringifiedConfig string
-	marshaledConfig   *any.Any
+	marshaledConfig   *anypb.Any
 	message           proto.Message
 }
 
@@ -93,7 +92,7 @@ func TestCreateExperiment(t *testing.T) {
 
 	tests := []struct {
 		id              string
-		config          *any.Any
+		config          *anypb.Any
 		startTime       time.Time
 		expectedExecs   []*exec
 		expectedQueries []*query
