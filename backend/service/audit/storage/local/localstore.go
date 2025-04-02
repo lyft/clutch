@@ -73,7 +73,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 	}
 
 	event := c.events[id].GetEvent()
-	proto.Merge(proto.MessageV1(event), proto.MessageV1(update))
+	proto.Merge(event, update)
 	return nil
 }
 

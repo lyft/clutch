@@ -67,7 +67,7 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 					return nil, err
 				}
 
-				results, err := res.Resolve(ctx, req.Want, proto.MessageV1(pb), req.Limit)
+				results, err := res.Resolve(ctx, req.Want, pb, req.Limit)
 				if err != nil {
 					return nil, err
 				}
