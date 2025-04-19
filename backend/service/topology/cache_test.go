@@ -28,12 +28,12 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 		{
 			id:     "key with chars",
 			input:  "topologycache",
-			expect: 1953460335,
+			expect: 0x6c80037f,
 		},
 		{
 			id:     "key with special chars",
 			input:  "*()#@&!*(#!@",
-			expect: 707275043,
+			expect: 0x7762da89,
 		},
 	}
 

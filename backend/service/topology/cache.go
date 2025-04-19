@@ -79,8 +79,8 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 }
 
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
-	x := sha256.New().Sum([]byte(lockID))
-	return binary.BigEndian.Uint32(x)
+	x := sha256.Sum256([]byte(lockID))
+	return binary.BigEndian.Uint32(x[:])
 }
 
 // This will check all services that are currently registered for the given clutch configuration

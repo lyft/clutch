@@ -229,6 +229,6 @@ func (c *client) poll() {
 }
 
 func convertLockToUint32(lockID string) uint32 {
-	x := sha256.New().Sum([]byte(lockID))
-	return binary.BigEndian.Uint32(x)
+	x := sha256.Sum256([]byte(lockID))
+	return binary.BigEndian.Uint32(x[:])
 }

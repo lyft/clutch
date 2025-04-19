@@ -206,17 +206,17 @@ func TestConvertLockToUint32(t *testing.T) {
 		{
 			id:     "key with chars",
 			input:  "audit:eventsink",
-			expect: 1635083369,
+			expect: 0xd8204ad5,
 		},
 		{
 			id:     "key with special chars",
 			input:  "*()#@&!*(#!@",
-			expect: 707275043,
+			expect: 0x7762da89,
 		},
 		{
 			id:     "key with numbers",
 			input:  "123123123",
-			expect: 825373489,
+			expect: 0x932f3c1b,
 		},
 	}
 
