@@ -9,7 +9,7 @@ import (
 )
 
 func GenerateAPI(args *Args, tmpFolder string, dest string) {
-	log.Println("Adding clutch dependencies to go.mod...")
+	log.Println("Adding clutch dependencies to go.mod ...")
 	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
