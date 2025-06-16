@@ -43,7 +43,7 @@ require (
 	github.com/shurcooL/githubv4 v0.0.0-20240429030203-be2daab69064
 	github.com/shurcooL/graphql v0.0.0-20230722043721-ed46e5a46466
 	github.com/shurcooL/vfsgen v0.0.0-20230704071429-0000e147ea92
-	github.com/slack-go/slack v0.14.0
+	github.com/slack-go/slack v0.17.1
 	github.com/stretchr/testify v1.10.0
 	github.com/uber-go/tally/v4 v4.1.6
 	go.temporal.io/sdk v1.26.1
@@ -112,7 +112,7 @@ require (
 	github.com/google/go-github/v55 v55.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
