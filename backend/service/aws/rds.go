@@ -5,9 +5,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
-	rdsv1 "github.com/lyft/clutch/backend/api/aws/rds/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	rdsv1 "github.com/lyft/clutch/backend/api/aws/rds/v1"
 )
 
 // RDSDescribeCluster fetches a single cluster description and returns it as proto.

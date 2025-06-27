@@ -9,12 +9,12 @@ import "api/v1/annotations.proto";
 message Cluster {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.aws.rds.v1.Cluster",
-    pattern  : "{account}/{region}/{cluster_identifier}"
+    pattern : "{account}/{region}/{cluster_identifier}"
   };
 
   string cluster_identifier = 1;
-  string account            = 2;
-  string region             = 3;
-  string engine             = 4;
-  string status             = 5;
-} 
+  string account = 2;
+  string region = 3;
+  string engine = 4;
+  string status = 5;
+}
