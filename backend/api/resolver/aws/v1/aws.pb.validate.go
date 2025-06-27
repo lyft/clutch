@@ -781,3 +781,109 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IAMRoleNameValidationError{}
+
+// Validate checks the field values on RDSClusterName with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *RDSClusterName) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RDSClusterName with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RDSClusterNameMultiError,
+// or nil if none found.
+func (m *RDSClusterName) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RDSClusterName) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Region
+
+	// no validation rules for Account
+
+	if len(errors) > 0 {
+		return RDSClusterNameMultiError(errors)
+	}
+
+	return nil
+}
+
+// RDSClusterNameMultiError is an error wrapping multiple validation errors
+// returned by RDSClusterName.ValidateAll() if the designated constraints
+// aren't met.
+type RDSClusterNameMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RDSClusterNameMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RDSClusterNameMultiError) AllErrors() []error { return m }
+
+// RDSClusterNameValidationError is the validation error returned by
+// RDSClusterName.Validate if the designated constraints aren't met.
+type RDSClusterNameValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RDSClusterNameValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RDSClusterNameValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RDSClusterNameValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RDSClusterNameValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RDSClusterNameValidationError) ErrorName() string { return "RDSClusterNameValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RDSClusterNameValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRDSClusterName.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RDSClusterNameValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RDSClusterNameValidationError{}

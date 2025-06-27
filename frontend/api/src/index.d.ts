@@ -4041,6 +4041,86 @@ export namespace clutch {
             }
         }
 
+        /** Namespace rds. */
+        namespace rds {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Cluster. */
+                interface ICluster {
+
+                    /** Cluster clusterIdentifier */
+                    clusterIdentifier?: (string|null);
+
+                    /** Cluster account */
+                    account?: (string|null);
+
+                    /** Cluster region */
+                    region?: (string|null);
+
+                    /** Cluster engine */
+                    engine?: (string|null);
+
+                    /** Cluster status */
+                    status?: (string|null);
+                }
+
+                /** Represents a Cluster. */
+                class Cluster implements ICluster {
+
+                    /**
+                     * Constructs a new Cluster.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.rds.v1.ICluster);
+
+                    /** Cluster clusterIdentifier. */
+                    public clusterIdentifier: string;
+
+                    /** Cluster account. */
+                    public account: string;
+
+                    /** Cluster region. */
+                    public region: string;
+
+                    /** Cluster engine. */
+                    public engine: string;
+
+                    /** Cluster status. */
+                    public status: string;
+
+                    /**
+                     * Verifies a Cluster message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Cluster
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.rds.v1.Cluster;
+
+                    /**
+                     * Creates a plain object from a Cluster message. Also converts values to other types if specified.
+                     * @param message Cluster
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.rds.v1.Cluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Cluster to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Namespace s3. */
         namespace s3 {
 
@@ -23569,6 +23649,66 @@ export namespace clutch {
 
                     /**
                      * Converts this IAMRoleName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RDSClusterName. */
+                interface IRDSClusterName {
+
+                    /** RDSClusterName name */
+                    name?: (string|null);
+
+                    /** RDSClusterName region */
+                    region?: (string|null);
+
+                    /** RDSClusterName account */
+                    account?: (string|null);
+                }
+
+                /** Represents a RDSClusterName. */
+                class RDSClusterName implements IRDSClusterName {
+
+                    /**
+                     * Constructs a new RDSClusterName.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.aws.v1.IRDSClusterName);
+
+                    /** RDSClusterName name. */
+                    public name: string;
+
+                    /** RDSClusterName region. */
+                    public region: string;
+
+                    /** RDSClusterName account. */
+                    public account: string;
+
+                    /**
+                     * Verifies a RDSClusterName message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RDSClusterName message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RDSClusterName
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.aws.v1.RDSClusterName;
+
+                    /**
+                     * Creates a plain object from a RDSClusterName message. Also converts values to other types if specified.
+                     * @param message RDSClusterName
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.aws.v1.RDSClusterName, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RDSClusterName to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

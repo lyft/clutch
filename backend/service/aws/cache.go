@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -59,6 +60,7 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllS3Buckets)
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllS3AccessPoints)
 			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllIamRoles)
+			go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), account.alias, client, c.processAllRDSClusters)
 		}
 	}
 }
@@ -393,6 +395,58 @@ func (c *client) processAllIamRoles(ctx context.Context, account string, client 
 				Resource: &topologyv1.Resource{
 					Id: patternId,
 					Pb: roleAny,
+				},
+				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+			}
+		}
+	}
+}
+
+func (c *client) processAllRDSClusters(ctx context.Context, account string, client *regionalClient) {
+	c.log.Info("starting to process rds clusters for region", zap.String("region", client.region))
+
+	input := rds.DescribeDBClustersInput{
+		// If no filters, this returns all clusters in account/region
+		// 100 records per page default; specify MaxRecords
+		MaxRecords: aws.Int32(100),
+	}
+
+	paginator := rds.NewDescribeDBClustersPaginator(client.rds, &input)
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+		if err != nil {
+			var notFoundErr *awshttp.ResponseError
+			if errors.As(err, &notFoundErr) && notFoundErr.HTTPStatusCode() == http.StatusNotFound {
+				// No clusters, skip gracefully.
+				return
+			}
+			c.log.Error("unable to get next rds cluster page", zap.Error(err))
+			break
+		}
+
+		for _, cluster := range output.DBClusters {
+			protoCluster, err := c.RDSDescribeCluster(ctx, account, client.region, *cluster.DBClusterIdentifier)
+			if err != nil {
+				c.log.Error("unable to get rds cluster", zap.Error(err))
+				continue
+			}
+
+			clusterAny, err := anypb.New(protoCluster)
+			if err != nil {
+				c.log.Error("unable to marshal rds cluster proto", zap.Error(err))
+				continue
+			}
+
+			patternId, err := meta.HydratedPatternForProto(protoCluster)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
+			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
+				Resource: &topologyv1.Resource{
+					Id: patternId,
+					Pb: clusterAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}

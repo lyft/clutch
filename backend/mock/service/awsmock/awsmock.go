@@ -25,6 +25,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	rdsv1 "github.com/lyft/clutch/backend/api/aws/rds/v1"
 	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 	"github.com/lyft/clutch/backend/service"
 	clutchawsclient "github.com/lyft/clutch/backend/service/aws"
@@ -116,6 +117,16 @@ func (s *svc) TerminateInstances(ctx context.Context, account, region string, id
 
 func (s *svc) RebootInstances(ctx context.Context, account, region string, ids []string) error {
 	return nil
+}
+
+func (s *svc) RDSDescribeCluster(ctx context.Context, account, region, clusterName string) (*rdsv1.Cluster, error) {
+	return &rdsv1.Cluster{
+		ClusterIdentifier: clusterName,
+		Region:            region,
+		Account:           "default",
+		Engine:            "aurora-mysql",
+		Status:            "available",
+	}, nil
 }
 
 func (s *svc) S3DescribeBucket(ctx context.Context, account, region, bucket string) (*s3v1.Bucket, error) {

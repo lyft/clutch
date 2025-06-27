@@ -9583,6 +9583,199 @@ export const clutch = $root.clutch = (() => {
             return kinesis;
         })();
 
+        aws.rds = (function() {
+
+            /**
+             * Namespace rds.
+             * @memberof clutch.aws
+             * @namespace
+             */
+            const rds = {};
+
+            rds.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.aws.rds
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.Cluster = (function() {
+
+                    /**
+                     * Properties of a Cluster.
+                     * @memberof clutch.aws.rds.v1
+                     * @interface ICluster
+                     * @property {string|null} [clusterIdentifier] Cluster clusterIdentifier
+                     * @property {string|null} [account] Cluster account
+                     * @property {string|null} [region] Cluster region
+                     * @property {string|null} [engine] Cluster engine
+                     * @property {string|null} [status] Cluster status
+                     */
+
+                    /**
+                     * Constructs a new Cluster.
+                     * @memberof clutch.aws.rds.v1
+                     * @classdesc Represents a Cluster.
+                     * @implements ICluster
+                     * @constructor
+                     * @param {clutch.aws.rds.v1.ICluster=} [properties] Properties to set
+                     */
+                    function Cluster(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Cluster clusterIdentifier.
+                     * @member {string} clusterIdentifier
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.clusterIdentifier = "";
+
+                    /**
+                     * Cluster account.
+                     * @member {string} account
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.account = "";
+
+                    /**
+                     * Cluster region.
+                     * @member {string} region
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.region = "";
+
+                    /**
+                     * Cluster engine.
+                     * @member {string} engine
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.engine = "";
+
+                    /**
+                     * Cluster status.
+                     * @member {string} status
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.status = "";
+
+                    /**
+                     * Verifies a Cluster message.
+                     * @function verify
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Cluster.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.clusterIdentifier != null && message.hasOwnProperty("clusterIdentifier"))
+                            if (!$util.isString(message.clusterIdentifier))
+                                return "clusterIdentifier: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.engine != null && message.hasOwnProperty("engine"))
+                            if (!$util.isString(message.engine))
+                                return "engine: string expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            if (!$util.isString(message.status))
+                                return "status: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.rds.v1.Cluster} Cluster
+                     */
+                    Cluster.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.rds.v1.Cluster)
+                            return object;
+                        let message = new $root.clutch.aws.rds.v1.Cluster();
+                        if (object.clusterIdentifier != null)
+                            message.clusterIdentifier = String(object.clusterIdentifier);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.engine != null)
+                            message.engine = String(object.engine);
+                        if (object.status != null)
+                            message.status = String(object.status);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Cluster message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @static
+                     * @param {clutch.aws.rds.v1.Cluster} message Cluster
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Cluster.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.clusterIdentifier = "";
+                            object.account = "";
+                            object.region = "";
+                            object.engine = "";
+                            object.status = "";
+                        }
+                        if (message.clusterIdentifier != null && message.hasOwnProperty("clusterIdentifier"))
+                            object.clusterIdentifier = message.clusterIdentifier;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.engine != null && message.hasOwnProperty("engine"))
+                            object.engine = message.engine;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Cluster to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.rds.v1.Cluster
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Cluster.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Cluster;
+                })();
+
+                return v1;
+            })();
+
+            return rds;
+        })();
+
         aws.s3 = (function() {
 
             /**
@@ -56820,6 +57013,141 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return IAMRoleName;
+                })();
+
+                v1.RDSClusterName = (function() {
+
+                    /**
+                     * Properties of a RDSClusterName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @interface IRDSClusterName
+                     * @property {string|null} [name] RDSClusterName name
+                     * @property {string|null} [region] RDSClusterName region
+                     * @property {string|null} [account] RDSClusterName account
+                     */
+
+                    /**
+                     * Constructs a new RDSClusterName.
+                     * @memberof clutch.resolver.aws.v1
+                     * @classdesc Represents a RDSClusterName.
+                     * @implements IRDSClusterName
+                     * @constructor
+                     * @param {clutch.resolver.aws.v1.IRDSClusterName=} [properties] Properties to set
+                     */
+                    function RDSClusterName(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RDSClusterName name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @instance
+                     */
+                    RDSClusterName.prototype.name = "";
+
+                    /**
+                     * RDSClusterName region.
+                     * @member {string} region
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @instance
+                     */
+                    RDSClusterName.prototype.region = "";
+
+                    /**
+                     * RDSClusterName account.
+                     * @member {string} account
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @instance
+                     */
+                    RDSClusterName.prototype.account = "";
+
+                    /**
+                     * Verifies a RDSClusterName message.
+                     * @function verify
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RDSClusterName.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            if (!$util.isString(message.account))
+                                return "account: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RDSClusterName message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.aws.v1.RDSClusterName} RDSClusterName
+                     */
+                    RDSClusterName.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.aws.v1.RDSClusterName)
+                            return object;
+                        let message = new $root.clutch.resolver.aws.v1.RDSClusterName();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        if (object.account != null)
+                            message.account = String(object.account);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RDSClusterName message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @static
+                     * @param {clutch.resolver.aws.v1.RDSClusterName} message RDSClusterName
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RDSClusterName.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.region = "";
+                            object.account = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        if (message.account != null && message.hasOwnProperty("account"))
+                            object.account = message.account;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RDSClusterName to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.aws.v1.RDSClusterName
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RDSClusterName.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RDSClusterName;
                 })();
 
                 return v1;

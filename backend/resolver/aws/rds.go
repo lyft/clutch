@@ -1,0 +1,44 @@
+package aws
+
+import (
+	"context"
+
+	"github.com/golang/protobuf/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
+	"github.com/lyft/clutch/backend/resolver"
+)
+
+func (r *res) resolveRDSClusterForInput(ctx context.Context, input proto.Message) (*resolver.Results, error) {
+	switch i := input.(type) {
+	case *awsv1resolver.RDSClusterName:
+		return r.rdsClusterResults(ctx, i.Account, i.Region, i.Name, 1)
+	default:
+		return nil, status.Errorf(codes.Internal, "resolution for type '%T' not implemented", i)
+	}
+}
+
+func (r *res) rdsClusterResults(ctx context.Context, account, region, name string, limit uint32) (*resolver.Results, error) {
+	ctx, handler := resolver.NewFanoutHandler(ctx)
+
+	allAccountRegions := r.determineAccountAndRegionsForOption(account, region)
+	for account := range allAccountRegions {
+		for _, region := range allAccountRegions[account] {
+			handler.Add(1)
+			go func(account, region string) {
+				defer handler.Done()
+				cluster, err := r.client.RDSDescribeCluster(ctx, account, region, name)
+				select {
+				case handler.Channel() <- resolver.NewSingleFanoutResult(cluster, err):
+					return
+				case <-handler.Cancelled():
+					return
+				}
+			}(account, region)
+		}
+	}
+
+	return handler.Results(limit)
+}

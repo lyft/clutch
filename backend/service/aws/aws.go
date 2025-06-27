@@ -23,6 +23,7 @@ import (
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3control"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -38,6 +39,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	iamv1 "github.com/lyft/clutch/backend/api/aws/iam/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	rdsv1 "github.com/lyft/clutch/backend/api/aws/rds/v1"
 	s3v1 "github.com/lyft/clutch/backend/api/aws/s3/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -165,6 +167,7 @@ func (c *client) createRegionalClients(accountAlias, region string, regions []st
 		dynamodb:    dynamodb.NewFromConfig(regionCfg),
 		sts:         sts.NewFromConfig(regionCfg),
 		iam:         iam.NewFromConfig(regionCfg),
+		rds:         rds.NewFromConfig(regionCfg),
 	}
 }
 
@@ -195,6 +198,9 @@ type Client interface {
 	SimulateCustomPolicy(ctx context.Context, account, region string, customPolicySimulatorParams *iam.SimulateCustomPolicyInput) (*iam.SimulateCustomPolicyOutput, error)
 	GetIAMRole(ctx context.Context, account, region, roleName string) (*iamv1.Role, error)
 
+	// RDS
+	RDSDescribeCluster(ctx context.Context, account, region, clusterName string) (*rdsv1.Cluster, error)
+
 	Accounts() []string
 	AccountsAndRegions() map[string][]string
 	GetAccountsInRegion(region string) []string
@@ -217,6 +223,7 @@ type DirectClient interface {
 	IAM() *iam.Client
 	Kinesis() *kinesis.Client
 	S3() *s3.Client
+	RDS() *rds.Client
 	STS() *sts.Client
 }
 
@@ -242,6 +249,7 @@ type regionalClient struct {
 	s3          s3Client
 	s3control   s3ControlClient
 	sts         stsClient
+	rds         rdsClient
 }
 
 func (r *regionalClient) Config() *aws.Config {
@@ -270,6 +278,10 @@ func (r *regionalClient) Kinesis() *kinesis.Client {
 
 func (r *regionalClient) S3() *s3.Client {
 	return r.s3.(*s3.Client)
+}
+
+func (r *regionalClient) RDS() *rds.Client {
+	return r.rds.(*rds.Client)
 }
 
 func (r *regionalClient) STS() *sts.Client {

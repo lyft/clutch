@@ -19,6 +19,7 @@ import (
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	iamv1api "github.com/lyft/clutch/backend/api/aws/iam/v1"
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	rdsv1api "github.com/lyft/clutch/backend/api/aws/rds/v1"
 	s3v1api "github.com/lyft/clutch/backend/api/aws/s3/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
@@ -39,6 +40,7 @@ var typeURLDynamodbTable = meta.TypeURL((*dynamodbv1api.Table)(nil))
 var typeURLS3Bucket = meta.TypeURL((*s3v1api.Bucket)(nil))
 var typeURLS3AccessPoint = meta.TypeURL((*s3v1api.AccessPoint)(nil))
 var typeURLIAMRole = meta.TypeURL((*iamv1api.Role)(nil))
+var typeURLRDSCluster = meta.TypeURL((*rdsv1api.Cluster)(nil))
 
 var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLInstance: {
@@ -61,6 +63,9 @@ var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	},
 	typeURLIAMRole: {
 		(*awsv1resolver.IAMRoleName)(nil),
+	},
+	typeURLRDSCluster: {
+		(*awsv1resolver.RDSClusterName)(nil),
 	},
 }
 
@@ -179,6 +184,9 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 	case typeURLIAMRole:
 		return r.resolveIAMRoleForInput(ctx, input)
 
+	case typeURLRDSCluster:
+		return r.resolveRDSClusterForInput(ctx, input)
+
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver for '%s' not implemented", wantTypeURL)
 	}
@@ -268,6 +276,18 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 
 		return r.iamRoleResults(ctx, resolver.OptionAll, resolver.OptionAll, query, limit)
+
+	case typeURLRDSCluster:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*rdsv1api.Cluster)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+
+		if ok {
+			return r.rdsClusterResults(ctx, patternValues["account"], patternValues["region"], patternValues["name"], limit)
+		}
+
+		return r.rdsClusterResults(ctx, resolver.OptionAll, resolver.OptionAll, query, limit)
 
 	default:
 		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
