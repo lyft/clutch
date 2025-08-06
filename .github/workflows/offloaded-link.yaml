@@ -1,0 +1,42 @@
+name: Generate Offloaded Facet Links
+
+on: 
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  check_comment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/offload') }}
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Get SHA
+        uses: actions/github-script@v7
+        id: get-sha
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          result-encoding: string
+          script: |
+            const { data } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            return data.head.sha;
+      - name: Post comment
+        uses: actions/github-script@v7
+        id: return-offloaded-url
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const SHORT_SHA = process.env.SHA.substring(0, 5);
+            const OFFLOADED_URL = `https://clutch-main-${SHORT_SHA}.staging.lyft.net`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `**Once your Clutch facet fully offloads, use the following URL:** ${OFFLOADED_URL}`
+            });
+        env:
+          SHA: ${{ steps.get-sha.outputs.result }}
