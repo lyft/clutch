@@ -49,7 +49,7 @@ require (
 	go.temporal.io/sdk v1.26.1
 	go.temporal.io/sdk/contrib/tally v0.2.0
 	go.uber.org/zap v1.26.0
-	golang.org/x/net v0.37.0
+	golang.org/x/net v0.38.0
 	golang.org/x/oauth2 v0.28.0
 	golang.org/x/sync v0.12.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240415180920-8c6c420018be
