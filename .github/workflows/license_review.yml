@@ -23,7 +23,7 @@ jobs:
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.6
+          ruby-version: 2.7.8
       - name: Install license finder
         run: gem install license_finder
       - name: Run license finder
