@@ -18,7 +18,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -55,7 +55,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -90,7 +90,7 @@ jobs:
     name: Test [e2e]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v4
         id: setup-go
         with:
@@ -152,7 +152,7 @@ jobs:
     name: Test [unit]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -181,7 +181,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: [build, lint, test-unit, test-e2e]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
