@@ -20,7 +20,7 @@ require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.7.0
 	github.com/bufbuild/buf v0.56.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
-	github.com/coreos/go-oidc/v3 v3.13.0
+	github.com/coreos/go-oidc/v3 v3.17.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.12.0
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
@@ -96,7 +96,7 @@ require (
 	github.com/evanphx/json-patch v5.6.0+incompatible // indirect
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
-	github.com/go-jose/go-jose/v4 v4.0.5 // indirect
+	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
